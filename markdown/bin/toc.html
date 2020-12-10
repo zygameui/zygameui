@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>toc</title>
+  <style type="text/css">
+    html {
+      line-height: 1.7;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 40em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin-top: 1.7em;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.7em;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1.7em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      font-style: italic;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      background-color: #f0f0f0;
+      font-size: 85%;
+      margin: 0;
+      padding: .2em .4em;
+    }
+    pre {
+      line-height: 1.5em;
+      padding: 1em;
+      background-color: #f0f0f0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin-top: 1.7em;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td {
+      border-bottom: 1px solid lightgray;
+      padding: 1em 3em 1em 0;
+    }
+    header {
+      margin-bottom: 6em;
+      text-align: center;
+    }
+    nav a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    kbd {
+        padding: 2px 4px ;
+        font-size: 90%;
+        color: #fff;
+        background-color: #19a3be;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    html {
+        line-height: 1.7;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #dcdcdc;
+        background-color: #292a2d ;
+    }
+
+    pre {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    code {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #98e020;
+      font-style: italic;
+    }
+    th, td {
+        border: 1px solid #717171;
+        padding: 1em 1em 1em;
+    }
+    body {
+        max-width: 100em;
+    }
+    a:visited {
+        color: #e0e0e0;
+    }
+    a {
+        color: #e0e0e0;
+        text-decoration: underline;
+    }
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        scrollbar-arrow-color:red;
+        background: rgba(166,226,41,1);
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(166,226,41,1);
+        background: rgba(166,226,41,1);
+        scrollbar-arrow-color:red;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 0;
+        background: rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body>
+<h2 id="zygameui引擎手册">ZYGAMEUI引擎手册</h2>
+<ol type="1">
+<li><a target='content'href="home.html">入门</a>
+<ol type="1">
+<li><a target='content'href="doc/start.html">开始</a></li>
+<li><a target='content'href="doc/debug.html">调试</a>
+<ol type="1">
+<li><a target='content'href="debug/html5.html">HTML5调试</a></li>
+<li><a target='content'href="debug/cpp.html">C++调试</a></li>
+</ol></li>
+<li><a target='content'href="doc/support.html">引擎支持</a></li>
+<li><a target='content'href="api.html">基础API</a>
+<ol type="1">
+<li><a target='content'href="api/stagesize.html">获取舞台大小</a></li>
+<li><a target='content'href="api/assets.html">资源管理</a></li>
+<li><a target='content'href="api/container.html">容器</a></li>
+<li><a target='content'href="api/image.html">图形显示</a></li>
+<li><a target='content'href="api/text.html">文本显示</a></li>
+<li><a target='content'href="api/events.html">基础事件</a></li>
+<li><a target='content'href="api/timer.html">时间管理器</a></li>
+<li><a target='content'href="api/font.html">字体设置</a></li>
+<li><a target='content'href="api/music.html">音频管理</a></li>
+<li><a target='content'href="api/sensors.html">重力感应</a></li>
+</ol></li>
+<li><a target='content'href="api/haxe.html">Haxe语法注意事项</a></li>
+<li><a target='content'href="features.html">组件</a>
+<ol type="1">
+<li><a target='content'href="features/spine.html">Spine骨骼动画</a></li>
+<li><a target='content'href="features/box.html">盒子容器</a></li>
+<li><a target='content'href="features/button.html">按钮</a></li>
+<li><a target='content'href="features/list.html">列表</a></li>
+<li><a target='content'href="features/quad.html">纯色块</a></li>
+<li><a target='content'href="features/scroll.html">滚动窗</a></li>
+<li><a target='content'href="features/animation.html">动画</a></li>
+<li><a target='content'href="features/graphics.html">画笔</a></li>
+<li><a target='content'href="features/scene.html">场景</a></li>
+<li><a target='content'href="features/input.html">输入文本</a></li>
+</ol></li>
+<li><a target='content'href="batch.html">批渲染组件</a>
+<ol type="1">
+<li><a target='content'href="batchs/imagebatchs.html">批渲染对象</a></li>
+<li><a target='content'href="batchs/bimg.html">图形显示</a></li>
+<li><a target='content'href="batchs/bspr.html">容器</a></li>
+<li><a target='content'href="batchs/btext.html">纹理文本</a></li>
+<li><a target='content'href="features/button.html">按钮</a></li>
+</ol></li>
+<li><a target='content'href="updoc.html">高级用法</a>
+<ol type="1">
+<li><a target='content'href="updoc/project.html">zproject.xml</a></li>
+<li><a target='content'href="updoc/differ.html">碰撞系统</a></li>
+<li><a target='content'href="updoc/marco.html">宏功能</a>
+<ol type="1">
+<li><a target='content'href="updoc/jsondata.html">JSON宏处理</a></li>
+<li><a target='content'href="updoc/xmlui.html">XML格式界面</a></li>
+<li><a target='content'href="updoc/autobuild.html">UI自动构造</a></li>
+<li><a target='content'href="updoc/R.html">资源引用</a></li>
+<li><a target='content'href="updoc/embed.html">嵌入加载</a></li>
+<li><a target='content'href="updoc/rubbish.html">植入垃圾代码</a></li>
+<li><a target='content'href="updoc/marcolist.html">宏工具</a></li>
+</ol></li>
+</ol></li>
+<li><a target='content'href="shader/shader.html">着色器</a>
+<ol type="1">
+<li><a target='content'href="shader/GeryShader.html">灰度</a></li>
+</ol></li>
+<li><a target='content'href="command/command.html">命令行</a></li>
+<li><a target='content'href="3d/3d.html">3D渲染</a></li>
+</ol></li>
+<li><a target='content'href="openfl.html">OpenFL</a>
+<ol type="1">
+<li><a target='content'href="openfl/project.html">project.xml</a></li>
+</ol></li>
+</ol>
+</body>
+</html>

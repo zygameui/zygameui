@@ -1,0 +1,525 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>project</title>
+  <style type="text/css">
+    html {
+      line-height: 1.7;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 40em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin-top: 1.7em;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.7em;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1.7em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      font-style: italic;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      background-color: #f0f0f0;
+      font-size: 85%;
+      margin: 0;
+      padding: .2em .4em;
+    }
+    pre {
+      line-height: 1.5em;
+      padding: 1em;
+      background-color: #f0f0f0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin-top: 1.7em;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td {
+      border-bottom: 1px solid lightgray;
+      padding: 1em 3em 1em 0;
+    }
+    header {
+      margin-bottom: 6em;
+      text-align: center;
+    }
+    nav a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    kbd {
+        padding: 2px 4px ;
+        font-size: 90%;
+        color: #fff;
+        background-color: #19a3be;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    html {
+        line-height: 1.7;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #dcdcdc;
+        background-color: #2F353A ;
+    }
+
+    pre {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    code {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #98e020;
+      font-style: italic;
+    }
+    th, td {
+        border: 1px solid #717171;
+        padding: 1em 1em 1em;
+    }
+    body {
+        max-width: 100em;
+    }
+    a:visited {
+        color: #e0e0e0;
+    }
+    a {
+        color: #e0e0e0;
+        text-decoration: underline;
+    }
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        scrollbar-arrow-color:red;
+        background: rgba(166,226,41,1);
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(166,226,41,1);
+        background: rgba(166,226,41,1);
+        scrollbar-arrow-color:red;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 0;
+        background: rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body>
+<h2 id="project项目配置">Project项目配置</h2>
+<p>游戏编译过程中，会依赖Lime的project.xml配置文件来进行编译，此文档可以帮助你了解XML功能模块。</p>
+<h3 id="条件编译">条件编译</h3>
+<p>首先，项目文件格式中的每个节点都支持<code>if</code>和<code>unless</code>属性。这些是条件值，可帮助您基于许多值来定制构建过程。以下是一些默认值：</p>
+<ul>
+<li>mobile（手机）</li>
+<li>desktop（桌面）</li>
+<li>web（浏览器）</li>
+<li>ios （IOS平台）</li>
+<li>android（安卓平台）</li>
+<li>windows（Window系统）</li>
+<li>mac（MacOs系统）</li>
+<li>linux（Linux系统）</li>
+<li>html5（HTML5）</li>
+<li>cpp（C++运行时）</li>
+<li>neko（Neko虚拟机）</li>
+<li>flash（Flash虚拟机）</li>
+<li>js（JS运行时）</li>
+</ul>
+<p>您可以<code>&lt;set /&gt;</code>或<code>&lt;unset /&gt;</code>条件逻辑的值：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;set</span><span class="ot"> name=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> background=</span><span class="st">&quot;#FF0000&quot;</span><span class="ot"> if=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>这也可以用来传递特殊值：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;set</span><span class="ot"> name=</span><span class="st">&quot;color&quot;</span><span class="ot"> value=</span><span class="st">&quot;#FF0000&quot;</span><span class="ot"> if=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;set</span><span class="ot"> name=</span><span class="st">&quot;color&quot;</span><span class="ot"> value=</span><span class="st">&quot;#0000FF&quot;</span><span class="ot"> if=</span><span class="st">&quot;blue&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> background=</span><span class="st">&quot;${color}&quot;</span><span class="ot"> if=</span><span class="st">&quot;color&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>您可以在<a href="https://lime.software/docs/project-files/xml-format/#template">模板中</a>使用这些值，如下所示：<code>::SET_COLOR::</code></p>
+<p>同样，您也可以将值<code>&lt;define /&gt;</code>或<code>&lt;undefine /&gt;</code>也传递给Haxe的值。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;define</span><span class="ot"> name=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> background=</span><span class="st">&quot;#FF0000&quot;</span><span class="ot"> if=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>#if red</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>trace (&quot;Background is red&quot;);</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>#end</span></code></pre></div>
+<p>您可以使用<code>::DEFINE_RED::</code>或者是<code>::SET_RED::</code>。</p>
+<p>您也可以使用命令行添加定义：</p>
+<pre class="shell"><code>lime test flash -Ddefine</code></pre>
+<p>如果您需要在条件中包含多个值，则空格表示“和”，竖线表示“或”，如下所示：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> width=</span><span class="st">&quot;640&quot;</span><span class="ot"> height=</span><span class="st">&quot;480&quot;</span><span class="ot"> if=</span><span class="st">&quot;define define2&quot;</span><span class="ot"> unless=</span><span class="st">&quot;define3 || define4&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="重复项">重复项</h3>
+<p>每个标签可以包含多个副本，因此不必担心将它们全部放在一个地方。您定义的所有值都将使用。如果您多次定义相同的值，则将使用最后一个定义。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> width=</span><span class="st">&quot;640&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> height=</span><span class="st">&quot;480&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="include.xml">include.xml</h3>
+<p>如果创建haxelib，则可以将“ include.xml”添加到顶级目录。构建工具将自动将文件内容添加到用户的项目中。您可以使用它来添加二进制依赖项，其他类路径等。</p>
+<h2 id="xml标记词汇表">XML标记词汇表</h2>
+<h3 id="应用程式">应用程式</h3>
+<p>该<code>&lt;app /&gt;</code>标签值集建设项目，包括入口点（主类），输出文件目录，重要的或者如果你想定制的可执行文件名或定义为一个网络平台自定义的预加载：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;app</span><span class="ot"> main=</span><span class="st">&quot;com.example.MyApplication&quot;</span><span class="ot"> file=</span><span class="st">&quot;MyApplication&quot;</span><span class="ot"> path=</span><span class="st">&quot;Export&quot;</span><span class="ot"> preloader=</span><span class="st">&quot;CustomPreloader&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;app</span><span class="ot"> swf-version=</span><span class="st">&quot;11&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="建筑">建筑</h3>
+<p>使用<code>&lt;architecture /&gt;</code>标签设置或排除特定于Android的体系结构。这些可以是<code>ARMv7</code>，<code>ARMv6</code>，<code>ARMv5</code>和<code>X86</code>。</p>
+<p>默认情况下，构建的唯一体系结构是<code>ARMv7</code>。</p>
+<p>例如，如果要启用<code>ARMv6</code>和禁用，则<code>ARMv7</code>可以将<code>&lt;architecture /&gt;</code>标签设置为：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;architecture</span><span class="ot"> name=</span><span class="st">&quot;armv6&quot;</span><span class="ot"> exclude=</span><span class="st">&quot;armv7&quot;</span><span class="ot"> if=</span><span class="st">&quot;android&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="资产">资产</h3>
+<p>使用资产节点将资源添加到您的项目中，可以使用<code>lime.Assets</code>。</p>
+<p>path属性可以指向文件或目录。这些文件将被复制（或嵌入）在您的最终项目中，并且可以使用<code>lime.Assets</code>类进行访问。</p>
+<p>例如，如果在项目文件中包括以下节点：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- 一般embed默认为true，但在引擎里一般不这样使用，需要改为embed为false，使资源能够自行加载处理 --&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;images/MyImage.jpg&quot;</span><span class="ot"> embed=</span><span class="st">&quot;true&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
+<p>您可以像这样在应用程序中访问它：</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">//一般引擎里不这样使用，需要通过ZAssets资源管理来加载读取</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> bitmapData = Assets.getBitmapData (<span class="st">&quot;images/MyImage.png&quot;</span>);</span></code></pre></div>
+<p>默认情况下，目标路径将镜像源路径，但是如果您希望使用其他目标路径，则还可以包括一个重命名属性。该<code>lime.Assets</code>班将使用<em>目标</em>的默认路径，所以使用重命名属性将改变你使用引用您的文件的名称。</p>
+<p>如果您希望自己为资产文件设置ID，请使用“ id”属性。这仅适用于指向文件而不是目录路径的资产节点。</p>
+<p>指向目录时，可以使用include或exclude属性指定用于自动包括文件的模式。支持通配符。例如，要包括目录下的所有文件，请使用包含值“ *”。您可以使用“ ”字符。</p>
+<p>您可以将资产节点相互嵌套。如果在顶级资产节点中指定目录，则该目录的路径将追加到在后续节点中指定的路径。</p>
+<p>每个文件的类型将根据每个文件扩展名自动确定，但是您可以使用type属性自行为文件或目录设置它。如果要将节点嵌套在另一个资产节点内，则还可以使用类型的名称作为节点的名称。</p>
+<p>这些是当前类型：</p>
+<ul>
+<li>binary（二进制）</li>
+<li>font（字体）</li>
+<li>image（图片）</li>
+<li>music（音乐）</li>
+<li>sound（声音）</li>
+<li>template（模板）</li>
+<li>text（文本）</li>
+</ul>
+<p>某些目标只能支持一次播放一个音乐文件。对于设计为作为背景音乐播放的文件，应使用“音乐”，对于所有其他音频，应使用“声音”。“ binary”和“ text”是通用类型，可以在应用程序中以ByteArray或String形式使用。大多数目标可以互换使用。</p>
+<p>如果将资产指定为“模板”，则不会将其复制/嵌入为普通资产，而是将其复制到项目的根目录，因此您可以替换任何模板HX，HXML或特定于平台的模板目标文件。</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;assets&quot;</span><span class="ot"> include=</span><span class="st">&quot;*&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;../../assets&quot;</span><span class="ot"> rename=</span><span class="st">&quot;assets&quot;</span><span class="ot"> include=</span><span class="st">&quot;*&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;assets/images&quot;</span><span class="ot"> rename=</span><span class="st">&quot;images&quot;</span><span class="ot"> include=</span><span class="st">&quot;*.jpg|*.png&quot;</span><span class="ot"> exclude=</span><span class="st">&quot;example.jpg&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;assets&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;images&quot;</span><span class="ot"> include=</span><span class="st">&quot;*&quot;</span><span class="ot"> type=</span><span class="st">&quot;image&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;assets</span><span class="ot"> path=</span><span class="st">&quot;assets&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;sound</span><span class="ot"> path=</span><span class="st">&quot;sound/MySound.wav&quot;</span><span class="ot"> id=</span><span class="st">&quot;MySound&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;music</span><span class="ot"> path=</span><span class="st">&quot;sound/BackgroundMusic.ogg&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/assets&gt;</span></span></code></pre></div>
+<h3 id="证书">证书</h3>
+<p>使用<code>&lt;certificate /&gt;</code>标记添加密钥库以在某些平台上进行发布签名。</p>
+<p>如果不包括密码属性，则将在命令行提示您输入证书密码。</p>
+<p>对于Android，默认情况下，别名将设置为证书的文件名，不带扩展名。如果别名不同，则可以使用alias属性。</p>
+<p>如果设置了password属性，则alias_password属性将默认为相同的值。否则，您可以添加一个别名密码属性来指定其他值。</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;certificate</span><span class="ot"> path=</span><span class="st">&quot;to/certificate.crt&quot;</span><span class="ot"> password=</span><span class="st">&quot;1234&quot;</span><span class="ot"> alias=</span><span class="st">&quot;my-alias&quot;</span><span class="ot"> alias-password=</span><span class="st">&quot;4321&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>iOS不使用证书<code>path</code>和<code>password</code>，而是使用<code>team-id</code>与Apple Developer门户中为您的团队提供的ID匹配的属性：</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;certificate</span><span class="ot"> team-id=</span><span class="st">&quot;SK12FH34&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="类路径">类路径</h3>
+<p>与“来源”相同。</p>
+<h3 id="编译器标志">编译器标志</h3>
+<p>与“ haxeflag”相同。</p>
+<h3 id="配置">配置</h3>
+<p>使用<code>&lt;config /&gt;</code>标签设置特定于平台的值。当前支持以下目标：</p>
+<ul>
+<li>air</li>
+<li>android</li>
+<li>blackberry</li>
+<li>console-pc</li>
+<li>firefox</li>
+<li>flash</li>
+<li>html5</li>
+<li>ios</li>
+<li>linux</li>
+<li>mac</li>
+<li>ps3</li>
+<li>ps4</li>
+<li>tizen</li>
+<li>vita</li>
+<li>windows</li>
+<li>webos</li>
+<li>wiiu</li>
+<li>xbox1</li>
+<li>emscripten</li>
+<li>tvos</li>
+</ul>
+<p><strong>根据平台的不同，必须在标签后缀一个后缀。</strong></p>
+<p>例如，使用<code>&lt;config:android /&gt;</code>标签设置特定于Android的值：</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;config:android</span><span class="ot"> install-location=</span><span class="st">&quot;preferExternal&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;config:android</span><span class="ot"> permission=</span><span class="st">&quot;com.android.vending.BILLING&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;config:android</span><span class="ot"> target-sdk-version=</span><span class="st">&quot;16&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p><code>&lt;config:ios /&gt;</code>编译时使用标签设置特定于iOS的值。该<code>deployment</code>属性可以设置您希望定位的最低iOS版本。该<code>prerendered-icon</code>属性可以帮助控制图标的样式。</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;config:ios</span><span class="ot"> deployment=</span><span class="st">&quot;5.1&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;config:ios</span><span class="ot"> prerendered-icon=</span><span class="st">&quot;false&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="定义">定义</h3>
+<p>与<code>&lt;set /&gt;</code>标签类似，用于<code>&lt;define /&gt;</code>将值也传递给Haxe。请参阅上面的<a href="https://lime.software/docs/project-files/xml-format/#Conditionals">条件</a>部分。</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;define</span><span class="ot"> name=</span><span class="st">&quot;myDefineFlag&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="依赖">依赖</h3>
+<p>使用<code>&lt;dependency /&gt;</code>标记可以指定编译项目所需的本机框架或参考，以及需要复制的其他库。</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;dependency</span><span class="ot"> name=</span><span class="st">&quot;GameKit.framework&quot;</span><span class="ot"> if=</span><span class="st">&quot;ios&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="输出信息">输出信息</h3>
+<p>将指定的消息打印到控制台。</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;echo</span><span class="ot"> value=</span><span class="st">&quot;Some output message&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="错误">错误</h3>
+<p>记录一个错误，<code>lime.utils.Log.error()</code>默认情况下会引发该错误<code>value</code>并停止编译（如果<code>lime.utils.Log.throwErrors</code>设置为<code>true</code>）。</p>
+<p>例子：</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;section</span><span class="ot"> if=</span><span class="st">&quot;html5&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;error</span><span class="ot"> value=</span><span class="st">&quot;html5 isn&#39;t supported!&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/section&gt;</span></span></code></pre></div>
+<h3 id="haxe定义">Haxe定义</h3>
+<p>使用<code>&lt;haxedef /&gt;</code>标签添加Haxe定义（类似于将a<code>&lt;haxeflag /&gt;</code>与“ -D”一起使用）：</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxedef</span><span class="ot"> name=</span><span class="st">&quot;define&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="haxeflag">Haxeflag</h3>
+<p>使用<code>&lt;haxeflag /&gt;</code>标签在Haxe编译过程中添加其他参数：</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxeflag</span><span class="ot"> name=</span><span class="st">&quot;-dce&quot;</span><span class="ot"> value=</span><span class="st">&quot;std&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="haxelib">Haxelib</h3>
+<p>使用<code>&lt;haxelib /&gt;</code>标签包括Haxe库：</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxelib</span><span class="ot"> name=</span><span class="st">&quot;actuate&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>如果您愿意，还可以指定一个版本：</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxelib</span><span class="ot"> name=</span><span class="st">&quot;actuate&quot;</span><span class="ot"> version=</span><span class="st">&quot;1.0.0&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="图标">图标</h3>
+<p>使用<code>&lt;icon /&gt;</code>节点将图标文件添加到您的项目。当命令行工具请求目标平台的图标时，它将使用您提供的精确大小匹配，或者将尝试查找最接近的匹配并调整大小。如果包含SVG矢量图标，则该文件应优先于调整位图文件的大小。</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;icon</span><span class="ot"> path=</span><span class="st">&quot;icon.png&quot;</span><span class="ot"> size=</span><span class="st">&quot;64&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;icon</span><span class="ot"> path=</span><span class="st">&quot;icon.png&quot;</span><span class="ot"> width=</span><span class="st">&quot;96&quot;</span><span class="ot"> height=</span><span class="st">&quot;96&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;icon</span><span class="ot"> path=</span><span class="st">&quot;icon.svg&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="包含其他xml文件">包含其他XML文件</h3>
+<p>使用<code>&lt;include /&gt;</code>标签可添加在另一个项目文件中找到的标签，或在目标目录中找到“ include.xml”文件：</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;include</span><span class="ot"> path=</span><span class="st">&quot;to/another/project.xml&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;include</span><span class="ot"> path=</span><span class="st">&quot;to/shared/library&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="java">JAVA</h3>
+<p><code>&lt;java /&gt;</code>定位Android时，使用标签将Java类添加到项目中：</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;java</span><span class="ot"> path=</span><span class="st">&quot;to/classes&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="语言">语言</h3>
+<p>在支持的语言列表中添加一种语言（默认情况下，该列表为空）。</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;language</span><span class="ot"> name=</span><span class="st">&quot;en-US&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="启动图像">启动图像</h3>
+<p>设置启动应用程序映像的路径（该映像将在应用程序启动时显示）</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;launchimage</span><span class="ot"> path=</span><span class="st">&quot;launchImage.png&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="发射板">发射板</h3>
+<p>设置启动屏幕故事板（仅适用于iOS开发）。</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;launchstoryboard</span><span class="ot"> path=</span><span class="st">&quot;image.png&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>要么</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;launchstoryboard</span><span class="ot"> name=</span><span class="st">&quot;image.png&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>您也可以将其<code>template</code>用于此目的（将来记录）。</p>
+<h3 id="库">库</h3>
+<p>所有资产都进入“默认”库，但是通过添加<code>&lt;library&gt;</code>标签，可以修改默认库，还可以定义其他库并根据需要加载/卸载它们。</p>
+<p>要在默认库上禁用预加载：</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;library</span><span class="ot"> name=</span><span class="st">&quot;default&quot;</span><span class="ot"> preload=</span><span class="st">&quot;false&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>要在运行时加载资产，请执行以下操作：</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Assets.loadLibrary (<span class="st">&quot;default&quot;</span>).onComplete (<span class="kw">function</span> (library) {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> bitmapData = Assets.getBitmapData (<span class="st">&quot;default:image.png&quot;</span>);</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// or</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> bitmapData = Assets.getBitmapData (<span class="st">&quot;image.png&quot;</span>);</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// &quot;default:&quot; prefix is implied, if no library prefix is included</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p><strong>使用其他资产库</strong></p>
+<p>您可以轻松地将资产添加到“默认”库以外的库中。这些默认情况下不会预先加载，除非您添加：<code>&lt;library name="myOtherLibrary" preload="true" /&gt;</code></p>
+<p>然后将某些资产分配给上述库： <code>&lt;assets path="assets/other" library="myOtherLibrary" /&gt;</code></p>
+<p>检索代码中的资产时，请确保指定正确的库。有关使用库前缀的信息，请参见上面的示例。</p>
+<p>您也可以使用<code>Assets.unloadLibrary</code>，当您使用这些资源做。</p>
+<h3 id="日志">日志</h3>
+<p>记录错误（请参阅“错误”），警告或信息消息。</p>
+<p>例子：</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;log</span><span class="ot"> error=</span><span class="st">&quot;error message&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;log</span><span class="ot"> warn=</span><span class="st">&quot;warn message&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;log</span><span class="ot"> info=</span><span class="st">&quot;info message&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;log</span><span class="ot"> value=</span><span class="st">&quot;your message&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;log</span><span class="ot"> verbose=</span><span class="st">&quot;verbose message&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="元数据">元数据</h3>
+<p>使用<code>&lt;meta /&gt;</code>标签添加有关您的应用程序的信息，通常不会影响应用程序的运行方式，但会影响如何将其标识到目标操作系统或应用程序商店中：</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;meta</span><span class="ot"> title=</span><span class="st">&quot;My Application&quot;</span><span class="ot"> package=</span><span class="st">&quot;com.example.myapplication&quot;</span><span class="ot"> version=</span><span class="st">&quot;1.0.0&quot;</span><span class="ot"> company=</span><span class="st">&quot;My Company&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="module">Module</h3>
+<p>还有更多。</p>
+<h3 id="ndll">NDLL</h3>
+<p>您可以使用<code>&lt;ndll /&gt;</code>标签来包含本机库。这些通常位于“ ndll”目录下，并根据目标平台提供其他目录。通常，<code>&lt;ndll /&gt;</code>标记将作为扩展的一部分包含在内，并且很少直接使用：</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ndll</span><span class="ot"> name=</span><span class="st">&quot;std&quot;</span><span class="ot"> haxelib=</span><span class="st">&quot;hxcpp&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="path">PATH</h3>
+<p>使用<code>&lt;path /&gt;</code>标记将目录添加到系统的PATH环境变量。</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;path</span><span class="ot"> value=</span><span class="st">&quot;path/to/add/to/system/PATH&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="构造后命令">构造后命令</h3>
+<p>使您可以设置构建后命令，例如Haxe代码（由Haxe解释器插入），运行文件命令或控制台命令。</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;postbuild</span><span class="ot"> haxe=</span><span class="st">&quot;Haxe code&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;postbuild</span><span class="ot"> open=</span><span class="st">&quot;file to run&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;postbuild</span><span class="ot"> command=</span><span class="st">&quot;command to run&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;postbuild</span><span class="ot"> cmd=</span><span class="st">&quot;command to run&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="预构造前命令">预构造前命令</h3>
+<p>使您可以设置预构建命令，例如Haxe代码（由Haxe解释器插入），运行文件命令或控制台命令：</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;prebuild</span><span class="ot"> haxe=</span><span class="st">&quot;Haxe code&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;prebuild</span><span class="ot"> open=</span><span class="st">&quot;file to run&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;prebuild</span><span class="ot"> command=</span><span class="st">&quot;command to run&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;prebuild</span><span class="ot"> cmd=</span><span class="st">&quot;command to run&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="更改预加载入口">更改预加载入口</h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;app</span><span class="ot"> preloader=</span><span class="st">&quot;preloaderClass&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="组合">组合</h3>
+<p>该<code>&lt;section /&gt;</code>标签是用来组其他标签一起。当结合“如果”和/或“除非”逻辑时，这通常是最有价值的：</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;section</span><span class="ot"> if=</span><span class="st">&quot;html5&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;source</span><span class="ot"> path=</span><span class="st">&quot;extra/src/html5&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/section&gt;</span></span></code></pre></div>
+<h3 id="设置">设置</h3>
+<p>使用<code>&lt;set /&gt;</code>标签设置条件逻辑变量。请参阅上面的<a href="#Conditionals">条件</a>部分。</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;set</span><span class="ot"> name=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="设定">设定</h3>
+<p>使用<code>&lt;setenv /&gt;</code>标签设置环境变量：</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;setenv</span><span class="ot"> name=</span><span class="st">&quot;GLOBAL_DEFINE&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="源代码">源代码</h3>
+<p>使用<code>&lt;source /&gt;</code>标签添加Haxe类路径：</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;source</span><span class="ot"> path=</span><span class="st">&quot;Source&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>如果你正在使用<code>@:file</code>，<code>@:bitmap</code>，<code>@:sound</code>或<code>@:file</code>在项目中的标签，确保资产的文件是你HAXE源路径中可用。</p>
+<h3 id="目标">目标</h3>
+<p>通过运行自定义的haxelib命令，可以重新定义特定目标的构建过程。如果您想使用自己的库来构建项目，这可能很有用，例如，您知道自己在做什么，并且知道Lime构建系统是如何工作的。</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;target</span><span class="ot"> name=</span><span class="st">&quot;customTarget&quot;</span><span class="ot"> handler=</span><span class="st">&quot;yourHandler&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="模板">模板</h3>
+<p>使用<code>&lt;template /&gt;</code>标签添加路径，这些路径可以覆盖命令行工具使用的模板。</p>
+<p>您可以添加完整的模板路径，如下所示：</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template</span><span class="ot"> path=</span><span class="st">&quot;templates&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>否则，您可以像这样覆盖单个文件：</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;template</span><span class="ot"> path=</span><span class="st">&quot;Assets/index.html&quot;</span><span class="ot"> rename=</span><span class="st">&quot;index.php&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="模板路径">模板路径</h3>
+<p>请参阅“模板”。</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;templatepath</span><span class="ot"> name=</span><span class="st">&quot;path&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="未定义">未定义</h3>
+<p>取消设置先前定义的标志。请参阅的条目<code>&lt;define /&gt;</code>。</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;undefine</span><span class="ot"> name=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="未设定">未设定</h3>
+<p>取消先前设置的值。请参阅的条目<code>&lt;set /&gt;</code>。</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;set</span><span class="ot"> name=</span><span class="st">&quot;red&quot;</span><span class="ot"> value=</span><span class="st">&quot;0xff0000&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;unset</span><span class="ot"> name=</span><span class="st">&quot;red&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h3 id="窗口">窗口</h3>
+<p>您可以使用<code>&lt;window /&gt;</code>标签来控制如何初始化应用程序。这包括屏幕分辨率和背景色，以及其他选项，例如是否应允许硬件或显示模式标志。</p>
+<p>默认情况下，移动平台使用的窗口宽度和高度为0，这是一个使用当前显示器分辨率的特殊值。这在台式机平台上可用，但通常建议改为启用该<code>fullscreen</code>标志，并将<code>width</code>和<code>height</code>值设置为良好的窗口分辨率。<code>fps="0"</code>HTML5有一个特殊值，它是默认值，它使用“ requestAnimationFrame”而不是强制使用帧速率。</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> width=</span><span class="st">&quot;640&quot;</span><span class="ot"> height=</span><span class="st">&quot;480&quot;</span><span class="ot"> background=</span><span class="st">&quot;#FFFFFF&quot;</span><span class="ot"> fps=</span><span class="st">&quot;30&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> hardware=</span><span class="st">&quot;true&quot;</span><span class="ot"> allow-shaders=</span><span class="st">&quot;true&quot;</span><span class="ot"> require-shaders=</span><span class="st">&quot;true&quot;</span><span class="ot"> depth-buffer=</span><span class="st">&quot;false&quot;</span><span class="ot"> stencil-buffer=</span><span class="st">&quot;false&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> fullscreen=</span><span class="st">&quot;false&quot;</span><span class="ot"> resizable=</span><span class="st">&quot;true&quot;</span><span class="ot"> borderless=</span><span class="st">&quot;false&quot;</span><span class="ot"> vsync=</span><span class="st">&quot;false&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;window</span><span class="ot"> orientation=</span><span class="st">&quot;portrait&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<p>该<code>orientation</code>值预期为“纵向”或“横向”……默认值为“自动”，它允许操作系统决定要使用的方向。</p>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>graphics</title>
+  <style type="text/css">
+    html {
+      line-height: 1.7;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 40em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin-top: 1.7em;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.7em;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1.7em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      font-style: italic;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      background-color: #f0f0f0;
+      font-size: 85%;
+      margin: 0;
+      padding: .2em .4em;
+    }
+    pre {
+      line-height: 1.5em;
+      padding: 1em;
+      background-color: #f0f0f0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin-top: 1.7em;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td {
+      border-bottom: 1px solid lightgray;
+      padding: 1em 3em 1em 0;
+    }
+    header {
+      margin-bottom: 6em;
+      text-align: center;
+    }
+    nav a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    kbd {
+        padding: 2px 4px ;
+        font-size: 90%;
+        color: #fff;
+        background-color: #19a3be;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    html {
+        line-height: 1.7;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #dcdcdc;
+        background-color: #2F353A ;
+    }
+
+    pre {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    code {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #98e020;
+      font-style: italic;
+    }
+    th, td {
+        border: 1px solid #717171;
+        padding: 1em 1em 1em;
+    }
+    body {
+        max-width: 100em;
+    }
+    a:visited {
+        color: #e0e0e0;
+    }
+    a {
+        color: #e0e0e0;
+        text-decoration: underline;
+    }
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        scrollbar-arrow-color:red;
+        background: rgba(166,226,41,1);
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(166,226,41,1);
+        background: rgba(166,226,41,1);
+        scrollbar-arrow-color:red;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 0;
+        background: rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body>
+<h2 id="画笔">画笔</h2>
+<p>在小游戏平台，无法使用太多原生的绘制API，因此新增了一个ZGraphics类，使用三角形绘制出我们所需要的形状。目前仅支持绘制方块、线。</p>
+<h5 id="创建一个绘制对象">创建一个绘制对象</h5>
+<p>请注意，该API为了提高性能，需要提供一个精灵表对象作为渲染源来进行渲染，根据不同的精灵帧来作为画笔。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> g = <span class="kw">new</span> ZGraphics();</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//绑定精灵表</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>g.beginTextureAtlas(精灵表对象);</span></code></pre></div>
+<h5 id="设置画笔">设置画笔</h5>
+<p>画笔就是不同的精灵帧，指定精灵表里的精灵名称即可。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>g.beginFrameByName(精灵帧名称)</span></code></pre></div>
+<h5 id="绘制方块">绘制方块</h5>
+<p>支持直接绘制方块：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>g.drawRect(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">100</span>); <span class="co">//绘制一个在坐标0,0，宽高各100的方块</span></span></code></pre></div>
+<h5 id="绘制线条">绘制线条</h5>
+<p>支持直接绘制线条：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>g.drawLine(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">100</span>); <span class="co">//绘制一个从坐标0,0 到坐标100,100的线条</span></span></code></pre></div>
+<h5 id="设置线粗">设置线粗</h5>
+<p>该属性仅影响线条，不影响方块绘制。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>g.lineSize = <span class="dv">10</span>; <span class="co">//设置线条的像素为10像素计算。</span></span></code></pre></div>
+<h5 id="连续画线">连续画线</h5>
+<p>如果直接使用drawLine进行画线，连续画线时，两条线之间不会合并，如果需要合并，请使用以下API：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>g.moveTo(<span class="dv">0</span>,<span class="dv">0</span>); <span class="co">//决定线的起始点</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>g.lineTo(<span class="dv">100</span>,<span class="dv">100</span>); <span class="co">//绘制到100,100坐标</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>g.lineTo(<span class="dv">0</span>,<span class="dv">100</span>); <span class="co">//绘制到0,100坐标</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>g.lineTo(<span class="dv">0</span>,<span class="dv">0</span>); <span class="co">//绘制到0,0坐标</span></span></code></pre></div>
+<p>以上方法多次调用会使多条线连接起来。</p>
+<h5 id="呈现画布">呈现画布</h5>
+<p>当绘制结束后，需要调用<code>fillEnd</code>接口进行呈现：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>g.fillEnd();</span></code></pre></div>
+<h5 id="擦除已绘制的内容">擦除已绘制的内容</h5>
+<p>支持直接擦除已绘制的内容，但这种擦除方式不是精准擦除，而是整段个体擦除。</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>g.erase(<span class="dv">100</span>,<span class="dv">100</span>,<span class="dv">10</span>); <span class="co">//擦除坐标100，100，在范围内10px的绘制对象。</span></span></code></pre></div>
+<p>该方法会自动调用<code>fillEnd</code>接口。</p>
+<h5 id="导出绘图数据">导出绘图数据</h5>
+<p>可将当前绘制的内容导出Base64，该数据会经过压缩。</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> base64 = g.toBase64();</span></code></pre></div>
+<h5 id="通过绘图数据渲染">通过绘图数据渲染</h5>
+<p>可将Base64导入，重新生成绘图：</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> g = ZGraphics.formBase64(精灵表对象,base64);</span></code></pre></div>
+<h5 id="清空所有绘制内容">清空所有绘制内容</h5>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>g.clear();</span></code></pre></div>
+<h5 id="撤销上一步操作绘制擦除">撤销上一步操作（绘制&amp;擦除）</h5>
+<p>撤销上一次绘制内容或擦除内容</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>g.withdraw();</span></code></pre></div>
+</body>
+</html>

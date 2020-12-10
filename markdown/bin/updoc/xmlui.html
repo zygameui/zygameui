@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>xmlui</title>
+  <style type="text/css">
+    html {
+      line-height: 1.7;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 40em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin-top: 1.7em;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.7em;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1.7em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      font-style: italic;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      background-color: #f0f0f0;
+      font-size: 85%;
+      margin: 0;
+      padding: .2em .4em;
+    }
+    pre {
+      line-height: 1.5em;
+      padding: 1em;
+      background-color: #f0f0f0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin-top: 1.7em;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td {
+      border-bottom: 1px solid lightgray;
+      padding: 1em 3em 1em 0;
+    }
+    header {
+      margin-bottom: 6em;
+      text-align: center;
+    }
+    nav a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    kbd {
+        padding: 2px 4px ;
+        font-size: 90%;
+        color: #fff;
+        background-color: #19a3be;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    html {
+        line-height: 1.7;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #dcdcdc;
+        background-color: #2F353A ;
+    }
+
+    pre {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    code {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #98e020;
+      font-style: italic;
+    }
+    th, td {
+        border: 1px solid #717171;
+        padding: 1em 1em 1em;
+    }
+    body {
+        max-width: 100em;
+    }
+    a:visited {
+        color: #e0e0e0;
+    }
+    a {
+        color: #e0e0e0;
+        text-decoration: underline;
+    }
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        scrollbar-arrow-color:red;
+        background: rgba(166,226,41,1);
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(166,226,41,1);
+        background: rgba(166,226,41,1);
+        scrollbar-arrow-color:red;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 0;
+        background: rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body>
+<h2 id="xml格式界面">XML格式界面</h2>
+<p>我们可以采取XML格式的方式，来渲染我们的UI界面。同时我们有<a href="updoc/zyeditui.html">ZYEditUI工具</a>来处理导入界面以及实时预览。</p>
+<p>默认支持的XML格式库：</p>
+<p>原生组件：</p>
+<ul>
+<li>ZBox（容器）</li>
+<li>ZImage （图片）</li>
+<li>HBox （横向容器）</li>
+<li>VBox （纵向容器）</li>
+<li>ZAnimatoin （动画）</li>
+<li>ZBitmapLabel （纹理文本）</li>
+<li>ZLabel （文本）</li>
+<li>ZInputLabel （输入文本）</li>
+<li>ZList （列表）</li>
+<li>ZQuad （纯色块）</li>
+<li>ZScroll （滚动窗）</li>
+<li>TouchImageBatchsCountainer （触摸批渲染层）</li>
+<li>ImageBatchs （批渲染层）</li>
+<li>ZButton （按钮）</li>
+<li>ZSpine （Spine骨骼动画）</li>
+</ul>
+<p>批渲染组件：</p>
+<ul>
+<li>BBox （容器）</li>
+<li>HBBox （横向容器）</li>
+<li>VBBox （纵向容器）</li>
+<li>BButton （按钮）</li>
+<li>BLabel （纹理文本）</li>
+<li>BSprite （容器）</li>
+<li>BScale9Image （九宫格图片）</li>
+<li>BScale9Button （九宫格按钮）</li>
+<li>BSpine （Spine骨骼动画）</li>
+<li>BAnimation （动画）</li>
+</ul>
+<p>功能组件：</p>
+<ul>
+<li>ZTween （动画过渡）</li>
+<li>ZInt （整数）</li>
+<li>ZFloat （浮点数）</li>
+<li>ZBool （布尔值）</li>
+<li>ZString （字符串）</li>
+<li>ZArray （数组）</li>
+<li>ZObject （动态类型）</li>
+<li>ZHaxe （hscript脚本）</li>
+</ul>
+<p>图片赋值，都是使用<code>src</code>属性，来个简单的示例：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ZBox&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;ZButton</span><span class="ot"> src=</span><span class="st">&quot;图片名&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;TouchImageBatchsCountainer</span><span class="ot"> src=</span><span class="st">&quot;精灵图名&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;BImage</span><span class="ot"> src=</span><span class="st">&quot;精灵图名:精灵名&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/TouchImageBatchsCountainer&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ZBox&gt;</span></span></code></pre></div>
+<p>文本赋值，都是使用<code>text</code>属性，同时高宽可以使用百分比计算赋值：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ZBox&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;ZLabel</span><span class="ot"> text=</span><span class="st">&quot;data&quot;</span><span class="ot"> width=</span><span class="st">&quot;100%&quot;</span><span class="ot"> height=</span><span class="st">&quot;32&quot;</span><span class="kw">/&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ZBox&gt;</span></span></code></pre></div>
+<h2 id="运行脚本">运行脚本</h2>
+<p>我们可以在XML配置中，可以得到创建完毕后执行脚本：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ZBox</span><span class="ot"> id=</span><span class="st">&quot;box&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;ZHaxe</span><span class="ot"> id=</span><span class="st">&quot;super&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    //可以直接访问id</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    box.x = 100;</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/ZHaxe&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ZBox&gt;</span></span></code></pre></div>
+<p>注意：&lt;、&gt;等符号需要转义，可以使用下面的描述代替：</p>
+<table>
+<thead>
+<tr class="header">
+<th>原符号</th>
+<th>XML可用更改符</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&gt;</td>
+<td>gt</td>
+</tr>
+<tr class="even">
+<td>&lt;</td>
+<td>lt</td>
+</tr>
+<tr class="odd">
+<td>&gt;=</td>
+<td>egt</td>
+</tr>
+<tr class="even">
+<td>&lt;=</td>
+<td>elt</td>
+</tr>
+<tr class="odd">
+<td>&amp;&amp;</td>
+<td>and</td>
+</tr>
+<tr class="even">
+<td>||</td>
+<td>or</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span>(value lt <span class="dv">1</span> and value gt <span class="dv">0</span>){</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//处理</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h2 id="构造ui">构造UI</h2>
+<p>我们可以在XML中定义布局后，然后通过Haxe来构造：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">//构造成功后，会默认添加到第二个参数的容器中</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> builder = ZBuilder.build(xml,<span class="kw">this</span>);</span></code></pre></div>
+<h2 id="方法定义">方法定义</h2>
+<p>我们还可以在XML中定义方法：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ZBox</span><span class="ot"> id=</span><span class="st">&quot;box&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- 定义一个play的方法 --&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;ZHaxe</span><span class="ot"> id=</span><span class="st">&quot;play&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    //可以直接访问id</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    box.x = 100;</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/ZHaxe&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ZBox&gt;</span></span></code></pre></div>
+<p>开始调用：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>builder.getFunction(<span class="st">&quot;play&quot;</span>)();</span></code></pre></div>
+<h2 id="扩展类型">扩展类型</h2>
+<p>我们还可以对ZBuilder进行类型扩展，先定义一个类型：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ExtendsClass <span class="kw">extends</span> ZBox {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="kw">var</span> tag:<span class="dt">String</span>;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="kw">function</span> <span class="kw">new</span>(tag:<span class="dt">String</span> = <span class="kw">null</span>):<span class="dt">Void</span>{</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>();</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span>.tag = tag;</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>然后进行扩展：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">//扩展一个ExtendClass的显示对象类型</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ZBuilder.bind(ExtendClass);</span></code></pre></div>
+<p>这时你可以在XML中使用，同时可以对它的属性进行修改：</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ExtendsClass</span><span class="ot"> tag=</span><span class="st">&quot;extendsTag&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ExtendsClass&gt;</span></span></code></pre></div>
+<p>如果你想对属性进行特殊写入，那么可以更改写入方式：</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ZBuilder.bindParsing(ExtendsClass,<span class="st">&quot;tag&quot;</span>,<span class="kw">function</span>(ui,name,value){</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//其中ui是当前的ExtendsClass对象，name是tag，value是当前赋值</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">cast</span>(ui,ExtendsClass).tag = <span class="st">&quot;[TAG]&quot;</span> + value;</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p>如果你想在创建的时候，进行属性传参：</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ZBuilder.bindCreate(ExtendsClass,<span class="kw">function</span>(xml:Xml):<span class="dt">Array</span>&lt;<span class="dt">Dynamic</span>&gt;{</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//此处返回的数组，就是new的时候所使用的参数</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">return</span> [xml.get(<span class="st">&quot;tag&quot;</span>)];</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p>当你的容器需要修改添加方式：</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ZBuilder.bindAdd(ExtendsClass,<span class="kw">function</span>(obj:<span class="dt">Dynamic</span>,parent:<span class="dt">Dynamic</span>,xml:Xml):<span class="dt">Void</span>{</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//其中obj是添加对象，parent是父亲对象，xml是当前添加的配置</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">cast</span>(parent,ExtendsClass).addChild(obj);  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p>当你的组件结束添加后：</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ZBuilder.bindEnd(ExtendsClass,<span class="kw">function</span>(ui:<span class="dt">Dynamic</span>):<span class="dt">Void</span>{</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">//ui是当前已结束添加的对象</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+</body>
+</html>

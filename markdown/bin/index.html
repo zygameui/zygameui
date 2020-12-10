@@ -1,0 +1,81 @@
+<meta charset="UTF-8"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>./source/index.html</title>
+  <style type="text/css">
+    html {
+      line-height: 1.7;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      padding: 0px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+      background:#30353A;
+    }
+    #main{position: fixed; width: 100%; height: 100%; display: flex;}
+    #side{width:250px;} 
+    #content{ flex-grow: 1}
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        scrollbar-arrow-color:red;
+        background: rgba(166,226,41,1);
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(166,226,41,1);
+        background: rgba(166,226,41,1);
+        scrollbar-arrow-color:red;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 0;
+        background: rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body>
+  <div id="main">
+    <iframe id="side" class="innerbox" src="toc.html" style=" border: 0px; height:100%;">
+    </iframe>
+    <iframe id="content" class="innerbox" style=" border: 0px; height:100%;" name="content">
+    </iframe>
+  </div>
+  <script type="text/javascript">
+    var lasturl = window.location.href;
+    var headurl = lasturl.substr(0,lasturl.lastIndexOf("/") + 1);
+    //初次切换界面
+    var contenturl = lasturl.indexOf("?p=") != -1? lasturl.substr(lasturl.lastIndexOf("?p=") + 3) : null;
+    if(contenturl != null)
+      contenturl = contenturl.split("_").join("/") + ".html";
+    document.getElementById("content").src = (contenturl != null ? contenturl: "home.html") + "?=" + 1604140206000;
+    this.setInterval(function(){
+      try{
+      var url = document.getElementById("content").contentWindow.location.href;
+      if(lasturl != url){
+        //变更头部
+        lasturl = url;
+        url = url.substr(headurl.length);
+        url = String(url).split("/").join("_");
+        url = String(url).substr(0,url.lastIndexOf(".html"));
+        var state={title:String(url).toLocaleUpperCase(),url: headurl + "index.html?p=" + url};
+        history.replaceState(state,state.title,state.url);
+        document.title = state.title;
+      }
+    }catch(e){
+
+    }
+    },100);
+  </script>
+</body>
+</html>

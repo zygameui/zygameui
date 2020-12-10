@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>assets</title>
+  <style type="text/css">
+    html {
+      line-height: 1.7;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 40em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin-top: 1.7em;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.7em;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1.7em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      font-style: italic;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      background-color: #f0f0f0;
+      font-size: 85%;
+      margin: 0;
+      padding: .2em .4em;
+    }
+    pre {
+      line-height: 1.5em;
+      padding: 1em;
+      background-color: #f0f0f0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin-top: 1.7em;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td {
+      border-bottom: 1px solid lightgray;
+      padding: 1em 3em 1em 0;
+    }
+    header {
+      margin-bottom: 6em;
+      text-align: center;
+    }
+    nav a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    kbd {
+        padding: 2px 4px ;
+        font-size: 90%;
+        color: #fff;
+        background-color: #19a3be;
+        border-radius: 3px;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    html {
+        line-height: 1.7;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #dcdcdc;
+        background-color: #2F353A ;
+    }
+
+    pre {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    code {
+        border-radius: 4px;
+        background-color: #2d2d2d;
+    }
+
+    blockquote {
+      margin: 1.7em 0 1.7em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #98e020;
+      font-style: italic;
+    }
+    th, td {
+        border: 1px solid #717171;
+        padding: 1em 1em 1em;
+    }
+    body {
+        max-width: 100em;
+    }
+    a:visited {
+        color: #e0e0e0;
+    }
+    a {
+        color: #e0e0e0;
+        text-decoration: underline;
+    }
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+        width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+        height: 4px;
+        scrollbar-arrow-color:red;
+        background: rgba(166,226,41,1);
+    }
+    ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(166,226,41,1);
+        background: rgba(166,226,41,1);
+        scrollbar-arrow-color:red;
+    }
+    ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        border-radius: 0;
+        background: rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body>
+<h2 id="资源管理">资源管理</h2>
+<p>在OpenFL中有<code>openfl.utils.Assets</code>工具类的实现，可以用于加载资源；但是其中加载的资源并不能满足于我们一些资源载入。为此，我给它封装了一个<code>zygame.utils.ZAssets</code>对象。</p>
+<p>当你拥有一个资源管理对象后，你将可以使用它进行加载以下格式：</p>
+<ul>
+<li>png、jpg 基础的图片资源，可通过getBitmapData获取。</li>
+<li>mp3、ogg 背景音乐以及音效，可通过getMusic以及getSound获取。</li>
+<li>json 动态JSON对象，当加载完成后就直接是Dynamic对象，可通过getObject获取。</li>
+<li>png、xml精灵表 基础的XML格式的精灵表数据，可通过getTextureAtlas获取。</li>
+<li>xml XML格式数据，可通过getXml获取。</li>
+<li>swflite SWFLite数据格式，可通过getMovieClip创建已载入的SWFMovieClip对象。</li>
+<li>fnt 位图字体资源，可通过getFntData获取位图字体资源。</li>
+<li>spine Spine资源，涉及的API较多，请直接参考2.9节点介绍。</li>
+<li>maplive Maplive地图数据格式，涉及的API较多，请直接参考2.10节点介绍</li>
+</ul>
+<p>简单的加载示例：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//单个文件加载</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>assets.loadFile(<span class="st">&quot;1.png&quot;</span>);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">//加载多个文件</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>assets.loadFiles([<span class="st">&quot;2.png&quot;</span>,<span class="st">&quot;3.mp3&quot;</span>]);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">//加载精灵表数据</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>assets.loadTextures(<span class="st">&quot;4.png&quot;</span>,<span class="st">&quot;4.xml&quot;</span>);</span></code></pre></div>
+<p>一般游戏过程中，都是需要等待资源加载完成后，才能继续游戏逻辑处理。我们通过上面的API示例，仅仅只是将资源放入加载列表中，其实内部还未开始加载。需要调用以下实现进行加载，同时会返回一个进度值，用于判断资源是否加载完成：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>assets.start(<span class="kw">function</span>(f:<span class="dt">Float</span>):<span class="dt">Void</span>{</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span>(f == <span class="dv">1</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">//加载完成，开始游戏逻辑处理</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p>当加载完成后，你可以通过访问API获取数据，例如获取一个位图：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>assets.getBitmapData(<span class="st">&quot;1&quot;</span>); <span class="co">//自动识别1.png</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>assets.getBitmapData(<span class="st">&quot;4:1&quot;</span>); <span class="co">//获取4.png的精灵图对象</span></span></code></pre></div>
+<h2 id="使用zip包资源载入">使用ZIP包资源载入</h2>
+<p>提供了压缩包文件读取方式入口，可通过压缩包将资源一次性载入。然后再通过普通的资源进行加载；Zip是属于平台通用功能，但会带来一定的性能影响。</p>
+<h4 id="使用说明">使用说明</h4>
+<p>loadAssetsZip的API不论先后，都会优先第一时间读取zip资源。然后再加载其他资源，其他资源会根据zip是否包含资源来决定是否从zip中获取资源。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>assets.loadAssetsZip(<span class="st">&quot;GameMain.zip&quot;</span>);</span></code></pre></div>
+<p>当资源不再需要时，可卸载zip所占用的资源。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>assets.unloadAssetsZip(<span class="st">&quot;GameMain&quot;</span>);</span></code></pre></div>
+<p>当资源被载入到Zip后，游戏可以快速地进行读取资源。这时可以根据需要来加载所需的图片。</p>
+<p>更详细的API请直接参考：<a href="">ZAssets</a>。</p>
+<h2 id="资源绑定">资源绑定</h2>
+<p>一个assets是独立的，如果你希望它可以被其他ZAssets所读取使用，那么你需要使用<code>zygame.components.ZBuilder</code>进行绑定：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ZBuilder.bindAssets(assets);</span></code></pre></div>
+<p>绑定的资源就会进行全局共享，可通过API直接全局获取：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">//从全局里获取精灵图</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ZBuilder.getBaseTextureAtlas(<span class="st">&quot;name&quot;</span>);</span></code></pre></div>
+<p>它还可以应用在<code>ZBuilder.build</code>中，一个界面由多个精灵图组成时，需要使用<code>bindAssets</code>功能让它们可以找到资源。</p>
+</body>
+</html>

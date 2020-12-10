@@ -1,0 +1,9 @@
+-main Tools
+-lib zypython
+-cp src
+-python tools.py
+
+--next
+
+-main Run
+-neko ../../run.n

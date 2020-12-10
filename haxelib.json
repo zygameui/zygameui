@@ -1,0 +1,14 @@
+{
+  "name": "zygameui",
+  "url": "",
+  "license": "MIT",
+  "tags": [],
+  "description": "",
+  "version": "9.6.7",
+  "releasenote": "",
+  "contributors": ["rainy","zygameui","zygameui"],
+  "dependencies": {
+      
+  },
+  "classPath": "Source"
+}

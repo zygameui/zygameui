@@ -1,27 +1,16 @@
 [dir]:doc
 
-## zygameui公共库代码
-js目录下是在QQ/微信小游戏中使用的公告库代码。
-
-# 该库作用
-
-使用该库开发的游戏，可以轻松发布到各个小游戏平台，并可以得到C++性能级别的安卓/IOS运行包。同时我也在维护openfl/Away3D库，该库可以轻松载入3D资源，创建3D游戏，但请注意，3D库未正式发布。
-
 ## 入门
 
 由Haxe+OpenFL+Lime支持的跨平台2D游戏引擎。是由[左眼]于2018年创建，并投入开发项目使用。经过多个版本的维护，当前版本已满足绝大部分游戏开发需求，拥有核心组件以及小游戏驱动良好支持。
 
-## 引擎特点
-
-- 支持Tilemap点击事件
-- 自带精灵图系统
-- 支持基础组件（兼容小游戏）
-- xml创建UI布局
-- 内置迷你小游戏引擎
-
 ## 教程
 
-请参考Git中的markdown/bin/index.html
+- [入门](doc/start.md)
+- [引擎支持](doc/support.md)
+- 资料
+- API
+- 使用说明
 
 ## Python3+
 zygameui命令行需要依赖python3，同时需要安装以下库：
@@ -30,14 +19,6 @@ pip3 install chardet
 pip3 install pandas
 pip3 install xlrd
 ```
-
-## 主要库依赖
-- Openfl8.9.3+
-- castle
-- differ
-- spine-hx
-- hscript
-- tweenxcore
 
 ## 平台支持
 
@@ -62,5 +43,3 @@ pip3 install xlrd
 - 小米赚赚H5小游戏（xiaomi-zz）
 - YYH5小游戏（yy-sdk）
 - 章鱼输入法小游戏（zhangyu-sdk）
-
-（以上库暂未发布，如果有需要，可以联系我！）

@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.utils.load.Loader3DData.ZLoader3D;
 import zygame.loader.parser.Loader3DParser;
 import zygame.loader.parser.AssetsType;
 import zygame.loader.parser.MP3Parser;
@@ -750,6 +751,15 @@ class ZAssets {
 	public function getZLoader3D(id:String):#if zygame3d zygame.utils.load.Loader3DData.ZLoader3D #else Dynamic #end
 	{
 		return _3ds.get(id);
+	}
+
+	/**
+	 * 设置ZLoader3D对象
+	 * @param id 
+	 * @param loader 
+	 */
+	public function setZLoader3D(id:String,loader:ZLoader3D):Void{
+		_3ds.set(id,loader);
 	}
 
 	/**

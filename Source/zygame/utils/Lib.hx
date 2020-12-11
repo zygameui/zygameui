@@ -348,6 +348,20 @@ class Lib {
 	}
 
 	/**
+	 * 根据两点坐标获取角度
+	 * @param x1 
+	 * @param y1 
+	 * @param x2 
+	 * @param y2 
+	 * @return Float
+	 */
+	public static function getAngleByPos(x1:Float,y1:Float,x2:Float,y2:Float):Float{
+		var angle:Float = Math.atan2((y2-y1), (x2-x1)); //弧度
+		// var theta:Float = angle*(180/Math.PI);
+		return angle;
+	}
+
+	/**
 	 * 角度转弧度
 	 * @param angle
 	 * @return Float

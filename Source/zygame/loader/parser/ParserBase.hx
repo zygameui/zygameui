@@ -111,9 +111,7 @@ import zygame.utils.Lib;
 	 */
 	public function finalAssets(type:AssetsType, assetsData:Dynamic, pro:Float = 0):Void {
 		this.progress = pro;
-		if (assetsData != null) {
-			this.out(this, type, assetsData, pro);
-		}
+		this.out(this, type, assetsData, pro);
 		if (pro == 1) {
 			this.done();
 			this._assets = null;

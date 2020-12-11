@@ -21,7 +21,7 @@ js目录下是在QQ/微信小游戏中使用的公共库代码。
 
 ## 教程
 
-请参考Git中的markdown/bin/index.html
+请参考http://static.zygameui.cn/games/doc/index.html
 
 ## Python3+
 zygameui命令行需要依赖python3，同时需要安装以下库：

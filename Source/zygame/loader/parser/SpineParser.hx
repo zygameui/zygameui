@@ -1,7 +1,6 @@
 package zygame.loader.parser;
 
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
-import openfl.utils.Assets;
 import zygame.utils.StringUtils;
 import zygame.utils.AssetsUtils;
 import openfl.display.BitmapData;
@@ -60,7 +59,7 @@ class SpineParser extends ParserBase {
 				this.finalAssets(SPINE, spine, 1);
 				map = null;
 			} else {
-				Assets.loadText(getData().atlas).onComplete(function(data:String):Void {
+				AssetsUtils.loadText(getData().atlas).onComplete(function(data:String):Void {
 					var spine:SpineTextureAtals = new SpineTextureAtals(map, data);
 					spine.path = getData().path;
 					this.finalAssets(SPINE, spine, 1);

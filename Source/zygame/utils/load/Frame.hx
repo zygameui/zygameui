@@ -28,6 +28,12 @@ class Frame extends BaseFrame {
 
 	public var parent:TextureAtlas;
 
+	/**
+	 * Away3D使用的纹理
+	 * @return Frame
+	 */
+	private var _texture3d:#if zygame3d away3d.textures.BitmapTexture #else Dynamic #end;
+
 	public function copy():Frame{
 		var frame = new Frame();
 		frame.name = name;
@@ -126,5 +132,17 @@ class Frame extends BaseFrame {
 			uvs.push((y1 + h1) / parent.getRootBitmapData().height);
 		}
 		return uvs;
+	}
+
+	/**
+	 * 获取Away3D使用的纹理
+	 * @return Dynamic
+	 */
+	public function getTexture3D():Dynamic{
+		#if zygame3d
+		return away3d.utils.Cast.bitmapTexture(this.parent.getRootBitmapData());
+		#else
+		return null;
+		#end
 	}
 }

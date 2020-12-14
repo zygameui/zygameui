@@ -13,7 +13,7 @@ import zygame.utils.AssetsUtils;
 #if (gl_stats && openfl < '9.0.0')
 import openfl._internal.renderer.context3D.stats.Context3DStats;
 import openfl._internal.renderer.context3D.stats.DrawCallContext;
-#else
+#elseif gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
 #end

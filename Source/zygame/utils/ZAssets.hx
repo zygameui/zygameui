@@ -381,6 +381,10 @@ class ZAssets {
 		var parser = _parsers[currentLoadIndex];
 		currentLoadIndex++;
 		currentLoadNumber++;
+		if(parser == null){
+			loadNext();
+			return;
+		}
 		parser.out = onAssetsOut;
 		parser.done = loadDone;
 		parser.error = loadError;

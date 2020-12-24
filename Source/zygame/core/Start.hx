@@ -445,8 +445,8 @@ class Start extends ZScene {
 			zygame.utils.Lib.onFrame();
 			// 3D渲染
 			#if zygame3d
-			if (view3d != null)
-				view3d.render();
+			if(zygame.core.Start3D.current != null)
+				zygame.core.Start3D.current.onRender();
 			#end
 		}
 	}

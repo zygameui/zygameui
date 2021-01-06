@@ -71,9 +71,9 @@ class TimeRuntime {
      * @param closure 
      * @param delay 
      * @param args 
-     * @return UInt
+     * @return Int
      */
-    public function nextFrameCall(closure:Function, args:Array<Dynamic> = null):UInt
+    public function nextFrameCall(closure:Function, args:Array<Dynamic> = null):Int
     {
         return setTimeout(closure,0,args);
     }
@@ -83,9 +83,9 @@ class TimeRuntime {
      * @param closure 
      * @param delay 
      * @param args 
-     * @return UInt
+     * @return Int
      */
-    public function setTimeout (closure:Function, delay:Int, args:Array<Dynamic> = null):UInt {
+    public function setTimeout (closure:Function, delay:Int, args:Array<Dynamic> = null):Int {
         _id ++;
         if(delay <= 0)
             delay = 1;
@@ -97,7 +97,7 @@ class TimeRuntime {
      * 清理计时器
      * @param id 
      */
-    public function clearTimeout(id:UInt):Void
+    public function clearTimeout(id:Int):Void
     {
         _timecall.remove(id);
     }
@@ -107,9 +107,9 @@ class TimeRuntime {
      * @param closure 
      * @param delay 
      * @param args 
-     * @return UInt
+     * @return Int
      */
-    public function setInterval(closure:Function, delay:Int = 0, args:Array<Dynamic> = null):UInt
+    public function setInterval(closure:Function, delay:Int = 0, args:Array<Dynamic> = null):Int
     {
         _id ++;
         if(delay <= 0)
@@ -132,7 +132,7 @@ class TimeRuntime {
      * 清理计时器
      * @param id 
      */
-    public function clearInterval(id:UInt):Void
+    public function clearInterval(id:Int):Void
     {
         _interval.remove(id);
     }
@@ -152,9 +152,9 @@ class TimeRuntime {
      * @param closure 
      * @param args 
      * @param delay 
-     * @return UInt
+     * @return Int
      */
-    public function resumeCall (closure:Function, args:Array<Dynamic> = null):UInt {
+    public function resumeCall (closure:Function, args:Array<Dynamic> = null):Int {
         //当活动是处于活动的情况下，则直接走setTimeout
         if(zygame.core.Start.isActivate){
             Reflect.callMethod (closure, closure, args == null ? [] : args);

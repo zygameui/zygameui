@@ -45,6 +45,11 @@ class SkeletonAnimation extends SkeletonSprite {
 	
 	public var state:AnimationState;
 
+	/**
+	 * 当前动画数据
+	 */
+	private var _currentAnimation:Animation;
+
 	public function new (skeletonData:SkeletonData, stateData:AnimationStateData = null) {
 		super(skeletonData);
 		#if (spine_hx <= "3.6.0")
@@ -82,6 +87,7 @@ class SkeletonAnimation extends SkeletonSprite {
 		super.advanceTime(time);
 	}
 
+
 	/**
 	 * 播放动画
 	 * @param action 动作名
@@ -94,7 +100,16 @@ class SkeletonAnimation extends SkeletonSprite {
 		if(action != null && action != ""){
 			this.state.setAnimationByName(0,action,loop);
 		}
+		this._currentAnimation = getAnimation(action);
 		super.play(action);
+	}
+
+	private function getAnimation(name:String):Animation{
+		for (animation in this.state.getData().getSkeletonData().animations) {
+			if(animation.name == name)
+				return animation;
+		}
+		return null;
 	}
 
 	/**
@@ -108,6 +123,17 @@ class SkeletonAnimation extends SkeletonSprite {
 		if(action != null && action != ""){
 			this.state.setAnimationByName(0,action,loop);
 		}
+		this._currentAnimation = getAnimation(action);
 		super.play(action);
+	}
+
+	/**
+	 * 获取最大持续时间
+	 * @return Float
+	 */
+	override function getMaxTime():Float {
+		if(_currentAnimation != null)
+			return _currentAnimation.getDuration();
+		return super.getMaxTime();
 	}
 }

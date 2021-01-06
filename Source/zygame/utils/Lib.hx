@@ -137,9 +137,9 @@ class Lib {
 	 * @param closure
 	 * @param delay
 	 * @param args
-	 * @return UInt
+	 * @return Int
 	 */
-	public static function nextFrameCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):UInt {
+	public static function nextFrameCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).setTimeout(closure, 0, args);
 	}
 
@@ -148,9 +148,9 @@ class Lib {
 	 * @param closure
 	 * @param delay
 	 * @param args
-	 * @return UInt
+	 * @return Int
 	 */
-	public static function setTimeout(closure:Function, delay:Int, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):UInt {
+	public static function setTimeout(closure:Function, delay:Int, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).setTimeout(closure, delay, args);
 	}
 
@@ -158,7 +158,7 @@ class Lib {
 	 * 清理计时器
 	 * @param id
 	 */
-	public static function clearTimeout(id:UInt, runtimeTag:String = "defalut"):Void {
+	public static function clearTimeout(id:Int, runtimeTag:String = "defalut"):Void {
 		getTimeRuntime(runtimeTag).clearTimeout(id);
 	}
 
@@ -167,9 +167,9 @@ class Lib {
 	 * @param closure
 	 * @param delay
 	 * @param args
-	 * @return UInt
+	 * @return Int
 	 */
-	public static function setInterval(closure:Function, delay:Int = 0, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):UInt {
+	public static function setInterval(closure:Function, delay:Int = 0, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).setInterval(closure, delay, args);
 	}
 
@@ -185,7 +185,7 @@ class Lib {
 	 * 清理计时器
 	 * @param id
 	 */
-	public static function clearInterval(id:UInt, runtimeTag:String = "defalut"):Void {
+	public static function clearInterval(id:Int, runtimeTag:String = "defalut"):Void {
 		getTimeRuntime(runtimeTag).clearInterval(id);
 	}
 
@@ -194,9 +194,9 @@ class Lib {
 	 * @param closure
 	 * @param delay
 	 * @param args
-	 * @return UInt
+	 * @return Int
 	 */
-	public static function resumeCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):UInt {
+	public static function resumeCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).resumeCall(closure, args);
 	}
 

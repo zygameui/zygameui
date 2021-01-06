@@ -256,6 +256,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 		if (_isPlay == false)
 			return;
 		skeleton.update(delta * timeScale);
+		if(skeleton.time > getMaxTime())
+			skeleton.setTime(0);
 		if (!this.visible)
 			return;
 		if (isNative)
@@ -440,6 +442,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			}
 		}
 
+
 		if (batchs == null && allTriangles.length > 2) {
 			_shape.graphics.clear();
 			_shape.graphics.beginBitmapFill(bitmapData, null, false, false);
@@ -499,4 +502,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 		return false;
 	}
 	#end
+
+	public function getMaxTime():Float{
+		return 0;
+	}
 }

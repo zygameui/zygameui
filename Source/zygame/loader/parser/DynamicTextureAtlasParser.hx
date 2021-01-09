@@ -6,6 +6,7 @@ import zygame.utils.load.DynamicTextureLoader;
  * 动态文本解析器
  */
  @:keep class DynamicTextureAtlasParser extends ParserBase {
+	
 	public static function supportType(data:Dynamic):Bool {
 		return true;
 	}

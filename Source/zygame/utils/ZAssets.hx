@@ -365,7 +365,7 @@ class ZAssets {
 	 * 开始载入下一个资源
 	 */
 	private function loadNext():Void {
-		if (_parsers.length == currentLoadIndex || _loadStop) {
+		if (_parsers.length <= currentLoadIndex || _loadStop) {
 			// 检查是否已载入完毕
 			var curprogress = getProgress();
 			if (curprogress == 1) {
@@ -381,6 +381,7 @@ class ZAssets {
 		var parser = _parsers[currentLoadIndex];
 		currentLoadIndex++;
 		currentLoadNumber++;
+		trace("载入进度："+currentLoadIndex,parser,_parsers.length);
 		if(parser == null){
 			loadNext();
 			return;

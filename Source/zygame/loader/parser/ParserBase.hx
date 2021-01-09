@@ -49,9 +49,9 @@ import zygame.utils.Lib;
 	 */
 	public function getName():String {
 		if (Std.is(_data, String)) {
-			return getAssets().onPasingPathName(_data);
+			return getAssets() != null?getAssets().onPasingPathName(_data):_data;
 		} else if (_data.path != null) {
-			return getAssets().onPasingPathName(_data.path);
+			return getAssets() != null?getAssets().onPasingPathName(_data.path):_data.path;
 		}
 		return null;
 	}

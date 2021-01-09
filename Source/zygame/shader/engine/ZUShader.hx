@@ -11,7 +11,7 @@ class ZUShader extends DisplayObjectShader implements zygame.core.Refresher{
     }
     
     public function onFrame():Void{
-
+        
     }
 
     /**

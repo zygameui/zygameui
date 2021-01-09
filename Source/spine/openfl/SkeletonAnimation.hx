@@ -81,7 +81,14 @@ class SkeletonAnimation extends SkeletonSprite {
 	}
 
 	override public function advanceTime (time:Float):Void {
+		if(!this.visible)
+			return;
 		state.update(time * timeScale);
+		skeleton.update(time * timeScale);
+		if (skeleton.time > getMaxTime()){
+			_cached = true;
+			skeleton.setTime(0);
+		}
 		state.apply(skeleton);
 		skeleton.updateWorldTransform();
 		super.advanceTime(time);

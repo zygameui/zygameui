@@ -116,6 +116,36 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 	private var _isNative:Bool = false;
 
+	/**
+	 * 是否使用缓存渲染，如果使用缓存渲染，如果使用换成渲染，则无法正常使用过渡动画
+	 */
+	public var isCache(get, set):Bool;
+
+	private var _isCache:Bool = false;
+
+	private function set_isCache(value:Bool):Bool {
+		_isCache = value;
+		if (_isCache && _cache == null) {
+			_cache = [];
+		}
+		return value;
+	}
+
+	private function get_isCache():Bool {
+		return _isCache;
+	}
+
+	/**
+	 * 动画缓存映射
+	 */
+	private var _cache:Map<String, Dynamic>;
+
+	private var _cacheBitmapData:BitmapData;
+
+	private var _cacheId:String;
+
+	private var _cached:Bool = false;
+
 	private function set_isNative(value:Bool):Bool {
 		_isNative = value;
 		if (_isNative && _spritePool == null)
@@ -208,6 +238,15 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	}
 
 	/**
+	 * 清空缓存
+	 */
+	public function clearCache():Void {
+		_cache = [];
+		_cached = false;
+		skeleton.setTime(0);
+	}
+
+	/**
 	 * 播放
 	 */
 	public function play(action:String = null, loop:Bool = true):Void {
@@ -215,6 +254,9 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 		_isPlay = true;
 		if (action != null)
 			_actionName = action;
+		if (isCache) {
+			clearCache();
+		}
 	}
 
 	/**
@@ -255,15 +297,30 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	public function advanceTime(delta:Float):Void {
 		if (_isPlay == false)
 			return;
-		skeleton.update(delta * timeScale);
-		if(skeleton.time > getMaxTime())
-			skeleton.setTime(0);
-		if (!this.visible)
-			return;
 		if (isNative)
 			renderNative();
-		else
+		else {
+			if (isCache) {
+				_cacheId = Std.string(Math.round(skeleton.time/.01)*.01);
+				if(_cache.exists(_cacheId)){
+					renderCacheTriangles(_cache.get(_cacheId));
+					return;
+				}
+				else if(_cached)
+					return;
+			}
 			renderTriangles();
+		}
+	}
+
+	/**
+	 * 渲染缓存三角形，使用isCache=true时可正常使用
+	 */
+	private function renderCacheTriangles(data:Dynamic):Void {
+		_shape.graphics.clear();
+		_shape.graphics.beginBitmapFill(_cacheBitmapData, null, false, false);
+		_shape.graphics.drawTriangles(data.va, data.t, data.uv, TriangleCulling.NONE);
+		_shape.graphics.endFill();
 	}
 
 	private function renderNative():Void {
@@ -442,15 +499,23 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			}
 		}
 
-
 		if (batchs == null && allTriangles.length > 2) {
 			_shape.graphics.clear();
 			_shape.graphics.beginBitmapFill(bitmapData, null, false, false);
 			_shape.graphics.drawTriangles(allVerticesArray, allTriangles, allUvs, TriangleCulling.NONE);
 			_shape.graphics.endFill();
+			// 缓存
+			if (isCache && _cache != null) {
+				if (_cacheBitmapData == null)
+					_cacheBitmapData = bitmapData;
+				_cache[_cacheId] = {
+					va: allVerticesArray.concat(),
+					t: allTriangles.concat(),
+					uv: allUvs.concat()
+				};
+			}
 		}
 	}
-	
 
 	/**
 	 * 渲染数组转换
@@ -503,7 +568,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	}
 	#end
 
-	public function getMaxTime():Float{
+	public function getMaxTime():Float {
 		return 0;
 	}
 }

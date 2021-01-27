@@ -122,15 +122,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex = None
+            startIndex1 = None
             _hx_len = None
-            if (startIndex is None):
+            if (startIndex1 is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex + 1))
-                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex1 + 1))
+                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -3157,9 +3157,14 @@ class platforms_Meizu(platforms_BuildSuper):
         super().__init__(args,dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/index.html"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/zygameui-dom.js"),dir)
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/manifest.json"),dir)
+        python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/sign"),dir)
         oldDir = Sys.getCwd()
         Sys.setCwd(dir)
-        Sys.command("zip -rp meizu.zip .")
+        npmInstall = sys_FileSystem.exists((HxOverrides.stringOrNull(self.dir) + "/../html5/bin/tools/meizu-build/node_modules"))
+        command = ((((((((("cd \"" + HxOverrides.stringOrNull(self.dir)) + "/../html5/bin/tools/meizu-build") + "\" ") + HxOverrides.stringOrNull((("&& npm install" if ((not npmInstall)) else "")))) + " && node bundle.js release --sourcePath ") + HxOverrides.stringOrNull(self.dir)) + " --outputPath ") + HxOverrides.stringOrNull(self.dir)) + "/../ --sign release")
+        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Meizu.hx", 'lineNumber': 19, 'className': "platforms.Meizu", 'methodName': "new"}))
+        Sys.command(command)
         Sys.setCwd(oldDir)
 platforms_Meizu._hx_class = platforms_Meizu
 _hx_classes["platforms.Meizu"] = platforms_Meizu

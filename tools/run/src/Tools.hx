@@ -291,39 +291,18 @@ class Tools {
                     File.saveContent(projectPath+"/../version.json",libs.join("\n"));
                     File.saveContent(projectPath + "/haxelib.json",StringTools.replace(haxelibmsg,data.version,v));
 
+                    projectName += v;
+
                     Sys.command("cd "+projectPath+"
                     zip -r ../"+projectName+".zip "+zipfiles.join(" "));
 
-                    //开始上传
+                    // 开始上传
                     var file = projectPath+"/../"+projectName+".zip";
-                    var url:Http = uploadFile(file,projectName+v+".zip","haxelib");
-                    trace("url.responseData=",url.responseData,url.responseData.length);
-                    var json:Dynamic = null;
-                    if(url.responseData.length == 0)
-                    {
-                        json = {code:0};
-                    }
-                    else
-                        json = haxe.Json.parse(url.responseData);
-                    if(json.code == 0)
-                    {
-                        //更新版本号对象
-                        var versionUrl:Http = uploadFile(projectPath+"/../version.json","version.json","haxelib");
-                        var json2:Dynamic = haxe.Json.parse(versionUrl.responseData);
-                        if(json2.code == 0)
-                        {
-                            trace("上传成功：",projectName,v);
-                        }
-                        else
-                        {
-                            trace("版本更新失败！");
-                        }
-                    }
-                    else
-                    {
-                        trace("上传失败！");
-                    }
-
+                    trace("开始上传");
+                    // 上传到库中
+                    uploadOSS(file,"kengsdk_tools_res:1001/haxelib");
+                    uploadOSS(projectPath+"/../version.json","kengsdk_tools_res:1001/haxelib");
+                    trace("上传成功：",projectName,v);
                     FileSystem.deleteFile(projectPath+"/../"+projectName+".zip");
                     break;
                 }
@@ -335,32 +314,38 @@ class Tools {
         }
     }
 
-    /**
-     * 上传API
-     * @param file 
-     * @param saveName 
-     * @param folder 
-     * @return Http
-     */
-    public static function uploadFile(file:String,saveName:String,folder:String):Http
-    {
-        //开始上传
-        var url:Http = new Http(authorizationMaps["api"]);
-        url.setHeader("Content-Type","multipart/form-data;");
-        url.setParameter("unzip","false");
-        url.setParameter("folder",folder);
-        url.setParameter("projectId",authorizationMaps["projectId"]);
-        url.setParameter("version","1001");
-        url.setParameter("privateKey",haxe.crypto.Md5.encode(authorizationMaps["privateKey"]).toUpperCase());
-        var input = sys.io.File.read(file);
-        var size:Int = sys.FileSystem.stat(file).size;
-        url.fileTransfer("file",saveName,input,size,"application/octet-stream");
-        url.onStatus = function(s):Void
-        {
-            trace("onStatus",s);
-        }
-        url.request(true);
-        return url;
+    public static function uploadOSS(file:String,saveName:String):Void{
+        var command = "haxelib run aliyun-oss-upload "+ file + " "+saveName;
+        trace(command);
+        Sys.command(command);
     }
+
+    // /**
+    //  * 上传API
+    //  * @param file 
+    //  * @param saveName 
+    //  * @param folder 
+    //  * @return Http
+    //  */
+    // public static function uploadFile(file:String,saveName:String,folder:String):Http
+    // {
+    //     //开始上传
+    //     var url:Http = new Http(authorizationMaps["api"]);
+    //     url.setHeader("Content-Type","multipart/form-data;");
+    //     url.setParameter("unzip","false");
+    //     url.setParameter("folder",folder);
+    //     url.setParameter("projectId",authorizationMaps["projectId"]);
+    //     url.setParameter("version","1001");
+    //     url.setParameter("privateKey",haxe.crypto.Md5.encode(authorizationMaps["privateKey"]).toUpperCase());
+    //     var input = sys.io.File.read(file);
+    //     var size:Int = sys.FileSystem.stat(file).size;
+    //     url.fileTransfer("file",saveName,input,size,"application/octet-stream");
+    //     url.onStatus = function(s):Void
+    //     {
+    //         trace("onStatus",s);
+    //     }
+    //     url.request(true);
+    //     return url;
+    // }
 
 }

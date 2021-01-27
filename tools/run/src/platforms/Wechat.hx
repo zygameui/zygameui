@@ -48,7 +48,22 @@ class Baidu extends Wechat {}
 /**
  * 梦工厂
  */
-class Mgc extends Wechat {}
+class Mgc extends Wechat {
+
+	/**
+	 * 尝试编译为MGC
+	 */
+	override function buildAfter() {
+		super.buildAfter();
+		var code = Sys.command("haxelib run lebox-build-tools");
+		if(code == 0){
+			trace("梦工厂包编译成功");
+		}
+		else 
+			trace("Warring:梦工厂包编译时，需要安装lebox-build-tools库");
+	}
+
+}
 
 /**
  * 奇虎360小游戏
@@ -60,16 +75,17 @@ class Qihoo extends Wechat {
 		if (FileSystem.exists(this.dir + "/game.zip"))
 			FileSystem.deleteFile(this.dir + "/game.zip");
 		var npmInstall:Bool = FileSystem.exists(this.dir + "/../html5/bin/tools/qihoosdk/node_modules");
-		Sys.command("
+		var command = "
 		cd "
 			+ this.dir
 			+ "/../html5/bin/tools/qihoosdk"
 			+ (npmInstall ? "" : "
-		npm install archiver
-		npm install commander")
+		npm install")
 			+ "
 		node ./index.js -i "
-			+ this.dir);
+			+ this.dir;
+		trace(command);
+		Sys.command(command);
 		FileUtils.copyFile(this.dir + "/../html5/bin/tools/qihoosdk/dist/game.zip", dir);
 	}
 }

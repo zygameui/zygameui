@@ -84,7 +84,11 @@ class Build {
         Defines.define("zybuild");
         Defines.define(args[1]);
         action(xml.firstElement(),args,dir);
-        switch (args[1])
+        //获取命令
+        var c = args[1];
+        if(c.indexOf(":") != -1)
+            c = c.substr(0,c.lastIndexOf(":"));
+        switch (c)
         {
             case "ios":
                 buildPlatform = "ios";

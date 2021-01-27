@@ -43,10 +43,33 @@ class Lib {
 		// 防CE逻辑实现
 		if (Std.is(data, Int) || Std.is(data, Float)) {
 			// 如果是数字，需要进行加密处理
-			data = "CE#" + Base64.encode(Bytes.ofString(Std.string(data)));
+			data = ceEncode(data);
 		}
 		Reflect.setField(sharedObject.data, key, data);
 		sharedObject.flush();
+	}
+
+	/**
+	 * CE加密
+	 * @param data
+	 * @return String
+	 */
+	public static function ceEncode(data:Dynamic):String {
+		return "CE#" + Base64.encode(Bytes.ofString(Std.string(data)));
+	}
+
+	/**
+	 * CE解密
+	 * @param value
+	 * @return Float
+	 */
+	public static function ceDecode(value:Dynamic):Float {
+		if(value == null || !Std.is(value,String))
+			return value;
+		value = StringTools.replace(value, "CE#", "");
+		var bytes = Base64.decode(value);
+		value = Std.parseFloat(bytes.getString(0, bytes.length));
+		return value;
 	}
 
 	/**
@@ -74,9 +97,7 @@ class Lib {
 		// 防CE逻辑实现
 		if (Std.is(value, String) && cast(value, String).indexOf("CE#") != -1) {
 			// 如果是数字，需要进行加密处理
-			value = StringTools.replace(value, "CE#", "");
-			var bytes = Base64.decode(value);
-			value = Std.parseFloat(bytes.getString(0, bytes.length));
+			value = ceDecode(value);
 		}
 		return value;
 	}
@@ -349,15 +370,14 @@ class Lib {
 
 	/**
 	 * 根据两点坐标获取角度
-	 * @param x1 
-	 * @param y1 
-	 * @param x2 
-	 * @param y2 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
 	 * @return Float
 	 */
-	public static function getAngleByPos(x1:Float,y1:Float,x2:Float,y2:Float):Float{
-		var angle:Float = Math.atan2((y2-y1), (x2-x1)); //弧度
-		// var theta:Float = angle*(180/Math.PI);
+	public static function getAngleByPos(x1:Float, y1:Float, x2:Float, y2:Float):Float {
+		var angle:Float = Math.atan2((y2 - y1), (x2 - x1)); // 弧度
 		return angle;
 	}
 

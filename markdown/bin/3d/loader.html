@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>cpp</title>
+  <title>loader</title>
   <style type="text/css">
     html {
       line-height: 1.7;
@@ -246,20 +246,32 @@
   </style>
 </head>
 <body>
-<h2 id="c调试">C++调试</h2>
-<p>在生成C++版本时，发布正式版的时候，是没有堆栈跟踪的，需要添加以下宏进行支持：</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- 即使在发布模式下，也要在最终二进制文件中添加符号。 --&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;define</span><span class="ot"> name=</span><span class="st">&quot;HXCPP_DEBUG_LINK&quot;</span><span class="ot"> if=</span><span class="st">&quot;debug&quot;</span><span class="kw">/&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- 即使在发布模式下，也具有有效的功能级堆栈跟踪。 --&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;define</span><span class="ot"> name=</span><span class="st">&quot;HXCPP_STACK_TRACE&quot;</span><span class="ot"> if=</span><span class="st">&quot;debug&quot;</span><span class="kw">/&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- 即使在发布模式下，也将行信息包括在堆栈跟踪中。 --&gt;</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;define</span><span class="ot"> name=</span><span class="st">&quot;HXCPP_STACK_LINE&quot;</span><span class="ot"> if=</span><span class="st">&quot;debug&quot;</span><span class="kw">/&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- 即使在发布模式下，也要添加空指针检查。 --&gt;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;define</span><span class="ot"> name=</span><span class="st">&quot;HXCPP_CHECK_POINTER&quot;</span><span class="ot"> if=</span><span class="st">&quot;debug&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
-<p>添加<code>debug</code>条件是因为发布正式版的时候，一般不需要包含这些信息，移除后可以提高性能。</p>
-<p>当需要进行debug调试时，可运行以下例子命令：</p>
-<pre class="shell"><code>lime build android -debug</code></pre>
-<p>或者</p>
-<pre class="shell"><code>haxelib run zygameui -debug android</code></pre>
+<h2 id="加载模型">加载模型</h2>
+<p>目前引擎支持的3D模型格式有以下几种：</p>
+<ul>
+<li>awd1.0 &amp; awd2.0</li>
+<li>3ds</li>
+<li>obj</li>
+<li>dae1.4</li>
+<li>dxf</li>
+<li>md2</li>
+<li>md5mesh &amp; md5anime</li>
+<li>ac3d</li>
+<li>FBX（尚未支持，可使用md5mesh &amp; md5anime代替）</li>
+</ul>
+<p>可以通过<code>zygameui.utils.ZAssets</code>进行载入3D模型，常规的使用方法：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> assets = <span class="kw">new</span> ZAssets();</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>assets.load3DFile(<span class="st">&quot;scene.awd&quot;</span>);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>assets.start(<span class="kw">function</span>(f){</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">if</span>(f == <span class="dv">1</span>){</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">//加载完成</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<h2 id="模型使用">模型使用</h2>
+<p>当模型被加载后，需要获取使用模型时，可通过：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">//创建一个完整的scene对象</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>assets.buildObject3D(<span class="st">&quot;scene&quot;</span>); </span></code></pre></div>
+<p>或者只创建其中一个模型（注意该接口获取的是源数据，如果需要新建需要clone。）：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>assets.get3DMesh(<span class="st">&quot;scene:role&quot;</span>);</span></code></pre></div>
 </body>
 </html>

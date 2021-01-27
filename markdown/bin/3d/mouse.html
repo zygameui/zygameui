@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>home</title>
+  <title>mouse</title>
   <style type="text/css">
     html {
       line-height: 1.7;
@@ -118,6 +118,67 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #cccccc; background-color: #303030; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ffcfaf; } /* Alert */
+    code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #dca3a3; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #f0dfaf; } /* ControlFlow */
+    code span.ch { color: #dca3a3; } /* Char */
+    code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+    code span.co { color: #7f9f7f; } /* Comment */
+    code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+    code span.do { color: #7f9f7f; } /* Documentation */
+    code span.dt { color: #dfdfbf; } /* DataType */
+    code span.dv { color: #dcdccc; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #efef8f; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+    code span.kw { color: #f0dfaf; } /* Keyword */
+    code span.op { color: #f0efd0; } /* Operator */
+    code span.ot { color: #efef8f; } /* Other */
+    code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #dca3a3; } /* SpecialChar */
+    code span.ss { color: #cc9393; } /* SpecialString */
+    code span.st { color: #cc9393; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #cc9393; } /* VerbatimString */
+    code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
     kbd {
         padding: 2px 4px ;
@@ -185,40 +246,10 @@
   </style>
 </head>
 <body>
-<h2 id="入门">入门</h2>
-<p>由Haxe+OpenFL+Lime支持的跨平台2D游戏引擎。是由[左眼]于2018年创建，并投入开发项目使用。经过多个版本的维护，当前版本已满足绝大部分游戏开发需求，拥有核心组件以及小游戏驱动良好支持。</p>
-<h2 id="教程">教程</h2>
-<ul>
-<li><a href="doc/start.html">入门</a></li>
-<li><a href="doc/support.html">引擎支持</a></li>
-<li>资料</li>
-<li>API</li>
-<li>使用说明</li>
-</ul>
-<h2 id="python3">Python3+</h2>
-<p>zygameui命令行需要依赖python3，同时需要安装以下库：</p>
-<pre class="shell"><code>pip3 install chardet
-pip3 install pandas
-pip3 install xlrd</code></pre>
-<h2 id="平台支持">平台支持</h2>
-<p>引擎目前支持Android/IOS/Window/Mac/HTML5等主流平台，但唯一已不再支持Flash输出。</p>
-<p>在Android/IOS/Window/Mac等平台上，游戏将使用C++运行游戏，可使用高性能的本机运行。</p>
-<p>在HTML5等平台上，游戏将使用JavaScript运行游戏；并支持不同渠道的小游戏兼容。</p>
-<h3 id="已支持小游戏平台">已支持小游戏平台</h3>
-<ul>
-<li>微信小游戏、百度小游戏、QQ小游戏、字节小游戏、梦工厂小游戏、360奇虎小游戏、BILIBILI小游戏（wechat-zygame-dom）</li>
-<li>4399H5小游戏（4399h5-sdk）</li>
-<li>4399游戏盒小游戏（wechat-zygame-dom）</li>
-<li>WIFI连尚无极小游戏（wifi-cpk-core）</li>
-<li>魅族小游戏（meizu-rpk-core）</li>
-<li>移动MMH5小游戏（mm-h5-sdk）</li>
-<li>Oppo快游戏、H5小游戏（oppo-rpk-core、oppocore-jssdk）</li>
-<li>UCH5小游戏（uc-h5-sdk）</li>
-<li>Vivo快游戏（vivo-rpk-core）</li>
-<li>小米快游戏、H5小游戏（xiaomi-rpk-core、xiaomi-h5）</li>
-<li>小米赚赚H5小游戏（xiaomi-zz）</li>
-<li>YYH5小游戏（yy-sdk）</li>
-<li>章鱼输入法小游戏（zhangyu-sdk）</li>
-</ul>
+<h2 id="d鼠标点击">3D鼠标点击</h2>
+<p>在Away3D中，所有对象的可点击属性<code>mouseEnabled</code>都为false。如果需要使用点击事件，需要侦听点击的对象将<code>mouseEnabled</code>设置为true，并进行侦听：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>plane.addEventListener(MouseEvent3D.CLICK,<span class="kw">function</span>(e:MouseEvent3D):<span class="dt">Void</span>{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">trace</span>(<span class="st">&quot;3D触摸位置：&quot;</span>,e.localPosition);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                });</span></code></pre></div>
 </body>
 </html>

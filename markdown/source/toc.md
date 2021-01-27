@@ -46,6 +46,7 @@
          5. [嵌入加载](updoc/embed.md)
          6. [植入垃圾代码](updoc/rubbish.md)
          7. [宏工具](updoc/marcolist.md)
+         8. [动态类型扩展](updoc/ce.md)
    9. [着色器](shader/shader.md)
       1. [灰度](shader/GeryShader.md)
    10. [命令行](command/command.md)

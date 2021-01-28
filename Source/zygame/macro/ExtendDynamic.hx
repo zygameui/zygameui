@@ -1,7 +1,6 @@
 package zygame.macro;
 
 #if macro
-import haxe.Json;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 #end
@@ -43,7 +42,7 @@ class ExtendDynamic {
 									}),
 									pos: Context.currentPos()
 								};
-
+								
 								var getValue = {
 									name: "get" + item.name.charAt(0).toUpperCase() + item.name.substr(1) + "Value",
 									meta: [],

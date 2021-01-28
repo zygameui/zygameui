@@ -3159,11 +3159,12 @@ class platforms_Meizu(platforms_BuildSuper):
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/zygameui-dom.js"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/manifest.json"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/sign"),dir)
+        python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/image"),dir)
         oldDir = Sys.getCwd()
         Sys.setCwd(dir)
         npmInstall = sys_FileSystem.exists((HxOverrides.stringOrNull(self.dir) + "/../html5/bin/tools/meizu-build/node_modules"))
         command = ((((((((("cd \"" + HxOverrides.stringOrNull(self.dir)) + "/../html5/bin/tools/meizu-build") + "\" ") + HxOverrides.stringOrNull((("&& npm install" if ((not npmInstall)) else "")))) + " && node bundle.js release --sourcePath ") + HxOverrides.stringOrNull(self.dir)) + " --outputPath ") + HxOverrides.stringOrNull(self.dir)) + "/../ --sign release")
-        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Meizu.hx", 'lineNumber': 19, 'className': "platforms.Meizu", 'methodName': "new"}))
+        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Meizu.hx", 'lineNumber': 20, 'className': "platforms.Meizu", 'methodName': "new"}))
         Sys.command(command)
         Sys.setCwd(oldDir)
 platforms_Meizu._hx_class = platforms_Meizu

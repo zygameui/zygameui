@@ -1,0 +1,17 @@
+-main zygame.core.Start
+--library zygameui
+--library zygameui-api
+--library openfl
+--library lime
+--library spine-hx
+--library castle
+--library hscript
+--library tweenxcore
+--library crypto
+--library KengSDK
+-D vscode
+-D zygame
+-D api
+-lib KengSDK
+-cp src
+--js bin/main.js

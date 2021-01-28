@@ -24,7 +24,7 @@ import zygame.components.ZBuilder;
 import zygame.macro.ZMacroUtils;
 import openfl.events.MouseEvent;
 import zygame.components.ZLabel;
-#if builddoc
+#if (builddoc || vscode)
 import zygame.core.ImportAll;
 #end
 
@@ -36,6 +36,9 @@ import zygame.core.ImportAll;
 @:build(zygame.macro.Res.init())
 #end
 class Start extends ZScene {
+
+	#if vscode public static function main(){}; #end
+
 	/**
 	 * 焦点对象
 	 */

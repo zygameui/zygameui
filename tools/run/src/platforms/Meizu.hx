@@ -10,6 +10,7 @@ class Meizu extends BuildSuper {
 		FileUtils.copyFile(args[2] + "Export/html5/bin/zygameui-dom.js", dir);
 		FileUtils.copyFile(args[2] + "Export/html5/bin/manifest.json", dir);
 		FileUtils.copyDic(args[2] + "Export/html5/bin/sign", dir);
+		FileUtils.copyDic(args[2] + "Export/html5/bin/image", dir);
 		var oldDir = Sys.getCwd();
 		Sys.setCwd(dir);
 		var npmInstall:Bool = FileSystem.exists(this.dir + "/../html5/bin/tools/meizu-build/node_modules");

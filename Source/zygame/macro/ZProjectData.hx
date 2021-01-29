@@ -1,6 +1,5 @@
 package zygame.macro;
 
-
 #if macro
 import sys.io.File;
 import zygame.utils.StringUtils;
@@ -14,35 +13,61 @@ class ZProjectData {
 	#if macro
 	public var assetsPath:Map<String, String> = [];
 	public var assetsRenamePath:Map<String, String> = [];
+	public var nowCwd:String = "";
 
 	public function new() {
-		if(FileSystem.exists("zproject.xml") == false)
+		var oldCwd = Sys.getCwd();
+		var zprojectData = createZProjectDataString();
+		if (zprojectData == null)
 			return;
-		var xml:Xml = Xml.parse(File.getContent("zproject.xml"));
+		trace("zproject.xml dir=" + Sys.getCwd());
+		nowCwd = Sys.getCwd();
+		Sys.setCwd(oldCwd);
+		var xml:Xml = Xml.parse(zprojectData);
 		for (item in xml.firstElement().elements()) {
 			switch (item.nodeName) {
 				case "assets":
-					if(item.get("unparser") == "true")
+					if (item.get("unparser") == "true")
 						continue;
-					readDir(Sys.getCwd() + item.get("path"),item.exists("rename")?item.get("rename"):StringUtils.getName(item.get("path")));
+					readDir(nowCwd + item.get("path"), item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path")));
 			}
 		}
 	}
 
-	public function readDir(path:String,rename:String):Void {
+	public function createZProjectDataString():String {
+		if (FileSystem.exists("zproject.xml"))
+			return File.getContent("zproject.xml");
+		if (FileSystem.exists("../zproject.xml")) {
+			Sys.setCwd("../");
+			return File.getContent("zproject.xml");
+		}
+		if (FileSystem.exists("../../zproject.xml")) {
+			Sys.setCwd("../../");
+			return File.getContent("zproject.xml");
+		}
+		if (FileSystem.exists("../../../zproject.xml")) {
+			Sys.setCwd("../../../");
+			return File.getContent("zproject.xml");
+		}
+		if (FileSystem.exists("../../../../zproject.xml")) {
+			Sys.setCwd("../../../../");
+			return File.getContent("zproject.xml");
+		}
+		return null;
+	}
+
+	public function readDir(path:String, rename:String):Void {
 		if (path == "" || path == null)
 			return;
 		if (FileSystem.isDirectory(path)) {
 			var dir:Array<String> = FileSystem.readDirectory(path);
 			for (file in dir) {
-                readDir(path + "/" + file,rename + "/" + file);
+				readDir(path + "/" + file, rename + "/" + file);
 			}
-        }
-        else
-        {
-			assetsRenamePath.set(StringUtils.getName(path)  + "." + StringUtils.getExtType(path),rename);
-            assetsPath.set(StringUtils.getName(path)  + "." + StringUtils.getExtType(path),path);
-        }
+		} else {
+			assetsRenamePath.set(StringUtils.getName(path) + "." + StringUtils.getExtType(path), rename);
+			assetsPath.set(StringUtils.getName(path) + "." + StringUtils.getExtType(path), path);
+		}
 	}
 	#end
 }

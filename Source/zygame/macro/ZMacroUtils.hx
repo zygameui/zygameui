@@ -170,7 +170,6 @@ class ZMacroUtils {
 		http.setHeader("Content-Type", contentType);
 		http.setPostData(data);
 		http.request(post);
-		//trace("request " + url + " success!");
 		return http.responseData;
 	}
 

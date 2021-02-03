@@ -366,7 +366,6 @@ class ZLabel extends DataProviderComponent {
 		_display.setTextFormat(_font);
 		zquad.width = 2;
 		zquad.height = font;
-		trace("设置尺寸：",_font,font * _scale);
 		updateComponents();
 	}
 

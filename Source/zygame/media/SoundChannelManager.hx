@@ -72,7 +72,6 @@ class SoundChannelManager {
 	 */
 	private function playMusic(sound:Music):Void {
         if(_musicChannel != null && sound == _music){
-			trace("Muisc is repat:" + sound.path);
 			return;
 		}
 		this.stopMusic();

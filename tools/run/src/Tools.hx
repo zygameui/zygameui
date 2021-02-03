@@ -1,3 +1,4 @@
+import task.Tasks;
 import atlasxml.AtlasTools;
 import atf.AtfBuild;
 import python.GetPass;
@@ -59,6 +60,7 @@ class Tools {
         {
             trace("version:"+version);
             trace("帮助列表：
+            -inittask 初始化VSCODE的task.json文件
             -build 用于生成不同平台命令（通用）
             -upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）
             -updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）
@@ -70,6 +72,9 @@ class Tools {
         var command:String = args[0];
         switch(command)
         {
+            case "-inittask":
+                //初始化task.json文件
+                Tasks.initTask();
             case "-updatehxml":
                 //更新库
                 UpdateHxml.update(args[1]);

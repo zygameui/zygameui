@@ -20,7 +20,6 @@ class ZProjectData {
 		var zprojectData = createZProjectDataString();
 		if (zprojectData == null)
 			return;
-		trace("zproject.xml dir=" + Sys.getCwd());
 		nowCwd = Sys.getCwd();
 		Sys.setCwd(oldCwd);
 		var xml:Xml = Xml.parse(zprojectData);

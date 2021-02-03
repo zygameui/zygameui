@@ -5524,51 +5524,61 @@ class task_Tasks:
             data = python_lib_Json.loads(tasks,**python__KwArgs_KwArgs_Impl_.fromT(_hx_AnonObject({'object_hook': python_Lib.dictToAnon})))
         else:
             haxe_Log.trace("tasks.json不存在，创建新的任务列表",_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 46, 'className': "task.Tasks", 'methodName': "initTask"}))
-        _g_current = 0
-        _g_array = data.tasks
-        while (_g_current < len(_g_array)):
-            _g1_value = (_g_array[_g_current] if _g_current >= 0 and _g_current < len(_g_array) else None)
-            _g1_key = _g_current
-            _g_current = (_g_current + 1)
-            index = _g1_key
-            value = _g1_value
+        taskCommands = []
+        _g = 0
+        _g1 = task_Tasks.tasks.list
+        while (_g < len(_g1)):
+            tdata = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            x = tdata.command
+            taskCommands.append(x)
+        _g2_current = 0
+        _g2_array = data.tasks
+        while (_g2_current < len(_g2_array)):
+            _g3_value = (_g2_array[_g2_current] if _g2_current >= 0 and _g2_current < len(_g2_array) else None)
+            _g3_key = _g2_current
+            _g2_current = (_g2_current + 1)
+            index = _g3_key
+            value = _g3_value
             _hx_str = value.command
             tmp = None
-            tmp1 = None
-            tmp2 = None
-            tmp3 = None
             startIndex = None
             if (((_hx_str.find("haxelib run zygameui -updatelib") if ((startIndex is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -updatelib",startIndex))) == -1):
                 startIndex1 = None
-                tmp3 = (((_hx_str.find("haxelib run zygameui -debug") if ((startIndex1 is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -debug",startIndex1))) == -1)
-            else:
-                tmp3 = False
-            if tmp3:
-                startIndex2 = None
-                tmp2 = (((_hx_str.find("python3 tools/python/build.py") if ((startIndex2 is None)) else HxString.indexOfImpl(_hx_str,"python3 tools/python/build.py",startIndex2))) == -1)
-            else:
-                tmp2 = False
-            if tmp2:
-                startIndex3 = None
-                tmp1 = (((_hx_str.find("haxelib run zygameui -build") if ((startIndex3 is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -build",startIndex3))) == -1)
-            else:
-                tmp1 = False
-            if tmp1:
-                startIndex4 = None
-                tmp = (((_hx_str.find("haxelib run zygameui -final") if ((startIndex4 is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -final",startIndex4))) == -1)
+                tmp = (((_hx_str.find("python3 tools/python/build.py") if ((startIndex1 is None)) else HxString.indexOfImpl(_hx_str,"python3 tools/python/build.py",startIndex1))) == -1)
             else:
                 tmp = False
             if tmp:
-                _this = newdata.tasks
-                _this.append(value)
-        _g_current = 0
-        _g_array = task_Tasks.tasks.list
-        while (_g_current < len(_g_array)):
-            _g1_value = (_g_array[_g_current] if _g_current >= 0 and _g_current < len(_g_array) else None)
-            _g1_key = _g_current
-            _g_current = (_g_current + 1)
-            index = _g1_key
-            value = _g1_value
+                tmp1 = None
+                tmp2 = None
+                startIndex2 = None
+                if (((_hx_str.find("haxelib run zygameui -debug") if ((startIndex2 is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -debug",startIndex2))) == -1):
+                    startIndex3 = None
+                    tmp2 = (((_hx_str.find("haxelib run zygameui -build") if ((startIndex3 is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -build",startIndex3))) != -1)
+                else:
+                    tmp2 = True
+                if (not tmp2):
+                    startIndex4 = None
+                    tmp1 = (((_hx_str.find("haxelib run zygameui -final") if ((startIndex4 is None)) else HxString.indexOfImpl(_hx_str,"haxelib run zygameui -final",startIndex4))) != -1)
+                else:
+                    tmp1 = True
+                if tmp1:
+                    commandArray = _hx_str.split(" ")
+                    command = python_internal_ArrayImpl._get(commandArray, (len(commandArray) - 1))
+                    if (python_internal_ArrayImpl.indexOf(taskCommands,command,None) == -1):
+                        _this = newdata.tasks
+                        _this.append(value)
+                else:
+                    _this1 = newdata.tasks
+                    _this1.append(value)
+        _g2_current = 0
+        _g2_array = task_Tasks.tasks.list
+        while (_g2_current < len(_g2_array)):
+            _g3_value = (_g2_array[_g2_current] if _g2_current >= 0 and _g2_current < len(_g2_array) else None)
+            _g3_key = _g2_current
+            _g2_current = (_g2_current + 1)
+            index = _g3_key
+            value = _g3_value
             _this = value.command
             startIndex = None
             if (((_this.find("haxelib") if ((startIndex is None)) else HxString.indexOfImpl(_this,"haxelib",startIndex))) == -1):
@@ -5595,8 +5605,8 @@ class task_Tasks:
                 _this4 = newdata.tasks
                 _this4.append(c3)
         sys_io_File.saveContent((("null" if dir is None else dir) + "/.vscode/tasks.json"),haxe_format_JsonPrinter.print(newdata,None,None))
-        haxe_Log.trace((("tasks.json同步" + Std.string(len(task_Tasks.tasks.list))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 89, 'className': "task.Tasks", 'methodName': "initTask"}))
-        haxe_Log.trace((("一共" + Std.string(len(newdata.tasks))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 90, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace((("tasks.json同步" + Std.string(len(task_Tasks.tasks.list))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 100, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace((("一共" + Std.string(len(newdata.tasks))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 101, 'className': "task.Tasks", 'methodName': "initTask"}))
 task_Tasks._hx_class = task_Tasks
 _hx_classes["task.Tasks"] = task_Tasks
 
@@ -5738,6 +5748,6 @@ python_Boot.keywords = set(["and", "del", "from", "not", "with", "as", "elif", "
 python_Boot.prefixLength = len("_hx_")
 python_Lib.lineEnd = ("\r\n" if ((Sys.systemName() == "Windows")) else "\n")
 sys_Http.PROXY = None
-task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"})]})
+task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"})]})
 
 Tools.main()

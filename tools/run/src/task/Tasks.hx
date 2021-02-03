@@ -7,9 +7,9 @@ import sys.FileSystem;
 class TaskCommand {
 	public var label:String;
 
-    public var command:String;
-    
-    public var type:String = "shell";
+	public var command:String;
+
+	public var type:String = "shell";
 
 	public var problemMatcher:Array<Dynamic> = [];
 
@@ -45,16 +45,27 @@ class Tasks {
 		} else {
 			trace("tasks.json不存在，创建新的任务列表");
 		}
+
+		var taskCommands = [];
+		for (tdata in tasks.list) {
+			taskCommands.push(tdata.command);
+		}
+
 		// 开始遍历
 		for (index => value in data.tasks) {
 			var str:String = value.command;
-			if (str.indexOf("haxelib run zygameui -updatelib") == -1
-				&& str.indexOf("haxelib run zygameui -debug") == -1
-				&& str.indexOf("python3 tools/python/build.py") == -1
-				&& str.indexOf("haxelib run zygameui -build") == -1
-				&& str.indexOf("haxelib run zygameui -final") == -1) {
-				// 过滤
-				newdata.tasks.push(value);
+			if (str.indexOf("haxelib run zygameui -updatelib") == -1 && str.indexOf("python3 tools/python/build.py") == -1) {
+				if (str.indexOf("haxelib run zygameui -debug") != -1
+					|| str.indexOf("haxelib run zygameui -build") != -1
+					|| str.indexOf("haxelib run zygameui -final") != -1) {
+					var commandArray = str.split(" ");
+					var command = commandArray[commandArray.length - 1];
+					if (taskCommands.indexOf(command) == -1) {
+						// 说明属于自定义命令，可保留
+						newdata.tasks.push(value);
+					}
+				} else
+					newdata.tasks.push(value);
 			}
 		}
 		// 更新新内容
@@ -78,7 +89,7 @@ class Tasks {
 					newdata.tasks.push(c);
 				}
 			} else {
-				//haxelib
+				// haxelib
 				var c = new TaskCommand();
 				c.label = value.name;
 				c.command = value.command;
@@ -174,7 +185,7 @@ class Tasks {
 			},
 			{
 				name: "九游UCH5小游戏",
-				command: "html:uc"
+				command: "html5:uc"
 			},
 			{
 				name: "安卓Android",

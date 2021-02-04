@@ -872,8 +872,8 @@ class ZBuilder {
 			// 对齐算法
 			if (parent != null)
 				align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));
-		} catch (e:Dynamic) {
-			throw "Align error:" + xml.toString();
+		} catch (e:Exception) {
+			throw "Align error:" + xml.toString() + " Exception:" + e.message + "\n" + e.stack.toString();
 		}
 		var items:Iterator<Xml> = xml.elements();
 		while (items.hasNext()) {
@@ -889,7 +889,7 @@ class ZBuilder {
 		return ui;
 	}
 
-	private static function align(#if cpp obj:Dynamic, parent:Dynamic #else obj:DisplayObject, parent:DisplayObject #end, leftPx:Dynamic = null,
+	private static function align(#if (cpp || hl) obj:Dynamic, parent:Dynamic #else obj:DisplayObject, parent:DisplayObject #end, leftPx:Dynamic = null,
 			rightPx:Dynamic = null, topPx:Dynamic = null, bottomPx:Dynamic = null, centerX:Dynamic = null, centerY:Dynamic = null):Void {
 		if (Std.is(leftPx, String))
 			leftPx = Std.parseInt(leftPx);
@@ -950,7 +950,7 @@ class ZBuilder {
 		else
 			untyped data[key] = value;
 		#else
-		#if cpp
+		#if (cpp || hl)
 		try {
 			Reflect.setProperty(data, key, value);
 		} catch (e:Dynamic) {

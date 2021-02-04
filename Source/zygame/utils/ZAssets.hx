@@ -184,7 +184,9 @@ class ZAssets {
 					return;
 				}
 			}
+			#if !hl
 			throw "数据格式[" + data + "]无法载入";
+			#end
 		}
 	}
 
@@ -328,10 +330,12 @@ class ZAssets {
 	 * @param path
 	 */
 	public function loadMusic(path:String):Void {
+		#if !hl
 		_parsers.push(new MP3Parser({
 			type: "Music",
 			path: path
 		}));
+		#end
 	}
 
 	public function getNowLoadCount():Int {

@@ -1,6 +1,6 @@
 package zygame.utils;
 
-#if cpp
+#if (cpp || hl)
 
 import zygame.components.ZScene;
 import zygame.core.Start;

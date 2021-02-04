@@ -210,6 +210,10 @@ class Tasks {
 			{
 				name: "更新内部haxelib库",
 				command: "haxelib run zygameui -updatelib"
+			},
+			{
+				name: "HashLink",
+				command: "hl"
 			}
 		]
 	};

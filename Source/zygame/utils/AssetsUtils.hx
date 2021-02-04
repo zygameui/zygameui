@@ -416,9 +416,14 @@ class BitmapDataLoader extends BaseLoader {
 			AssetsUtils.loadBytes(path).onComplete((bytes) -> {
 				Image.loadFromBytes(bytes).onComplete((img) -> {
 					var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(img);
-					bitmapData.path = path;
-					if (call != null)
-						call(bitmapData);
+					if (bitmapData == null) {
+						if (callError != null)
+							callError("无法加载" + path);
+					} else {
+						bitmapData.path = path;
+						if (call != null)
+							call(bitmapData);
+					}
 					call = null;
 				});
 			}).onError((msg) -> {
@@ -435,13 +440,12 @@ class BitmapDataLoader extends BaseLoader {
 					call(bitmapData);
 				call = null;
 			}, function():Void {
-				if(loadTimes < AssetsUtils.failTryLoadTimes){
-					//重试
-					trace("重载："+path +","+loadTimes);
+				if (loadTimes < AssetsUtils.failTryLoadTimes) {
+					// 重试
+					trace("重载：" + path + "," + loadTimes);
 					loadTimes++;
 					onComplete2(call);
-				}
-				else if (callError != null)
+				} else if (callError != null)
 					callError("无法加载" + path);
 				call = null;
 			});
@@ -468,7 +472,7 @@ class TextLoader extends BaseLoader {
 		data.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
-				trace("重载："+path +","+loadTimes);
+				trace("重载：" + path + "," + loadTimes);
 				loadTimes++;
 				onComplete(call);
 			} else
@@ -496,7 +500,7 @@ class SoundLoader extends BaseLoader {
 		sound.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
-				trace("重载："+path +","+loadTimes);
+				trace("重载：" + path + "," + loadTimes);
 				loadTimes++;
 				onComplete(call);
 			} else

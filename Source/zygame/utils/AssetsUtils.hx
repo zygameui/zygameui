@@ -435,9 +435,14 @@ class BitmapDataLoader extends BaseLoader {
 			var img:Image = new Image();
 			img.__fromFile(path, function(loadedImage:Image):Void {
 				var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(loadedImage);
-				bitmapData.path = path;
-				if (call != null)
-					call(bitmapData);
+				if (bitmapData == null) {
+					if (callError != null)
+						callError("无法加载" + path);
+				} else {
+					bitmapData.path = path;
+					if (call != null)
+						call(bitmapData);
+				}
 				call = null;
 			}, function():Void {
 				if (loadTimes < AssetsUtils.failTryLoadTimes) {

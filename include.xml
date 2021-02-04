@@ -1,73 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	
+
+	<!-- <log info="zygameui库在9.9.0以后，需要将haxelib引入放在配置的最下面，否则会无法编译通过；并且可以移除所有关于渲染库的引用。" /> -->
+
+	<!-- 编译平台的自动引入处理 -->
+	<include path="platforms.xml" />
+
 	<!-- 原始实现 -->
 	<source path="Source" />
-	<haxelib name="openfl"/>
-	<haxelib name="hscript"/>
+	<haxelib name="openfl" />
+	<haxelib name="hscript" />
 	<!-- Spine锁定版本3.8.1 -->
-	<haxelib name="spine-hx" version="3.8.1" if="spine3.8"/> 
-	<haxelib name="spine-hx" version="3.6.0" unless="spine3.8"/> 
-	<haxedef name="spine38" if="spine3.8"/>
-	<haxelib name="tweenxcore"/>
+	<haxelib name="spine-hx" version="3.8.1" if="spine3.8" />
+	<haxelib name="spine-hx" version="3.6.0" unless="spine3.8" />
+	<haxedef name="spine38" if="spine3.8" />
+	<haxelib name="tweenxcore" />
 	<!-- 静态数据类 -->
-	<haxelib name="castle"/>
+	<haxelib name="castle" />
 	<!-- 无物理系统碰撞类 -->
-	<haxelib name="differ"/>
-	<haxelib name="zygameui-nape" if="nape"/>
+	<haxelib name="differ" />
+	<haxelib name="zygameui-nape" if="nape" />
 
 	<!-- zygameui框架标示 -->
-	<haxedef name="zygame"/>
-	
+	<haxedef name="zygame" />
+
 	<!-- C++测试模块 -->
-	<haxedef name="debuginput" if="debug && cpp && !ios"/>
-	<haxedef name="debugnetwork" if="debug && cpp && !ios"/>
+	<haxedef name="debuginput" if="debug cpp !ios" />
+	<haxedef name="debugnetwork" if="debug cpp !ios" />
 
 	<!-- HXCPP-RELEASE-DEBUG 测试性功能 -->
-	<haxedef name="HXCPP_STACK_TRACE" if="debug"/>
-	<haxedef name="HXCPP_STACK_LINE" if="debug"/>
-	<haxedef name="HXCPP_CHECK_POINTER" if="debug"/>
+	<haxedef name="HXCPP_STACK_TRACE" if="debug" />
+	<haxedef name="HXCPP_STACK_LINE" if="debug" />
+	<haxedef name="HXCPP_CHECK_POINTER" if="debug" />
 
-	<window allow-high-dpi="true" antialiasing="4" vsync="true" if="cpp"/>
+	<window allow-high-dpi="true" antialiasing="4" vsync="true" if="cpp" />
 
 	<!-- 默认平滑 -->
-	<haxedef name="smoothing" if="cpp" unless="unsmoothing"/>
+	<haxedef name="smoothing" if="cpp" unless="unsmoothing" />
 
 	<!-- 禁止图形使用软件刷新 -->
 	<define name="openfl-disable-graphics-upscaling" />
 
-	<haxedef name="invalidate" if="android"/>
+	<haxedef name="invalidate" if="android" />
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->
-	<template path="template-html5/template/index.html" rename="index.html"/>
+	<template path="template-html5/template/index.html" rename="index.html" />
 
 	<!-- 测试 -->
 	<!-- <haxeflag name="-dce" value="full" /> -->
-	<haxeflag name='--macro keep("openfl.display.DisplayObject")'/>
-	<haxeflag name='--macro keep("openfl.display.DisplayObjectContainer")'/>
-	<haxeflag name='--macro keep("openfl.display.Sprite")'/>
-	<haxeflag name='--macro keep("zygame.display.batch.BLabel")'/>
-	<haxeflag name='--macro keep("openfl.geom.Point")'/>
-	<haxeflag name='--macro keep("zygame.display.batch.BDisplayObject")'/>
-	<haxeflag name='--macro keep("zygame.display.DisplayObject")'/>
-	<haxeflag name='--macro keep("zygame.display.DisplayObjectContainer")'/>
-	<haxeflag name='--macro keep("zygame.display.batch.BDisplayObjectContainer")'/>
-	<haxeflag name='--macro keep("game.core.display.WipeImage")'/>
-	<haxeflag name='--macro keep("zygame.components.ZImage")'/>
-	<haxeflag name='--macro keep("zygame.components.ZAnimation")'/>
-	<haxeflag name='--macro keep("zygame.mini.MiniEngineScene")'/>
-	<haxeflag name='--macro keep("zygame.mini.MiniEngineAssets")'/>
-	<haxeflag name='--macro keep("openfl.ui.Multitouch")'/>
-	<haxeflag name='--macro keep("spine.AnimationStateData")'/>
-	<haxeflag name='--macro keep("spine.Key")'/>
-	<haxeflag name='--macro keep("spine.Skin")'/>
-	<haxeflag name='--macro keep("spine.support.extensions.SpineExtensions")'/>
-	<haxeflag name='--macro keep("spine.support.extensions.StringExtensions")'/>
+	<haxeflag name='--macro keep("openfl.display.DisplayObject")' />
+	<haxeflag name='--macro keep("openfl.display.DisplayObjectContainer")' />
+	<haxeflag name='--macro keep("openfl.display.Sprite")' />
+	<haxeflag name='--macro keep("zygame.display.batch.BLabel")' />
+	<haxeflag name='--macro keep("openfl.geom.Point")' />
+	<haxeflag name='--macro keep("zygame.display.batch.BDisplayObject")' />
+	<haxeflag name='--macro keep("zygame.display.DisplayObject")' />
+	<haxeflag name='--macro keep("zygame.display.DisplayObjectContainer")' />
+	<haxeflag name='--macro keep("zygame.display.batch.BDisplayObjectContainer")' />
+	<haxeflag name='--macro keep("game.core.display.WipeImage")' />
+	<haxeflag name='--macro keep("zygame.components.ZImage")' />
+	<haxeflag name='--macro keep("zygame.components.ZAnimation")' />
+	<haxeflag name='--macro keep("zygame.mini.MiniEngineScene")' />
+	<haxeflag name='--macro keep("zygame.mini.MiniEngineAssets")' />
+	<haxeflag name='--macro keep("openfl.ui.Multitouch")' />
+	<haxeflag name='--macro keep("spine.AnimationStateData")' />
+	<haxeflag name='--macro keep("spine.Key")' />
+	<haxeflag name='--macro keep("spine.Skin")' />
+	<haxeflag name='--macro keep("spine.support.extensions.SpineExtensions")' />
+	<haxeflag name='--macro keep("spine.support.extensions.StringExtensions")' />
 
-	<!-- 微信库自动引入 -->
-	<haxelib name="wechat-zygame-dom" if="tt || wechat || baidu || qihoo || mgc"/>
+	<!-- 发布最终版时，会移除所有trace语句，提高性能 -->
+	<haxeflag name="--no-traces" if="final" />
 
-	<haxeflag name="--no-traces" if="final && !trace" unless="debug"/>
-	
+	<!-- HLCheak  -->
+	<haxeflag name="-D hl-cheak" if="hl" />
+
 </project>

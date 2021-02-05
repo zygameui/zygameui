@@ -68,9 +68,11 @@ class Tasks {
 					newdata.tasks.push(value);
 			}
 		}
+		var arr = [];
 		// 更新新内容
 		for (index => value in tasks.list) {
 			if (value.command.indexOf("haxelib") == -1) {
+				arr.push(value.name);
 				//-build
 				var c = new TaskCommand();
 				c.label = value.name + "(Build)";
@@ -96,7 +98,8 @@ class Tasks {
 				newdata.tasks.push(c);
 			}
 		}
-		File.saveContent(dir + "/.vscode/tasks.json", Json.stringify(newdata));
+		File.saveContent(dir + ".vscode/tasks.json", Json.stringify(newdata));
+		trace("支持平台列表：\n" + arr.join("\n"));
 		trace("tasks.json同步" + tasks.list.length + "条编译命令");
 		trace("一共" + newdata.tasks.length + "条编译命令");
 	}

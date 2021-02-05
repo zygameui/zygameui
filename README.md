@@ -47,20 +47,33 @@ pip3 install xlrd
 
 在HTML5等平台上，游戏将使用JavaScript运行游戏；并支持不同渠道的小游戏兼容。
 
-### 已支持小游戏平台
-
-- 微信小游戏、百度小游戏、QQ小游戏、字节小游戏、梦工厂小游戏、360奇虎小游戏、BILIBILI小游戏（wechat-zygame-dom）
-- 4399H5小游戏（4399h5-sdk）
-- 4399游戏盒小游戏（wechat-zygame-dom）
-- WIFI连尚无极小游戏（wifi-cpk-core）
-- 魅族小游戏（meizu-rpk-core）
-- 移动MMH5小游戏（mm-h5-sdk）
-- Oppo快游戏、H5小游戏（oppo-rpk-core、oppocore-jssdk）
-- UCH5小游戏（uc-h5-sdk）
-- Vivo快游戏（vivo-rpk-core）
-- 小米快游戏、H5小游戏（xiaomi-rpk-core、xiaomi-h5）
-- 小米赚赚H5小游戏（xiaomi-zz）
-- YYH5小游戏（yy-sdk）
-- 章鱼输入法小游戏（zhangyu-sdk）
+### 已支持编译平台
+- HTML5
+- 微信小游戏
+- 4399游戏盒
+- Bilibili快游戏
+- 字节跳动快游戏
+- 手Q小游戏
+- 百度小游戏
+- 梦工厂小游戏
+- 奇虎小游戏
+- Facebook小游戏
+- 魅族快游戏
+- 华为快游戏
+- 小米快游戏
+- 移动MMH5小游戏
+- Vivo快游戏
+- Oppo快游戏
+- Wifi无极环境小游戏
+- 豹趣H5小游戏
+- 趣头条H5小游戏
+- 360奇虎快游戏
+- 九游UCH5小游戏
+- 安卓Android
+- 苹果IOS
+- 4399H5全平台兼容小游戏
+- 小米赚赚H5小游戏
+- YY小游戏（H5）
+- HashLink
 
 （以上库暂未发布，如果有需要，可以联系我！）

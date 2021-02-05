@@ -1120,6 +1120,7 @@ class Tools:
         try:
             random = int(x)
         except BaseException as _g:
+            None
             random = None
         downloadPath = Tools.webPath
         haxe_Log.trace(((("开始更新库:" + ("null" if downloadPath is None else downloadPath)) + "haxelib/version.json?version=") + Std.string(random)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 143, 'className': "Tools", 'methodName': "updateLib"}))
@@ -1176,6 +1177,7 @@ class Tools:
                     try:
                         num = int((((a * b) / c) * 100))
                     except BaseException as _g:
+                        None
                         num = None
                     num1 = num
                     if (num1 > 100):
@@ -5608,6 +5610,7 @@ class task_Tasks:
                 else:
                     _this1 = newdata.tasks
                     _this1.append(value)
+        arr = []
         _g2_current = 0
         _g2_array = task_Tasks.tasks.list
         while (_g2_current < len(_g2_array)):
@@ -5619,6 +5622,8 @@ class task_Tasks:
             _this = value.command
             startIndex = None
             if (((_this.find("haxelib") if ((startIndex is None)) else HxString.indexOfImpl(_this,"haxelib",startIndex))) == -1):
+                x = value.name
+                arr.append(x)
                 c = task_TaskCommand()
                 c.label = (HxOverrides.stringOrNull(value.name) + "(Build)")
                 c.command = ("haxelib run zygameui -build " + HxOverrides.stringOrNull(value.command))
@@ -5641,9 +5646,11 @@ class task_Tasks:
                 c3.command = value.command
                 _this4 = newdata.tasks
                 _this4.append(c3)
-        sys_io_File.saveContent((("null" if dir is None else dir) + "/.vscode/tasks.json"),haxe_format_JsonPrinter.print(newdata,None,None))
-        haxe_Log.trace((("tasks.json同步" + Std.string(len(task_Tasks.tasks.list))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 100, 'className': "task.Tasks", 'methodName': "initTask"}))
-        haxe_Log.trace((("一共" + Std.string(len(newdata.tasks))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 101, 'className': "task.Tasks", 'methodName': "initTask"}))
+        sys_FileSystem.createDirectory(".vscode")
+        sys_io_File.saveContent((("null" if dir is None else dir) + ".vscode/tasks.json"),haxe_format_JsonPrinter.print(newdata,None,None))
+        haxe_Log.trace(("支持平台列表：\n" + HxOverrides.stringOrNull("\n".join([python_Boot.toString1(x1,'') for x1 in arr]))),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 103, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace((("tasks.json同步" + Std.string(len(task_Tasks.tasks.list))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 104, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace((("一共" + Std.string(len(newdata.tasks))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 105, 'className': "task.Tasks", 'methodName': "initTask"}))
 task_Tasks._hx_class = task_Tasks
 _hx_classes["task.Tasks"] = task_Tasks
 

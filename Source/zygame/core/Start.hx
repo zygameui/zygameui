@@ -1,5 +1,6 @@
 package zygame.core;
 
+import openfl.events.RenderEvent;
 import openfl.events.UncaughtErrorEvent;
 #if cmnt
 import zygame.cmnt.GameUtils;
@@ -36,8 +37,9 @@ import zygame.core.ImportAll;
 @:build(zygame.macro.Res.init())
 #end
 class Start extends ZScene {
-
-	#if vscode public static function main(){}; #end
+	#if vscode
+	public static function main() {};
+	#end
 
 	/**
 	 * 焦点对象
@@ -208,6 +210,15 @@ class Start extends ZScene {
 	}
 
 	/**
+	 * 渲染事件
+	 * @param e
+	 */
+	public function onRender(e:Event):Void {
+		// trace("渲染时触发onRender",e.type);
+		Lib.onRender();
+	}
+
+	/**
 	 * 初始化时机控制，确保ZQuad可用
 	 * @param e
 	 */
@@ -284,6 +295,9 @@ class Start extends ZScene {
 		this.addEventListener(Event.ENTER_FRAME, onFrameEvent);
 		stage.addEventListener(Event.RESIZE, onResize);
 		stage.addEventListener(MouseEvent.CLICK, onStageMouseClick);
+		stage.addEventListener(RenderEvent.RENDER_CAIRO, onRender);
+		stage.addEventListener(RenderEvent.RENDER_OPENGL, onRender);
+		stage.addEventListener(RenderEvent.RENDER_CANVAS, onRender);
 		#if html5
 		// bate测试
 		// OPPO侦听无法正常使用onBlur以及onFocue
@@ -301,7 +315,7 @@ class Start extends ZScene {
 		stage.addEventListener(Event.ACTIVATE, onActivate);
 		stage.addEventListener(Event.DEACTIVATE, onDeActivate);
 
-		//异常错误过滤
+		// 异常错误过滤
 		// openfl.Lib.current.loaderInfo.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR,function(event){
 		// 	event.preventDefault();
 		// 	trace("发生异常错误：",event.toString());
@@ -331,7 +345,6 @@ class Start extends ZScene {
 		trace("返回至前台");
 		zygame.utils.Lib.onResume();
 		#if qqquick
-
 		#else
 		SoundChannelManager.current().resumeMusic();
 		#end
@@ -390,7 +403,7 @@ class Start extends ZScene {
 			topView.x = stage.stageHeight;
 		}
 		onSceneSizeChange();
-		if(view3d != null){
+		if (view3d != null) {
 			view3d.width = Start.stageWidth;
 			view3d.height = Start.stageHeight;
 		}
@@ -424,7 +437,7 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	private function onFrameEvent(e:Event):Void {
-		#if (invalidate)
+		#if (invalidate || hl)
 		this.invalidate();
 		#end
 		if (fps.getFps() < 61 || fps60.update()) {
@@ -448,7 +461,7 @@ class Start extends ZScene {
 			zygame.utils.Lib.onFrame();
 			// 3D渲染
 			#if zygame3d
-			if(zygame.core.Start3D.current != null)
+			if (zygame.core.Start3D.current != null)
 				zygame.core.Start3D.current.onRender();
 			#end
 		}
@@ -484,20 +497,19 @@ class Start extends ZScene {
 	 */
 	override public function onFrame():Void {}
 }
+	class UpdateStats {
+		/**
+		 * 处理对象
+		 */
+		public var display:Refresher;
 
-class UpdateStats {
-	/**
-	 * 处理对象
-	 */
-	public var display:Refresher;
+		/**
+		 * 0为添加，1为移除
+		 */
+		public var action:Int = 0;
 
-	/**
-	 * 0为添加，1为移除
-	 */
-	public var action:Int = 0;
-
-	public function new(display:Refresher, action:Int) {
-		this.display = display;
-		this.action = action;
+		public function new(display:Refresher, action:Int) {
+			this.display = display;
+			this.action = action;
+		}
 	}
-}

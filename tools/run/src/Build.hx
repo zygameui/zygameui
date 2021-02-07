@@ -18,7 +18,7 @@ class Build {
 		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl"
+		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron"
 	];
 
 	/**
@@ -71,6 +71,9 @@ class Build {
 		if (c.indexOf(":") != -1)
 			c = c.substr(0, c.lastIndexOf(":"));
 		switch (c) {
+			case "electron":
+				buildPlatform = "electron";
+				buildElectron();
 			case "hl":
 				buildPlatform = "hl";
 				buildHashlink();
@@ -156,7 +159,7 @@ class Build {
 	}
 
 	/**
-	 * 编译成Android
+	 * 编译成Hashlink
 	 */
 	public static function buildHashlink():Void {
 		trace("开始编译HashLink");
@@ -165,6 +168,18 @@ class Build {
 			Sys.command("lime build hl -debug");
 		else
 			Sys.command("lime build hl");
+	}
+
+	/**
+	 * 编译成Electron
+	 */
+	public static function buildElectron():Void {
+		trace("开始编译Electron");
+		var args:Array<String> = Sys.args();
+		if (args.indexOf("-debug") != -1)
+			Sys.command("lime build electron -debug");
+		else
+			Sys.command("lime build electron");
 	}
 
 	/**

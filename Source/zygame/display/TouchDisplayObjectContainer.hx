@@ -75,7 +75,7 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 		var event:TouchEvent = new TouchEvent(TouchEvent.TOUCH_BEGIN, false, false, 0, false, e.localX, e.localY, 0, 0, 0);
 		event.stageX = e.stageX;
 		event.stageY = e.stageY;
-		#if (html5 || cpp)
+		#if (html5 || cpp || hl)
 		event.target = e.target;
 		event.currentTarget = e.currentTarget;
 		#end
@@ -86,7 +86,7 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 		var event:TouchEvent = new TouchEvent(TouchEvent.TOUCH_MOVE, false, false, 0, false, e.localX, e.localY, 0, 0, 0);
 		event.stageX = e.stageX;
 		event.stageY = e.stageY;
-		#if (html5 || cpp)
+		#if (html5 || cpp || hl)
 		event.target = e.target;
 		event.currentTarget = e.currentTarget;
 		#end
@@ -97,7 +97,7 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 		var event:TouchEvent = new TouchEvent(TouchEvent.TOUCH_END, false, false, 0, false, e.localX, e.localY, 0, 0, 0);
 		event.stageX = e.stageX;
 		event.stageY = e.stageY;
-		#if (html5 || cpp)
+		#if (html5 || cpp || hl)
 		event.target = e.target;
 		event.currentTarget = e.currentTarget;
 		#end

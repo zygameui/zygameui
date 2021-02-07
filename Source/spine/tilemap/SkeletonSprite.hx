@@ -30,25 +30,10 @@
 
 package spine.tilemap;
 
-import zygame.display.batch.BSprite;
-import openfl.geom.ColorTransform;
 import spine.base.SpineBaseDisplay;
 import zygame.utils.SpineManager;
-import openfl.display.BitmapData;
-import spine.attachments.MeshAttachment;
-import spine.Bone;
 import spine.Skeleton;
 import spine.SkeletonData;
-import spine.Slot;
-import spine.support.graphics.TextureAtlas;
-import spine.attachments.RegionAttachment;
-import spine.support.graphics.Color;
-import openfl.display.TileContainer;
-import openfl.display.Tile;
-import openfl.events.Event;
-import spine.BlendMode;
-import spine.support.graphics.Color;
-
 /**
  * Tilemap渲染器
  */

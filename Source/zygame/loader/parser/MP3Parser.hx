@@ -28,7 +28,7 @@ import zygame.utils.AssetsUtils;
 			});
 		}
 		var file:String = getData().path;
-		#if cpp
+		#if (cpp || hl)
 		file = StringTools.replace(file,".mp3",".ogg");
 		#end
 		AssetsUtils.loadSound(file).onComplete(function(sound) {

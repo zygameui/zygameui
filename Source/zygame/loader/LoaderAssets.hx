@@ -13,10 +13,16 @@ import zygame.loader.parser.ParserBase;
  * ZAssets核心载入器，可简易使用扩展
  */
 class LoaderAssets {
-
 	/**
 	 * 单独载入文件路径支持的格式载入解析器，可通过继承ParserBase来扩展自定义载入方式。supportType直接返回true的解析器请勿加入到此列表。
 	 */
-    public static var fileparser:Array<Class<ParserBase>> = [SparticleParser #if !hl ,MP3Parser #end,TextParser,CDBParser,XMLParser,JSONParser,BitmapDataParser];
-
+	public static var fileparser:Array<Class<ParserBase>> = [
+		SparticleParser,
+		MP3Parser,
+		TextParser,
+		CDBParser,
+		XMLParser,
+		JSONParser,
+		BitmapDataParser
+	];
 }

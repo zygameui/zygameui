@@ -64,7 +64,7 @@ class Lib {
 	 * @return Float
 	 */
 	public static function ceDecode(value:Dynamic):Float {
-		if(value == null || !Std.is(value,String))
+		if (value == null || !Std.is(value, String))
 			return value;
 		value = StringTools.replace(value, "CE#", "");
 		var bytes = Base64.decode(value);
@@ -119,6 +119,15 @@ class Lib {
 	public static function onResume():Void {
 		for (runtime in _timeRuntimes) {
 			runtime.onResume();
+		}
+	}
+
+	/**
+	 * 当渲染时触发
+	 */
+	public static function onRender():Void {
+		for (runtime in _timeRuntimes) {
+			runtime.onRender();
 		}
 	}
 
@@ -219,6 +228,17 @@ class Lib {
 	 */
 	public static function resumeCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).resumeCall(closure, args);
+	}
+
+	/**
+	 * 当渲染时进行调用
+	 * @param closure
+	 * @param args
+	 * @param runtimeTag
+	 * @return Int
+	 */
+	public static function renderCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
+		return getTimeRuntime(runtimeTag).renderCall(closure, args);
 	}
 
 	/**

@@ -3,6 +3,23 @@
 
 # ZYGameUI 更新日志
 
+### 9.9.2
+- [新增] 新增`electron`目标编译支持。
+- [新增] 新增`Lib.renderCall()`在渲染事件发生时进行回调。
+
+### 9.9.1
+- [改进] 微信小游戏库自动引入，编译微信、手Q、4399盒子等小游戏时，会自动引入`wechat-zygame-dom`库。
+- [改进] vivo/oppo/huawei/xiaomi等库会自动引入。
+- [兼容] 兼容hashlink虚拟机支持。
+- [新增] 新增hashlink编译平台。
+- [修复] 修复hashlink的应用宝无法正常直接启动的问题。
+
+### 9.8.8
+- [改进] 优化inittask命令可以保留自定义命令。
+
+### 9.8.7
+- [新增] 新增`haxelib run zygameui -inittask`用于更新编译命令列表。
+
 ### 9.8.3
 - [改进] 改进魅族小游戏打包流程。
 

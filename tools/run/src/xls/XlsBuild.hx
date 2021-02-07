@@ -1,12 +1,13 @@
 package xls;
 
+import haxe.Exception;
 import sys.io.File;
 import python.XlsData;
 import sys.FileSystem;
 
 class XlsBuild {
 	public static function build(path:String, saveDir:String):Void {
-		trace("XLS:",path,saveDir);
+		trace("XLS:",path,saveDir,FileSystem.isDirectory(path));
 		if (FileSystem.isDirectory(path)) {
 			var array = FileSystem.readDirectory(path);
 			for (str in array) {
@@ -70,8 +71,8 @@ class XlsBuild {
 					}
 					File.saveContent(saveDir + "/" + saveName + ".json", haxe.Json.stringify(data));
 				}
-			} catch (err:Dynamic) {
-				trace("file "+path+" is not xls, skip!");
+			} catch (err:Exception) {
+				trace("file "+path+" is not xls, skip!" + "\n" + err.message);
 			}
 		}
 	}

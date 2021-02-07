@@ -217,6 +217,10 @@ class Tasks {
 			{
 				name: "HashLink",
 				command: "hl"
+			},
+			{
+				name: "Electron",
+				command: "electron"
 			}
 		]
 	};

@@ -356,8 +356,8 @@ class Build:
     def buildElectron():
         haxe_Log.trace("开始编译Electron",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 177, 'className': "Build", 'methodName': "buildElectron"}))
         args = Sys.args()
-        if (python_internal_ArrayImpl.indexOf(args,"-debug",None) != -1):
-            Sys.command("lime build electron -debug")
+        if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
+            Sys.command("lime build electron -final")
         else:
             Sys.command("lime build electron")
 

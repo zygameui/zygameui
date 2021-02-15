@@ -461,6 +461,11 @@ class BitmapDataLoader extends BaseLoader {
 }
 
 class TextLoader extends BaseLoader {
+	/**
+	 * 解码处理回调：文件名->数据->解码数据
+	 */
+	public static var decodeCallback:String->String->String;
+
 	public function onCompleteAssets(call:String->String->Void):TextLoader {
 		onComplete(function(text:String):Void {
 			call(path, text);
@@ -472,6 +477,9 @@ class TextLoader extends BaseLoader {
 		var url:URLRequest = new URLRequest(path);
 		var data:URLLoader = new URLLoader();
 		data.addEventListener(Event.COMPLETE, function(_):Void {
+			//特殊解码处理
+			if (decodeCallback != null)
+				data.data = decodeCallback(path, data.data);
 			call(data.data);
 		});
 		data.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {

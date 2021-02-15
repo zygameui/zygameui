@@ -34,6 +34,12 @@ Lime
 <haxelib name="zygameui"/>
 ```
 
+## 添加平台编译命令
+前往当前项目目录下，可运行下面的命令，创建.vscode/tasks.json文件。
+```shell
+haxelib run zygameui -inittask
+```
+
 ## 修改Main类
 
 请继承zygame.core.Start类：

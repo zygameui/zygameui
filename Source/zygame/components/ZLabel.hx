@@ -450,8 +450,10 @@ class ZLabel extends DataProviderComponent {
 		}
 		this.setSelectQuadVisible(true);
 		#elseif html5
-		HTML5TextInput.openInput(this);
-		this.setSelectQuadVisible(true);
+		Lib.nextFrameCall(function(){
+			HTML5TextInput.openInput(this);
+			this.setSelectQuadVisible(true);
+		});
 		#elseif (kengsdkv2 || ios)
 		// 安卓 IOS 原生输入支持
 		KengSDK.showKeyboard(this.dataProvider, _display.maxChars, function(text:String):Void {

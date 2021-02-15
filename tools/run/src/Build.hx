@@ -176,8 +176,8 @@ class Build {
 	public static function buildElectron():Void {
 		trace("开始编译Electron");
 		var args:Array<String> = Sys.args();
-		if (args.indexOf("-debug") != -1)
-			Sys.command("lime build electron -debug");
+		if (args.indexOf("-final") != -1)
+			Sys.command("lime build electron -final");
 		else
 			Sys.command("lime build electron");
 	}

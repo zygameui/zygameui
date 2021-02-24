@@ -1,3 +1,4 @@
+import pkg.PkgTools;
 import task.Tasks;
 import atlasxml.AtlasTools;
 import atf.AtfBuild;
@@ -72,6 +73,9 @@ class Tools {
         var command:String = args[0];
         switch(command)
         {
+            case "-pkg":
+                //创建一个项目包
+                PkgTools.build();
             case "-inittask":
                 //初始化task.json文件
                 Tasks.initTask();

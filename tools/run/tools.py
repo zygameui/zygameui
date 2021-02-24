@@ -122,15 +122,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex1 = None
+            startIndex = None
             _hx_len = None
-            if (startIndex1 is None):
+            if (startIndex is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex1 + 1))
-                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex + 1))
+                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -1060,13 +1060,13 @@ class Tools:
                 v = (arr[1] if 1 < len(arr) else None)
                 Tools.authorizationMaps.h[(arr[0] if 0 < len(arr) else None)] = v
         Tools.webPath = Tools.authorizationMaps.h.get("haxelib",None)
-        haxe_Log.trace("authorization=",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 55, 'className': "Tools", 'methodName': "main", 'customParams': [authorization]}))
-        haxe_Log.trace(("haxelib:" + HxOverrides.stringOrNull(Tools.haxelib)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 56, 'className': "Tools", 'methodName': "main"}))
-        haxe_Log.trace(("args:" + Std.string(Sys.args())),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 57, 'className': "Tools", 'methodName': "main"}))
+        haxe_Log.trace("authorization=",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 56, 'className': "Tools", 'methodName': "main", 'customParams': [authorization]}))
+        haxe_Log.trace(("haxelib:" + HxOverrides.stringOrNull(Tools.haxelib)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 57, 'className': "Tools", 'methodName': "main"}))
+        haxe_Log.trace(("args:" + Std.string(Sys.args())),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 58, 'className': "Tools", 'methodName': "main"}))
         args = Sys.args()
         if (len(args) == 1):
-            haxe_Log.trace(("version:" + HxOverrides.stringOrNull(Tools.version)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 61, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("帮助列表：\n            -inittask 初始化VSCODE的task.json文件\n            -build 用于生成不同平台命令（通用）\n            -upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）\n            -updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）\n            -updatelib :用于更新所有的自有开发库（需要得到授权才能够更新到自开发库）\n            -libs :显示所有库版本情况（需要得到授权）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 62, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace(("version:" + HxOverrides.stringOrNull(Tools.version)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 62, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("帮助列表：\n            -inittask 初始化VSCODE的task.json文件\n            -build 用于生成不同平台命令（通用）\n            -upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）\n            -updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）\n            -updatelib :用于更新所有的自有开发库（需要得到授权才能够更新到自开发库）\n            -libs :显示所有库版本情况（需要得到授权）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 63, 'className': "Tools", 'methodName': "main"}))
             return
         command = (args[0] if 0 < len(args) else None)
         command1 = command
@@ -1087,6 +1087,8 @@ class Tools:
         elif (_hx_local_1 == 4):
             if (command1 == "-atf"):
                 atf_AtfBuild.build((args[1] if 1 < len(args) else None),(args[2] if 2 < len(args) else None))
+            elif (command1 == "-pkg"):
+                pkg_PkgTools.build()
             elif (command1 == "-xls"):
                 xls_XlsBuild.build((HxOverrides.stringOrNull((args[3] if 3 < len(args) else None)) + HxOverrides.stringOrNull((args[1] if 1 < len(args) else None))),(HxOverrides.stringOrNull((args[3] if 3 < len(args) else None)) + HxOverrides.stringOrNull((args[2] if 2 < len(args) else None))))
         elif (_hx_local_1 == 5):
@@ -1110,7 +1112,7 @@ class Tools:
     @staticmethod
     def showLibs():
         onlineVersion = sys_Http.requestUrl(((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/version.json?") + Std.string(python_lib_Random.random())))
-        haxe_Log.trace("\n版本库：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 108, 'className': "Tools", 'methodName': "showLibs"}))
+        haxe_Log.trace("\n版本库：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 112, 'className': "Tools", 'methodName': "showLibs"}))
         arr = onlineVersion.split("\n")
         _g = 0
         while (_g < len(arr)):
@@ -1121,13 +1123,13 @@ class Tools:
                 projectName = (a[0] if 0 < len(a) else None)
                 if sys_FileSystem.exists(((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName))):
                     if sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.current")):
-                        haxe_Log.trace(((("null" if lib is None else lib) + "  now:") + HxOverrides.stringOrNull(sys_io_File.getContent((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.current")))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 119, 'className': "Tools", 'methodName': "showLibs"}))
+                        haxe_Log.trace(((("null" if lib is None else lib) + "  now:") + HxOverrides.stringOrNull(sys_io_File.getContent((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.current")))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 123, 'className': "Tools", 'methodName': "showLibs"}))
                     elif sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.dev")):
-                        haxe_Log.trace((("null" if lib is None else lib) + "  now:开发版本"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 121, 'className': "Tools", 'methodName': "showLibs"}))
+                        haxe_Log.trace((("null" if lib is None else lib) + "  now:开发版本"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 125, 'className': "Tools", 'methodName': "showLibs"}))
                     else:
-                        haxe_Log.trace((("null" if lib is None else lib) + "  now:库已损坏"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 125, 'className': "Tools", 'methodName': "showLibs"}))
+                        haxe_Log.trace((("null" if lib is None else lib) + "  now:库已损坏"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 129, 'className': "Tools", 'methodName': "showLibs"}))
                 else:
-                    haxe_Log.trace((("null" if lib is None else lib) + "  now:库不存在"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 130, 'className': "Tools", 'methodName': "showLibs"}))
+                    haxe_Log.trace((("null" if lib is None else lib) + "  now:库不存在"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 134, 'className': "Tools", 'methodName': "showLibs"}))
 
     @staticmethod
     def updateLib():
@@ -1139,18 +1141,18 @@ class Tools:
             None
             random = None
         downloadPath = Tools.webPath
-        haxe_Log.trace(((("开始更新库:" + ("null" if downloadPath is None else downloadPath)) + "haxelib/version.json?version=") + Std.string(random)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 143, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(((("开始更新库:" + ("null" if downloadPath is None else downloadPath)) + "haxelib/version.json?version=") + Std.string(random)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 147, 'className': "Tools", 'methodName': "updateLib"}))
         versionData = sys_Http.requestUrl(((("null" if downloadPath is None else downloadPath) + "haxelib/version.json?version=") + Std.string(random)))
         versoins = versionData.split("\n")
-        haxe_Log.trace(versoins,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 146, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(versoins,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 150, 'className': "Tools", 'methodName': "updateLib"}))
         userName = python_GetPass.getuser()
         haxelibConfigPath = (("/Users/" + ("null" if userName is None else userName)) + "/.haxelib")
-        haxe_Log.trace(("haxelibConfigPath=" + ("null" if haxelibConfigPath is None else haxelibConfigPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 151, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(("haxelibConfigPath=" + ("null" if haxelibConfigPath is None else haxelibConfigPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 155, 'className': "Tools", 'methodName': "updateLib"}))
         haxelibPath = Tools.haxelib
         if (Sys.systemName() == "Mac"):
             haxelibPath = sys_io_File.getContent(haxelibConfigPath)
         haxelibPath = StringTools.replace(haxelibPath," ","")
-        haxe_Log.trace(("haxelibPath=" + ("null" if haxelibPath is None else haxelibPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 156, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(("haxelibPath=" + ("null" if haxelibPath is None else haxelibPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 160, 'className': "Tools", 'methodName': "updateLib"}))
         _g = 0
         while (_g < len(versoins)):
             version = (versoins[_g] if _g >= 0 and _g < len(versoins) else None)
@@ -1159,13 +1161,13 @@ class Tools:
             arr = version.split(":")
             cheakVersionPath = (((("null" if haxelibPath is None else haxelibPath) + "/") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + "/.current")
             cheakDevPath = (((("null" if haxelibPath is None else haxelibPath) + "/") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + "/.dev")
-            haxe_Log.trace(("检查库：" + Std.string(arr)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 163, 'className': "Tools", 'methodName': "updateLib"}))
+            haxe_Log.trace(("检查库：" + Std.string(arr)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 167, 'className': "Tools", 'methodName': "updateLib"}))
             if (len(arr) != 2):
                 continue
             if sys_FileSystem.exists(cheakVersionPath):
                 curVersion = sys_io_File.getContent(cheakVersionPath)
-                haxe_Log.trace(("curVersion:" + ("null" if curVersion is None else curVersion)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 169, 'className': "Tools", 'methodName': "updateLib"}))
-                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 170, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace(("curVersion:" + ("null" if curVersion is None else curVersion)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 173, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 174, 'className': "Tools", 'methodName': "updateLib"}))
                 tmp = None
                 if (curVersion != (arr[1] if 1 < len(arr) else None)):
                     _this = curVersion.split(".")
@@ -1176,18 +1178,18 @@ class Tools:
                 else:
                     tmp = False
                 if tmp:
-                    haxe_Log.trace("版本有更新，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 173, 'className': "Tools", 'methodName': "updateLib"}))
+                    haxe_Log.trace("版本有更新，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 177, 'className': "Tools", 'methodName': "updateLib"}))
                     isUpdate = True
                 else:
-                    haxe_Log.trace("已是最新无需更新",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 178, 'className': "Tools", 'methodName': "updateLib"}))
+                    haxe_Log.trace("已是最新无需更新",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 182, 'className': "Tools", 'methodName': "updateLib"}))
             elif sys_FileSystem.exists(cheakDevPath):
-                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 183, 'className': "Tools", 'methodName': "updateLib"}))
-                haxe_Log.trace("该库为开发库",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 184, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 187, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace("该库为开发库",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 188, 'className': "Tools", 'methodName': "updateLib"}))
             else:
-                haxe_Log.trace("库不存在，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 188, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace("库不存在，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 192, 'className': "Tools", 'methodName': "updateLib"}))
                 isUpdate = True
             if isUpdate:
-                haxe_Log.trace((((((((("null" if downloadPath is None else downloadPath) + "haxelib/") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))) + ".zip") + " -> ") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + ".zip"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 195, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace((((((((("null" if downloadPath is None else downloadPath) + "haxelib/") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))) + ".zip") + " -> ") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + ".zip"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 199, 'className': "Tools", 'methodName': "updateLib"}))
                 def _hx_local_1(a,b,c):
                     num = None
                     try:
@@ -1198,7 +1200,7 @@ class Tools:
                     num1 = num
                     if (num1 > 100):
                         num1 = 100
-                    haxe_Log.trace((("已下载：" + Std.string(num1)) + "%"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 200, 'className': "Tools", 'methodName': "updateLib"}))
+                    haxe_Log.trace((("已下载：" + Std.string(num1)) + "%"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 204, 'className': "Tools", 'methodName': "updateLib"}))
                 python_HttpDownload.urlretrieve(((((("null" if downloadPath is None else downloadPath) + "haxelib/") + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + HxOverrides.stringOrNull((arr[1] if 1 < len(arr) else None))) + ".zip"),(HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None)) + ".zip"),_hx_local_1)
                 Sys.command((("haxelib install " + HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None))) + ".zip"))
                 sys_FileSystem.deleteFile((HxOverrides.stringOrNull((arr[0] if 0 < len(arr) else None)) + ".zip"))
@@ -1207,7 +1209,7 @@ class Tools:
     def updatedev():
         args = Sys.args()
         projectName = (args[1] if 1 < len(args) else None)
-        haxe_Log.trace(("正在更新库：" + ("null" if projectName is None else projectName)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 215, 'className': "Tools", 'methodName': "updatedev"}))
+        haxe_Log.trace(("正在更新库：" + ("null" if projectName is None else projectName)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 219, 'className': "Tools", 'methodName': "updatedev"}))
         if sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.dev")):
             onlineVersion = sys_Http.requestUrl(((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/version.json?") + Std.string(python_lib_Random.random())))
             libs = onlineVersion.split("\n")
@@ -1220,25 +1222,25 @@ class Tools:
                 startIndex = None
                 if (((lib.find(projectName) if ((startIndex is None)) else HxString.indexOfImpl(lib,projectName,startIndex))) != -1):
                     downloadPath = ((((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/") + HxOverrides.stringOrNull(StringTools.replace(lib,":",""))) + ".zip?") + Std.string(python_lib_Random.random()))
-                    haxe_Log.trace(((("正在更新" + ("null" if lib is None else lib)) + ":") + ("null" if downloadPath is None else downloadPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 226, 'className': "Tools", 'methodName': "updatedev"}))
+                    haxe_Log.trace(((("正在更新" + ("null" if lib is None else lib)) + ":") + ("null" if downloadPath is None else downloadPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 230, 'className': "Tools", 'methodName': "updatedev"}))
                     if sys_FileSystem.exists((HxOverrides.stringOrNull(Tools.haxelib) + "/cache.zip")):
                         sys_FileSystem.deleteFile((HxOverrides.stringOrNull(Tools.haxelib) + "/cache.zip"))
                     python_HttpDownload.urlretrieve(downloadPath,(HxOverrides.stringOrNull(Tools.haxelib) + "/cache.zip"))
-                    haxe_Log.trace("同步版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 230, 'className': "Tools", 'methodName': "updatedev"}))
+                    haxe_Log.trace("同步版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 234, 'className': "Tools", 'methodName': "updatedev"}))
                     Sys.command((((("cd " + HxOverrides.stringOrNull(Tools.haxelib)) + "/") + ("null" if projectName is None else projectName)) + "\n                    unzip -o ../cache.zip"))
                     if sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/__MACOSX")):
                         python_FileUtils.removeDic((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/__MACOSX"))
-                    haxe_Log.trace("更新结束！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 235, 'className': "Tools", 'methodName': "updatedev"}))
+                    haxe_Log.trace("更新结束！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 239, 'className': "Tools", 'methodName': "updatedev"}))
                     break
         else:
-            haxe_Log.trace((("null" if projectName is None else projectName) + "不是你的开发库，无法更新"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 242, 'className': "Tools", 'methodName': "updatedev"}))
+            haxe_Log.trace((("null" if projectName is None else projectName) + "不是你的开发库，无法更新"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 246, 'className': "Tools", 'methodName': "updatedev"}))
 
     @staticmethod
     def uploadlib():
         args = Sys.args()
         projectName = (args[1] if 1 < len(args) else None)
         projectPath = ((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName))
-        haxe_Log.trace(("正在处理项目库：" + ("null" if projectPath is None else projectPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 251, 'className': "Tools", 'methodName': "uploadlib"}))
+        haxe_Log.trace(("正在处理项目库：" + ("null" if projectPath is None else projectPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 255, 'className': "Tools", 'methodName': "uploadlib"}))
         if sys_FileSystem.exists(projectPath):
             haxelibmsg = sys_io_File.getContent((("null" if projectPath is None else projectPath) + "/haxelib.json"))
             data = python_lib_Json.loads(haxelibmsg,**python__KwArgs_KwArgs_Impl_.fromT(_hx_AnonObject({'object_hook': python_Lib.dictToAnon})))
@@ -1250,7 +1252,7 @@ class Tools:
                     v = ("0" + ("null" if v is None else v))
             _this = list(v)
             v = ".".join([python_Boot.toString1(x1,'') for x1 in _this])
-            haxe_Log.trace(("升级版本至：" + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 263, 'className': "Tools", 'methodName': "uploadlib"}))
+            haxe_Log.trace(("升级版本至：" + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 267, 'className': "Tools", 'methodName': "uploadlib"}))
             onlineVersion = sys_Http.requestUrl(((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/version.json?") + Std.string(python_lib_Random.random())))
             startIndex = None
             if (((onlineVersion.find(projectName) if ((startIndex is None)) else HxString.indexOfImpl(onlineVersion,projectName,startIndex))) == -1):
@@ -1265,9 +1267,9 @@ class Tools:
                 startIndex = None
                 if (((lib.find(projectName) if ((startIndex is None)) else HxString.indexOfImpl(lib,projectName,startIndex))) != -1):
                     onlineV = HxOverrides.arrayGet(lib.split(":"), 1)
-                    haxe_Log.trace((((("线上版本：" + ("null" if onlineV is None else onlineV)) + "->") + " 当前新版本：") + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 277, 'className': "Tools", 'methodName': "uploadlib"}))
+                    haxe_Log.trace((((("线上版本：" + ("null" if onlineV is None else onlineV)) + "->") + " 当前新版本：") + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 281, 'className': "Tools", 'methodName': "uploadlib"}))
                     if (Std.parseInt(StringTools.replace(onlineV,".","")) >= Std.parseInt(StringTools.replace(v,".",""))):
-                        haxe_Log.trace("你的本地版本需大于线上版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 281, 'className': "Tools", 'methodName': "uploadlib"}))
+                        haxe_Log.trace("你的本地版本需大于线上版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 285, 'className': "Tools", 'methodName': "uploadlib"}))
                         exit(1)
                     python_internal_ArrayImpl._set(libs, i, ((("null" if projectName is None else projectName) + ":") + ("null" if v is None else v)))
                     zipfiles = sys_FileSystem.readDirectory(projectPath)
@@ -1282,19 +1284,19 @@ class Tools:
                     projectName = (("null" if projectName is None else projectName) + ("null" if v is None else v))
                     Sys.command(((((("cd " + ("null" if projectPath is None else projectPath)) + "\n                    zip -r ../") + ("null" if projectName is None else projectName)) + ".zip ") + HxOverrides.stringOrNull(" ".join([python_Boot.toString1(x1,'') for x1 in zipfiles]))))
                     file = (((("null" if projectPath is None else projectPath) + "/../") + ("null" if projectName is None else projectName)) + ".zip")
-                    haxe_Log.trace("开始上传",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 306, 'className': "Tools", 'methodName': "uploadlib"}))
+                    haxe_Log.trace("开始上传",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 310, 'className': "Tools", 'methodName': "uploadlib"}))
                     Tools.uploadOSS(file,"kengsdk_tools_res:1001/haxelib")
                     Tools.uploadOSS((("null" if projectPath is None else projectPath) + "/../version.json"),"kengsdk_tools_res:1001/haxelib")
-                    haxe_Log.trace("上传成功：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 310, 'className': "Tools", 'methodName': "uploadlib", 'customParams': [projectName, v]}))
+                    haxe_Log.trace("上传成功：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 314, 'className': "Tools", 'methodName': "uploadlib", 'customParams': [projectName, v]}))
                     sys_FileSystem.deleteFile((((("null" if projectPath is None else projectPath) + "/../") + ("null" if projectName is None else projectName)) + ".zip"))
                     break
         else:
-            haxe_Log.trace("库不存在！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 318, 'className': "Tools", 'methodName': "uploadlib"}))
+            haxe_Log.trace("库不存在！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 322, 'className': "Tools", 'methodName': "uploadlib"}))
 
     @staticmethod
     def uploadOSS(file,saveName):
         command = ((("haxelib run aliyun-oss-upload " + ("null" if file is None else file)) + " ") + ("null" if saveName is None else saveName))
-        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 324, 'className': "Tools", 'methodName': "uploadOSS"}))
+        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 328, 'className': "Tools", 'methodName': "uploadOSS"}))
         Sys.command(command)
 Tools._hx_class = Tools
 _hx_classes["Tools"] = Tools
@@ -1780,6 +1782,202 @@ class haxe_ValueException(haxe_Exception):
 
 haxe_ValueException._hx_class = haxe_ValueException
 _hx_classes["haxe.ValueException"] = haxe_ValueException
+
+
+class haxe_crypto_Md5:
+    _hx_class_name = "haxe.crypto.Md5"
+    __slots__ = ()
+    _hx_methods = ["bitOR", "bitXOR", "bitAND", "addme", "hex", "rol", "cmn", "ff", "gg", "hh", "ii", "doEncode"]
+    _hx_statics = ["encode", "str2blks"]
+
+    def __init__(self):
+        pass
+
+    def bitOR(self,a,b):
+        lsb = ((a & 1) | ((b & 1)))
+        msb31 = (HxOverrides.rshift(a, 1) | (HxOverrides.rshift(b, 1)))
+        return ((msb31 << 1) | lsb)
+
+    def bitXOR(self,a,b):
+        lsb = ((a & 1) ^ ((b & 1)))
+        msb31 = (HxOverrides.rshift(a, 1) ^ (HxOverrides.rshift(b, 1)))
+        return ((msb31 << 1) | lsb)
+
+    def bitAND(self,a,b):
+        lsb = ((a & 1) & ((b & 1)))
+        msb31 = (HxOverrides.rshift(a, 1) & (HxOverrides.rshift(b, 1)))
+        return ((msb31 << 1) | lsb)
+
+    def addme(self,x,y):
+        lsw = (((x & 65535)) + ((y & 65535)))
+        msw = ((((x >> 16)) + ((y >> 16))) + ((lsw >> 16)))
+        return ((msw << 16) | ((lsw & 65535)))
+
+    def hex(self,a):
+        _hx_str = ""
+        hex_chr = "0123456789abcdef"
+        _g = 0
+        while (_g < len(a)):
+            num = (a[_g] if _g >= 0 and _g < len(a) else None)
+            _g = (_g + 1)
+            index = ((num >> 4) & 15)
+            index1 = (num & 15)
+            _hx_str = (("null" if _hx_str is None else _hx_str) + HxOverrides.stringOrNull(((HxOverrides.stringOrNull((("" if (((index < 0) or ((index >= len(hex_chr))))) else hex_chr[index]))) + HxOverrides.stringOrNull((("" if (((index1 < 0) or ((index1 >= len(hex_chr))))) else hex_chr[index1])))))))
+            index2 = ((num >> 12) & 15)
+            index3 = ((num >> 8) & 15)
+            _hx_str = (("null" if _hx_str is None else _hx_str) + HxOverrides.stringOrNull(((HxOverrides.stringOrNull((("" if (((index2 < 0) or ((index2 >= len(hex_chr))))) else hex_chr[index2]))) + HxOverrides.stringOrNull((("" if (((index3 < 0) or ((index3 >= len(hex_chr))))) else hex_chr[index3])))))))
+            index4 = ((num >> 20) & 15)
+            index5 = ((num >> 16) & 15)
+            _hx_str = (("null" if _hx_str is None else _hx_str) + HxOverrides.stringOrNull(((HxOverrides.stringOrNull((("" if (((index4 < 0) or ((index4 >= len(hex_chr))))) else hex_chr[index4]))) + HxOverrides.stringOrNull((("" if (((index5 < 0) or ((index5 >= len(hex_chr))))) else hex_chr[index5])))))))
+            index6 = ((num >> 28) & 15)
+            index7 = ((num >> 24) & 15)
+            _hx_str = (("null" if _hx_str is None else _hx_str) + HxOverrides.stringOrNull(((HxOverrides.stringOrNull((("" if (((index6 < 0) or ((index6 >= len(hex_chr))))) else hex_chr[index6]))) + HxOverrides.stringOrNull((("" if (((index7 < 0) or ((index7 >= len(hex_chr))))) else hex_chr[index7])))))))
+        return _hx_str
+
+    def rol(self,num,cnt):
+        return ((num << cnt) | (HxOverrides.rshift(num, ((32 - cnt)))))
+
+    def cmn(self,q,a,b,x,s,t):
+        return self.addme(self.rol(self.addme(self.addme(a,q),self.addme(x,t)),s),b)
+
+    def ff(self,a,b,c,d,x,s,t):
+        return self.cmn(self.bitOR(self.bitAND(b,c),self.bitAND(~b,d)),a,b,x,s,t)
+
+    def gg(self,a,b,c,d,x,s,t):
+        return self.cmn(self.bitOR(self.bitAND(b,d),self.bitAND(c,~d)),a,b,x,s,t)
+
+    def hh(self,a,b,c,d,x,s,t):
+        return self.cmn(self.bitXOR(self.bitXOR(b,c),d),a,b,x,s,t)
+
+    def ii(self,a,b,c,d,x,s,t):
+        return self.cmn(self.bitXOR(c,self.bitOR(b,~d)),a,b,x,s,t)
+
+    def doEncode(self,x):
+        a = 1732584193
+        b = -271733879
+        c = -1732584194
+        d = 271733878
+        step = None
+        i = 0
+        while (i < len(x)):
+            olda = a
+            oldb = b
+            oldc = c
+            oldd = d
+            step = 0
+            a = self.ff(a,b,c,d,(x[i] if i >= 0 and i < len(x) else None),7,-680876936)
+            d = self.ff(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 1)),12,-389564586)
+            c = self.ff(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 2)),17,606105819)
+            b = self.ff(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 3)),22,-1044525330)
+            a = self.ff(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 4)),7,-176418897)
+            d = self.ff(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 5)),12,1200080426)
+            c = self.ff(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 6)),17,-1473231341)
+            b = self.ff(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 7)),22,-45705983)
+            a = self.ff(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 8)),7,1770035416)
+            d = self.ff(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 9)),12,-1958414417)
+            c = self.ff(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 10)),17,-42063)
+            b = self.ff(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 11)),22,-1990404162)
+            a = self.ff(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 12)),7,1804603682)
+            d = self.ff(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 13)),12,-40341101)
+            c = self.ff(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 14)),17,-1502002290)
+            b = self.ff(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 15)),22,1236535329)
+            a = self.gg(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 1)),5,-165796510)
+            d = self.gg(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 6)),9,-1069501632)
+            c = self.gg(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 11)),14,643717713)
+            b = self.gg(b,c,d,a,(x[i] if i >= 0 and i < len(x) else None),20,-373897302)
+            a = self.gg(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 5)),5,-701558691)
+            d = self.gg(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 10)),9,38016083)
+            c = self.gg(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 15)),14,-660478335)
+            b = self.gg(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 4)),20,-405537848)
+            a = self.gg(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 9)),5,568446438)
+            d = self.gg(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 14)),9,-1019803690)
+            c = self.gg(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 3)),14,-187363961)
+            b = self.gg(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 8)),20,1163531501)
+            a = self.gg(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 13)),5,-1444681467)
+            d = self.gg(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 2)),9,-51403784)
+            c = self.gg(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 7)),14,1735328473)
+            b = self.gg(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 12)),20,-1926607734)
+            a = self.hh(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 5)),4,-378558)
+            d = self.hh(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 8)),11,-2022574463)
+            c = self.hh(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 11)),16,1839030562)
+            b = self.hh(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 14)),23,-35309556)
+            a = self.hh(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 1)),4,-1530992060)
+            d = self.hh(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 4)),11,1272893353)
+            c = self.hh(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 7)),16,-155497632)
+            b = self.hh(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 10)),23,-1094730640)
+            a = self.hh(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 13)),4,681279174)
+            d = self.hh(d,a,b,c,(x[i] if i >= 0 and i < len(x) else None),11,-358537222)
+            c = self.hh(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 3)),16,-722521979)
+            b = self.hh(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 6)),23,76029189)
+            a = self.hh(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 9)),4,-640364487)
+            d = self.hh(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 12)),11,-421815835)
+            c = self.hh(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 15)),16,530742520)
+            b = self.hh(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 2)),23,-995338651)
+            a = self.ii(a,b,c,d,(x[i] if i >= 0 and i < len(x) else None),6,-198630844)
+            d = self.ii(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 7)),10,1126891415)
+            c = self.ii(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 14)),15,-1416354905)
+            b = self.ii(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 5)),21,-57434055)
+            a = self.ii(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 12)),6,1700485571)
+            d = self.ii(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 3)),10,-1894986606)
+            c = self.ii(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 10)),15,-1051523)
+            b = self.ii(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 1)),21,-2054922799)
+            a = self.ii(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 8)),6,1873313359)
+            d = self.ii(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 15)),10,-30611744)
+            c = self.ii(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 6)),15,-1560198380)
+            b = self.ii(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 13)),21,1309151649)
+            a = self.ii(a,b,c,d,python_internal_ArrayImpl._get(x, (i + 4)),6,-145523070)
+            d = self.ii(d,a,b,c,python_internal_ArrayImpl._get(x, (i + 11)),10,-1120210379)
+            c = self.ii(c,d,a,b,python_internal_ArrayImpl._get(x, (i + 2)),15,718787259)
+            b = self.ii(b,c,d,a,python_internal_ArrayImpl._get(x, (i + 9)),21,-343485551)
+            a = self.addme(a,olda)
+            b = self.addme(b,oldb)
+            c = self.addme(c,oldc)
+            d = self.addme(d,oldd)
+            i = (i + 16)
+        return [a, b, c, d]
+
+    @staticmethod
+    def encode(s):
+        m = haxe_crypto_Md5()
+        h = m.doEncode(haxe_crypto_Md5.str2blks(s))
+        return m.hex(h)
+
+    @staticmethod
+    def str2blks(_hx_str):
+        str1 = haxe_io_Bytes.ofString(_hx_str)
+        nblk = ((((str1.length + 8) >> 6)) + 1)
+        blks = list()
+        blksSize = (nblk * 16)
+        _g = 0
+        _g1 = blksSize
+        while (_g < _g1):
+            i = _g
+            _g = (_g + 1)
+            python_internal_ArrayImpl._set(blks, i, 0)
+        i = 0
+        _hx_max = str1.length
+        l = (_hx_max * 8)
+        while (i < _hx_max):
+            _hx_local_0 = blks
+            _hx_local_1 = (i >> 2)
+            _hx_local_2 = (_hx_local_0[_hx_local_1] if _hx_local_1 >= 0 and _hx_local_1 < len(_hx_local_0) else None)
+            python_internal_ArrayImpl._set(_hx_local_0, _hx_local_1, (_hx_local_2 | ((str1.b[i] << ((HxOverrides.mod(((l + i)), 4) * 8))))))
+            (_hx_local_0[_hx_local_1] if _hx_local_1 >= 0 and _hx_local_1 < len(_hx_local_0) else None)
+            i = (i + 1)
+        _hx_local_4 = blks
+        _hx_local_5 = (i >> 2)
+        _hx_local_6 = (_hx_local_4[_hx_local_5] if _hx_local_5 >= 0 and _hx_local_5 < len(_hx_local_4) else None)
+        python_internal_ArrayImpl._set(_hx_local_4, _hx_local_5, (_hx_local_6 | ((128 << ((HxOverrides.mod(((l + i)), 4) * 8))))))
+        (_hx_local_4[_hx_local_5] if _hx_local_5 >= 0 and _hx_local_5 < len(_hx_local_4) else None)
+        k = ((nblk * 16) - 2)
+        python_internal_ArrayImpl._set(blks, k, (l & 255))
+        python_internal_ArrayImpl._set(blks, k, ((blks[k] if k >= 0 and k < len(blks) else None) | ((((HxOverrides.rshift(l, 8) & 255)) << 8))))
+        python_internal_ArrayImpl._set(blks, k, ((blks[k] if k >= 0 and k < len(blks) else None) | ((((HxOverrides.rshift(l, 16) & 255)) << 16))))
+        python_internal_ArrayImpl._set(blks, k, ((blks[k] if k >= 0 and k < len(blks) else None) | ((((HxOverrides.rshift(l, 24) & 255)) << 24))))
+        return blks
+
+haxe_crypto_Md5._hx_class = haxe_crypto_Md5
+_hx_classes["haxe.crypto.Md5"] = haxe_crypto_Md5
 
 
 class haxe_format_JsonPrinter:
@@ -3106,6 +3304,277 @@ class mini_MiniEngineBuild:
             sys_io_File.copy("dist.zip",python_internal_ArrayImpl._get(Sys.args(), 3))
 mini_MiniEngineBuild._hx_class = mini_MiniEngineBuild
 _hx_classes["mini.MiniEngineBuild"] = mini_MiniEngineBuild
+
+
+class pkg_PkgTools:
+    _hx_class_name = "pkg.PkgTools"
+    __slots__ = ()
+    _hx_statics = ["build", "copyPkg", "copyTemplate", "copySource", "copyAssets"]
+
+    @staticmethod
+    def build():
+        haxe_Log.trace("打包参数：",_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 12, 'className': "pkg.PkgTools", 'methodName': "build", 'customParams': [Sys.args()]}))
+        projectDir = python_internal_ArrayImpl._get(Sys.args(), 1)
+        path = (("null" if projectDir is None else projectDir) + "/zproject.xml")
+        if (not sys_FileSystem.exists(path)):
+            raise haxe_Exception.thrown("项目不存在zproject.xml")
+        pkgDir = (("null" if projectDir is None else projectDir) + "/Export/pkg")
+        python_FileUtils.removeDic(pkgDir)
+        python_FileUtils.createDir(pkgDir)
+        zproject = pkg_ZProjectData(path)
+        sys_io_File.saveContent((("null" if pkgDir is None else pkgDir) + "/zproject.xml"),(("<project><haxedef name='pkgtools'/>" + HxOverrides.stringOrNull(zproject.getData())) + "</project>"))
+        pkg_PkgTools.copyAssets(zproject)
+        pkg_PkgTools.copyTemplate(zproject)
+        pkg_PkgTools.copyPkg(zproject)
+        pkg_PkgTools.copySource(zproject)
+
+    @staticmethod
+    def copyPkg(zproject):
+        projectDir = python_internal_ArrayImpl._get(Sys.args(), 1)
+        _g = 0
+        _g1 = zproject.pkgBind
+        while (_g < len(_g1)):
+            obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            haxe_Log.trace(("Pkg:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 41, 'className': "pkg.PkgTools", 'methodName': "copyPkg"}))
+            if sys_FileSystem.isDirectory(obj.path):
+                files = sys_FileSystem.readDirectory(obj.path)
+                _g2 = 0
+                while (_g2 < len(files)):
+                    file = (files[_g2] if _g2 >= 0 and _g2 < len(files) else None)
+                    _g2 = (_g2 + 1)
+                    if sys_FileSystem.isDirectory(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file))):
+                        python_FileUtils.copyDic(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
+                    else:
+                        python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)) + "/") + ("null" if file is None else file)))
+            else:
+                python_FileUtils.copyFile(obj.path,((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
+            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 53, 'className': "pkg.PkgTools", 'methodName': "copyPkg"}))
+        _g = 0
+        _g1 = zproject.includes
+        while (_g < len(_g1)):
+            i = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            pkg_PkgTools.copyPkg(i)
+
+    @staticmethod
+    def copyTemplate(zproject):
+        projectDir = python_internal_ArrayImpl._get(Sys.args(), 1)
+        _g = 0
+        _g1 = zproject.templateBind
+        while (_g < len(_g1)):
+            obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            haxe_Log.trace(("Template:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 67, 'className': "pkg.PkgTools", 'methodName': "copyTemplate"}))
+            if sys_FileSystem.isDirectory(obj.path):
+                files = sys_FileSystem.readDirectory(obj.path)
+                _g2 = 0
+                while (_g2 < len(files)):
+                    file = (files[_g2] if _g2 >= 0 and _g2 < len(files) else None)
+                    _g2 = (_g2 + 1)
+                    if sys_FileSystem.isDirectory(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file))):
+                        python_FileUtils.copyDic(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
+                    else:
+                        python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)) + "/") + ("null" if file is None else file)))
+            else:
+                python_FileUtils.copyFile(obj.path,((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
+            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 79, 'className': "pkg.PkgTools", 'methodName': "copyTemplate"}))
+        _g = 0
+        _g1 = zproject.includes
+        while (_g < len(_g1)):
+            i = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            pkg_PkgTools.copyTemplate(i)
+
+    @staticmethod
+    def copySource(zproject):
+        projectDir = python_internal_ArrayImpl._get(Sys.args(), 1)
+        _g = 0
+        _g1 = zproject.sourceBind
+        while (_g < len(_g1)):
+            obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            haxe_Log.trace(("Source:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 89, 'className': "pkg.PkgTools", 'methodName': "copySource"}))
+            if sys_FileSystem.isDirectory(obj.path):
+                files = sys_FileSystem.readDirectory(obj.path)
+                _g2 = 0
+                while (_g2 < len(files)):
+                    file = (files[_g2] if _g2 >= 0 and _g2 < len(files) else None)
+                    _g2 = (_g2 + 1)
+                    if sys_FileSystem.isDirectory(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file))):
+                        python_FileUtils.copyDic(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),(("null" if projectDir is None else projectDir) + "/Export/pkg/source"))
+                    else:
+                        python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),(((("null" if projectDir is None else projectDir) + "/Export/pkg/source") + "/") + ("null" if file is None else file)))
+            else:
+                python_FileUtils.copyFile(obj.path,(("null" if projectDir is None else projectDir) + "/Export/pkg/source"))
+        _g = 0
+        _g1 = zproject.includes
+        while (_g < len(_g1)):
+            i = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            pkg_PkgTools.copySource(i)
+
+    @staticmethod
+    def copyAssets(zproject):
+        projectDir = python_internal_ArrayImpl._get(Sys.args(), 1)
+        _g = 0
+        _g1 = zproject.assetsBind
+        while (_g < len(_g1)):
+            obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            haxe_Log.trace(("Assets:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 114, 'className': "pkg.PkgTools", 'methodName': "copyAssets"}))
+            if sys_FileSystem.isDirectory(obj.path):
+                files = sys_FileSystem.readDirectory(obj.path)
+                _g2 = 0
+                while (_g2 < len(files)):
+                    file = (files[_g2] if _g2 >= 0 and _g2 < len(files) else None)
+                    _g2 = (_g2 + 1)
+                    if sys_FileSystem.isDirectory(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file))):
+                        python_FileUtils.copyDic(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
+                    else:
+                        python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)) + "/") + ("null" if file is None else file)))
+            else:
+                python_FileUtils.copyFile(obj.path,((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
+            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 126, 'className': "pkg.PkgTools", 'methodName': "copyAssets"}))
+        _g = 0
+        _g1 = zproject.includes
+        while (_g < len(_g1)):
+            i = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
+            _g = (_g + 1)
+            pkg_PkgTools.copyAssets(i)
+pkg_PkgTools._hx_class = pkg_PkgTools
+_hx_classes["pkg.PkgTools"] = pkg_PkgTools
+
+
+class pkg_ZProjectData:
+    _hx_class_name = "pkg.ZProjectData"
+    __slots__ = ("_xml", "_changeXml", "includes", "assetsBind", "sourceBind", "templateBind", "pkgBind")
+    _hx_fields = ["_xml", "_changeXml", "includes", "assetsBind", "sourceBind", "templateBind", "pkgBind"]
+    _hx_methods = ["getData"]
+
+    def __init__(self,path,xmlData = None):
+        self.pkgBind = []
+        self.templateBind = []
+        self.sourceBind = []
+        self.assetsBind = []
+        self.includes = []
+        self._changeXml = []
+        startIndex1 = None
+        _hx_len = None
+        if (startIndex1 is None):
+            _hx_len = path.rfind("/", 0, len(path))
+        else:
+            i = path.rfind("/", 0, (startIndex1 + 1))
+            startLeft = (max(0,((startIndex1 + 1) - len("/"))) if ((i == -1)) else (i + 1))
+            check = path.find("/", startLeft, len(path))
+            _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
+        rootPath = HxString.substr(path,0,_hx_len)
+        self._xml = Xml.parse((xmlData if ((xmlData is not None)) else sys_io_File.getContent(path)))
+        _this = self._xml.firstElement()
+        if ((_this.nodeType != Xml.Document) and ((_this.nodeType != Xml.Element))):
+            raise haxe_Exception.thrown(("Bad node type, expected Element or Document but found " + HxOverrides.stringOrNull((("null" if ((_this.nodeType is None)) else _Xml_XmlType_Impl_.toString(_this.nodeType))))))
+        item = haxe_iterators_ArrayIterator(_this.children)
+        while item.hasNext():
+            item1 = item.next()
+            if (item1.nodeType == 0):
+                tmp = haxe_Log.trace
+                tmp1 = ("null" if ((item1.nodeType is None)) else _Xml_XmlType_Impl_.toString(item1.nodeType))
+                if (item1.nodeType != Xml.Element):
+                    raise haxe_Exception.thrown(("Bad node type, expected Element but found " + HxOverrides.stringOrNull((("null" if ((item1.nodeType is None)) else _Xml_XmlType_Impl_.toString(item1.nodeType))))))
+                tmp(tmp1,_hx_AnonObject({'fileName': "src/pkg/ZProjectData.hx", 'lineNumber': 39, 'className': "pkg.ZProjectData", 'methodName': "new", 'customParams': [item1.nodeName, item1]}))
+                if (item1.nodeType != Xml.Element):
+                    raise haxe_Exception.thrown(("Bad node type, expected Element but found " + HxOverrides.stringOrNull((("null" if ((item1.nodeType is None)) else _Xml_XmlType_Impl_.toString(item1.nodeType))))))
+                _g = item1.nodeName
+                _hx_local_0 = len(_g)
+                if (_hx_local_0 == 7):
+                    if (_g == "include"):
+                        includeData = pkg_ZProjectData(((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path"))))
+                        attributes = []
+                        itemkey = item1.attributes()
+                        while itemkey.hasNext():
+                            itemkey1 = itemkey.next()
+                            if (itemkey1 == "path"):
+                                continue
+                            x1 = (((("null" if itemkey1 is None else itemkey1) + "=\"") + HxOverrides.stringOrNull(item1.get(itemkey1))) + "\"")
+                            attributes.append(x1)
+                        _this2 = self._changeXml
+                        x2 = (((("<section " + HxOverrides.stringOrNull(" ".join([python_Boot.toString1(x1,'') for x1 in attributes]))) + ">") + HxOverrides.stringOrNull(includeData.getData())) + "</section>")
+                        _this2.append(x2)
+                        _this3 = self.includes
+                        _this3.append(includeData)
+                    elif (_g == "section"):
+                        sectionData = pkg_ZProjectData(path,haxe_xml_Printer.print(item1))
+                        attributes1 = []
+                        itemkey2 = item1.attributes()
+                        while itemkey2.hasNext():
+                            itemkey3 = itemkey2.next()
+                            x3 = (((("null" if itemkey3 is None else itemkey3) + "=\"") + HxOverrides.stringOrNull(item1.get(itemkey3))) + "\"")
+                            attributes1.append(x3)
+                        _this5 = self._changeXml
+                        x4 = (((("<section " + HxOverrides.stringOrNull(" ".join([python_Boot.toString1(x1,'') for x1 in attributes1]))) + ">") + HxOverrides.stringOrNull(sectionData.getData())) + "</section>")
+                        _this5.append(x4)
+                    else:
+                        _this9 = self._changeXml
+                        x6 = haxe_xml_Printer.print(item1)
+                        _this9.append(x6)
+                elif (_hx_local_0 == 3):
+                    if (_g == "pkg"):
+                        to = (item1.get("rename") if (item1.exists("rename")) else item1.get("path"))
+                        obj1 = _hx_AnonObject({'path': ((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path"))), 'copyTo': to})
+                        _this4 = self.pkgBind
+                        _this4.append(obj1)
+                    else:
+                        _this9 = self._changeXml
+                        x6 = haxe_xml_Printer.print(item1)
+                        _this9.append(x6)
+                elif (_hx_local_0 == 8):
+                    if (_g == "template"):
+                        obj3 = _hx_AnonObject({'path': ((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path"))), 'copyTo': ("template/" + HxOverrides.stringOrNull(haxe_crypto_Md5.encode(((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path"))))))})
+                        _this7 = self.templateBind
+                        _this7.append(obj3)
+                        item1.set("path",obj3.copyTo)
+                        _this8 = self._changeXml
+                        x5 = haxe_xml_Printer.print(item1)
+                        _this8.append(x5)
+                    else:
+                        _this9 = self._changeXml
+                        x6 = haxe_xml_Printer.print(item1)
+                        _this9.append(x6)
+                elif (_hx_local_0 == 6):
+                    if (_g == "assets"):
+                        obj = _hx_AnonObject({'path': ((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path"))), 'copyTo': ("assets/" + HxOverrides.stringOrNull(haxe_crypto_Md5.encode(((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path"))))))})
+                        _this = self.assetsBind
+                        _this.append(obj)
+                        if (not item1.exists("rename")):
+                            item1.set("rename",item1.get("path"))
+                        item1.set("path",obj.copyTo)
+                        _this1 = self._changeXml
+                        x = haxe_xml_Printer.print(item1)
+                        _this1.append(x)
+                    elif (_g == "source"):
+                        obj2 = _hx_AnonObject({'path': ((("null" if rootPath is None else rootPath) + "/") + HxOverrides.stringOrNull(item1.get("path")))})
+                        _this6 = self.sourceBind
+                        _this6.append(obj2)
+                    else:
+                        _this9 = self._changeXml
+                        x6 = haxe_xml_Printer.print(item1)
+                        _this9.append(x6)
+                else:
+                    _this9 = self._changeXml
+                    x6 = haxe_xml_Printer.print(item1)
+                    _this9.append(x6)
+        if (len(self.sourceBind) > 0):
+            _this = self._changeXml
+            _this.append("<source path=\"source\"/>")
+        _this = self._changeXml
+        haxe_Log.trace(("ChangeXml:\n\n" + HxOverrides.stringOrNull("\n".join([python_Boot.toString1(x1,'') for x1 in _this]))),_hx_AnonObject({'fileName': "src/pkg/ZProjectData.hx", 'lineNumber': 102, 'className': "pkg.ZProjectData", 'methodName': "new"}))
+
+    def getData(self):
+        _this = self._changeXml
+        return "\n".join([python_Boot.toString1(x1,'') for x1 in _this])
+
+pkg_ZProjectData._hx_class = pkg_ZProjectData
+_hx_classes["pkg.ZProjectData"] = pkg_ZProjectData
 
 
 class platforms_BuildSuper:
@@ -4531,7 +5000,7 @@ _hx_classes["python.internal.ArrayImpl"] = python_internal_ArrayImpl
 class HxOverrides:
     _hx_class_name = "HxOverrides"
     __slots__ = ()
-    _hx_statics = ["iterator", "eq", "stringOrNull", "push", "arrayGet", "mapKwArgs"]
+    _hx_statics = ["iterator", "eq", "stringOrNull", "push", "rshift", "modf", "mod", "arrayGet", "mapKwArgs"]
 
     @staticmethod
     def iterator(x):
@@ -4559,6 +5028,36 @@ class HxOverrides:
             _this.append(e)
             return len(_this)
         return x.push(e)
+
+    @staticmethod
+    def rshift(val,n):
+        return ((val % 0x100000000) >> n)
+
+    @staticmethod
+    def modf(a,b):
+        if (b == 0.0):
+            return float('nan')
+        elif (a < 0):
+            if (b < 0):
+                return -(-a % (-b))
+            else:
+                return -(-a % b)
+        elif (b < 0):
+            return a % (-b)
+        else:
+            return a % b
+
+    @staticmethod
+    def mod(a,b):
+        if (a < 0):
+            if (b < 0):
+                return -(-a % (-b))
+            else:
+                return -(-a % b)
+        elif (b < 0):
+            return a % (-b)
+        else:
+            return a % b
 
     @staticmethod
     def arrayGet(a,i):

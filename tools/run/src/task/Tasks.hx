@@ -221,6 +221,9 @@ class Tasks {
 			{
 				name: "Electron",
 				command: "electron"
+			},{
+				name: "生成Lime架构包",
+				command : "haxelib run zygameui -pkg"
 			}
 		]
 	};

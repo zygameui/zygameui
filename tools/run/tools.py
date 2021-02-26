@@ -122,15 +122,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex = None
+            startIndex1 = None
             _hx_len = None
-            if (startIndex is None):
+            if (startIndex1 is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex + 1))
-                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex1 + 1))
+                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -3327,6 +3327,13 @@ class pkg_PkgTools:
         pkg_PkgTools.copyTemplate(zproject)
         pkg_PkgTools.copyPkg(zproject)
         pkg_PkgTools.copySource(zproject)
+        if sys_FileSystem.exists((("null" if projectDir is None else projectDir) + "/pkgtools.json")):
+            sys_io_File.copy((("null" if projectDir is None else projectDir) + "/pkgtools.json"),(("null" if pkgDir is None else pkgDir) + "/pkgtools.json"))
+        haxe_Log.trace("############## 启动编译检查 ##############",_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 36, 'className': "pkg.PkgTools", 'methodName': "build"}))
+        Sys.command((("cd " + ("null" if pkgDir is None else pkgDir)) + " && haxelib run zygameui -build html5"))
+        haxe_Log.trace("############## 编译检查结束 ##############",_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 39, 'className': "pkg.PkgTools", 'methodName': "build"}))
+        python_FileUtils.removeDic((("null" if pkgDir is None else pkgDir) + "/Export"))
+        Sys.command((("cd " + ("null" if pkgDir is None else pkgDir)) + " && zip -q -r app.zip *"))
 
     @staticmethod
     def copyPkg(zproject):
@@ -3336,7 +3343,7 @@ class pkg_PkgTools:
         while (_g < len(_g1)):
             obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
             _g = (_g + 1)
-            haxe_Log.trace(("Pkg:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 41, 'className': "pkg.PkgTools", 'methodName': "copyPkg"}))
+            haxe_Log.trace(("Pkg:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 53, 'className': "pkg.PkgTools", 'methodName': "copyPkg"}))
             if sys_FileSystem.isDirectory(obj.path):
                 files = sys_FileSystem.readDirectory(obj.path)
                 _g2 = 0
@@ -3349,7 +3356,7 @@ class pkg_PkgTools:
                         python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)) + "/") + ("null" if file is None else file)))
             else:
                 python_FileUtils.copyFile(obj.path,((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
-            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 53, 'className': "pkg.PkgTools", 'methodName': "copyPkg"}))
+            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 65, 'className': "pkg.PkgTools", 'methodName': "copyPkg"}))
         _g = 0
         _g1 = zproject.includes
         while (_g < len(_g1)):
@@ -3365,7 +3372,7 @@ class pkg_PkgTools:
         while (_g < len(_g1)):
             obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
             _g = (_g + 1)
-            haxe_Log.trace(("Template:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 67, 'className': "pkg.PkgTools", 'methodName': "copyTemplate"}))
+            haxe_Log.trace(("Template:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 79, 'className': "pkg.PkgTools", 'methodName': "copyTemplate"}))
             if sys_FileSystem.isDirectory(obj.path):
                 files = sys_FileSystem.readDirectory(obj.path)
                 _g2 = 0
@@ -3378,7 +3385,7 @@ class pkg_PkgTools:
                         python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)) + "/") + ("null" if file is None else file)))
             else:
                 python_FileUtils.copyFile(obj.path,((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
-            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 79, 'className': "pkg.PkgTools", 'methodName': "copyTemplate"}))
+            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 91, 'className': "pkg.PkgTools", 'methodName': "copyTemplate"}))
         _g = 0
         _g1 = zproject.includes
         while (_g < len(_g1)):
@@ -3394,7 +3401,7 @@ class pkg_PkgTools:
         while (_g < len(_g1)):
             obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
             _g = (_g + 1)
-            haxe_Log.trace(("Source:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 89, 'className': "pkg.PkgTools", 'methodName': "copySource"}))
+            haxe_Log.trace(("Source:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 101, 'className': "pkg.PkgTools", 'methodName': "copySource"}))
             if sys_FileSystem.isDirectory(obj.path):
                 files = sys_FileSystem.readDirectory(obj.path)
                 _g2 = 0
@@ -3422,7 +3429,7 @@ class pkg_PkgTools:
         while (_g < len(_g1)):
             obj = (_g1[_g] if _g >= 0 and _g < len(_g1) else None)
             _g = (_g + 1)
-            haxe_Log.trace(("Assets:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 114, 'className': "pkg.PkgTools", 'methodName': "copyAssets"}))
+            haxe_Log.trace(("Assets:" + HxOverrides.stringOrNull(obj.path)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 126, 'className': "pkg.PkgTools", 'methodName': "copyAssets"}))
             if sys_FileSystem.isDirectory(obj.path):
                 files = sys_FileSystem.readDirectory(obj.path)
                 _g2 = 0
@@ -3435,7 +3442,7 @@ class pkg_PkgTools:
                         python_FileUtils.copyFile(((HxOverrides.stringOrNull(obj.path) + "/") + ("null" if file is None else file)),((((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)) + "/") + ("null" if file is None else file)))
             else:
                 python_FileUtils.copyFile(obj.path,((("null" if projectDir is None else projectDir) + "/Export/pkg/") + HxOverrides.stringOrNull(obj.copyTo)))
-            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 126, 'className': "pkg.PkgTools", 'methodName': "copyAssets"}))
+            haxe_Log.trace(((("null" if projectDir is None else projectDir) + "/") + HxOverrides.stringOrNull(obj.copyTo)),_hx_AnonObject({'fileName': "src/pkg/PkgTools.hx", 'lineNumber': 138, 'className': "pkg.PkgTools", 'methodName': "copyAssets"}))
         _g = 0
         _g1 = zproject.includes
         while (_g < len(_g1)):
@@ -3459,15 +3466,15 @@ class pkg_ZProjectData:
         self.assetsBind = []
         self.includes = []
         self._changeXml = []
-        startIndex1 = None
+        startIndex = None
         _hx_len = None
-        if (startIndex1 is None):
+        if (startIndex is None):
             _hx_len = path.rfind("/", 0, len(path))
         else:
-            i = path.rfind("/", 0, (startIndex1 + 1))
-            startLeft = (max(0,((startIndex1 + 1) - len("/"))) if ((i == -1)) else (i + 1))
+            i = path.rfind("/", 0, (startIndex + 1))
+            startLeft = (max(0,((startIndex + 1) - len("/"))) if ((i == -1)) else (i + 1))
             check = path.find("/", startLeft, len(path))
-            _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
+            _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
         rootPath = HxString.substr(path,0,_hx_len)
         self._xml = Xml.parse((xmlData if ((xmlData is not None)) else sys_io_File.getContent(path)))
         _this = self._xml.firstElement()
@@ -3685,16 +3692,17 @@ class platforms_Meizu(platforms_BuildSuper):
 
     def __init__(self,args,dir):
         super().__init__(args,dir)
-        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/index.html"),dir)
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/index-meizu.html"),(("null" if dir is None else dir) + "/index.html"))
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/zygameui-dom.js"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/manifest.json"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/sign"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/image"),dir)
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),dir)
         oldDir = Sys.getCwd()
         Sys.setCwd(dir)
         npmInstall = sys_FileSystem.exists((HxOverrides.stringOrNull(self.dir) + "/../html5/bin/tools/meizu-build/node_modules"))
         command = ((((((((("cd \"" + HxOverrides.stringOrNull(self.dir)) + "/../html5/bin/tools/meizu-build") + "\" ") + HxOverrides.stringOrNull((("&& npm install" if ((not npmInstall)) else "")))) + " && node bundle.js release --sourcePath ") + HxOverrides.stringOrNull(self.dir)) + " --outputPath ") + HxOverrides.stringOrNull(self.dir)) + "/../ --sign release")
-        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Meizu.hx", 'lineNumber': 20, 'className': "platforms.Meizu", 'methodName': "new"}))
+        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Meizu.hx", 'lineNumber': 22, 'className': "platforms.Meizu", 'methodName': "new"}))
         Sys.command(command)
         Sys.setCwd(oldDir)
 platforms_Meizu._hx_class = platforms_Meizu
@@ -6310,6 +6318,6 @@ python_Boot.keywords = set(["and", "del", "from", "not", "with", "as", "elif", "
 python_Boot.prefixLength = len("_hx_")
 python_Lib.lineEnd = ("\r\n" if ((Sys.systemName() == "Windows")) else "\n")
 sys_Http.PROXY = None
-task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"}), _hx_AnonObject({'name': "HashLink", 'command': "hl"}), _hx_AnonObject({'name': "Electron", 'command': "electron"})]})
+task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"}), _hx_AnonObject({'name': "HashLink", 'command': "hl"}), _hx_AnonObject({'name': "Electron", 'command': "electron"}), _hx_AnonObject({'name': "生成Lime架构包", 'command': "haxelib run zygameui -pkg"})]})
 
 Tools.main()

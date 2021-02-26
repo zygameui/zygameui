@@ -29,6 +29,18 @@ class PkgTools {
 		copyPkg(zproject);
 		// 分析代码并拷贝
 		copySource(zproject);
+		// 检查是否存在pkgtools.json文件，如果有则将它拷贝
+		if (FileSystem.exists(projectDir + "/pkgtools.json")) {
+			File.copy(projectDir + "/pkgtools.json", pkgDir + "/pkgtools.json");
+		}
+		trace("############## 启动编译检查 ##############");
+		// 使用编译检查
+		Sys.command("cd " + pkgDir + " && haxelib run zygameui -build html5");
+		trace("############## 编译检查结束 ##############");
+		// 检查后删除Export目录
+		FileUtils.removeDic(pkgDir + "/Export");
+		// 然后压缩
+		Sys.command("cd " + pkgDir + " && zip -q -r app.zip *");
 	}
 
 	/**

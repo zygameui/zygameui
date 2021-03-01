@@ -3667,6 +3667,7 @@ class platforms_Huawei(platforms_BuildSuper):
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/manifest.json"),(("null" if dir is None else dir) + "/web"))
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/window.js"),(("null" if dir is None else dir) + "/web"))
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/game.js"),(("null" if dir is None else dir) + "/web"))
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),(("null" if dir is None else dir) + "/web"))
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/lib"),(("null" if dir is None else dir) + "/web"))
 
     def buildAfter(self):
@@ -3751,6 +3752,7 @@ class platforms_QuickGame(platforms_BuildSuper):
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/config"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/sign"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/lib"),(("null" if dir is None else dir) + "/src"))
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),dir)
 
     def run(self,cName):
         Sys.command((("cd Export/" + ("null" if cName is None else cName)) + "\n        npm install\n        npm run build\n        "))
@@ -3800,6 +3802,8 @@ class platforms_Oppo(platforms_BuildSuper):
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/res"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/lib/pako.min"),(("null" if dir is None else dir) + "/lib"))
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/release"),(("null" if dir is None else dir) + "/sign"))
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),dir)
+        python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/sdk"),dir)
 
     def buildAfter(self):
         super().buildAfter()
@@ -4004,6 +4008,7 @@ class platforms_Xiaomi(platforms_BuildSuper):
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/manifest.json"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/package.json"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/zygameui-dom.js"),dir)
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),dir)
 
     def buildAfter(self):
         super().buildAfter()

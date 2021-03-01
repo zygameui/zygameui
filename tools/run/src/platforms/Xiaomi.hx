@@ -12,14 +12,14 @@ class Xiaomi extends BuildSuper {
 		FileUtils.copyFile(args[2] + "Export/html5/bin/manifest.json", dir);
 		FileUtils.copyFile(args[2] + "Export/html5/bin/package.json", dir);
 		FileUtils.copyFile(args[2] + "Export/html5/bin/zygameui-dom.js", dir);
-		
+		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir);
 	}
 
-    override function buildAfter() {
-        super.buildAfter();
-        Sys.setCwd(dir);
+	override function buildAfter() {
+		super.buildAfter();
+		Sys.setCwd(dir);
 		if (!FileSystem.exists("node_moules"))
 			Sys.command(" npm install;");
 		Sys.command("npm run release;");
-    }
+	}
 }

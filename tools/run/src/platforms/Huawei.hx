@@ -17,6 +17,7 @@ class Huawei extends BuildSuper {
         FileUtils.copyFile(args[2] + "Export/html5/bin/manifest.json", dir + "/web");
         FileUtils.copyFile(args[2] + "Export/html5/bin/window.js", dir + "/web");
         FileUtils.copyFile(args[2] + "Export/html5/bin/game.js", dir + "/web");
+        FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir + "/web");
         FileUtils.copyDic(args[2] + "Export/html5/bin/lib", dir + "/web");
 	}
 

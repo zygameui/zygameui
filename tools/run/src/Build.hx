@@ -119,6 +119,8 @@ class Build {
 		trace("开始编译平台资源");
 		if (!FileSystem.exists(dir))
 			FileSystem.createDirectory(dir);
+		if(mainFileName == null)
+			throw "Build.mainFileName is NULL!";
 		// 通用资源拷贝
 		FileUtils.copyDic("Export/html5/bin/lib", dir);
 		FileUtils.copyFile(args[2] + "Export/html5/bin/" + mainFileName + ".js", dir);
@@ -224,7 +226,8 @@ class Build {
 					if (!after)
 						Defines.define(item.get("name"), item.get("value"));
 				case "app":
-					mainFileName = item.get("file");
+					if(item.exists("file"))
+						mainFileName = item.get("file");
 				case "shell":
 					// 执行自定义脚本使用
 					var code = 0;

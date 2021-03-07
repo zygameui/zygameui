@@ -48,6 +48,7 @@ class ZGraphics extends DisplayObjectContainer {
 	 * 最大可绘制区域宽度，0为不限制，默认为0
 	 */
 	public var maxDrawWidth:Int = 0;
+
 	/**
 	 * 最大可绘制区域高度，0为不限制，默认为0
 	 */
@@ -72,8 +73,8 @@ class ZGraphics extends DisplayObjectContainer {
 		eraseVertices.splice(0, eraseVertices.length);
 		eraseUv.splice(0, eraseUv.length);
 		eraseIds.splice(0, eraseIds.length);
-		eraseIndexs.splice(0,eraseIndexs.length);
-		commend.splice(0,commend.length);
+		eraseIndexs.splice(0, eraseIndexs.length);
+		commend.splice(0, commend.length);
 	}
 
 	/**
@@ -89,13 +90,13 @@ class ZGraphics extends DisplayObjectContainer {
 		if (getLastCommend() == "erase") {
 			for (i in 0...commend.length) {
 				var c = commend.pop();
-                if (c != "erase")
+				if (c != "erase")
 					break;
 				// 撤销橡皮檫操作
 				var index:Int = eraseIndexs.pop();
-				pushStringVector(eraseIds.splice(eraseVertices.length - 1, 1), ids,index);
-				pushVector(eraseVertices.splice(eraseVertices.length - 1 * 8, 1 * 8), vertices,index);
-				pushVector(eraseUv.splice(eraseUv.length - 1 * 8, 1 * 8), uv,index);
+				pushStringVector(eraseIds.splice(eraseVertices.length - 1, 1), ids, index);
+				pushVector(eraseVertices.splice(eraseVertices.length - 1 * 8, 1 * 8), vertices, index);
+				pushVector(eraseUv.splice(eraseUv.length - 1 * 8, 1 * 8), uv, index);
 			}
 		} else if (getLastCommend() != "lineTo") {
 			commend.pop();
@@ -118,7 +119,7 @@ class ZGraphics extends DisplayObjectContainer {
 	/**
 	 * 画布是否已经绘制
 	 */
-	public function isNull():Bool{
+	public function isNull():Bool {
 		return vertices.length != 0;
 	}
 
@@ -149,8 +150,7 @@ class ZGraphics extends DisplayObjectContainer {
 	 * @param x3 
 	 * @param y 
 	 */
-	public function drawTriangles(x1:Float,y1:Float,x2:Float,y2:Float,x3:Float,y3:Float):Void
-	{
+	public function drawTriangles(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float):Void {
 		this.pushFrameUVs();
 		this.pushPoint(x1, y1);
 		this.pushPoint(x2, y2);
@@ -177,6 +177,27 @@ class ZGraphics extends DisplayObjectContainer {
 	}
 
 	/**
+	 * 判断此处是否有绘制过的内容
+	 * @param x 
+	 * @param y 
+	 * @param size 
+	 */
+	public function checkIn(x:Float, y:Float, size:Int = 5):Bool {
+		var i:Int = 0;
+		while (true) {
+			var isErase:Bool = cheakIn(i, x, y, size);
+			// 判断是否可以擦除
+			if (isErase) {
+				return true;
+			}
+			i += 8;
+			if (i >= vertices.length)
+				break;
+		}
+		return false;
+	}
+
+	/**
 	 * 擦除指定区域的绘制内容，该擦除功能会自动呈现，不需要调用fillEnd接口
 	 */
 	public function erase(x:Float, y:Float, size:Int = 5):Void {
@@ -198,15 +219,15 @@ class ZGraphics extends DisplayObjectContainer {
 		fillEnd();
 	}
 
-	private function pushVector(v1:Vector<Float>, v2:Vector<Float>,index:Int = -1):Void {
+	private function pushVector(v1:Vector<Float>, v2:Vector<Float>, index:Int = -1):Void {
 		for (i in 0...v1.length) {
-			index == -1?v2.push(v1[i]):v2.insertAt(index + i,v1[i]);
+			index == -1 ? v2.push(v1[i]) : v2.insertAt(index + i, v1[i]);
 		}
 	}
 
-	private function pushStringVector(v1:Array<String>, v2:Array<String>,index:Int = -1):Void {
+	private function pushStringVector(v1:Array<String>, v2:Array<String>, index:Int = -1):Void {
 		for (i in 0...v1.length) {
-			index == -1?v2.push(v1[i]):v2.insert(index + i,v1[i]);
+			index == -1 ? v2.push(v1[i]) : v2.insert(index + i, v1[i]);
 		}
 	}
 
@@ -294,7 +315,7 @@ class ZGraphics extends DisplayObjectContainer {
 	 * @param y
 	 */
 	public function lineTo(x:Float, y:Float):Void {
-		drawLine(moveToPos.x, moveToPos.y, x, y,0,0);
+		drawLine(moveToPos.x, moveToPos.y, x, y, 0, 0);
 		if (isLineTo) {
 			// 修正连续画线时的拼接
 			vertices[vertices.length - 10] = vertices[vertices.length - 4];
@@ -316,7 +337,7 @@ class ZGraphics extends DisplayObjectContainer {
 	 * @param endY
 	 * @param size
 	 */
-	public function drawLine(startX:Float, startY:Float, endX:Float, endY:Float,offectX:Float = 0,offectY:Float = 0):Void {
+	public function drawLine(startX:Float, startY:Float, endX:Float, endY:Float, offectX:Float = 0, offectY:Float = 0):Void {
 		var pointA:Point = new Point();
 		pointA.x = startX;
 		pointA.y = startY;
@@ -332,7 +353,7 @@ class ZGraphics extends DisplayObjectContainer {
 		// 计算偏移的线粗
 		startX += sin * lineSize;
 		startY -= cos * lineSize;
-		this.pushFrameUVs(offectX,offectY);
+		this.pushFrameUVs(offectX, offectY);
 		this.pushPoint(startX, startY);
 		this.pushPoint(startX + d * cos, startY + d * sin);
 		startX -= sin * lineSize * 2;
@@ -360,7 +381,7 @@ class ZGraphics extends DisplayObjectContainer {
 		draw.graphics.endFill();
 	}
 
-	private function pushFrameUVs(pxf:Float = 0,pyf:Float = 0):Void {
+	private function pushFrameUVs(pxf:Float = 0, pyf:Float = 0):Void {
 		if (curFrame == null) {
 			this.pushUV(0, 0);
 			this.pushUV(0, 0);
@@ -370,8 +391,8 @@ class ZGraphics extends DisplayObjectContainer {
 		} else {
 			// 修正UV
 			var uvs:Array<Float> = curFrame.getUv();
-            var px:Float = pxf == 0?0:(uvs[6] - uvs[0]) * pxf;
-            var py:Float = pyf == 0?0:(uvs[7] - uvs[1]) * pyf;
+			var px:Float = pxf == 0 ? 0 : (uvs[6] - uvs[0]) * pxf;
+			var py:Float = pyf == 0 ? 0 : (uvs[7] - uvs[1]) * pyf;
 			this.pushUV(uvs[0] + px, uvs[1] + py);
 			this.pushUV(uvs[2] - px, uvs[3] + py);
 			this.pushUV(uvs[4] + px, uvs[5] - py);
@@ -386,18 +407,16 @@ class ZGraphics extends DisplayObjectContainer {
 	}
 
 	private function pushPoint(x:Float, y:Float):Void {
-		if(maxDrawWidth != 0)
-		{
-			if(x < 0)
+		if (maxDrawWidth != 0) {
+			if (x < 0)
 				x = 0;
-			else if(x > maxDrawWidth)
+			else if (x > maxDrawWidth)
 				x = maxDrawWidth;
 		}
-		if(maxDrawHeight != 0)
-		{
-			if(y < 0)
+		if (maxDrawHeight != 0) {
+			if (y < 0)
 				y = 0;
-			else if(y > maxDrawHeight)
+			else if (y > maxDrawHeight)
 				y = maxDrawHeight;
 		}
 		vertices.push(Std.int(x));
@@ -488,8 +507,7 @@ class ZGraphics extends DisplayObjectContainer {
 	 * 获取自身已绘制的区域大小
 	 * @return Rectangle
 	 */
-	public function getLocalBounds():Rectangle
-	{
+	public function getLocalBounds():Rectangle {
 		var rect = new Rectangle();
 		var maxX:Float = this.vertices[0];
 		var minX:Float = this.vertices[0];
@@ -497,19 +515,18 @@ class ZGraphics extends DisplayObjectContainer {
 		var minY:Float = this.vertices[1];
 		@:privateAccess for (i in 0...this.vertices.length) {
 			var v = this.vertices[i];
-            if(i/2 == Std.int(i/2)){
-				if(v > maxX)
+			if (i / 2 == Std.int(i / 2)) {
+				if (v > maxX)
 					maxX = v;
-				else if(v < minX)
+				else if (v < minX)
 					minX = v;
-            }
-            else{
-                if(v > maxY)
+			} else {
+				if (v > maxY)
 					maxY = v;
-				else if(v < minY)
+				else if (v < minY)
 					minY = v;
-            }
-        }
+			}
+		}
 		rect.x = minX;
 		rect.y = minY;
 		rect.width = maxX - minX;
@@ -532,5 +549,4 @@ class ZGraphics extends DisplayObjectContainer {
 		return false;
 	}
 	#end
-	
 }

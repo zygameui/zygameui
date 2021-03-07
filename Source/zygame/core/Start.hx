@@ -111,6 +111,13 @@ class Start extends ZScene {
 	 */
 	public var topView:DisplayObjectContainer;
 
+	#if ios
+	/**
+	 * IOS渲染器修复
+	 */
+	public var iosRender:ZQuad;
+	#end
+
 	/**
 	 * 更新状态队列
 	 */
@@ -167,8 +174,6 @@ class Start extends ZScene {
 			var createTextureCall:Dynamic = this.stage.application.window.context.webgl.createTexture;
 			untyped this.stage.application.window.context.webgl.createTexture = function():Dynamic {
 				TEXTURE_COUNT++;
-				// if(TEXTURE_COUNT > 500)
-				// 	throw "???TEXTURE_COUNT";
 				return createTextureCall();
 			}
 			var deleteTextureCall:Dynamic = this.stage.application.window.context.webgl.deleteTexture;
@@ -232,16 +237,8 @@ class Start extends ZScene {
 				superInitEvent(e);
 			});
 			#elseif qqquick
-			// if (wx.WxUtils.getPlatform() != "ios") {
 			ZQuad.quadBitmapData = new BitmapData(1, 1, false, 0xffffff);
 			superInitEvent(e);
-			// } else {
-			// var px1base64:String = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAAA1BMVEUAAACnej3aAAAACklEQVQYlWNgAAAAAgABNesWWgAAAABJRU5ErkJggg==";
-			// BitmapData.loadFromBase64(px1base64, "image/png").onComplete((bitmapData:BitmapData) -> {
-			// 	ZQuad.quadBitmapData = bitmapData;
-			// 	superInitEvent(e);
-			// });
-			// }
 			#else
 			ZQuad.quadBitmapData = new BitmapData(1, 1, false, 0xffffff);
 			superInitEvent(e);
@@ -250,6 +247,9 @@ class Start extends ZScene {
 			superInitEvent(e);
 		}
 		#end
+		#if ios
+		iosRender = new ZQuad();
+		#end 
 	}
 
 	/**
@@ -280,9 +280,6 @@ class Start extends ZScene {
 		stage.addChild(topView);
 
 		this.onStageSizeChange();
-
-		topView.scaleX = this.scaleX;
-		topView.scaleY = this.scaleY;
 
 		fps = new FPSDebug();
 		topView.addChild(fps);
@@ -357,9 +354,6 @@ class Start extends ZScene {
 			onSceneSizeChange();
 			return;
 		}
-		// 计算出分辨率
-		// log("适配宽度",this.HDWidth,stage.stageWidth);
-		// log("适配宽度",this.HDHeight,stage.stageHeight);
 		var wscale:Float = 1;
 		var hscale:Float = 1;
 		if (_lockLandscape && stage.stageWidth < stage.stageHeight) {
@@ -379,7 +373,9 @@ class Start extends ZScene {
 			currentScale = hscale;
 		}
 
-		// stage
+		// topView比例同步
+		topView.scaleX = this.scaleX;
+		topView.scaleY = this.scaleY;
 
 		#if html5
 		js.Syntax.code("window.currentScale=zygame_core_Start.currentScale");
@@ -437,6 +433,16 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	private function onFrameEvent(e:Event):Void {
+		#if ios
+		if (iosRender != null) {
+			stage.addChild(iosRender);
+			iosRender.scale(topView.scaleX);
+			iosRender.width = getStageWidth();
+			iosRender.height = getStageHeight();
+			iosRender.alpha = 0.0001;
+			iosRender.mouseEnabled = false;
+		}
+		#end
 		#if (invalidate || hl)
 		this.invalidate();
 		#end
@@ -497,19 +503,19 @@ class Start extends ZScene {
 	 */
 	override public function onFrame():Void {}
 }
-	class UpdateStats {
-		/**
-		 * 处理对象
-		 */
-		public var display:Refresher;
+class UpdateStats {
+	/**
+	 * 处理对象
+	 */
+	public var display:Refresher;
 
-		/**
-		 * 0为添加，1为移除
-		 */
-		public var action:Int = 0;
+	/**
+	 * 0为添加，1为移除
+	 */
+	public var action:Int = 0;
 
-		public function new(display:Refresher, action:Int) {
-			this.display = display;
-			this.action = action;
-		}
+	public function new(display:Refresher, action:Int) {
+		this.display = display;
+		this.action = action;
 	}
+}

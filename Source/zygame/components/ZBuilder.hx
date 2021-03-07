@@ -340,17 +340,17 @@ class ZBuilder {
 		// 绑定解析
 		bindCreate(ZSpine, function(xml:Xml):Array<Dynamic> {
 			var target = xml.get("src");
-			if(target != null){
+			if (target != null) {
 				var data = target.split(":");
-				return [data[0],data[1],xml.get("tilemap") == "true"];
+				return [data[0], data[1], xml.get("tilemap") == "true"];
 			}
 			return [];
 		});
 		bindCreate(BSpine, function(xml:Xml):Array<Dynamic> {
 			var target = xml.get("src");
-			if(target != null){
+			if (target != null) {
 				var data = target.split(":");
-				return [data[0],data[1]];
+				return [data[0], data[1]];
 			}
 			return [];
 		});
@@ -457,14 +457,14 @@ class ZBuilder {
 	 */
 	public static function createSpineSpriteSkeleton(atalsName:String, skeletonJsonName:String):spine.openfl.SkeletonAnimation {
 		var atlas:SpineTextureAtals = cast ZBuilder.getBaseTextureAtlas(atalsName);
-		if(atlas == null)
+		if (atlas == null)
 			return null;
 		return atlas.buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(ZBuilder.getBaseObject(skeletonJsonName)));
 	}
 
 	public static function createSpineTilemapSkeleton(atalsName:String, skeletonJsonName:String):spine.tilemap.SkeletonAnimation {
 		var atlas:SpineTextureAtals = cast ZBuilder.getBaseTextureAtlas(atalsName);
-		if(atlas == null)
+		if (atlas == null)
 			return null;
 		return atlas.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(ZBuilder.getBaseObject(skeletonJsonName)));
 	}
@@ -670,7 +670,7 @@ class ZBuilder {
 		if (xml == null)
 			throw xmlfileName + "配置不存在";
 		var builder:Builder = new Builder();
-		buildui(xml.firstChild(), parent, builder);
+		buildui(xml.firstElement(), parent, builder);
 		builder.bindBuilder();
 		if (Std.is(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
@@ -679,7 +679,6 @@ class ZBuilder {
 		}
 		return builder;
 	}
-	
 
 	/**
 	 * 绑定资源，同时生成XML对象
@@ -695,7 +694,7 @@ class ZBuilder {
 			bindAssets(assets);
 		var xml = assets.getXml(xmlfileName);
 		var builder:Builder = new Builder();
-		buildui(xml.firstChild(), parent, builder);
+		buildui(xml.firstElement(), parent, builder);
 		builder.bindBuilder();
 		if (Std.is(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
@@ -714,7 +713,7 @@ class ZBuilder {
 	 */
 	public static function build(xml:Xml, parent:Dynamic = null, superInit:ZBuilder->Void = null, defalutArgs:Array<Dynamic> = null):Builder {
 		var builder:Builder = new Builder();
-		buildui(xml.firstChild(), parent, builder, superInit, defalutArgs);
+		buildui(xml.firstElement(), parent, builder, superInit, defalutArgs);
 		builder.bindBuilder();
 		if (Std.is(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
@@ -727,6 +726,7 @@ class ZBuilder {
 	private static function buildui(xml:Xml, parent:Dynamic, builder:Builder, superInit:ZBuilder->Void = null, defalutArgs:Array<Dynamic> = null):Dynamic {
 		if (defalutArgs == null)
 			defalutArgs = [];
+		trace("buildui",xml);
 		// 定义判断
 		if (xml.exists("if")) {
 			var isExists:Bool = false;
@@ -763,7 +763,7 @@ class ZBuilder {
 			// 当无法找到类型时，可在XML中查找
 			var xml = getXml(className);
 			if (xml != null)
-				ui = ZBuilder.buildui(xml.firstChild(), parent, builder);
+				ui = ZBuilder.buildui(xml.firstElement(), parent, builder);
 			else
 				throw "Class name " + className + " is not define xml assets!";
 		} else
@@ -829,7 +829,6 @@ class ZBuilder {
 			cast(parent, TileContainer).addTile(ui);
 		} else if (Std.is(parent, Tilemap))
 			cast(parent, Tilemap).addTile(ui);
-
 		var attr:Iterator<String> = xml.attributes();
 		while (attr.hasNext()) {
 			var name:String = attr.next();
@@ -1018,8 +1017,8 @@ class AssetsBuilder extends Builder {
 				cb(true);
 			}
 		}, (msg) -> {
-				cb(false);
-			});
+			cb(false);
+		});
 		return this;
 	}
 
@@ -1127,7 +1126,7 @@ class Builder {
 	}
 
 	public function disposeView():Void {
-		if (this.display != null && cast(this.display, DisplayObject).parent != null) {
+		if (this.display != null && Std.is(this.display, DisplayObject) && cast(this.display, DisplayObject).parent != null) {
 			cast(this.display, DisplayObject).parent.removeChild(cast(this.display, DisplayObject));
 		}
 		this.dispose();

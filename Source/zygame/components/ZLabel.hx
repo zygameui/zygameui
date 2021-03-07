@@ -24,7 +24,6 @@ import zygame.components.base.ZTextField;
  */
 @:keep
 class ZLabel extends DataProviderComponent {
-
 	private var _defaultDisplay:ZTextField;
 
 	private var _display:ZTextField;
@@ -76,9 +75,10 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	private var _maxChars:Int = 0;
-	
-	public var maxChars(get,set):UInt;
-	private function set_maxChars(value:Int):Int{
+
+	public var maxChars(get, set):UInt;
+
+	private function set_maxChars(value:Int):Int {
 		if (_defaultDisplay == null)
 			updatedefaultText();
 		_defaultDisplay.maxChars = value;
@@ -86,7 +86,8 @@ class ZLabel extends DataProviderComponent {
 		_maxChars = value;
 		return value;
 	}
-	private function get_maxChars():Int{
+
+	private function get_maxChars():Int {
 		if (_defaultDisplay == null)
 			updatedefaultText();
 		return _defaultDisplay.maxChars;
@@ -267,15 +268,14 @@ class ZLabel extends DataProviderComponent {
 	override private function set_dataProvider(value:Dynamic):Dynamic {
 		value = Std.string(value);
 		super.dataProvider = value;
-		if(value != null && value.length > _maxChars){
-			if(_maxChars != 0){
-				value = value.substr(0,_maxChars);
+		if (value != null && value.length > _maxChars) {
+			if (_maxChars != 0) {
+				value = value.substr(0, _maxChars);
 			}
 		}
-		if(getDisplay().wordWrap == false)
-		{
-			value = StringTools.replace(value,"\n","");
-			value = StringTools.replace(value,"\r","");
+		if (getDisplay().wordWrap == false) {
+			value = StringTools.replace(value, "\n", "");
+			value = StringTools.replace(value, "\r", "");
 		}
 		#if (quickgame || qqquick || minigame)
 		// 快游戏引擎不会清理文本画布，请在这里进行清理
@@ -450,14 +450,14 @@ class ZLabel extends DataProviderComponent {
 		}
 		this.setSelectQuadVisible(true);
 		#elseif html5
-		Lib.nextFrameCall(function(){
+		Lib.nextFrameCall(function() {
 			HTML5TextInput.openInput(this);
 			this.setSelectQuadVisible(true);
 		});
 		#elseif (kengsdkv2 || ios)
 		// 安卓 IOS 原生输入支持
 		KengSDK.showKeyboard(this.dataProvider, _display.maxChars, function(text:String):Void {
-			Lib.resumeCall(function(){
+			Lib.resumeCall(function() {
 				this.dataProvider = text;
 			});
 		});
@@ -507,6 +507,7 @@ class ZLabel extends DataProviderComponent {
 	// 	return rect;
 	// }
 	#end
+
 	/**
 	 *  释放文本占用的缓存
 	 */

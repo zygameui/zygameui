@@ -24,7 +24,7 @@ class AutoBuilder {
 		if (path == null) {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
-		var builder:ZBuilderData = new ZBuilderData(path);
+		var builder:ZBuilderData = new ZBuilderData(path, project);
 		var fields = Context.getBuildFields();
 
 		bindBuilder = bindBuilder == null ? "assetsBuilder" : bindBuilder;
@@ -40,14 +40,24 @@ class AutoBuilder {
 		// 路径移除
 		path = StringTools.replace(project.assetsRenamePath.get(StringUtils.getName(xmlPath) + ".xml"), Sys.getCwd(), "");
 		var textures:Array<{png:String, xml:String}> = [];
+		var files:Array<String> = [];
 
 		// 开始遍历所需资源
 		for (file in builder.assetsLoads) {
 			if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".xml")) {
+				// trace("one png + xml:", file);
 				textures.push({
 					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
 					xml: StringTools.replace(project.assetsRenamePath.get(file + ".xml"), Sys.getCwd(), "")
 				});
+			} else if (project.assetsPath.exists(file + ".png")) {
+				// 单图加载
+				// trace("one png:", file);
+				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""));
+			} else if (project.assetsPath.exists(file + ".xml")) {
+				// 单XML加载
+				// trace("one xml:" + file);
+				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".xml"), Sys.getCwd(), ""));
 			}
 		}
 
@@ -85,6 +95,10 @@ class AutoBuilder {
 					expr: isZBuilderScene ? macro {
 						super($v{path});
 						var textures:Array<{png:String, xml:String}> = $v{textures};
+						var files:Array<String> = $v{files};
+						for (f in files) {
+							this.$bindBuilder.loadFiles([f]);
+						}
 						for (item in textures) {
 							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(item.png)) == null)
 								this.$bindBuilder.loadTextures(item.png, item.xml);

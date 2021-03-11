@@ -3753,7 +3753,7 @@ class platforms_QuickGame(platforms_BuildSuper):
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/config"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/sign"),dir)
         python_FileUtils.copyDic((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/lib"),(("null" if dir is None else dir) + "/src"))
-        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),dir)
+        python_FileUtils.copyFile((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/pkgicon.png"),(("null" if dir is None else dir) + "/src"))
 
     def run(self,cName):
         Sys.command((("cd Export/" + ("null" if cName is None else cName)) + "\n        npm install\n        npm run build\n        "))

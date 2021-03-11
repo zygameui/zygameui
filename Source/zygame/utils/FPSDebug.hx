@@ -70,11 +70,11 @@ class FPSDebug extends Sprite {
 		var mem:Float = Math.round(System.totalMemory / 1024 / 1024 * 100) / 100;
 		if (mem > memPeak)
 			memPeak = mem;
+		#if (gl_stats)
+		if (Context3DStats.totalDrawCalls() != 0)
+			_curDrawCall = Context3DStats.totalDrawCalls();
+		#end
 		if (visible) {
-			#if (gl_stats)
-			if (Context3DStats.totalDrawCalls() != 0)
-				_curDrawCall = Context3DStats.totalDrawCalls();
-			#end
 			if (debugMsg != null)
 				_text.dataProvider = debugMsg;
 			else

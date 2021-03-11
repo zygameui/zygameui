@@ -1,7 +1,5 @@
 package platforms;
 
-import sys.io.File;
-import haxe.Json;
 import python.FileUtils;
 import sys.FileSystem;
 
@@ -22,7 +20,7 @@ class QuickGame extends BuildSuper {
 		FileUtils.copyDic(args[2] + "Export/html5/bin/config", dir);
 		FileUtils.copyDic(args[2] + "Export/html5/bin/sign", dir);
 		FileUtils.copyDic(args[2] + "Export/html5/bin/lib", dir + "/src");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir);
+		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir + "/src");
 	}
 
 	override public function run(cName:String):Void {

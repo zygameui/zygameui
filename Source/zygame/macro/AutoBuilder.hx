@@ -1,6 +1,7 @@
 package zygame.macro;
 
 #if macro
+import sys.io.File;
 import zygame.utils.StringUtils;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -127,7 +128,13 @@ class AutoBuilder {
 
 		// 追加属性创建
 		for (key => value in builder.ids) {
-			createGetCall(fields, key, value, bindBuilder);
+			if(project.assetsPath.exists(value + ".xml")){
+				//XML定义
+				var nodexml:Xml = Xml.parse(File.getContent(project.assetsPath.get(value + ".xml")));
+				createGetCall(fields, key, nodexml.firstElement().nodeName, bindBuilder);
+			}
+			else
+				createGetCall(fields, key, value, bindBuilder);
 		}
 
 		return fields;

@@ -723,10 +723,20 @@ class ZBuilder {
 		return builder;
 	}
 
-	private static function buildui(xml:Xml, parent:Dynamic, builder:Builder, superInit:ZBuilder->Void = null, defalutArgs:Array<Dynamic> = null):Dynamic {
+	/**
+	 * 根据XML创建UI
+	 * @param xml xml本体
+	 * @param parent 添加父节点容器
+	 * @param builder 
+	 * @param superInit 
+	 * @param defalutArgs 
+	 * @param idpush ID追加
+	 * @return Dynamic
+	 */
+	private static function buildui(xml:Xml, parent:Dynamic, builder:Builder, superInit:ZBuilder->Void = null, defalutArgs:Array<Dynamic> = null,
+			idpush:String = null):Dynamic {
 		if (defalutArgs == null)
 			defalutArgs = [];
-		trace("buildui",xml);
 		// 定义判断
 		if (xml.exists("if")) {
 			var isExists:Bool = false;
@@ -761,9 +771,11 @@ class ZBuilder {
 			base = classMaps.get(className);
 		if (base == null) {
 			// 当无法找到类型时，可在XML中查找
-			var xml = getXml(className);
-			if (xml != null)
-				ui = ZBuilder.buildui(xml.firstElement(), parent, builder);
+			var childxml = getXml(className);
+			if (childxml != null){
+				trace("子集：",xml.get("id"));
+				ui = ZBuilder.buildui(childxml.firstElement(), parent, builder, null, null, xml.get("id"));
+			}
 			else
 				throw "Class name " + className + " is not define xml assets!";
 		} else
@@ -789,7 +801,7 @@ class ZBuilder {
 			// 不是可视化对象
 			var idname:String = xml.get("id");
 			if (idname != null) {
-				builder.ids.set(idname, ui);
+				builder.ids.set((idpush != null ? idpush + "_" : "") + idname, ui);
 				if (Std.is(ui, ZHaxe)) {
 					if (idname == "super") {
 						cast(ui, ZHaxe).bindBuilder(builder);
@@ -807,7 +819,7 @@ class ZBuilder {
 				var items:Iterator<Xml> = xml.elements();
 				while (items.hasNext()) {
 					var itemxml:Xml = items.next();
-					buildui(itemxml, ui, builder);
+					buildui(itemxml, ui, builder,idpush);
 				}
 			}
 			return ui;
@@ -833,7 +845,9 @@ class ZBuilder {
 		while (attr.hasNext()) {
 			var name:String = attr.next();
 			if (name == "id") {
-				builder.ids.set(xml.get(name), ui);
+				var idname = (idpush != null ? idpush + "_" : "") + xml.get(name);
+				trace("创建IDName:" + idname,idpush);
+				builder.ids.set(idname, ui);
 				if (!xml.exists("name"))
 					setProperty(ui, "name", xml.get(name));
 				continue;
@@ -877,7 +891,7 @@ class ZBuilder {
 		var items:Iterator<Xml> = xml.elements();
 		while (items.hasNext()) {
 			var itemxml:Xml = items.next();
-			buildui(itemxml, ui, builder);
+			buildui(itemxml, ui, builder,idpush);
 		}
 		if (endMaps.exists(className)) {
 			endMaps.get(className)(ui);

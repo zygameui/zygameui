@@ -26,16 +26,17 @@ class ZBuilderData {
 		parserXml(xml.firstElement());
 	}
 
-	private function parserXml(xml:Xml):Void {
-		parserItem(xml);
+	private function parserXml(xml:Xml, parentId:String = null):Void {
+		parserItem(xml, parentId);
 		for (item in xml.elements()) {
-			parserXml(item);
+			parserXml(item, parentId);
 		}
 	}
 
-	private function parserItem(item:Xml) {
+	private function parserItem(item:Xml, parentId:String = null) {
 		if (item.exists("id")) {
-			ids.set(item.get("id"), item.nodeName);
+			var idname = (parentId != null ? parentId + "_" : "") + item.get("id");
+			ids.set(idname, item.nodeName);
 		}
 		if (item.exists("src")) {
 			var src = item.get("src");
@@ -49,13 +50,13 @@ class ZBuilderData {
 			}
 		}
 		// Item可能是一个XML配置，列入查询
-		if (assetsLoads.indexOf(item.nodeName) == -1 && project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml") != null) {
-			assetsLoads.push(item.nodeName);
+		if (project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml") != null) {
+			if (assetsLoads.indexOf(item.nodeName) == -1)
+				assetsLoads.push(item.nodeName);
 			// 子集查询
 			var childcontent = File.getContent(project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml"));
-			// trace("子集查询" + project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml"));
 			var childxml:Xml = Xml.parse(childcontent);
-			parserXml(childxml.firstElement());
+			parserXml(childxml.firstElement(), item.get("id"));
 		}
 	}
 	#end

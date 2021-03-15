@@ -64,7 +64,7 @@ class ZButton extends ToggleButton {
 
 	public var clickEvent(never, set):Void->Void;
 
-	private var _clickCall:MouseEvent->Void;
+	private var _clickCall:Event->Void;
 
 	private function set_clickEvent(call:Void->Void):Void->Void {
 		if (_clickCall != null) {

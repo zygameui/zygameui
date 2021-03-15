@@ -846,7 +846,6 @@ class ZBuilder {
 			var name:String = attr.next();
 			if (name == "id") {
 				var idname = (idpush != null ? idpush + "_" : "") + xml.get(name);
-				trace("创建IDName:" + idname,idpush);
 				builder.ids.set(idname, ui);
 				if (!xml.exists("name"))
 					setProperty(ui, "name", xml.get(name));

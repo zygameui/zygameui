@@ -381,11 +381,11 @@ class ZAssets {
 		var parser = _parsers[currentLoadIndex];
 		currentLoadIndex++;
 		currentLoadNumber++;
-		trace("载入进度："+currentLoadIndex,parser,_parsers.length);
 		if(parser == null){
 			loadNext();
 			return;
 		}
+		trace("载入进度："+currentLoadIndex,parser,_parsers.length,parser.getName());
 		parser.out = onAssetsOut;
 		parser.done = loadDone;
 		parser.error = loadError;

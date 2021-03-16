@@ -133,6 +133,7 @@ class ZBuilder {
 		bind(NativeZBitmapLabel);
 		bind(ZSpine);
 		bind(BSpine);
+		bind(ZStack);
 
 		// 解析方法解析
 		bindParsing(zygame.components.ZImage, "src", function(ui:Dynamic, name:String, value:String):Void {

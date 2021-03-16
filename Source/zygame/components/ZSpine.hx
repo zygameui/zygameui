@@ -22,14 +22,22 @@ class ZSpine extends ZBox {
 
 	public var spineSkin(get, set):String;
 
+	public function getNativeSpine():SkeletonAnimation {
+		return spine;
+	}
+
+	public function getTilemapSpine():TilemapAnimation {
+		return bspine.spine;
+	}
+
 	private function set_spineSkin(name:String):String {
 		if (btilemap != null)
 			bspine.spineSkin = name;
-		else{
-            spine.skeleton.setSkinByName(name);
-            spine.skeleton.setBonesToSetupPose();
-            spine.skeleton.setSlotsToSetupPose();
-        }
+		else {
+			spine.skeleton.setSkinByName(name);
+			spine.skeleton.setBonesToSetupPose();
+			spine.skeleton.setSlotsToSetupPose();
+		}
 		return name;
 	}
 
@@ -78,8 +86,9 @@ class ZSpine extends ZBox {
 		return super.set_height(value);
 	}
 
-	public function new(atlasName:String = null, skeletionName:String = null, tilemap:Bool = false) {
+	public function new(atlasName:String = null, skeletionName:String = null, tilemap:Bool = false, native:Bool = false, isLoop:Bool = true) {
 		super();
+		this.isLoop = isLoop;
 		if (tilemap) {
 			btilemap = new ImageBatchs(ZBuilder.getBaseTextureAtlas(atlasName));
 			this.addChild(btilemap);
@@ -87,6 +96,7 @@ class ZSpine extends ZBox {
 			btilemap.addChild(bspine);
 		} else {
 			spine = ZBuilder.createSpineSpriteSkeleton(atlasName, skeletionName);
+			spine.isNative = native;
 			if (spine != null) {
 				this.addChild(spine);
 			}

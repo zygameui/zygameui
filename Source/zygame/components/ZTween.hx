@@ -39,7 +39,7 @@ class ZTween implements Refresher {
 		_baseXml = xml;
 	}
 
-	public function bindBuilder(builder:Builder):Void {
+	public function bindBuilder(builder:Builder, parentid:String = null):Void {
 		_builder = builder;
 		if (_baseXml.get("auto") == "true") {
 			play();
@@ -52,7 +52,7 @@ class ZTween implements Refresher {
 		var lastStart = 0;
 		while (frames.hasNext()) {
 			var xml = frames.next();
-			var tw = new TweenFrame(xml, builder.ids.get(xml.get("bind")));
+			var tw = new TweenFrame(xml, builder.ids.get((parentid == null ? "" : parentid + "_") + xml.get("bind")));
 			if (!xml.exists("start"))
 				tw.start = lastStart;
 			lastStart = tw.end + 1;

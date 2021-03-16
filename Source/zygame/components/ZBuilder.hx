@@ -342,7 +342,13 @@ class ZBuilder {
 			var target = xml.get("src");
 			if (target != null) {
 				var data = target.split(":");
-				return [data[0], data[1], xml.get("tilemap") == "true"];
+				return [
+					data[0],
+					data[1],
+					xml.get("tilemap") == "true",
+					xml.get("native") == "true",
+					!xml.exists("isLoop") || xml.get("isLoop") == "true"
+				];
 			}
 			return [];
 		});
@@ -772,11 +778,10 @@ class ZBuilder {
 		if (base == null) {
 			// 当无法找到类型时，可在XML中查找
 			var childxml = getXml(className);
-			if (childxml != null){
-				trace("子集：",xml.get("id"));
+			if (childxml != null) {
+				trace("子集：", xml.get("id"));
 				ui = ZBuilder.buildui(childxml.firstElement(), parent, builder, null, null, xml.get("id"));
-			}
-			else
+			} else
 				throw "Class name " + className + " is not define xml assets!";
 		} else
 			ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
@@ -809,7 +814,7 @@ class ZBuilder {
 					} else if (xml.exists("args"))
 						cast(ui, ZHaxe).argsName = xml.get("args").split(",");
 				} else if (Std.is(ui, ZTween)) {
-					cast(ui, ZTween).bindBuilder(builder);
+					cast(ui, ZTween).bindBuilder(builder, idpush);
 				}
 			} else
 				throw "Create " + className + " not define id.";
@@ -819,7 +824,7 @@ class ZBuilder {
 				var items:Iterator<Xml> = xml.elements();
 				while (items.hasNext()) {
 					var itemxml:Xml = items.next();
-					buildui(itemxml, ui, builder,idpush);
+					buildui(itemxml, ui, builder, idpush);
 				}
 			}
 			return ui;
@@ -890,7 +895,7 @@ class ZBuilder {
 		var items:Iterator<Xml> = xml.elements();
 		while (items.hasNext()) {
 			var itemxml:Xml = items.next();
-			buildui(itemxml, ui, builder,idpush);
+			buildui(itemxml, ui, builder, idpush);
 		}
 		if (endMaps.exists(className)) {
 			endMaps.get(className)(ui);

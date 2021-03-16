@@ -41,11 +41,21 @@ class AutoBuilder {
 		// 路径移除
 		path = StringTools.replace(project.assetsRenamePath.get(StringUtils.getName(xmlPath) + ".xml"), Sys.getCwd(), "");
 		var textures:Array<{png:String, xml:String}> = [];
+		var spines:Array<{png:String, atlas:String, json:String}> = [];
 		var files:Array<String> = [];
 
 		// 开始遍历所需资源
 		for (file in builder.assetsLoads) {
-			if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".xml")) {
+			if (project.assetsPath.exists(file + ".png")
+				&& project.assetsPath.exists(file + ".json")
+				&& project.assetsPath.exists(file + ".atlas")) {
+				// trace("one spine:", file);
+				spines.push({
+					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
+					atlas: StringTools.replace(project.assetsRenamePath.get(file + ".atlas"), Sys.getCwd(), ""),
+					json: StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), "")
+				});
+			} else if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".xml")) {
 				// trace("one png + xml:", file);
 				textures.push({
 					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
@@ -97,8 +107,15 @@ class AutoBuilder {
 						super($v{path});
 						var textures:Array<{png:String, xml:String}> = $v{textures};
 						var files:Array<String> = $v{files};
+						var spines:Array<{png:String,atlas:String,json:String}> = $v{spines};
 						for (f in files) {
 							this.$bindBuilder.loadFiles([f]);
+						}
+						for (s in spines) {
+							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(s.png)) == null) {
+								this.$bindBuilder.loadSpine([s.png], s.atlas);
+								this.$bindBuilder.loadFiles([s.json]);
+							}
 						}
 						for (item in textures) {
 							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(item.png)) == null)
@@ -128,12 +145,11 @@ class AutoBuilder {
 
 		// 追加属性创建
 		for (key => value in builder.ids) {
-			if(project.assetsPath.exists(value + ".xml")){
-				//XML定义
+			if (project.assetsPath.exists(value + ".xml")) {
+				// XML定义
 				var nodexml:Xml = Xml.parse(File.getContent(project.assetsPath.get(value + ".xml")));
 				createGetCall(fields, key, nodexml.firstElement().nodeName, bindBuilder);
-			}
-			else
+			} else
 				createGetCall(fields, key, value, bindBuilder);
 		}
 

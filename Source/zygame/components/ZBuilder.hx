@@ -784,10 +784,10 @@ class ZBuilder {
 			var childxml = getXml(className);
 			if (childxml != null) {
 				for (attr in xml.attributes()) {
-					switch(attr){
+					switch (attr) {
 						case "id":
 						default:
-							childxml.firstElement().set(attr,xml.get(attr));
+							childxml.firstElement().set(attr, xml.get(attr));
 					}
 				}
 				ui = ZBuilder.buildui(childxml.firstElement(), parent, builder, null, null, xml.get("id"));
@@ -879,10 +879,17 @@ class ZBuilder {
 					// 访问父节点的参数
 					var parentKey = StringTools.replace(value, "${", "");
 					parentKey = StringTools.replace(parentKey, "}", "");
-					var parentValue = xml.parent.get(parentKey);
-					trace("访问父节点：",parentKey,parentValue);
-					if(parentValue != null)
-						value = parentValue;
+					var parentXml = xml.parent;
+					while (true) {
+						if(parentXml.nodeType == Document)
+							break;
+						var parentValue = parentXml.get(parentKey);
+						if (parentValue != null){
+							value = parentValue;
+							break;
+						}
+						parentXml = parentXml.parent;
+					}
 				}
 			}
 

@@ -52,7 +52,10 @@ class ZTween implements Refresher {
 		var lastStart = 0;
 		while (frames.hasNext()) {
 			var xml = frames.next();
-			var tw = new TweenFrame(xml, builder.ids.get((parentid == null ? "" : parentid + "_") + xml.get("bind")));
+			var bindid = (parentid != null ? parentid + "_" : "")  + xml.get("bind");
+			if (!builder.ids.exists(bindid))
+				throw xml.toString() + ":Bind Error (" + bindid + ")";
+			var tw = new TweenFrame(xml, builder.ids.get(bindid));
 			if (!xml.exists("start"))
 				tw.start = lastStart;
 			lastStart = tw.end + 1;

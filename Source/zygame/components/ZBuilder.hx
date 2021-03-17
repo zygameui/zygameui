@@ -783,7 +783,13 @@ class ZBuilder {
 			// 当无法找到类型时，可在XML中查找
 			var childxml = getXml(className);
 			if (childxml != null) {
-				trace("子集：", xml.get("id"));
+				for (attr in xml.attributes()) {
+					switch(attr){
+						case "id":
+						default:
+							childxml.firstElement().set(attr,xml.get(attr));
+					}
+				}
 				ui = ZBuilder.buildui(childxml.firstElement(), parent, builder, null, null, xml.get("id"));
 			} else
 				throw "Class name " + className + " is not define xml assets!";
@@ -864,10 +870,20 @@ class ZBuilder {
 				continue;
 			var value:String = xml.get(name);
 			// 宏定义值
-			if (value != null && value.indexOf("::") == 0 && value.lastIndexOf("::") == value.length - 2) {
-				var defineKey = StringTools.replace(value, "::", "");
-				if (defineMaps.exists(defineKey))
-					value = defineMaps.get(defineKey);
+			if (value != null) {
+				if (value.indexOf("::") == 0 && value.lastIndexOf("::") == value.length - 2) {
+					var defineKey = StringTools.replace(value, "::", "");
+					if (defineMaps.exists(defineKey))
+						value = defineMaps.get(defineKey);
+				} else if (value.indexOf("${") == 0 && value.lastIndexOf("}") == value.length - 1) {
+					// 访问父节点的参数
+					var parentKey = StringTools.replace(value, "${", "");
+					parentKey = StringTools.replace(parentKey, "}", "");
+					var parentValue = xml.parent.get(parentKey);
+					trace("访问父节点：",parentKey,parentValue);
+					if(parentValue != null)
+						value = parentValue;
+				}
 			}
 
 			var att:Dynamic = getProperty(ui, name);

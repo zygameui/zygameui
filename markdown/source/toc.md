@@ -29,6 +29,7 @@
       8. [画笔](features/graphics.md)
       9. [场景](features/scene.md)
       10. [输入文本](features/input.md)
+      11. [页面管理器](features/zstack.md)
    7. [批渲染组件](batch.md)
       1. [批渲染对象](batchs/imagebatchs.md)
       2. [图形显示](batchs/bimg.md)

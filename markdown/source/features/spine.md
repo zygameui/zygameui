@@ -72,3 +72,10 @@ this.addChild(spine);
 
 [什么是绑定资源？](api/assets.md)
 
+## 事件侦听
+通过`SpineEvent`事件，侦听Spine发生的事情。
+```haxe
+spine.addEventListener(SpineEvent.EVENT,function(e){
+    // 接收事件
+});
+```

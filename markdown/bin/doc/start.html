@@ -261,20 +261,23 @@ Lime</code></pre>
 <h2 id="添加库">添加库</h2>
 <p>在project.xml中新增：</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxelib</span><span class="ot"> name=</span><span class="st">&quot;zygameui&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
+<h2 id="添加平台编译命令">添加平台编译命令</h2>
+<p>前往当前项目目录下，可运行下面的命令，创建.vscode/tasks.json文件。</p>
+<pre class="shell"><code>haxelib run zygameui -inittask</code></pre>
 <h2 id="修改main类">修改Main类</h2>
 <p>请继承zygame.core.Start类：</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> zygame.core.Start;</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Main <span class="kw">extends</span> Start {</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="kw">function</span> <span class="kw">new</span>(){</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">super</span>(<span class="dv">1024</span>,<span class="dv">600</span>,<span class="kw">true</span>);</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">public</span> <span class="kw">function</span> onInit():<span class="dt">Void</span>{</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">//请在这里编写游戏逻辑</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> zygame.core.Start;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Main <span class="kw">extends</span> Start {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="kw">function</span> <span class="kw">new</span>(){</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">super</span>(<span class="dv">1024</span>,<span class="dv">600</span>,<span class="kw">true</span>);</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">public</span> <span class="kw">function</span> onInit():<span class="dt">Void</span>{</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="co">//请在这里编写游戏逻辑</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <h2 id="编译项目">编译项目</h2>
 <p>Mac环境下，请使用<kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>进行调用编译命令。</p>
 <h2 id="测试项目">测试项目</h2>

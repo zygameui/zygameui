@@ -149,7 +149,6 @@ class SkeletonAnimation extends SkeletonSprite {
 		if (_event == null && state != null) {
 			_event = new AnimationEvent();
 			this.state.addListener(_event);
-			trace("事件侦听：",type);
 		}
 		if (_event != null)
 			_event.addEventListener(type, listener);

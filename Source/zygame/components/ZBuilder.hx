@@ -436,6 +436,9 @@ class ZBuilder {
 		bindEnd(HBox, function(obj:Dynamic):Void {
 			cast(obj, HBox).updateLayout();
 		});
+		bindEnd(ZStack, function(obj:Dynamic):Void {
+			@:privateAccess cast(obj, ZStack).updateDisplay();
+		});
 	}
 
 	private static function getDynamicTextureAtlas(value:String):Atlas {

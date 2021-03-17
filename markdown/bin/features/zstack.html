@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>spine</title>
+  <title>zstack</title>
   <style type="text/css">
     html {
       line-height: 1.7;
@@ -246,58 +246,19 @@
   </style>
 </head>
 <body>
-<h2 id="spine骨骼动画">Spine骨骼动画</h2>
-<p>在ZYGameUI中，它支持两种渲染模式，一种是利用Sprite进行三角形渲染；另外一种是利用Tilemap进行批渲染实现。</p>
-<p>Spine骨骼资源会提供出以下几种文件格式：</p>
-<ul>
-<li>json - 动画资源文件，记录动画数据。</li>
-<li>atlas - 位图映射数据问题，用于映射图片精灵表图的数据。</li>
-<li>png - 骨骼所使用到的图片资源。</li>
-</ul>
-<p>了解这些资源格式后，我们来看看加载示例：</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> _assets:ZAssets = <span class="kw">new</span> ZAssets();</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//加载动画资源</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>_assets.loadFile(<span class="st">&quot;assets/Comic1.json&quot;</span>);</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">//加载多张资源图纹理集</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>_assets.loadSpineTextAlats([<span class="st">&quot;assets/Comic1.png&quot;</span>,<span class="st">&quot;assets/Comic12.png&quot;</span>,<span class="st">&quot;assets/Comic13.png&quot;</span>,<span class="st">&quot;assets/Comic14.png&quot;</span>],<span class="st">&quot;assets/Comic1.atlas&quot;</span>);</span></code></pre></div>
-<h2 id="spine-sprite对象spine.openfl.skeletonanimation">Spine-Sprite对象（spine.openfl.SkeletonAnimation）</h2>
-<p>该对象拥有批渲染高性能渲染，能够得到1draw的渲染。但是会有以下几个限制：</p>
-<ul>
-<li>必须使用单张资源纹理渲染。</li>
-<li>单张纹理资源大小不超过2048*2048。</li>
-<li>使用批渲染渲染时，暂时不支持透明度，改色等功能；但是支持网格功能。</li>
-</ul>
-<p>创建示例：</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">//创建SpriteSpine</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> spine:SkeletonAnimation = _assets.createSpineSpriteSkeleton(<span class="st">&quot;Comic1&quot;</span>,<span class="st">&quot;Comic1&quot;</span>);</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">this</span>.addChild(spine);</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">//播放动画</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>spine.play(<span class="st">&quot;G1_5_2&quot;</span>);</span></code></pre></div>
-<p>上面提及到必须使用单张图片纹理渲染，但也可以通过isNative属性开启支持多纹理、透明度、改色等功能，但将会牺牲一定层度的性能：</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">//功能能够通过isNative属性开启，多张纹理图的渲染，必须开启这个属性，否则渲染会有异常。</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>spine.isNative = <span class="kw">true</span>;</span></code></pre></div>
-<h2 id="spine-tilemap对象spine.tilemap.skeletonanimation">Spine-Tilemap对象（spine.tilemap.SkeletonAnimation）</h2>
-<p>该对象拥有批渲染高性能渲染，同时支持在Tilemap中进行渲染。但是会有以下几个限制：</p>
-<ul>
-<li>必须使用单张资源纹理渲染</li>
-<li>单张纹理大小不超过2048*2048</li>
-<li>不支持多张纹理图渲染，即无isNative支持。</li>
-<li>不支持网格渲染。</li>
-</ul>
-<p>创建示例：</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">//注意需要先调用createSpineTilemapSkeleton，这样可以确保Alats可以获取到纹理渲染。</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> spine:SkeletonAnimation = _assets.createSpineTilemapSkeleton(<span class="st">&quot;Comic1&quot;</span>,<span class="st">&quot;Comic1&quot;</span>);</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> batchs:ImageBatchs = <span class="kw">new</span> ImageBatchs(Game.assets.getSpineTextureAlats(<span class="st">&quot;纹理名&quot;</span>));</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>batchs.addChild(spine);</span></code></pre></div>
-<h2 id="zspine组件">ZSpine组件</h2>
-<p>另还封装了一个便捷使用的<code>zygame.components.ZSpine</code>对象类，可以简化使用方法，同时它会从已绑定的资源中获取内容：</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> spine = <span class="kw">new</span> ZSpine(<span class="st">&quot;spineName&quot;</span>,<span class="st">&quot;skeletionName&quot;</span>,<span class="kw">false</span>);</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">this</span>.addChild(spine);</span></code></pre></div>
-<p><a href="api/assets.html">什么是绑定资源？</a></p>
-<h2 id="事件侦听">事件侦听</h2>
-<p>通过<code>SpineEvent</code>事件，侦听Spine发生的事情。</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>spine.addEventListener(SpineEvent.EVENT,<span class="kw">function</span>(e){</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 接收事件</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<h2 id="页面管理器">页面管理器</h2>
+<p>通过页面管理器，可以管理不同的显示页面。</p>
+<h2 id="基础使用">基础使用</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> stack = <span class="kw">new</span> ZStack();</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">this</span>.addChild(stack);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> box = <span class="kw">new</span> ZQuad();</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>box.width = <span class="dv">100</span>;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>box.height = <span class="dv">200</span>;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>box.name = <span class="st">&quot;boxid&quot;</span>;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">// 显示box的对象</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>stack.currentId = <span class="st">&quot;boxid&quot;</span>;</span></code></pre></div>
+<h2 id="切换效果">切换效果</h2>
+<p>ZStack默认是没有切换效果的，如果需要切换效果，那么可以对它的<code>style</code>进行设置：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stack.style = <span class="kw">new</span> DefalutZStackAnimateStyle(); <span class="co">// 该样式是默认的黑色过渡切换效果</span></span></code></pre></div>
 </body>
 </html>

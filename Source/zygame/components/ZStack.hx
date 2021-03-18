@@ -45,11 +45,16 @@ class ZStack extends ZBox {
 		else {
 			// 使用过渡动画
 			this.getTopView().addChild(style);
-			@:privateAccess style.onEntered = updateDisplay;
-			@:privateAccess style.onExited = function() {
+			@:privateAccess style._onEntered = updateDisplay;
+			@:privateAccess style._onExited = function() {
 				style.parent.removeChild(style);
 			}
-			style.onEnter(currentSelect, this.getChildByName(value));
+			var nextSelect = this.getChildByName(value);
+			if (currentSelect == null || nextSelect == null || currentSelect == nextSelect) {
+				@:privateAccess style.enterEvent();
+				@:privateAccess style.exitEvent();
+			} else
+				style.onEnter(currentSelect, nextSelect);
 		}
 		return value;
 	}
@@ -70,14 +75,29 @@ class ZStack extends ZBox {
  */
 class ZStackAnimateStyle extends ZBox {
 	/**
+	 * 持续时间，单位：毫秒
+	 */
+	public var time:Float = 0.5;
+
+	/**
+	 * 内部方法：进入完成
+	 */
+	dynamic private function _onEntered():Void {}
+
+	/**
+	 * 内部方法：退出完成
+	 */
+	dynamic private function _onExited():Void {}
+
+	/**
 	 * 进入完成
 	 */
-	dynamic private function onEntered():Void {}
+	dynamic public function onEntered():Void {}
 
 	/**
 	 * 退出完成
 	 */
-	dynamic private function onExited():Void {}
+	dynamic public function onExited():Void {}
 
 	/**
 	 * 进入动画
@@ -85,6 +105,16 @@ class ZStackAnimateStyle extends ZBox {
 	 * @param nextDislay 下一个显示的对象
 	 */
 	public function onEnter(currentDisplay:DisplayObject, nextDislay:DisplayObject):Void {}
+
+	private function enterEvent():Void {
+		this.onEntered();
+		this._onEntered();
+	}
+
+	private function exitEvent():Void {
+		this.onExited();
+		this._onExited();
+	}
 }
 
 class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
@@ -107,12 +137,12 @@ class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
 			if (time <= 30) {
 				_quad.alpha = (time / 30).linear().lerp(0, 1);
 				if (time == 30) {
-					this.onEntered();
+					this.enterEvent();
 				}
 			} else {
 				_quad.alpha = ((time - 30) / 30).linear().lerp(1, 0);
 				if (time == 60) {
-					this.onExited();
+					this.exitEvent();
 					f.stop();
 				}
 			}

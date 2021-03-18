@@ -10,19 +10,8 @@ using tweenxcore.Tools;
  * 页面切换器，屏幕式上下滑动、左右滑动切换效果。
  */
 class ZStackMoveAnimateStyle extends ZStackAnimateStyle {
-    
-	/**
-	 * 持续时间，单位：毫秒
-	 */
-	public var time:Float = 0.5;
-
 	override function onEnter(currentDisplay:DisplayObject, nextDislay:DisplayObject) {
 		super.onEnter(currentDisplay, nextDislay);
-        if(currentDisplay == null || nextDislay == null)
-        {
-            this.onEntered();
-            return;
-        }
 		moveBottomYtoUp(currentDisplay, nextDislay);
 	}
 
@@ -36,7 +25,7 @@ class ZStackMoveAnimateStyle extends ZStackAnimateStyle {
 		nextDislay.y += getStageHeight();
 		var startY2 = nextDislay.y;
 		nextDislay.visible = true;
-		var maxFrame = time * 60;
+		var maxFrame = Std.int(time * 60);
 		var nowFrame = 0;
 		FrameEngine.create(function(f) {
 			nowFrame++;
@@ -46,7 +35,8 @@ class ZStackMoveAnimateStyle extends ZStackAnimateStyle {
 				f.stop();
 				currentDisplay.visible = false;
 				currentDisplay.y = nowY1;
-                this.onEntered();
+				this.enterEvent();
+				this.exitEvent();
 			}
 		});
 	}

@@ -265,6 +265,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	public var isPlay(get, set):Bool;
 
 	private function get_isPlay():Bool {
+		if (actionName == "" || actionName == null)
+			return false;
 		return _isPlay;
 	}
 
@@ -301,12 +303,11 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			renderNative();
 		else {
 			if (isCache) {
-				_cacheId = Std.string(Math.round(skeleton.time/.01)*.01);
-				if(_cache.exists(_cacheId)){
+				_cacheId = Std.string(Math.round(skeleton.time / .01) * .01);
+				if (_cache.exists(_cacheId)) {
 					renderCacheTriangles(_cache.get(_cacheId));
 					return;
-				}
-				else if(_cached)
+				} else if (_cached)
 					return;
 			}
 			renderTriangles();

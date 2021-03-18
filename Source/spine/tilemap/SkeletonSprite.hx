@@ -34,11 +34,11 @@ import spine.base.SpineBaseDisplay;
 import zygame.utils.SpineManager;
 import spine.Skeleton;
 import spine.SkeletonData;
+
 /**
  * Tilemap渲染器
  */
-class SkeletonSprite extends BaseSkeletonDraw implements SpineBaseDisplay  {
-
+class SkeletonSprite extends BaseSkeletonDraw implements SpineBaseDisplay {
 	public var timeScale:Float = 1;
 
 	private var _isPlay:Bool = true;
@@ -69,6 +69,8 @@ class SkeletonSprite extends BaseSkeletonDraw implements SpineBaseDisplay  {
 	public var isPlay(get, set):Bool;
 
 	private function get_isPlay():Bool {
+		if (actionName == "" || actionName == null)
+			return false;
 		return _isPlay;
 	}
 
@@ -88,7 +90,7 @@ class SkeletonSprite extends BaseSkeletonDraw implements SpineBaseDisplay  {
 
 	public function play(action:String = null, loop:Bool = true):Void {
 		_isPlay = true;
-		if(this.visible)
+		if (this.visible)
 			SpineManager.addOnFrame(this);
 		if (action != null)
 			_actionName = action;
@@ -107,15 +109,12 @@ class SkeletonSprite extends BaseSkeletonDraw implements SpineBaseDisplay  {
 		renderTriangles();
 	}
 
-	override private function set_visible(value:Bool):Bool{
-		if(!value)
-		{
+	override private function set_visible(value:Bool):Bool {
+		if (!value) {
 			SpineManager.removeOnFrame(this);
-		}
-		else if(_isPlay){
+		} else if (_isPlay) {
 			SpineManager.addOnFrame(this);
 		}
 		return super.set_visible(value);
 	}
-
 }

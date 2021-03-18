@@ -12,6 +12,8 @@ using tweenxcore.Tools;
 class ZStack extends ZBox {
 	override function addChildAt(display:DisplayObject, index:Int):DisplayObject {
 		display.visible = display.name == currentId;
+		if (display.visible)
+			currentSelect = display;
 		return super.addChildAt(display, index);
 	}
 
@@ -26,6 +28,11 @@ class ZStack extends ZBox {
 	 * 设置ID来显示对象，如果ID不存在，则不会显示任何内容
 	 */
 	public var currentId(get, set):String;
+
+	/**
+	 * 当前的显示对象
+	 */
+	public var currentSelect:DisplayObject;
 
 	private function get_currentId():String {
 		return _id;
@@ -42,7 +49,7 @@ class ZStack extends ZBox {
 			@:privateAccess style.onExited = function() {
 				style.parent.removeChild(style);
 			}
-			style.onEnter();
+			style.onEnter(currentSelect, this.getChildByName(value));
 		}
 		return value;
 	}
@@ -51,6 +58,9 @@ class ZStack extends ZBox {
 		for (i in 0...this.numChildren) {
 			var child = this.getChildAt(i);
 			child.visible = child.name == currentId;
+			if (child.visible) {
+				currentSelect = child;
+			}
 		}
 	}
 }
@@ -69,7 +79,12 @@ class ZStackAnimateStyle extends ZBox {
 	 */
 	dynamic private function onExited():Void {}
 
-	public function onEnter():Void {}
+	/**
+	 * 进入动画
+	 * @param currentDisplay 当前显示的对象
+	 * @param nextDislay 下一个显示的对象
+	 */
+	public function onEnter(currentDisplay:DisplayObject, nextDislay:DisplayObject):Void {}
 }
 
 class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
@@ -84,8 +99,8 @@ class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
 		_quad.height = this.height;
 	}
 
-	override function onEnter() {
-		super.onEnter();
+	override function onEnter(currentDisplay:DisplayObject, nextDislay:DisplayObject) {
+		super.onEnter(currentDisplay, nextDislay);
 		var time = 0;
 		FrameEngine.create(function(f) {
 			time++;

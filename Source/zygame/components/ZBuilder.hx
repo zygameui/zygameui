@@ -881,10 +881,10 @@ class ZBuilder {
 					parentKey = StringTools.replace(parentKey, "}", "");
 					var parentXml = xml.parent;
 					while (true) {
-						if(parentXml.nodeType == Document)
+						if (parentXml.nodeType == Document)
 							break;
 						var parentValue = parentXml.get(parentKey);
-						if (parentValue != null){
+						if (parentValue != null) {
 							value = parentValue;
 							break;
 						}
@@ -1052,6 +1052,7 @@ class AssetsBuilder extends Builder {
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
 		assets.loadFile(viewXmlPath);
 		assets.start((f) -> {
+			onProgress(f);
 			if (f == 1) {
 				ZBuilder.bindAssets(assets);
 				if (onloaded != null)
@@ -1066,6 +1067,8 @@ class AssetsBuilder extends Builder {
 		});
 		return this;
 	}
+
+	dynamic public function onProgress(f:Float):Void {}
 
 	/**
 	 * 释放

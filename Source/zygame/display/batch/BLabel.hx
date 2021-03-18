@@ -186,17 +186,23 @@ class BLabel extends BSprite{
                 _maxHeight = curFntData.maxHeight;
                 var offestX:Float = 0;
                 var offestY:Float = 0;
+                var scaleFloat:Float = this._size > 0?(this._size / _lineHeight):1;
                 for(char in _texts)
                 {
                     var id:Int = char.charCodeAt(0);
                     var frame:FntFrame = curFntData.getTileFrame(id);
                     if(frame != null)
                     {
+                        if(wordWrap && (offestX + frame.width) * scaleFloat > this._width)
+                        {
+                            offestX = 0;
+                            offestY += curFntData.maxHeight;
+                            _maxHeight += curFntData.maxHeight;
+                        }
                         var tile:FntTile = new FntTile(frame);
                         _node.addChild(tile);
-                        offestY = frame.yoffset;
                         tile.x = offestX + frame.xoffset;
-                        tile.y = offestY;
+                        tile.y = offestY + frame.yoffset;
                         offestX += Std.int(frame.xadvance);
                         if(_lineHeight < frame.height)
                             _lineHeight = frame.height; 
@@ -204,6 +210,12 @@ class BLabel extends BSprite{
                     else if(char == " ")
                     {
                         offestX += _size * 0.8;
+                    }
+                    else if(char == "\n")
+                    {
+                        offestX = 0;
+                        offestY += curFntData.maxHeight;
+                        _maxHeight += curFntData.maxHeight;
                     }
                 }
                 _maxWidth = offestX;
@@ -278,6 +290,12 @@ class BLabel extends BSprite{
                     else if(char == " ")
                     {
                         offestX += _size * 0.8;
+                    }
+                    else if(char == "\n")
+                    {
+                        offestX = 0;
+                        offestY += _lineHeight;
+                        _maxHeight += _lineHeight;
                     }
                 }
             }

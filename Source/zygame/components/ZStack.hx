@@ -10,11 +10,18 @@ using tweenxcore.Tools;
  * 切换器
  */
 class ZStack extends ZBox {
+	public var stacks:Array<DisplayObject> = [];
+
 	override function addChildAt(display:DisplayObject, index:Int):DisplayObject {
 		display.visible = display.name == currentId;
-		if (display.visible)
+		if (display.visible) {
+			this.removeChildren();
 			currentSelect = display;
-		return super.addChildAt(display, index);
+			return super.addChildAt(display, 0);
+		}
+		if (stacks.indexOf(display) == -1)
+			stacks.push(display);
+		return display;
 	}
 
 	private var _id:String;
@@ -50,21 +57,30 @@ class ZStack extends ZBox {
 				style.parent.removeChild(style);
 			}
 			var nextSelect = this.getChildByName(value);
-			if (currentSelect == null || nextSelect == null || currentSelect == nextSelect) {
+			super.addChildAt(nextSelect, 0);
+			if (nextSelect == null || currentSelect == nextSelect) {
 				@:privateAccess style.enterEvent();
 				@:privateAccess style.exitEvent();
 			} else
-				style.onEnter(currentSelect, nextSelect);
+				style.onEnter(currentSelect == null ? nextSelect : currentSelect, nextSelect);
 		}
 		return value;
 	}
 
+	override function getChildByName(name:String):DisplayObject {
+		for (index => value in stacks) {
+			if (value.name == name)
+				return value;
+		}
+		return super.getChildByName(name);
+	}
+
 	private function updateDisplay():Void {
-		for (i in 0...this.numChildren) {
-			var child = this.getChildAt(i);
+		for (i in 0...this.stacks.length) {
+			var child = this.stacks[i];
 			child.visible = child.name == currentId;
 			if (child.visible) {
-				currentSelect = child;
+				this.addChild(child);
 			}
 		}
 	}

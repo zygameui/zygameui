@@ -152,27 +152,6 @@ typedef NativeZBitmapLabel = ZBitmapLabel;
     {
         //批量渲染字
         _node.updateText(_text);
-
-        /**
-        switch(hAlign)
-        {
-            case Align.LEFT:
-                _node.x = 0;
-            case Align.RIGHT:
-                _node.x = _textmap.width - _node.getTextWidth();
-            case Align.CENTER:
-                _node.x = _textmap.width/2 - _node.getTextWidth()/2;
-        }
-        switch(vAlign)
-        {
-            case Align.TOP:
-                _node.y = 0;
-            case Align.BOTTOM:
-                _node.y = _textmap.height - _node.getTextHeight();
-            case Align.CENTER:
-                _node.y = _textmap.height/2 - _node.getTextHeight()/2;
-        }
-        */
     }
 
     #if flash

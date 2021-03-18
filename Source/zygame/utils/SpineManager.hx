@@ -35,6 +35,11 @@ class SpineManager {
 	public static var enbed:Bool = true;
 
 	/**
+	 * 正在播放运行的Spine数量
+	 */
+	public static var playingCount:Int = 0;
+
+	/**
 	 * 初始化更新器
 	 * @param stage
 	 * @param isLockFrameFps 是否根据帧频率来播放动画，默认为false
@@ -69,20 +74,27 @@ class SpineManager {
 	private static function onFrame(event:Event):Void {
 		if (!enbed)
 			return;
+		playingCount = 0;
 		if (!isLockFrameFps) {
 			_newFpsTime = Date.now().getTime();
 			var currentFpsTime = _newFpsTime - _lastFpsTime;
 			currentFpsTime = currentFpsTime / 1000;
 			_lastFpsTime = _newFpsTime;
 			for (display in spineOnFrames) {
+				if (display.visible && display.isPlay)
+					playingCount++;
 				display.onSpineUpdate(currentFpsTime);
 			}
 		} else if (fps.fps == 60) {
 			for (display in spineOnFrames) {
+				if (display.visible && display.isPlay)
+					playingCount++;
 				display.onSpineUpdate(1 / stage.frameRate);
 			}
 		} else if (fps.update()) {
 			for (display in spineOnFrames) {
+				if (display.visible && display.isPlay)
+					playingCount++;
 				display.onSpineUpdate(1 / fps.fps);
 			}
 		}

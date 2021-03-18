@@ -53,12 +53,16 @@ class SkeletonAnimation extends SkeletonSprite {
 		skeleton.setScaleY(-1);
 		#end
 		state = new AnimationState(stateData == null ? new AnimationStateData(skeletonData):stateData);
-		advanceTime(0);
+		_advanceTime(0);
 	}
 
 	override public function advanceTime (time:Float):Void {
-		if(!this.visible)
+		if(!this.visible || !isPlay)
 			return;
+		_advanceTime(time);
+	}
+
+	private function _advanceTime(time:Float){
 		state.update(time * timeScale);
 		state.apply(skeleton);
 		skeleton.updateWorldTransform();

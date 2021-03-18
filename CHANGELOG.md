@@ -4,6 +4,24 @@
 
 # ZYGameUI 更新日志
 
+### 10.1.4
+- [修复] 修复`ZStack`第一次设置currentId时，无法发生切换效果的问题。
+
+### 10.1.3
+- [改进] 改进`FPSDebug`的信息栏显示。
+- [改进] 改进`Spine`的`advanceTime`性能。
+- [改进] 改进`ZStack`的渲染性能，无用的对象会直接移除。
+
+### 10.1.2
+- [修复] 修复`ZStack.currentId`在XML中配置不会立即生效的问题。
+- [新增] 新增`ZStackAlphaAnimateStyle`透明渐变过渡效果。
+- [新增] 新增`ZStackMoveAnimateStyle`位移过渡效果。
+
+### 10.1.1
+- [新增] 新增对ZSpine.native的支持，可以使用Spine的原生渲染。
+- [优化] 优化了Spine侦听器，可以直接侦听Spine.addEventListener(SpineEvent.EVENT,_)；
+- [新增] 新增`ZStack`页面管理组件，可直接使用currentId来决定显示什么组件内容。
+
 ### 10.0.9
 - [新增] 新增对AutoBuilder自动构造支持子XML载入。
 - [新增] 新增对子XML读取，如果父节点设置了id，子XML会自动追加。

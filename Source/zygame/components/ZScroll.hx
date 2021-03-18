@@ -443,8 +443,10 @@ class ZScroll extends DataProviderComponent {
 	private function set_vscroll(value:Float):Float {
 		_v = -value;
 		_vMoveing = true;
-		_onSizeChange(null);
-		updateComponents();
+		if (this.cutRect != null) {
+			_onSizeChange(null);
+			updateComponents();
+		}
 		return value;
 	}
 
@@ -455,8 +457,10 @@ class ZScroll extends DataProviderComponent {
 	private function set_hscroll(value:Float):Float {
 		_h = -value;
 		_hMoveing = true;
-		_onSizeChange(null);
-		updateComponents();
+		if (this.cutRect != null) {
+			_onSizeChange(null);
+			updateComponents();
+		}
 		return value;
 	}
 

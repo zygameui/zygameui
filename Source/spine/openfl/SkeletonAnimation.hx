@@ -59,7 +59,7 @@ class SkeletonAnimation extends SkeletonSprite {
 		skeleton.setScaleY(-1);
 		#end
 		state = new AnimationState(stateData == null ? new AnimationStateData(skeletonData) : stateData);
-		advanceTime(0);
+		_advanceTime(0);
 		setSkeletonData(skeletonData);
 	}
 
@@ -81,8 +81,12 @@ class SkeletonAnimation extends SkeletonSprite {
 	}
 
 	override public function advanceTime(time:Float):Void {
-		if (!this.visible)
+		if (!this.visible || !isPlay)
 			return;
+		_advanceTime(time);
+	}
+
+	private function _advanceTime(time:Float):Void {
 		state.update(time * timeScale);
 		skeleton.update(time * timeScale);
 		if (skeleton.time > getMaxTime()) {

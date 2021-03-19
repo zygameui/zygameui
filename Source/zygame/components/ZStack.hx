@@ -54,7 +54,8 @@ class ZStack extends ZBox {
 			this.getTopView().addChild(style);
 			@:privateAccess style._onEntered = updateDisplay;
 			@:privateAccess style._onExited = function() {
-				style.parent.removeChild(style);
+				if(style.parent != null)
+					style.parent.removeChild(style);
 			}
 			var nextSelect = this.getChildByName(value);
 			super.addChildAt(nextSelect, 0);
@@ -143,6 +144,7 @@ class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
 		this.addChild(_quad);
 		_quad.width = this.width;
 		_quad.height = this.height;
+		_quad.alpha = 0;
 	}
 
 	override function onEnter(currentDisplay:DisplayObject, nextDislay:DisplayObject) {

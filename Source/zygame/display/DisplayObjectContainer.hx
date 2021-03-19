@@ -10,7 +10,6 @@ import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
 class DisplayObjectContainer extends Sprite implements Refresher implements zygame.mini.MiniExtend {
-
 	/**
 	 * 自定义数据，默认为null，可以作为扩展数据使用
 	 */
@@ -25,6 +24,48 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	public var subtractionHeight:Int = 0;
 
+	private var _scrollMaskDislayObject:DisplayObject;
+	private var _scrollMaskDislayObjectRect:Rectangle;
+
+	/**
+	 * Bate功能：遮罩对象（依赖scrollRect实现的遮罩逻辑实现）
+	 */
+	@:noCompletion public var scrollMaskDislayObject(get, set):DisplayObject;
+
+	private function get_scrollMaskDislayObject():DisplayObject {
+		return _scrollMaskDislayObject;
+	}
+
+	private function set_scrollMaskDislayObject(value:DisplayObject):DisplayObject {
+		_scrollMaskDislayObject = value;
+		if (_scrollMaskDislayObject == null) {
+			this.scrollRect = null;
+			return null;
+		}
+		_scrollMaskDislayObject.visible = true;
+		if (_scrollMaskDislayObjectRect == null)
+			_scrollMaskDislayObjectRect = new Rectangle();
+		_scrollMaskDislayObjectRect.x = value.x + super.get_x();
+		_scrollMaskDislayObjectRect.y = value.y + super.get_y();
+		_scrollMaskDislayObjectRect.width = value.width;
+		_scrollMaskDislayObjectRect.height = value.height;
+		this.scrollRect = _scrollMaskDislayObjectRect;
+		_scrollMaskDislayObject.visible = false;
+		trace(_scrollMaskDislayObjectRect);
+		return value;
+	}
+
+	// override function invalidate():Void {
+	// 	super.invalidate();
+	// 	scrollMaskDislayObject = _scrollMaskDislayObject;
+	// }
+	// override function get_x():Float {
+	// 	return _scrollMaskDislayObject == null ? super.get_x() : _scrollMaskDislayObject.x;
+	// }
+	// override function get_y():Float {
+	// 	return _scrollMaskDislayObject == null ? super.get_y() : _scrollMaskDislayObject.y;
+	// }
+
 	/**
 	 * 绑定类型，Maplive可用
 	 */
@@ -33,32 +74,34 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	/**
 	 * 横向对齐实现
 	 */
-	public var hAlign(get,set):String;
+	public var hAlign(get, set):String;
+
 	private var _hAlign:String = "left";
-	private function get_hAlign():String
-	{
+
+	private function get_hAlign():String {
 		return _hAlign;
 	}
-	private function set_hAlign(value:String):String
-	{
+
+	private function set_hAlign(value:String):String {
 		_hAlign = value;
-		alignPivot(_vAlign,_hAlign);
+		alignPivot(_vAlign, _hAlign);
 		return value;
 	}
 
 	/**
 	 * 竖向对齐实现
 	 */
-	public var vAlign(get,set):String;
+	public var vAlign(get, set):String;
+
 	private var _vAlign:String = "top";
-	private function get_vAlign():String
-	{
+
+	private function get_vAlign():String {
 		return _vAlign;
 	}
-	private function set_vAlign(value:String):String
-	{
+
+	private function set_vAlign(value:String):String {
 		_vAlign = value;
-		alignPivot(_vAlign,_hAlign);
+		alignPivot(_vAlign, _hAlign);
 		return value;
 	}
 
@@ -89,12 +132,12 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 *  初始化接口
 	 */
 	public function onInit():Void {
-        if (this.baseBuilder != null) {
+		if (this.baseBuilder != null) {
 			var call = this.baseBuilder.getFunction("onInit");
 			if (call != null)
 				call();
 		}
-    }
+	}
 
 	/**
 	 *  帧事件接口

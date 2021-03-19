@@ -109,7 +109,7 @@ class Start extends ZScene {
 	/**
 	 * 最顶层显示，该窗口会根据缩放比例进行适配，能够与实际游戏内容的坐标匹配。
 	 */
-	public var topView:DisplayObjectContainer;
+	public var topView:StageDisplayObjectContainer;
 
 	#if ios
 	/**
@@ -276,7 +276,7 @@ class Start extends ZScene {
 		stage.frameRate = 60;
 		SpineManager.init(stage);
 
-		topView = new DisplayObjectContainer();
+		topView = new StageDisplayObjectContainer();
 		stage.addChild(topView);
 
 		this.onStageSizeChange();
@@ -351,6 +351,7 @@ class Start extends ZScene {
 		if (HDWidth == 0 && HDHeight == 0) {
 			Start.stageWidth = Std.int(stage.stageWidth / this.scaleX) + 1;
 			Start.stageHeight = Std.int(stage.stageHeight / this.scaleY) + 1;
+			topView.x = stage.stageWidth;
 			onSceneSizeChange();
 			return;
 		}
@@ -396,7 +397,7 @@ class Start extends ZScene {
 			this.rotation = 90;
 			this.x = stage.stageWidth;
 			topView.rotation = 90;
-			topView.x = stage.stageHeight;
+			topView.x = stage.stageWidth;
 		}
 		onSceneSizeChange();
 		if (view3d != null) {
@@ -518,4 +519,9 @@ class UpdateStats {
 		this.display = display;
 		this.action = action;
 	}
+}
+
+class StageDisplayObjectContainer extends DisplayObjectContainer {
+
+
 }

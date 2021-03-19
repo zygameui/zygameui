@@ -65,6 +65,10 @@ class AutoBuilder {
 				// 单图加载
 				// trace("one png:", file);
 				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""));
+			}else if (project.assetsPath.exists(file + ".jpg")) {
+				// 单图加载
+				// trace("one png:", file);
+				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".jpg"), Sys.getCwd(), ""));
 			} else if (project.assetsPath.exists(file + ".xml")) {
 				// 单XML加载
 				// trace("one xml:" + file);

@@ -11,44 +11,50 @@ import zygame.core.Refresher;
  * })
  */
 class FrameEngine implements Refresher {
-    
-    public function new() {
-        
-    }
+	/**
+	 * 停止所有FrameEngine逻辑
+	 */
+	public static function stopAllFrameEngine():Void {
+		var array = @:privateAccess Start.current.updates;
+		var len = array.length;
+		while (len >= 0) {
+			len--;
+			if (Std.is(array[len], FrameEngine)) {
+				array.removeAt(len);
+			}
+		}
+	}
 
-    public static function create(cb:FrameEngine->Void){
-        var engine:FrameEngine = new FrameEngine();
-        engine.onFrameEvent = cb;
-        engine.start();
-        return engine;
-    }
-    
-    public function onFrame():Void{
-        onFrameEvent(this);
-    }
+	public function new() {}
 
-    /**
-     * 帧事件处理
-     * @param event 
-     */
-    dynamic public function onFrameEvent(event:FrameEngine){
+	public static function create(cb:FrameEngine->Void) {
+		var engine:FrameEngine = new FrameEngine();
+		engine.onFrameEvent = cb;
+		engine.start();
+		return engine;
+	}
 
-    }
+	public function onFrame():Void {
+		onFrameEvent(this);
+	}
 
-    /**
-     * 开始帧事件
-     */
-    public function start():Void
-    {
-        Start.current.addToUpdate(this);
-    }
+	/**
+	 * 帧事件处理
+	 * @param event 
+	 */
+	dynamic public function onFrameEvent(event:FrameEngine) {}
 
-    /**
-     * 停止帧事件
-     */
-    public function stop():Void
-    {
-        Start.current.removeToUpdate(this);
-    }
+	/**
+	 * 开始帧事件
+	 */
+	public function start():Void {
+		Start.current.addToUpdate(this);
+	}
 
+	/**
+	 * 停止帧事件
+	 */
+	public function stop():Void {
+		Start.current.removeToUpdate(this);
+	}
 }

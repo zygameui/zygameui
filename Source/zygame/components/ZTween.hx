@@ -97,6 +97,10 @@ class ZTween implements Refresher {
 				_crrentFrame = 0;
 		}
 		Start.current.addToUpdate(this);
+		for (frame in _baseFrames) {
+			if(frame.getNodeName() == "tween")
+				frame.update(_crrentFrame);
+		}
 	}
 
 	public function getFrameList():Array<TweenFrame> {
@@ -185,6 +189,10 @@ class TweenFrame {
 				to = Std.parseFloat(_baseXml.get("to"));
 				type = _baseXml.get("type");
 		}
+	}
+
+	public function getNodeName():String{
+		return _baseXml.nodeName;
 	}
 
 	public function update(frame:Int):Void {

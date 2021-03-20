@@ -38,6 +38,13 @@ class ZBuilderData {
 			var idname = (parentId != null ? parentId + "_" : "") + item.get("id");
 			ids.set(idname, item.nodeName);
 		}
+		// 可能内置音效功能
+		if (item.exists("sound")) {
+			var src = item.get("sound");
+			if (assetsLoads.indexOf(src) == -1) {
+				assetsLoads.push(src);
+			}
+		}
 		if (item.exists("src")) {
 			var src = item.get("src");
 			if (src.indexOf(":") != -1) {

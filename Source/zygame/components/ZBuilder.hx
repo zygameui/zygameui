@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.media.base.Sound;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
 import haxe.Exception;
 import zygame.components.ZBitmapLabel;
@@ -121,6 +122,7 @@ class ZBuilder {
 		bind(VBox);
 		bind(HBox);
 		bind(ZHaxe);
+		bind(ZSound); // 绑定音频组件
 		bind(ZShader); // 绑定着色器
 		bind(ZInt);
 		bind(ZBool);
@@ -339,6 +341,9 @@ class ZBuilder {
 		});
 
 		// 绑定解析
+		bindCreate(ZSound, function(xml:Xml):Array<Dynamic> {
+			return [xml.get("src"), xml.get("music") == "true"];
+		});
 		bindCreate(ZSpine, function(xml:Xml):Array<Dynamic> {
 			var target = xml.get("src");
 			if (target != null) {
@@ -511,6 +516,15 @@ class ZBuilder {
 			var atlas:Atlas = assets.getTextAtlas(value);
 			if (atlas != null)
 				return atlas;
+		}
+		return null;
+	}
+
+	public static function getBaseSound(value:String):Sound {
+		for (assets in baseAssetsList) {
+			var sound = assets.getSound(value);
+			if (sound != null)
+				return sound;
 		}
 		return null;
 	}
@@ -836,6 +850,12 @@ class ZBuilder {
 					var itemxml:Xml = items.next();
 					buildui(itemxml, ui, builder, idpush);
 				}
+			}
+			// 赋值处理
+			for (attr in xml.attributes()) {
+				if(attr == "id")
+					continue;
+				setProperty(ui, attr, xml.get(attr));
 			}
 			return ui;
 		}

@@ -11,6 +11,11 @@ import openfl.geom.Rectangle;
  *  实现单张图片时，会有点击缩放效果
  */
 class ZButton extends ToggleButton {
+	/**
+	 * 默认音频
+	 */
+	public static var defaultSound:String;
+
 	private var _text:ZLabel;
 
 	/**
@@ -60,24 +65,31 @@ class ZButton extends ToggleButton {
 
 	public function new() {
 		super();
+		this.addEventListener("click", _clickCall);
 	}
+
+	/**
+	 * 点击音效ID名
+	 */
+	public var sound:String;
 
 	public var clickEvent(never, set):Void->Void;
 
-	private var _clickCall:Event->Void;
+	private var _clickEventCall:Void->Void;
+
+	private function _clickCall(e:MouseEvent):Void {
+		if (sound != null || defaultSound != null) {
+			var playsound = ZBuilder.getBaseSound(sound == null ? defaultSound : sound);
+			if (playsound != null) {
+				playsound.play(0, 1);
+			}
+		}
+		if (_clickEventCall != null)
+			_clickEventCall();
+	}
 
 	private function set_clickEvent(call:Void->Void):Void->Void {
-		if (_clickCall != null) {
-			this.removeEventListener("click", _clickCall);
-		}
-		if (call == null) {
-			_clickCall = null;
-			return call;
-		}
-		_clickCall = function(_) {
-			call();
-		};
-		this.addEventListener("click", _clickCall);
+		_clickEventCall = call;
 		return call;
 	}
 

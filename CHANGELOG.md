@@ -4,8 +4,26 @@
 
 # ZYGameUI 更新日志
 
+### 10.1.6
+- [改进] 改进`ZSound`的播放以及释放处理。
+- [新增] 新增`ZSound.stopAllSound`方法来释放所有`ZSound`音频。
+
+### 10.1.5
+- [修复] 修复`topView`没有适配强制横屏功能的问题。
+- [改进] 新增JPG资源载入支持。
+- [修复] 修复ZStack样式切换父节点空判断。
+- [新增] 新增`FrameEngine.stopAllFrameEngine`支持所有帧事件引擎停止。
+- [新增] 新增`ZSound`功能组件，可以在XML配置中添加音效，并可以配置节奏播放。
+- [新增] 新增`ZButton.sound`音频播放设置。
+- [新增] 新增`BButton.sound`音频播放设置。
+- [新增] 新增`ZButton.defaultSound`静态变量设置默认音频播放设置。
+
 ### 10.1.4
 - [修复] 修复`ZStack`第一次设置currentId时，无法发生切换效果的问题。
+- [新增] 新增`ZBuildScene.assetsBuild.onProgress`侦听资源加载进度。
+- [修复] 修复`Spine`修改动画后的状态同步问题。
+- [修复] 修复`Spine`的`isPlay`状态不准确的问题。
+- [改进] 改进`AutoBuilder`支持jpg格式图片加载。 
 
 ### 10.1.3
 - [改进] 改进`FPSDebug`的信息栏显示。

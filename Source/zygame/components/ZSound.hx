@@ -5,6 +5,20 @@ import zygame.media.base.Sound;
 import zygame.media.base.SoundChannel;
 
 class ZSound implements zygame.core.Refresher {
+	/**
+	 * 停止所有ZSound逻辑
+	 */
+	public static function stopAllSound():Void {
+		var array = @:privateAccess Start.current.updates;
+		var len = array.length;
+		while (len >= 0) {
+			len--;
+			if (Std.is(array[len], ZSound)) {
+				array.removeAt(len);
+			}
+		}
+	}
+
 	public var src:String;
 
 	public var isBgMusic:Bool = false;
@@ -73,7 +87,8 @@ class ZSound implements zygame.core.Refresher {
 				}
 			}
 		} else {
-			throw "ZSound[" + src + "]播放失败";
+			// 已成为无效音频，直接停止
+			stop();
 		}
 	}
 
@@ -85,8 +100,13 @@ class ZSound implements zygame.core.Refresher {
 		this._loop = loop;
 		if (_soundPlayTimes.length == 0) {
 			__playSound(loop);
-		} else
+		} else {
+			_soundIndex = 0;
+			if (_soundPlayTimes[_soundIndex] != 0) {
+				__playSound(1);
+			}
 			Start.current.addToUpdate(this);
+		}
 	}
 
 	/**

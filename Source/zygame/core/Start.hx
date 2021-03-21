@@ -434,6 +434,8 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	private function onFrameEvent(e:Event):Void {
+		if(fps.visible)
+			topView.addChild(fps);
 		#if ios
 		if (iosRender != null) {
 			stage.addChild(iosRender);

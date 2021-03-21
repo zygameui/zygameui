@@ -36,11 +36,7 @@ class ZSound implements zygame.core.Refresher {
 	/**
 	 * 设置音频的节奏
 	 */
-	public var rhythm(get, set):String;
-
-	private function get_rhythm():String {
-		return null;
-	}
+	public var rhythm(never, set):String;
 
 	private function set_rhythm(value:String):String {
 		_soundPlayTimes = [];
@@ -91,6 +87,13 @@ class ZSound implements zygame.core.Refresher {
 			stop();
 		}
 	}
+
+    /**
+     * 强制播放：该方法会独立播放，不会停止已播放的音频
+     */
+    public function playForce():Void{
+        this.__playSound(1);
+    }
 
 	/**
 	 * 开始播放

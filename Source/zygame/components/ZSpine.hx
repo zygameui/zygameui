@@ -96,6 +96,8 @@ class ZSpine extends ZBox {
 			btilemap.addChild(bspine);
 		} else {
 			spine = ZBuilder.createSpineSpriteSkeleton(atlasName, skeletionName);
+			if (spine == null)
+				throw atlasName + ":" + skeletionName + " spine is not create.";
 			spine.isNative = native;
 			if (spine != null) {
 				this.addChild(spine);

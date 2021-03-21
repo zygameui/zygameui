@@ -1,5 +1,8 @@
 package zygame.utils;
 
+import zygame.components.ZBox;
+import zygame.components.ZQuad;
+import zygame.core.Start;
 import zygame.shader.TextFiledShader;
 import haxe.Timer;
 import openfl.events.Event;
@@ -18,7 +21,7 @@ import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
 #end
 
-class FPSDebug extends Sprite {
+class FPSDebug extends ZBox {
 	public static var fnt:FntData;
 
 	public static var debugMsg:Dynamic = null;
@@ -38,17 +41,20 @@ class FPSDebug extends Sprite {
 			fnt = new FntData(bitmapData, Xml.parse(FPSAssets.fnt), null);
 			_text = new ZBitmapLabel(fnt);
 			_text.x = inX;
-			// _text.y = inY;
 			this.y = inY;
 			_text.width = 120;
 			_text.height = 150;
 			_text.vAlign = "top";
-			// _text.shader = new TextFiledShader();
-			this.graphics.beginFill(0x0, 0.5);
-			this.graphics.drawRect(inX, inY, _text.width, _text.height);
+            var bg = new ZQuad();
+            this.addChild(bg);
+            bg.width = _text.width;
+            bg.height = _text.height;
+            bg.alpha = 0.85;
 			this.addChild(_text);
 
+			this.mouseChildren = true;
 			this.mouseEnabled = false;
+            bg.mouseEnabled = false;
 			_text.mouseEnabled = false;
 
 			addEventListener(Event.ENTER_FRAME, onEnter);
@@ -56,8 +62,8 @@ class FPSDebug extends Sprite {
 
 		this.y = 150;
 
-		this.scaleX = 2;
-		this.scaleY = 2;
+		this.scaleX = Start.current.HDHeight / 640;
+		this.scaleY = this.scaleX;
 	}
 
 	private function onEnter(_) {

@@ -54,6 +54,7 @@ typedef NativeZBitmapLabel = ZBitmapLabel;
         _fnt = fnt;
         super();
         _textmap = new Tilemap(0,0,_fnt != null ? _fnt.getTileset():null);
+        
         // _textmap.tileAlphaEnabled = false;
         // _textmap.tileBlendModeEnabled = false;
         // _textmap.tileColorTransformEnabled = false;

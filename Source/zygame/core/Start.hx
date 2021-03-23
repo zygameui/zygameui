@@ -200,6 +200,10 @@ class Start extends ZScene {
 		if (untyped window.localStorage != null)
 			untyped window.localStorage.removeItem = function() {};
 		#end
+		topView = new StageDisplayObjectContainer();
+		stage.addChild(topView);
+		this.onStageSizeChange();
+
 	}
 
 	/**
@@ -275,11 +279,6 @@ class Start extends ZScene {
 	override public function onInit():Void {
 		stage.frameRate = 60;
 		SpineManager.init(stage);
-
-		topView = new StageDisplayObjectContainer();
-		stage.addChild(topView);
-
-		this.onStageSizeChange();
 
 		fps = new FPSDebug();
 		topView.addChild(fps);

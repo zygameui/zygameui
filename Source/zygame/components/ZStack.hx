@@ -92,7 +92,7 @@ class ZStack extends ZBox {
  */
 class ZStackAnimateStyle extends ZBox {
 	/**
-	 * 持续时间，单位：毫秒
+	 * 持续时间，单位：秒
 	 */
 	public var time:Float = 0.5;
 

@@ -162,7 +162,7 @@ class AutoBuilder {
 		if (typeName.indexOf(".") != -1) {
 			var pkg = typeName.split(".");
 			return TPath({
-				pack: pkg.slice(0, pkg.length - 2),
+				pack: pkg.slice(0, pkg.length - 1),
 				name: pkg[pkg.length - 1]
 			});
 		} else if (typeName == "VBox" || typeName == "HBox") {

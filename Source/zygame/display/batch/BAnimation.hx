@@ -33,7 +33,7 @@ class BAnimation extends BImage {
 		var an:BAnimation = new BAnimation();
 		var anData = new AnimationData(fps);
 		anData.addFrames(bitmaps);
-		an.data = anData;
+		an.dataProvider = anData;
 		return an;
 	}
 

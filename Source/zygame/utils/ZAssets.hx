@@ -245,14 +245,15 @@ class ZAssets {
 
 	/**
 	 *  载入纹理资源
-	 *  @param img -
+	 *  @param img 如果只传递图片，xml会直接识别图片资源
 	 *  @param xml -
 	 */
-	public function loadTextures(img:String, xml:String, isAtf:Bool = false):Void {
+	public function loadTextures(img:String, xml:String = null, isAtf:Bool = false):Void {
+		var _xml = xml != xml ? xml : img.substr(0, img.lastIndexOf(".")) + ".xml";
 		_parsers.push(new TextureAtlasParser({
 			imgpath: img,
-			xmlpath: xml,
-			path: xml,
+			xmlpath: _xml,
+			path: _xml,
 			atf: isAtf
 		}));
 	}
@@ -381,11 +382,11 @@ class ZAssets {
 		var parser = _parsers[currentLoadIndex];
 		currentLoadIndex++;
 		currentLoadNumber++;
-		if(parser == null){
+		if (parser == null) {
 			loadNext();
 			return;
 		}
-		trace("载入进度："+currentLoadIndex,parser,_parsers.length,parser.getName());
+		trace("载入进度：" + currentLoadIndex, parser, _parsers.length, parser.getName());
 		parser.out = onAssetsOut;
 		parser.done = loadDone;
 		parser.error = loadError;
@@ -457,6 +458,10 @@ class ZAssets {
 		#else
 		return null;
 		#end
+	}
+
+	public function setMusic(id:String, data:Music):Void {
+		_musics.set(id, data);
 	}
 
 	/**
@@ -745,7 +750,7 @@ class ZAssets {
 	public function get3DMesh(id:String):#if zygame3d away3d.entities.Mesh #else Dynamic #end
 	{
 		var arr:Array<String> = id.split(":");
-		if (arr.length != 2){
+		if (arr.length != 2) {
 			_3ds.get(arr[0]).getMesh();
 		}
 		return _3ds.get(arr[0]).getMesh(arr[1]);
@@ -765,8 +770,8 @@ class ZAssets {
 	 * @param id 
 	 * @param loader 
 	 */
-	public function setZLoader3D(id:String,loader:#if zygame3d ZLoader3D #else Dynamic #end):Void{
-		_3ds.set(id,loader);
+	public function setZLoader3D(id:String, loader:#if zygame3d ZLoader3D #else Dynamic #end):Void {
+		_3ds.set(id, loader);
 	}
 
 	/**

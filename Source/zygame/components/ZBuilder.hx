@@ -146,13 +146,13 @@ class ZBuilder {
 				values.pop();
 				value = values.join(":");
 			}
-			if (value.indexOf("http") == 0 || getBaseBitmapData(ui, name, value) == null)
+			if (value.indexOf("http") == 0 || getBaseBitmapData(value) == null)
 				cast(ui, zygame.components.ZImage).dataProvider = value;
 			else
-				cast(ui, zygame.components.ZImage).dataProvider = getBaseBitmapData(ui, name, value);
+				cast(ui, zygame.components.ZImage).dataProvider = getBaseBitmapData(value);
 		});
 		bindParsing(zygame.display.batch.BImage, "src", function(ui:Dynamic, name:String, value:String):Void {
-			cast(ui, zygame.display.batch.BImage).setFrame(getBaseBitmapData(ui, name, value));
+			cast(ui, zygame.display.batch.BImage).setFrame(getBaseBitmapData(value));
 		});
 		bindParsing(zygame.display.batch.BScale9Image, "src", function(ui:Dynamic, name:String, value:String):Void {
 			var values = value.split(":");
@@ -160,13 +160,13 @@ class ZBuilder {
 				// 解析绑定九宫格数据
 				cast(getBaseTextureAtlas(values[0]), TextureAtlas).bindScale9(values[1], values[2]);
 			}
-			var bitmap:Frame = cast getBaseBitmapData(ui, name, value);
+			var bitmap:Frame = cast getBaseBitmapData(value);
 			cast(ui, zygame.display.batch.BScale9Image).setFrame(bitmap);
 		});
 		bindParsing(zygame.display.batch.BButton, "src", function(ui:Dynamic, name:String, value:String):Void {
 			var arr:Array<String> = value.split(":");
 			cast(ui, zygame.display.batch.BButton).skin = zygame.display.batch.BButton.createButtonFrameSkin(cast getBaseTextureAtlas(arr[0]),
-				getBaseBitmapData(ui, name, value));
+				getBaseBitmapData(value));
 			cast(ui, zygame.display.batch.BButton).updateComponents();
 		});
 		bindParsing(zygame.components.ZButton, "src", function(ui:Dynamic, name:String, value:String):Void {
@@ -175,7 +175,7 @@ class ZBuilder {
 				// 解析绑定九宫格数据
 				cast(getBaseTextureAtlas(values[0]), TextureAtlas).bindScale9(values[1], values[2]);
 			}
-			cast(ui, zygame.components.ZButton).skin = zygame.components.ZButton.createSkin(getBaseBitmapData(ui, name, value));
+			cast(ui, zygame.components.ZButton).skin = zygame.components.ZButton.createSkin(getBaseBitmapData(value));
 			cast(ui, zygame.components.ZButton).updateComponents();
 		});
 
@@ -193,7 +193,7 @@ class ZBuilder {
 					var textureAtlas:TextureAtlas = cast getBaseTextureAtlas(valueArray[0]);
 					anData.addFrame(textureAtlas.getBitmapDataFrame(valueArray[1]));
 				} else {
-					anData.addFrame(getBaseBitmapData(ui, name, value2));
+					anData.addFrame(getBaseBitmapData(value));
 				}
 			}
 			cast(ui, ZAnimation).dataProvider = anData;
@@ -262,21 +262,20 @@ class ZBuilder {
 				// 解析绑定九宫格数据
 				cast(getBaseTextureAtlas(arr[0]), TextureAtlas).bindScale9(arr[1], arr[2]);
 			}
-			cast(ui, BScale9Button).skin = zygame.display.batch.BButton.createButtonFrameSkin(cast getBaseTextureAtlas(arr[0]),
-				getBaseBitmapData(ui, name, value));
+			cast(ui, BScale9Button).skin = zygame.display.batch.BButton.createButtonFrameSkin(cast getBaseTextureAtlas(arr[0]), getBaseBitmapData(value));
 			cast(ui, BScale9Button).updateComponents();
 		});
 		bindParsing(ZHaxe, "args", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZHaxe).argsName = value.split(",");
 		});
 		bindParsing(BScale9Button, "content", function(ui:Dynamic, name:String, value:String):Void {
-			cast(ui, BScale9Button).setContent(getBaseBitmapData(ui, name, value));
+			cast(ui, BScale9Button).setContent(getBaseBitmapData(value));
 		});
 		bindParsing(zygame.components.ZButton, "content", function(ui:Dynamic, name:String, value:String):Void {
-			cast(ui, zygame.components.ZButton).setContent(getBaseBitmapData(ui, name, value));
+			cast(ui, zygame.components.ZButton).setContent(getBaseBitmapData(value));
 		});
 		bindParsing(BButton, "content", function(ui:Dynamic, name:String, value:String):Void {
-			cast(ui, BButton).setContent(getBaseBitmapData(ui, name, value));
+			cast(ui, BButton).setContent(getBaseBitmapData(value));
 		});
 		bindParsing(BLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
 			// zygame.utils.Lib.nextFrameCall(cast(ui, BLabel).updateText, [value]);
@@ -345,7 +344,7 @@ class ZBuilder {
 			return [xml.get("src"), xml.get("music") == "true"];
 		});
 		bindCreate(ZSpine, function(xml:Xml):Array<Dynamic> {
-			var target = xml.get("src");
+			var target = __getParentDefineValue(xml, xml.get("src"));
 			if (target != null) {
 				var data = target.split(":");
 				return [
@@ -551,19 +550,20 @@ class ZBuilder {
 	 * 获取纹理图功能
 	 * @return BitmapData
 	 */
-	private static function getBaseBitmapData(ui:Dynamic, name:String, value:String):Dynamic {
+	public static function getBaseBitmapData(name:String):Dynamic {
 		var bitmap:Dynamic = null;
 		for (assets in baseAssetsList) {
-			bitmap = assets.getBitmapData(value);
+			bitmap = assets.getBitmapData(name);
 			if (bitmap != null)
 				break;
 		}
-		if (bitmap == null && useDefault) {
-			// 获取缺省值
-			if (Std.is(ui, BToggleButton) || Std.is(ui, ToggleButton))
-				return defalutAssets.getBitmapData("ui:button");
-			return defalutAssets.getBitmapData("ui:other");
-		}
+		// 不再支持缺省值功能
+		// if (bitmap == null && useDefault) {
+		// 	// 获取缺省值
+		// 	if (Std.is(ui, BToggleButton) || Std.is(ui, ToggleButton))
+		// 		return defalutAssets.getBitmapData("ui:button");
+		// 	return defalutAssets.getBitmapData("ui:other");
+		// }
 		return bitmap;
 	}
 
@@ -747,6 +747,30 @@ class ZBuilder {
 		return builder;
 	}
 
+	private static function __getParentDefineValue(xml:Xml, value:String):String {
+		if (value.indexOf("::") == 0 && value.lastIndexOf("::") == value.length - 2) {
+			var defineKey = StringTools.replace(value, "::", "");
+			if (defineMaps.exists(defineKey))
+				value = defineMaps.get(defineKey);
+		} else if (value.indexOf("${") == 0 && value.lastIndexOf("}") == value.length - 1) {
+			// 访问父节点的参数
+			var parentKey = StringTools.replace(value, "${", "");
+			parentKey = StringTools.replace(parentKey, "}", "");
+			var parentXml = xml.parent;
+			while (true) {
+				if (parentXml.nodeType == Document)
+					break;
+				var parentValue = parentXml.get(parentKey);
+				if (parentValue != null) {
+					value = parentValue;
+					break;
+				}
+				parentXml = parentXml.parent;
+			}
+		}
+		return value;
+	}
+
 	/**
 	 * 根据XML创建UI
 	 * @param xml xml本体
@@ -853,7 +877,7 @@ class ZBuilder {
 			}
 			// 赋值处理
 			for (attr in xml.attributes()) {
-				if(attr == "id")
+				if (attr == "id")
 					continue;
 				setProperty(ui, attr, xml.get(attr));
 			}
@@ -891,26 +915,7 @@ class ZBuilder {
 			var value:String = xml.get(name);
 			// 宏定义值
 			if (value != null) {
-				if (value.indexOf("::") == 0 && value.lastIndexOf("::") == value.length - 2) {
-					var defineKey = StringTools.replace(value, "::", "");
-					if (defineMaps.exists(defineKey))
-						value = defineMaps.get(defineKey);
-				} else if (value.indexOf("${") == 0 && value.lastIndexOf("}") == value.length - 1) {
-					// 访问父节点的参数
-					var parentKey = StringTools.replace(value, "${", "");
-					parentKey = StringTools.replace(parentKey, "}", "");
-					var parentXml = xml.parent;
-					while (true) {
-						if (parentXml.nodeType == Document)
-							break;
-						var parentValue = parentXml.get(parentKey);
-						if (parentValue != null) {
-							value = parentValue;
-							break;
-						}
-						parentXml = parentXml.parent;
-					}
-				}
+				value = __getParentDefineValue(xml, value);
 			}
 
 			var att:Dynamic = getProperty(ui, name);

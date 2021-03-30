@@ -64,8 +64,16 @@ class ZProjectData {
 				readDir(path + "/" + file, rename + "/" + file);
 			}
 		} else {
-			assetsRenamePath.set(StringUtils.getName(path) + "." + StringUtils.getExtType(path), rename);
-			assetsPath.set(StringUtils.getName(path) + "." + StringUtils.getExtType(path), path);
+			var id = StringUtils.getName(path) + "." + StringUtils.getExtType(path);
+			if (id.indexOf(".") != 0) {
+				assetsRenamePath.set(id, rename);
+				var curPath = assetsPath.get(id);
+				if (assetsPath.exists(id) && curPath != path) {
+					// trace("File duplicate:" + path + " in (" + curPath + ")");
+				} else {
+					assetsPath.set(id, path);
+				}
+			}
 		}
 	}
 	#end

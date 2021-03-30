@@ -87,8 +87,8 @@ class SkeletonAnimation extends SkeletonSprite {
 	}
 
 	private function _advanceTime(time:Float):Void {
-		state.update(time * timeScale);
-		skeleton.update(time * timeScale);
+		state.update(time / timeScale);
+		skeleton.update(time / timeScale);
 		if (skeleton.time > getMaxTime()) {
 			_cached = true;
 			skeleton.setTime(0);

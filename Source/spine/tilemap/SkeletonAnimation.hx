@@ -26,7 +26,7 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *****************************************************************************/
+*****************************************************************************/
 
 package spine.tilemap;
 
@@ -35,7 +35,6 @@ import spine.AnimationState;
 import spine.AnimationStateData;
 
 class SkeletonAnimation extends SkeletonSprite {
-
 	#if zygame
 	/**
 	 * 资源索引
@@ -45,25 +44,25 @@ class SkeletonAnimation extends SkeletonSprite {
 
 	public var state:AnimationState;
 
-	public function new (skeletonData:SkeletonData, stateData:AnimationStateData = null) {
+	public function new(skeletonData:SkeletonData, stateData:AnimationStateData = null) {
 		super(skeletonData);
 		#if (spine_hx <= "3.6.0")
 		skeleton.setFlipY(true);
 		#else
 		skeleton.setScaleY(-1);
 		#end
-		state = new AnimationState(stateData == null ? new AnimationStateData(skeletonData):stateData);
+		state = new AnimationState(stateData == null ? new AnimationStateData(skeletonData) : stateData);
 		_advanceTime(0);
 	}
 
-	override public function advanceTime (time:Float):Void {
-		if(!this.visible || !isPlay)
+	override public function advanceTime(time:Float):Void {
+		if (!this.visible || !isPlay)
 			return;
 		_advanceTime(time);
 	}
 
-	private function _advanceTime(time:Float){
-		state.update(time * timeScale);
+	private function _advanceTime(time:Float) {
+		state.update(time / timeScale);
 		state.apply(skeleton);
 		skeleton.updateWorldTransform();
 		super.advanceTime(time);
@@ -72,10 +71,9 @@ class SkeletonAnimation extends SkeletonSprite {
 	/**
 	 * 播放
 	 */
-	override public function play(action:String = null,loop:Bool = true):Void {
-		if(action != null && action != "")
-		{
-			this.state.setAnimationByName(0,action,loop);
+	override public function play(action:String = null, loop:Bool = true):Void {
+		if (action != null && action != "") {
+			this.state.setAnimationByName(0, action, loop);
 		}
 		super.play(action);
 	}

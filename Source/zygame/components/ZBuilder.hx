@@ -831,8 +831,19 @@ class ZBuilder {
 				ui = ZBuilder.buildui(childxml.firstElement(), parent, builder, null, null, xml.get("id"));
 			} else
 				throw "Class name " + className + " is not define xml assets!";
-		} else
+		} else {
+			// var childxml = getXml(className);
+			// if (childxml != null) {
+			// 	for (attr in xml.attributes()) {
+			// 		switch (attr) {
+			// 			case "id":
+			// 			default:
+			// 				childxml.firstElement().set(attr, xml.get(attr));
+			// 		}
+			// 	}
+			// }
 			ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
+		}
 		if (!Std.is(ui, DisplayObject) && !Std.is(ui, Tile)) {
 			// 着色器
 			if (Std.is(ui, ZShader)) {

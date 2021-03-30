@@ -456,11 +456,13 @@ class ZLabel extends DataProviderComponent {
 		});
 		#elseif (kengsdkv2 || ios)
 		// 安卓 IOS 原生输入支持
+		#if kengsdkv2
 		KengSDK.showKeyboard(this.dataProvider, _display.maxChars, function(text:String):Void {
 			Lib.resumeCall(function() {
 				this.dataProvider = text;
 			});
 		});
+		#end
 		#end
 	}
 	#end

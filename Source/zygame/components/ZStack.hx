@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.events.Event;
 import tweenxcore.Tools.Easing;
 import zygame.utils.FrameEngine;
 import openfl.display.DisplayObject;
@@ -52,10 +53,15 @@ class ZStack extends ZBox {
 		else {
 			// 使用过渡动画
 			this.getTopView().addChild(style);
-			@:privateAccess style._onEntered = updateDisplay;
+			this.dispatchEvent(new ZStackEvent(ZStackEvent.START));
+			@:privateAccess style._onEntered = function() {
+				updateDisplay();
+				this.dispatchEvent(new ZStackEvent(ZStackEvent.ENTER));
+			}
 			@:privateAccess style._onExited = function() {
-				if(style.parent != null)
+				if (style.parent != null)
 					style.parent.removeChild(style);
+				this.dispatchEvent(new ZStackEvent(ZStackEvent.EXITED));
 			}
 			var nextSelect = this.getChildByName(value);
 			super.addChildAt(nextSelect, 0);
@@ -166,4 +172,10 @@ class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
 			}
 		});
 	}
+}
+
+class ZStackEvent extends Event {
+	public static var EXITED:String = "exited";
+	public static var ENTER:String = "enter";
+	public static var START:String = "start";
 }

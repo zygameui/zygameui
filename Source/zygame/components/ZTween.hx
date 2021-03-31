@@ -23,6 +23,10 @@ class ZTween implements Refresher {
 	private var _maxFrame:Int = 0;
 
 	private var _isPlay:Bool = false;
+	public var isPlay(get,never):Bool;
+	private function get_isPlay():Bool{
+		return _isPlay;
+	}
 
 	private var _onFrameId:Int = -1;
 

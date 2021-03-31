@@ -3,6 +3,18 @@
 ## zygameui公共库代码
 js目录下是在QQ/微信小游戏中使用的公共库代码。
 
+# 重要
+
+当需要在微信小游戏提交审核时，需要备注内容，避免代码库导致审核失败：
+
+```haxe
+您好，存在多款游戏使用的公共引擎库一致，以下为公共库情况链接：
+OpenFL引擎库：https://github.com/openfl/openfl
+Lime引擎库：https://github.com/haxelime/lime
+游戏框架库：https://github.com/rainyt/zygameui
+公共库JavaScript文件：https://github.com/rainyt/zygameui/tree/master/js
+```
+
 # 该库作用
 
 使用该库开发的游戏，可以轻松发布到各个小游戏平台，并可以得到C++性能级别的安卓/IOS运行包。同时我也在维护openfl/Away3D库，该库可以轻松载入3D资源，3D库：http://github.com/rainyt/zygameui-3d 

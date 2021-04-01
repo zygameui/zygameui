@@ -23,8 +23,10 @@ class ZTween implements Refresher {
 	private var _maxFrame:Int = 0;
 
 	private var _isPlay:Bool = false;
-	public var isPlay(get,never):Bool;
-	private function get_isPlay():Bool{
+
+	public var isPlay(get, never):Bool;
+
+	private function get_isPlay():Bool {
 		return _isPlay;
 	}
 
@@ -56,7 +58,7 @@ class ZTween implements Refresher {
 		var lastStart = 0;
 		while (frames.hasNext()) {
 			var xml = frames.next();
-			var bindid = (parentid != null ? parentid + "_" : "")  + xml.get("bind");
+			var bindid = (parentid != null ? parentid + "_" : "") + xml.get("bind");
 			if (!builder.ids.exists(bindid))
 				throw xml.toString() + ":Bind Error (" + bindid + ")";
 			var tw = new TweenFrame(xml, builder.ids.get(bindid));
@@ -102,7 +104,7 @@ class ZTween implements Refresher {
 		}
 		Start.current.addToUpdate(this);
 		for (frame in _baseFrames) {
-			if(frame.getNodeName() == "tween")
+			if (frame.getNodeName() == "tween")
 				frame.update(_crrentFrame);
 		}
 	}
@@ -195,7 +197,7 @@ class TweenFrame {
 		}
 	}
 
-	public function getNodeName():String{
+	public function getNodeName():String {
 		return _baseXml.nodeName;
 	}
 

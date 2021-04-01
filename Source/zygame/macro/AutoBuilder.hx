@@ -173,6 +173,12 @@ class AutoBuilder {
 					return macro:zygame.components.ZBox.HBox;
 			}
 		} else if (typeName.indexOf("Z") != -1) {
+			if(typeName == "ZShader"){
+				return TPath({
+					pack: ["zygame", "shader", "engine"],
+					name: typeName
+				});
+			}
 			return TPath({
 				pack: ["zygame", "components"],
 				name: typeName

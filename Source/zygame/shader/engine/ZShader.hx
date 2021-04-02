@@ -62,6 +62,33 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
             );
         }";
 
+	private static var defalutGLVertexHeader:String = "attribute float openfl_Alpha;
+    attribute vec4 openfl_ColorMultiplier;
+    attribute vec4 openfl_ColorOffset;
+    attribute vec4 openfl_Position;
+    attribute vec2 openfl_TextureCoord;
+
+    varying float openfl_Alphav;
+    varying vec4 openfl_ColorMultiplierv;
+    varying vec4 openfl_ColorOffsetv;
+    varying vec2 openfl_TextureCoordv;
+
+    uniform mat4 openfl_Matrix;
+    uniform bool openfl_HasColorTransform;
+    uniform vec2 openfl_TextureSize;";
+
+	private static var defalutGLVertexBody:String = "openfl_Alphav = openfl_Alpha;
+    openfl_TextureCoordv = openfl_TextureCoord;
+
+    if (openfl_HasColorTransform) {
+
+        openfl_ColorMultiplierv = openfl_ColorMultiplier;
+        openfl_ColorOffsetv = openfl_ColorOffset / 255.0;
+
+    }
+
+    gl_Position = openfl_Matrix * openfl_Position;";
+
 	public var haxeScript:ZHaxe;
 
 	/**
@@ -88,6 +115,10 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 			}
 		}
 		if (glVertexSource != null) {
+			glVertexSource = StringTools.replace(glVertexSource, "#header", defalutGLVertexHeader);
+			glVertexSource = StringTools.replace(glVertexSource, "#body", defalutGLVertexBody);
+			glVertexSource = StringTools.replace(glVertexSource, "#pragma header", defalutGLVertexHeader);
+			glVertexSource = StringTools.replace(glVertexSource, "#pragma body", defalutGLVertexBody);
 			this.glVertexSource = glVertexSource;
 		}
 		if (glFragmentSource != null) {

@@ -832,16 +832,6 @@ class ZBuilder {
 			} else
 				throw "Class name " + className + " is not define xml assets!";
 		} else {
-			// var childxml = getXml(className);
-			// if (childxml != null) {
-			// 	for (attr in xml.attributes()) {
-			// 		switch (attr) {
-			// 			case "id":
-			// 			default:
-			// 				childxml.firstElement().set(attr, xml.get(attr));
-			// 		}
-			// 	}
-			// }
 			ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
 		}
 		if (!Std.is(ui, DisplayObject) && !Std.is(ui, Tile)) {
@@ -887,10 +877,28 @@ class ZBuilder {
 				}
 			}
 			// 赋值处理
-			for (attr in xml.attributes()) {
-				if (attr == "id")
+			for (name in xml.attributes()) {
+				if (name == "id")
 					continue;
-				setProperty(ui, attr, xml.get(attr));
+				var value = xml.get(name);
+				var att:Dynamic = getProperty(ui, name);
+				var parsingName:String = className + "." + name;
+				if (parsingMaps.exists(parsingName)) {
+					parsingMaps.get(parsingName)(ui, name, value);
+				} else if (Std.is(att, Float) && value.indexOf("0x") == -1) {
+					if (value.indexOf("%") != -1) {
+						var bfb:Float = Std.parseFloat(value.substr(0, value.lastIndexOf("%")));
+						bfb = bfb / 100 * getProperty(parent, name);
+						setProperty(ui, name, bfb);
+					} else
+						setProperty(ui, name, Std.parseFloat(value));
+				} else if (Std.is(att, Int)) {
+					setProperty(ui, name, Std.parseInt(value));
+				} else if (Std.is(att, Bool)) {
+					setProperty(ui, name, xml.get(name) == "true");
+				} else if (Std.is(att, String) || att == null) {
+					setProperty(ui, name, xml.get(name));
+				}
 			}
 			return ui;
 		}

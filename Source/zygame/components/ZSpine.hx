@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.display.Shader;
 import zygame.utils.SpineManager;
 import spine.AnimationState;
 import zygame.display.batch.ImageBatchs;
@@ -125,5 +126,14 @@ class ZSpine extends ZBox {
 		if (bspine != null) {
 			@:privateAccess SpineManager.addOnFrame(bspine.spine);
 		}
+	}
+
+	override function set_shader(value:Shader):Shader {
+		super.set_shader(value);
+		if (this.getNativeSpine() != null)
+			this.getNativeSpine().shader = value;
+		if (this.getTilemapSpine() != null)
+			this.getTilemapSpine().shader = value;
+		return value;
 	}
 }

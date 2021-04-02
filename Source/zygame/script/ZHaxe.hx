@@ -109,7 +109,12 @@ class ZHaxe {
 	 */
 	public function call(args:Array<Dynamic> = null):Dynamic {
 		if ((args == null && argsName.length > 0) || (args != null && args.length != argsName.length)) {
-			throw "ZHaxe args count is not match:" + argsName + " not match " + args + "\nSource:\n" + _script
+			throw "ZHaxe args count is not match:"
+				+ argsName
+				+ " not match "
+				+ args
+				+ "\nSource:\n"
+				+ _script
 				+ ("\nargs.length=" + (args != null ? args.length : 0) + "  argsName.length=" + argsName.length);
 		}
 		#if hscript
@@ -129,8 +134,9 @@ class ZHaxe {
  */
 @:keep
 class ZInt {
-	public function new(value:Int) {
-		this.value = value;
+	public function new(v2:Int) {
+		trace("ZInt",v2);
+		this.value = v2;
 	}
 
 	public var value:Int = 0;

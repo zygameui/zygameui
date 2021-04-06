@@ -19,20 +19,24 @@ class TextStrokeShader extends DisplayObjectShader {
 		void main(void) {
 			
 			#pragma body
-            
-            float radius = 0.00005 * stroke * textsize;
+            float blur = stroke;
+            float radiusStep = 0.00002;
+            float radius = radiusStep * blur * textsize;
             vec4 framecolor = vec4(0.,0.,0.,0.);
-            for(int i = 1;i>0;i--)
+            for(int i = 10;i>0;i--)
             {
-                float radius2 = float(i) * radius;
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x + radius2,openfl_TextureCoordv.y));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x - radius2,openfl_TextureCoordv.y));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x,openfl_TextureCoordv.y + radius2));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x,openfl_TextureCoordv.y - radius2));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x + radius2,openfl_TextureCoordv.y + radius2));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x + radius2,openfl_TextureCoordv.y - radius2));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x - radius2,openfl_TextureCoordv.y + radius2));
-                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x - radius2,openfl_TextureCoordv.y - radius2));
+                radius -= radiusStep;
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x + radius,openfl_TextureCoordv.y));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x - radius,openfl_TextureCoordv.y));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x,openfl_TextureCoordv.y + radius));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x,openfl_TextureCoordv.y - radius));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x + radius,openfl_TextureCoordv.y + radius));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x + radius,openfl_TextureCoordv.y - radius));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x - radius,openfl_TextureCoordv.y + radius));
+                framecolor += texture2D(openfl_Texture, vec2(openfl_TextureCoordv.x - radius,openfl_TextureCoordv.y - radius));
+                blur --;
+                if(blur <= 0.)
+                    break;
             }
             framecolor *= 1.0;
             framecolor.rgb = vec3(strokeColor.r,strokeColor.g,strokeColor.b)*framecolor.a;

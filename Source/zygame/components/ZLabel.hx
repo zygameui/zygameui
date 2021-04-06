@@ -478,6 +478,13 @@ class ZLabel extends DataProviderComponent {
 		this.getDisplay().shader = new zygame.shader.TextStrokeShader(color, blur, _font.size);
 	}
 
+	/**
+	 * 加粗字体
+	 */
+	public function bold(blur:Int = 1):Void {
+		this.getDisplay().shader = new zygame.shader.TextStrokeShader(_font.color, blur, _font.size);
+	}
+
 	#if android
 	// override function getBounds(target:DisplayObject):Rectangle {
 	// 	var rect = super.getBounds(target);

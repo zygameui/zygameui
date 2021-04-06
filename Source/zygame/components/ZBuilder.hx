@@ -278,11 +278,13 @@ class ZBuilder {
 			cast(ui, BButton).setContent(getBaseBitmapData(value));
 		});
 		bindParsing(BLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
-			// zygame.utils.Lib.nextFrameCall(cast(ui, BLabel).updateText, [value]);
 			cast(ui, BLabel).updateText(value);
 		});
 		bindParsing(ZButton, "text", function(ui:Dynamic, name:String, value:String):Void {
 			zygame.utils.Lib.nextFrameCall(cast(ui, ZButton).setText, [value]);
+		});
+		bindParsing(ZLabel, "stroke", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZLabel).stroke(Std.parseInt(value));
 		});
 		bindParsing(ZLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).dataProvider = value;

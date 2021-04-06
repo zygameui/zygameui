@@ -105,6 +105,7 @@ class MiniEngineAssets extends ZAssets {
 			var hxid = StringUtils.getName(id);
 			var main = zip.getHScript(hxid);
 			var minihaxe = MiniEngine.parseMiniHaxe(main);
+			trace("minihaxe=",minihaxe.xml.toString());
 			this.setXml(hxid, this.onParsingHaxeData(hxid, minihaxe.xml));
 			haxeMaps.set(hxid, minihaxe);
 			for (key => value in minihaxe.vars) {

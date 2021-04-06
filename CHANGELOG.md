@@ -4,9 +4,39 @@
 
 # ZYGameUI 更新日志
 
+### 10.1.11
+- [保留] 避免丢失大部分有用信息，保留了trace的输出。
+- [改进] `ZLabel.stroke`改进了描边效果，游戏可使用质量较高的描边效果，白色字体+任意颜色描边效果最佳。
+
+### 10.1.9
+- [改进] 改进对`ZShader`的支持，发生异常不会造成游戏卡死的问题。
+- [修复] 修复`ZBuilder`对ZInt的属性赋值异常的问题。
+
+### 10.1.8
+- [新增] 新增XML属性`classed`，需要布局绑定类型时，则可以使用这个属性，填入包类名后将会解析成绑定的类型。
+    ```xml
+    <!-- 同时在使用classed时，可不需要ZBuilder.bind进行绑定，但要确定类型导入 -->
+    <!-- 指向WechatView类 -->
+    <ZBox classed="game.wechat.WechatView"/>
+    ```
+- [删除] 删除`ZBuilder`的缺省UI功能。
+- [改进] 改进`ZSpine`支持${}读取。
+- [新增] 新增`ZList`的`selectIndex`选择索引支持。
+- [修复] 修复`ZBuilder`对包名类识别的问题。
+- [修复] 修复`Spine`的`timeScale`实现相反的问题。
+
+### 10.1.7
+- [新增] 新增`EffectUtils`工具包，可统一为显示对象添加呼吸效果。
+- [新增] 新增`Music.toMusic`功能，可以将Sound转换为Music，当做背景音乐使用。
+- [修复] 修复`Spine.isPlay`返回不正常的问题。
+- [修复] 修复`BAnimation`无法正常播放动画的问题。
+
 ### 10.1.6
 - [改进] 改进`ZSound`的播放以及释放处理。
 - [新增] 新增`ZSound.stopAllSound`方法来释放所有`ZSound`音频。
+- [改进] 改进`FPSDebug`会根据分辨率自动适配。
+- [改进] 改进`FPSDebug`遮挡点击问题。
+- [改进] 改进舞台的尺寸获取时机。
 
 ### 10.1.5
 - [修复] 修复`topView`没有适配强制横屏功能的问题。

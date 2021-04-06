@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.shader.TextStrokeShader;
 import zygame.utils.Lib;
 import openfl.desktop.Clipboard;
 import openfl.desktop.ClipboardFormats;
@@ -135,6 +136,7 @@ class ZLabel extends DataProviderComponent {
 		#else
 		_font = new TextFormat(zygame.components.base.ZConfig.fontName);
 		#end
+		_font.size = 24;
 		_display.scaleX = 1 / _scale;
 		_display.scaleY = 1 / _scale;
 		_display.width = 0;
@@ -468,15 +470,12 @@ class ZLabel extends DataProviderComponent {
 	#end
 
 	/**
-	 * 描边字体
-	 * @param color
-	 * @param blur
+	 * 描边字体：更改了文字大小后，可重新描边一次。
+	 * @param color 描边的颜色
+	 * @param blur 描边的厚度，默认建议使用1
 	 */
-	public function stroke(color:UInt, blur:Int = 4):Void {
-		if (blur == 1)
-			this.getDisplay().shader = new zygame.shader.StrokeShader(color, blur, 0.5);
-		else
-			this.getDisplay().shader = new zygame.shader.StrokeShader(color, blur, 0);
+	public function stroke(color:UInt, blur:Int = 1):Void {
+		this.getDisplay().shader = new zygame.shader.TextStrokeShader(color, blur, _font.size);
 	}
 
 	#if android

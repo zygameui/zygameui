@@ -2,16 +2,11 @@ package zygame.components;
 
 import zygame.shader.TextStrokeShader;
 import zygame.utils.Lib;
-import openfl.desktop.Clipboard;
-import openfl.desktop.ClipboardFormats;
-import openfl.system.System;
-import zygame.core.Start;
 #if html5
 import zygame.components.input.HTML5TextInput;
 #end
 import openfl.geom.Point;
 import openfl.text.TextField;
-import openfl.display.DisplayObject;
 import zygame.components.base.DataProviderComponent;
 import openfl.text.TextFormat;
 import zygame.utils.Align;

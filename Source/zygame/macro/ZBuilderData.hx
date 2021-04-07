@@ -37,7 +37,8 @@ class ZBuilderData {
 		var idname = null;
 		if (item.exists("id")) {
 			idname = (parentId != null ? parentId + "_" : "") + item.get("id");
-			ids.set(idname, item.nodeName);
+			if (!item.exists("classed"))
+				ids.set(idname, item.nodeName);
 		}
 		// 可能内置音效功能
 		if (item.exists("sound")) {
@@ -58,21 +59,17 @@ class ZBuilderData {
 			}
 		}
 		// Item可能是一个XML配置，列入查询，如果classed为true时，则意味着这个组件可能已经被类型注册，则不再解析
-		if (!item.exists("classed") && project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml") != null) {
+		if (project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml") != null) {
 			if (assetsLoads.indexOf(item.nodeName) == -1)
 				assetsLoads.push(item.nodeName);
 			// 子集查询
 			var childcontent = File.getContent(project.assetsPath.get(StringUtils.getName(item.nodeName) + ".xml"));
 			var childxml:Xml = Xml.parse(childcontent);
-			if (!childxml.firstElement().exists("classed")) {
-				parserXml(childxml.firstElement(), item.get("id"));
-			} else {
+			if (childxml.firstElement().exists("classed")) {
 				item.set("classed", childxml.firstElement().get("classed"));
 				ids.set(idname, item.get("classed"));
 			}
-		} else {
-			if (idname != null && item.exists("classed"))
-				ids.set(idname, item.get("classed"));
+			parserXml(childxml.firstElement(), item.get("id"));
 		}
 	}
 	#end

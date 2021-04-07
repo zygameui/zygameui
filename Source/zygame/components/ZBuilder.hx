@@ -813,6 +813,9 @@ class ZBuilder {
 				return null;
 		}
 		var className:String = xml.nodeName;
+		if(childxml != null && childxml.firstElement().exists("classed")){
+			className = childxml.firstElement().get("classed");
+		}
 		var ui:Dynamic = null;
 		var base:Class<Dynamic> = null;
 		if (!classMaps.exists(className)) {
@@ -821,7 +824,6 @@ class ZBuilder {
 			base = classMaps.get(className);
 		if (base == null) {
 			// 当无法找到类型时，可在XML中查找
-			var childxml = getXml(className);
 			if (childxml != null) {
 				for (attr in xml.attributes()) {
 					switch (attr) {

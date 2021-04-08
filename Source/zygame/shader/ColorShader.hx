@@ -17,9 +17,9 @@ class ColorShader extends DisplayObjectShader {
 			
 			#pragma body
 			
-			float a = gl_FragColor.a;
-			gl_FragColor.rgb = mcolorvalue;
-			gl_FragColor *= a * openfl_Alphav;
+			gl_FragColor.rgb = mcolorvalue * color.a;
+			gl_FragColor.a = color.a;
+			gl_FragColor *= openfl_Alphav;
 		}
 		
 	")

@@ -813,6 +813,7 @@ class ZBuilder {
 				return null;
 		}
 		var className:String = xml.nodeName;
+		var childxml = getXml(className);
 		if(childxml != null && childxml.firstElement().exists("classed")){
 			className = childxml.firstElement().get("classed");
 		}

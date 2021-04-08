@@ -26,18 +26,18 @@ class ZBuilderData {
 		parserXml(xml.firstElement());
 	}
 
-	private function parserXml(xml:Xml, parentId:String = null):Void {
-		parserItem(xml, parentId);
+	private function parserXml(xml:Xml, parentId:String = null, isClassed:Bool = false):Void {
+		parserItem(xml, parentId, isClassed);
 		for (item in xml.elements()) {
-			parserXml(item, parentId);
+			parserXml(item, parentId, isClassed);
 		}
 	}
 
-	private function parserItem(item:Xml, parentId:String = null) {
+	private function parserItem(item:Xml, parentId:String = null, isClassed:Bool = false) {
 		var idname = null;
 		if (item.exists("id")) {
 			idname = (parentId != null ? parentId + "_" : "") + item.get("id");
-			if (!item.exists("classed"))
+			if (!item.exists("classed") && !isClassed)
 				ids.set(idname, item.nodeName);
 		}
 		// 可能内置音效功能
@@ -68,8 +68,10 @@ class ZBuilderData {
 			if (childxml.firstElement().exists("classed")) {
 				item.set("classed", childxml.firstElement().get("classed"));
 				ids.set(idname, item.get("classed"));
+				parserXml(childxml.firstElement(), item.get("id"), true);
+			} else {
+				parserXml(childxml.firstElement(), item.get("id"), false);
 			}
-			parserXml(childxml.firstElement(), item.get("id"));
 		}
 	}
 	#end

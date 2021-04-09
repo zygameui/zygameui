@@ -136,8 +136,12 @@ class ZBuilder {
 		bind(ZSpine);
 		bind(BSpine);
 		bind(ZStack);
+		bind(ZParticles);
 
 		// 解析方法解析
+		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, zygame.components.ZParticles).dataProvider = value;
+		});
 		bindParsing(zygame.components.ZImage, "src", function(ui:Dynamic, name:String, value:String):Void {
 			var values = value.split(":");
 			if (values.length >= 3) {
@@ -814,7 +818,7 @@ class ZBuilder {
 		}
 		var className:String = xml.nodeName;
 		var childxml = getXml(className);
-		if(childxml != null && childxml.firstElement().exists("classed")){
+		if (childxml != null && childxml.firstElement().exists("classed")) {
 			className = childxml.firstElement().get("classed");
 		}
 		var ui:Dynamic = null;

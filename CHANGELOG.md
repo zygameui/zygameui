@@ -4,6 +4,11 @@
 
 # ZYGameUI 更新日志
 
+### 10.2.4
+- [新增] 正式引入粒子效果库到zygame库中，不再需要引入`zparticles`;
+    - 注意：旧版本和新版本的使用可能存在差异，请参考文档使用。
+- [新增] 新增`ZParticles`粒子组件功能，可在XML中直接配置`<ZParticles src="粒子图片名称:粒子JSON名称"/>`直接使用。
+
 ### 10.2.2
 - [改进] `ZLabel.bold`新增加粗字体的支持。
 - [改进] 改进`classed`的XML属性识别，可不需要ZBuilder.bind就可以确定类型。

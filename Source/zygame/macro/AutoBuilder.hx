@@ -62,7 +62,12 @@ class AutoBuilder {
 			} else if (project.assetsPath.exists(file + ".png")) {
 				// 单图加载
 				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""));
-			}else if (project.assetsPath.exists(file + ".jpg")) {
+				// 可能包含一个粒子资源
+				if (project.assetsPath.exists(file + ".json")) {
+					// JSON加载
+					files.push(StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), ""));
+				}
+			} else if (project.assetsPath.exists(file + ".jpg")) {
 				// 单图加载
 				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".jpg"), Sys.getCwd(), ""));
 			} else if (project.assetsPath.exists(file + ".xml")) {
@@ -109,7 +114,7 @@ class AutoBuilder {
 						super($v{path});
 						var textures:Array<{png:String, xml:String}> = $v{textures};
 						var files:Array<String> = $v{files};
-						var spines:Array<{png:String,atlas:String,json:String}> = $v{spines};
+						var spines:Array<{png:String, atlas:String, json:String}> = $v{spines};
 						for (f in files) {
 							this.$bindBuilder.loadFiles([f]);
 						}
@@ -173,7 +178,7 @@ class AutoBuilder {
 					return macro:zygame.components.ZBox.HBox;
 			}
 		} else if (typeName.indexOf("Z") != -1) {
-			if(typeName == "ZShader"){
+			if (typeName == "ZShader") {
 				return TPath({
 					pack: ["zygame", "shader", "engine"],
 					name: typeName

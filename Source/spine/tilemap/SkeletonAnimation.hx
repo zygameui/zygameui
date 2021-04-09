@@ -30,6 +30,7 @@
 
 package spine.tilemap;
 
+import spine.events.AnimationEvent;
 import spine.SkeletonData;
 import spine.AnimationState;
 import spine.AnimationStateData;
@@ -76,5 +77,24 @@ class SkeletonAnimation extends SkeletonSprite {
 			this.state.setAnimationByName(0, action, loop);
 		}
 		super.play(action);
+	}
+
+	private var _event:AnimationEvent;
+
+	override function addEventListener<T>(type:openfl.events.EventType<T>, listener:T->Void, useCapture:Bool = false, priority:Int = 0,
+			useWeakReference:Bool = false) {
+		if (_event == null && state != null) {
+			_event = new AnimationEvent();
+			this.state.addListener(_event);
+		}
+		if (_event != null)
+			_event.addEventListener(type, listener);
+		super.addEventListener(type, listener, useCapture, priority, useWeakReference);
+	}
+
+	override function removeEventListener<T>(type:openfl.events.EventType<T>, listener:T->Void, useCapture:Bool = false) {
+		super.removeEventListener(type, listener, useCapture);
+		if (_event != null)
+			_event.addEventListener(type, listener);
 	}
 }

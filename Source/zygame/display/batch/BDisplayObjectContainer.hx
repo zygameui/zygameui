@@ -1,5 +1,9 @@
 package zygame.display.batch;
 
+import openfl.events.Event;
+import openfl.events.EventType;
+import openfl.events.EventDispatcher;
+import openfl.events.IEventDispatcher;
 import zygame.components.ZBuilder.Builder;
 import openfl.display.Tile;
 import zygame.core.Start;
@@ -7,7 +11,8 @@ import zygame.core.Refresher;
 import openfl.display.TileContainer;
 import zygame.display.batch.ITileDisplayObject;
 
-class BDisplayObjectContainer extends TileContainer implements ITileDisplayObject implements Refresher implements zygame.mini.MiniExtend {
+class BDisplayObjectContainer extends TileContainer implements ITileDisplayObject implements Refresher implements zygame.mini.MiniExtend
+		implements IEventDispatcher {
 	/**
 	 * 自定义绑定数据
 	 */
@@ -22,6 +27,11 @@ class BDisplayObjectContainer extends TileContainer implements ITileDisplayObjec
 
 	public var name:String = null;
 
+	/**
+	 * 事件回传事件
+	 */
+	private var __listener:EventDispatcher;
+
 	public function new():Void {
 		super();
 	}
@@ -32,6 +42,35 @@ class BDisplayObjectContainer extends TileContainer implements ITileDisplayObjec
 			if (call != null)
 				call();
 		}
+	}
+
+	public function addEventListener<T>(type:EventType<T>, listener:T->Void, useCapture:Bool = false, priority:Int = 0, useWeakReference:Bool = false):Void {
+		if (__listener == null)
+			__listener = new EventDispatcher(this);
+		__listener.addEventListener(type, listener, useCapture, priority, useWeakReference);
+	}
+
+	public function removeEventListener<T>(type:EventType<T>, listener:T->Void, useCapture:Bool = false):Void {
+		if (__listener != null)
+			__listener.removeEventListener(type, listener, useCapture);
+	}
+
+	public function dispatchEvent(event:Event):Bool {
+		if (__listener != null)
+			return __listener.dispatchEvent(event);
+		return false;
+	}
+
+	public function hasEventListener(type:String):Bool {
+		if (__listener != null)
+			return __listener.hasEventListener(type);
+		return false;
+	}
+
+	public function willTrigger(type:String):Bool {
+		if (__listener != null)
+			return __listener.willTrigger(type);
+		return false;
 	}
 
 	public function onFrame() {

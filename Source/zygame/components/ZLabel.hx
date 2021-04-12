@@ -310,10 +310,10 @@ class ZLabel extends DataProviderComponent {
 				@:privateAccess _display.__cleanup();
 			_display.text = Std.string(value);
 		}
-		// 刷新内容
-		updateComponents();
 		// 修复9.0.0设置无法正常格式化问题
 		_display.setTextFormat(_font);
+		// 刷新内容
+		updateComponents();
 		return value;
 	}
 

@@ -55,7 +55,7 @@ class ZList extends ZScroll {
 
 	override public function onTouchEnd(touch:TouchEvent):Void {
 		super.onTouchEnd(touch);
-		if (Std.is(touch.target, itemRenderType) && getIsMoveing() == false && currentSelectItem != cast(touch.target, ItemRender).data) {
+		if (Std.isOfType(touch.target, itemRenderType) && getIsMoveing() == false && currentSelectItem != cast(touch.target, ItemRender).data) {
 			selectIndex = @:privateAccess cast(this.dataProvider, ListData)._data.indexOf(cast(touch.target, ItemRender).data);
 		}
 	}

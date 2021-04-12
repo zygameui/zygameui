@@ -38,6 +38,11 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
      */
     private var _lineCount:Int;
 
+    /**
+     * 字体规格
+     */
+    private var f:TextFormat = new TextFormat();
+
     public function new(id:String,fontName:String,fontsize:UInt,color:UInt = 0xffffff) {
         super();
         #if (html5 && !no_html5_cache_render)
@@ -49,7 +54,6 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
         this._lineCount = Std.int(this.width/(fontsize*2));
         this.selectable = false;
         this.mouseEnabled = false;
-        var f:TextFormat = new TextFormat();
         f.size = fontsize;
         f.color = color;
         #if ios
@@ -79,6 +83,7 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
         if(text == value)
             return value;
         super.set_text(value);
+        this.setTextFormat(f);
         var xml:Xml = Xml.createDocument();
         var atlas:Xml = Xml.createElement("TextureAtlas");
         xml.insertChild(atlas,0);

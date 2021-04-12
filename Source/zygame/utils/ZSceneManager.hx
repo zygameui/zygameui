@@ -95,7 +95,7 @@ class ZSceneManager {
 	 *  @return ZScene
 	 */
 	public function replaceScene(cName:Class<ZScene>, isReleaseScene:Bool = false):ZScene {
-		if (getCurrentScene() != null && Std.is(getCurrentScene(), cName))
+		if (getCurrentScene() != null && Std.isOfType(getCurrentScene(), cName))
 			return getCurrentScene();
 		while (_scenes.length > 0) {
 			var zscene:ZScene = _scenes.shift();

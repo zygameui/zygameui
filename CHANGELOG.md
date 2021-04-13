@@ -5,10 +5,12 @@
 
 # ZYGameUI 更新日志
 
+### 10.2.7
+- [修复] 修复`ZSound.stopAllSound()`无效的问题。
+
 ### 10.2.6
 - [兼容] 已支持`swf3.0.2`版本。
 - [注意] SWF已支持`OpenFL9.1.0`，但SWF需要全部生成。
-
 
 ### 10.2.5
 - [改进] 对`TilemapSpine`新增`SpineEvent`侦听支持。

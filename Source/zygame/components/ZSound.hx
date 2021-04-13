@@ -5,16 +5,18 @@ import zygame.media.base.Sound;
 import zygame.media.base.SoundChannel;
 
 class ZSound implements zygame.core.Refresher {
+	private static var _soundlist:Array<ZSound> = [];
+
 	/**
 	 * 停止所有ZSound逻辑
 	 */
 	public static function stopAllSound():Void {
-		var array = @:privateAccess Start.current.updates;
+		var array = _soundlist;
 		var len = array.length;
 		while (len >= 0) {
 			len--;
 			if (Std.is(array[len], ZSound)) {
-				array.removeAt(len);
+				cast(array[len], ZSound).stop();
 			}
 		}
 	}
@@ -79,7 +81,7 @@ class ZSound implements zygame.core.Refresher {
 				if (_loop > 0) {
 					_loop--;
 					if (_loop == 0)
-						Start.current.removeToUpdate(this);
+						stop();
 				}
 			}
 		} else {
@@ -88,12 +90,12 @@ class ZSound implements zygame.core.Refresher {
 		}
 	}
 
-    /**
-     * 强制播放：该方法会独立播放，不会停止已播放的音频
-     */
-    public function playForce():Void{
-        this.__playSound(1);
-    }
+	/**
+	 * 强制播放：该方法会独立播放，不会停止已播放的音频
+	 */
+	public function playForce():Void {
+		this.__playSound(1);
+	}
 
 	/**
 	 * 开始播放
@@ -110,6 +112,7 @@ class ZSound implements zygame.core.Refresher {
 			}
 			Start.current.addToUpdate(this);
 		}
+		_soundlist.push(this);
 	}
 
 	/**
@@ -121,5 +124,6 @@ class ZSound implements zygame.core.Refresher {
 		}
 		_channels = [];
 		Start.current.removeToUpdate(this);
+		_soundlist.remove(this);
 	}
 }

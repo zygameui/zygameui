@@ -102,7 +102,7 @@ class ZAssets {
 	private var _fnts:Dictionary<String, FntData>;
 	private var _maps:Dictionary<String, MapliveData>;
 	private var _spines:Dictionary<String, SpineTextureAtals>;
-	#if (openfl < '9.0.0')
+	#if (openfl_swf)
 	private var _swflites:Dictionary<String, SWFLiteLibrary>;
 	#end
 	private var _zips:Dictionary<String, Zip>;
@@ -128,7 +128,7 @@ class ZAssets {
 		_fnts = new Dictionary<String, FntData>();
 		_maps = new Dictionary<String, MapliveData>();
 		_spines = new Dictionary<String, SpineTextureAtals>();
-		#if (openfl < '9.0.0')
+		#if (openfl_swf)
 		_swflites = new Dictionary<String, SWFLiteLibrary>();
 		#end
 		_zips = new Dictionary<String, Zip>();
@@ -194,7 +194,7 @@ class ZAssets {
 	 * @param isZip 是否为压缩包，默认为压缩包
 	 */
 	public function loadSwfliteFile(path:String, isZip:Bool = true):Void {
-		#if (openfl >= '9.0.0')
+		#if (!openfl_swf)
 		throw "OpenFL9 not support SWF file.";
 		#else
 		_parsers.push(new SWFParser({
@@ -488,7 +488,7 @@ class ZAssets {
 			case DYNAMICTEXTUREATLAS:
 				this._dynamicAtlas.set(parser.getName(), data);
 			case SWF:
-				#if (openfl < '9.0.0')
+				#if (openfl_swf)
 				this._swflites.set(parser.getName(), data);
 				#end
 			case MAPLIVE:
@@ -631,7 +631,7 @@ class ZAssets {
 	 * @return MovieClip
 	 */
 	public function getMovieClip(id:String):MovieClip {
-		#if (openfl >= '9.0.0')
+		#if (!openfl_swf)
 		return null;
 		#else
 		var arr:Array<String> = id.split(":");
@@ -645,7 +645,7 @@ class ZAssets {
 	 * @param id
 	 */
 	public function unloadSwfliteFile(id:String):Void {
-		#if (openfl < '9.0.0')
+		#if (openfl_swf)
 		if (this._swflites.exists(id)) {
 			this._swflites.get(id).unload();
 			this._swflites.remove(id);

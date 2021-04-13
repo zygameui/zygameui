@@ -1,20 +1,49 @@
 package zygame.utils.load;
 
-#if (openfl <= '9.0.0')
+#if (openfl_swf)
 
 import lime.app.Future;
 import lime.app.Promise;
 import lime.graphics.Image;
 import haxe.zip.Entry;
+#if (openfl >= '9.0.0')
+import openfl._internal.symbols.BitmapSymbol;
+import openfl._internal.symbols.TextSymbol;
+import openfl._internal.symbols.SpriteSymbol;
+import openfl._internal.symbols.StaticTextSymbol;
+import openfl._internal.formats.swf.SWFLite;
+import openfl._internal.formats.swf.SWFLiteLibrary;
+import openfl._internal.formats.swf.FilterType;
+import openfl._internal.formats.swf.ShapeCommand;
+import openfl._internal.formats.swf.SWFLibrary;
+import openfl._internal.symbols.SWFSymbol;
+import openfl._internal.symbols.FontSymbol;
+import openfl._internal.symbols.ShapeSymbol;
+import openfl._internal.symbols.ButtonSymbol;
+import openfl._internal.symbols.DynamicTextSymbol;
+import openfl._internal.symbols.BitmapSymbol;
+import swf.exporters.swflite.BitmapSymbol;
+import swf.exporters.swflite.SWFLite;
+import openfl._internal.symbols.timeline.Frame;
+import openfl._internal.symbols.timeline.FrameObject;
+import openfl._internal.symbols.timeline.FrameObjectType;
+import openfl._internal.symbols.timeline.SymbolTimeline;
+#else
 import openfl._internal.symbols.BitmapSymbol;
 import openfl._internal.formats.swf.SWFLite;
+#end
 import openfl.utils.Assets;
 import zygame.utils.AssetsUtils;
 import haxe.io.Bytes;
 import lime._internal.format.Deflate;
 
+#if (openfl > '9.0.0')
+class SWFLiteLibrary extends swf.exporters.swflite.SWFLiteLibrary{
+
+}
+#else
 @:keep
-class SWFLiteLibrary extends #if (openfl <= '8.3.0') openfl._internal.swf.SWFLiteLibrary #else openfl._internal.formats.swf.SWFLiteLibrary #end {
+class SWFLiteLibrary extends #if (openfl <= '8.3.0') openfl._internal.swf.SWFLiteLibrary #elseif (openfl >= '9.0.0') swf.exporters.swflite.SWFLiteLibrary #else openfl._internal.formats.swf.SWFLiteLibrary #end {
 	/**
 	 * SWF文件名
 	 */
@@ -149,4 +178,5 @@ class SWFLiteLibrary extends #if (openfl <= '8.3.0') openfl._internal.swf.SWFLit
 	}
 }
 
+#end
 #end

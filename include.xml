@@ -3,18 +3,19 @@
 
 	<!-- <log info="zygameui库在9.9.0以后，需要将haxelib引入放在配置的最下面，否则会无法编译通过；并且可以移除所有关于渲染库的引用。" /> -->
 
-	<!-- 编译平台的自动引入处理 -->
-	<include path="platforms.xml" />
-
 	<!-- 原始实现 -->
 	<source path="Source" />
 	<haxelib name="openfl" />
+	<haxelib name="swf" if="${openfl >= 9.0.0}"/>
+	<!-- OpenFL9兼容8.9.0的代码 -->
+	<source path="openfl9-source" if="${openfl >= 9.0.0}"/>
 	<haxelib name="hscript" />
 	<!-- Spine锁定版本3.8.1 -->
 	<haxelib name="spine-hx" version="3.8.1" if="spine3.8" />
 	<haxelib name="spine-hx" version="3.6.0" unless="spine3.8" />
 	<haxedef name="spine38" if="spine3.8" />
 	<haxelib name="tweenxcore" />
+	<haxelib name="actuate" />
 	<!-- 静态数据类 -->
 	<haxelib name="castle" />
 	<!-- 无物理系统碰撞类 -->
@@ -23,6 +24,9 @@
 
 	<!-- zygameui框架标示 -->
 	<haxedef name="zygame" />
+
+	<!-- 编译平台的自动引入处理 -->
+	<include path="platforms.xml" />
 
 	<!-- C++测试模块 -->
 	<haxedef name="debuginput" if="debug cpp !ios" />
@@ -38,14 +42,20 @@
 	<!-- 默认平滑 -->
 	<haxedef name="smoothing" if="cpp" unless="unsmoothing" />
 
-	<!-- 禁止图形使用软件刷新 -->
-	<define name="openfl-disable-graphics-upscaling" />
+	<!-- 禁止图形使用软件刷新，使用OpenFL9将不再限制 -->
+	<define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl}" />
+
+	<!-- 新增对openflswf的支持 -->
+	<define name="openfl_swf"/>
 
 	<haxedef name="invalidate" if="android" />
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->
-	<template path="template-html5/template/index.html" rename="index.html" />
+	<template path="template-html5/template/index.html" rename="index.html" unless="minigame" />
+
+	<!-- IOS不要v7 -->
+	<architecture name="arm64" exclude="armv7" if="ios" />
 
 	<!-- 测试 -->
 	<!-- <haxeflag name="-dce" value="full" /> -->
@@ -71,9 +81,9 @@
 	<haxeflag name='--macro keep("spine.support.extensions.StringExtensions")' />
 
 	<!-- 发布最终版时，会移除所有trace语句，提高性能 -->
-	<haxeflag name="--no-traces" if="final" />
+	<haxeflag name="--no-traces" if="final-no-traces" />
 
 	<!-- HLCheak  -->
-	<!-- <haxeflag name="-D" value="hl-check" if="hl"/> -->
+	<haxeflag name="-D" value="hl-check" if="hl" />
 
 </project>

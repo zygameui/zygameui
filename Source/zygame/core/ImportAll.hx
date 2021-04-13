@@ -102,7 +102,7 @@ package zygame.core;import js.base.KeyboardInput;
  import zygame.shader.GeryShader; 
  import zygame.shader.LayerAlphaShader; 
  import zygame.shader.MaskShader; 
- import zygame.shader.StrokeShader; 
+ import zygame.shader.TextStrokeShader; 
  import zygame.shader.TextColorShader; 
  import zygame.shader.TextFiledShader; 
  import zygame.shader.engine.ZShader; 

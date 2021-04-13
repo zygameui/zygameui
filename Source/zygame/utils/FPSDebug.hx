@@ -13,12 +13,14 @@ import openfl.Assets;
 import openfl.display.BitmapData;
 import zygame.utils.load.FntLoader;
 import zygame.utils.AssetsUtils;
-#if (gl_stats && openfl < '9.0.0')
+#if gl_stats
+#if (openfl < '9.0.0')
 import openfl._internal.renderer.context3D.stats.Context3DStats;
 import openfl._internal.renderer.context3D.stats.DrawCallContext;
-#elseif gl_stats
+#else
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
+#end
 #end
 
 class FPSDebug extends ZBox {

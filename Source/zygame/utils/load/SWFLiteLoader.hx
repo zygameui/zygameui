@@ -24,7 +24,11 @@ import lime.app.Promise;
 import lime.system.ThreadPool;
 #end
 
-#if (openfl < '9.0.0')
+#if (openfl_swf)
+
+#if (openfl >= '9.0.0')
+typedef SWFLiteLoader = SWFLiteLoaderOpenFL9;
+#else
 
 /**
  * SWFLite加载器，用于加载zip压缩格式的SWF资源
@@ -135,4 +139,5 @@ class SWFLiteLoader {
 	}
 }
 
+#end
 #end

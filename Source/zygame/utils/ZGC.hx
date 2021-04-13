@@ -151,7 +151,7 @@ class ZGC {
      */
     public static function disposeMovieClip(mc:MovieClip):Void
     {   
-        #if (openfl < '9.0.0')
+        #if (openfl_swf && openfl < '9.0.0')
         var iterator:Iterator<Dynamic> = mc.__activeInstancesByFrameObjectID.iterator(); 
         while(iterator.hasNext())
         {

@@ -2,7 +2,7 @@ package zygame.loader.parser;
 
 import zygame.utils.load.SWFLiteLoader;
 
-#if (openfl < '9.0.0')
+#if (openfl_swf)
 
 /**
  * SWF载入解析器

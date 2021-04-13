@@ -6,6 +6,13 @@
 # ZYGameUI 更新日志
 
 ### 10.2.6
+- [兼容] 已支持`swf3.0.2`版本。
+- [注意] SWF已支持`OpenFL9.1.0`，但SWF需要全部生成。
+
+
+### 10.2.5
+- [改进] 对`TilemapSpine`新增`SpineEvent`侦听支持。
+- [新增] 批渲染容器新增事件支持。
 - [兼容] 与`openfl9.1.0`兼容，主要更新内容如下：
     - [支持] 支持最新的Haxe4.2.x版本。
     - [新增] 新增`ServerSocket`以及`DatagramSocket`本机功能。
@@ -18,10 +25,6 @@
 - [修复] 修复`ZHaxe`的方法访问。
 - [兼容] 弃用`Std.is`改使用`Std.isOfType`。
 - [功能缺陷] 新版本的SWF可自动转为zip，但因格式未兼容，因此OpenFL9.1.0版本暂无法使用SWF功能。
-
-### 10.2.5
-- [改进] 对`TilemapSpine`新增`SpineEvent`侦听支持。
-- [新增] 批渲染容器新增事件支持。
 
 ### 10.2.4
 - [新增] 正式引入粒子效果库到zygame库中，不再需要引入`zparticles`;

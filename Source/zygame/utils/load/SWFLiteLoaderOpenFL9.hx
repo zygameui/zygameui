@@ -1,5 +1,8 @@
 package zygame.utils.load;
 
+import lime.utils.AssetLibrary;
+import swf.exporters.animate.AnimateLibrary;
+import lime.utils.AssetBundle;
 import openfl.Assets;
 import swf.exporters.swflite.SWFLiteLibrary;
 
@@ -33,12 +36,17 @@ class SWFLiteLoaderOpenFL9 {
 	 * 加载，并返回AssetLibrary实例
 	 * @param call
 	 */
-	public function load(call:SWFLiteLibrary->Void, errorCall:String->Void) {
+	public function load(call:AssetLibrary->Void, errorCall:String->Void) {
 		// 加载二进制文件
-		trace("开始加载：",_path);
-		Assets.loadLibrary(_path).onComplete(function(swf){
-			call(cast swf);
+		AssetBundle.loadFromFile(_path).onComplete(function(bundle){
+			var a:AnimateLibrary = cast lime.utils.AssetLibrary.fromBundle(bundle);
+			a.load().onComplete(function(a){
+				call(a);
+			});
 		});
+		// Assets.loadLibrary(_path).onComplete(function(swf){
+		// 	call(cast swf);
+		// });
 	}
 
 }

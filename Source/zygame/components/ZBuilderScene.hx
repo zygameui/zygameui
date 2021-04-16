@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.ZSceneManager;
 import zygame.macro.AutoBuilder;
 import zygame.macro.JSONData;
 import zygame.components.ZBuilder.AssetsBuilder;
@@ -23,13 +24,13 @@ class ZBuilderScene extends ZScene {
 	 * @return T
 	 */
 	public function get<T:Dynamic>(id:String, type:Class<T>):Null<T> {
-		return assetsBuilder.get(id,type);
+		return assetsBuilder.get(id, type);
 	}
 
 	override function onInit() {
 		super.onInit();
-		
-		//透明层，避免重复点击
+
+		// 透明层，避免重复点击
 		var bg:ZQuad = new ZQuad();
 		this.addChild(bg);
 		bg.alpha = 0;
@@ -42,9 +43,11 @@ class ZBuilderScene extends ZScene {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				onBuilded();
 			} else {
-				onBuildError();
+				if (onBuildError()) {
+					ZSceneManager.current.releaseScene(this);
+				}
 			}
-		},onLoaded);
+		}, onLoaded);
 	}
 
 	/**
@@ -56,7 +59,13 @@ class ZBuilderScene extends ZScene {
 
 	public function onBuilded() {}
 
-	public function onBuildError() {}
+	/**
+	 * 构造失败，一般为加载失败时触发，当返回true时，该窗口会自动移除，返回false可自行处理。
+	 * @return Bool
+	 */
+	public function onBuildError():Bool {
+		return true;
+	}
 
 	override function onSceneRelease() {
 		super.onSceneRelease();

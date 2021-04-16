@@ -5,6 +5,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.2.9
+- [新增] 新增自动导入类型宏：`@:build(zygame.macro.ImportAllClasses.build("源代码路径"))`。
+
 ### 10.2.8
 - [修复] 修复`ZSound`播放会失效的问题。
 - [改进] 改进`ZBuilderScene`当无法加载时，会自动移除，避免卡死。

@@ -6,10 +6,15 @@
 # ZYGameUI 更新日志
 
 ### 10.2.9
-- [新增] 新增自动导入类型宏：`@:build(zygame.macro.ImportAllClasses.build("源代码路径"))`。
-- [新增] 优化字体的内存使用，低端分辨率的游戏，可使用`high_label`开启高清字体，但使用1980p的游戏不再需要使用。
+- [改进] 改进`ZLabel`在高度不足时，自动扩展高度的计算。
+- [新增] 新增`ZSceneManager.replaceHistoryScene`返回上一个场景方法，仅支持记录5个场景记录。
+- [改进] 改进`ZSceneManager.replaceScene`新增isHistory是否允许列入历史场景中，默认为true。
 
 ### 10.2.8
+- [兼容] 兼容IOS和安卓的`openfl-disable-graphics-upscaling`在OpenFL9的表现。
+- [新增] 新增自动导入类型宏：`@:build(zygame.macro.ImportAllClasses.build("源代码路径"))`。
+- [新增] 优化字体的内存使用，低端分辨率的游戏，可使用`high_label`开启高清字体，但使用1980p的游戏不再需要使用。
+- [兼容] 安卓仅生产v7文件。
 - [修复] 修复`ZSound`播放会失效的问题。
 - [改进] 改进`ZBuilderScene`当无法加载时，会自动移除，避免卡死。
 

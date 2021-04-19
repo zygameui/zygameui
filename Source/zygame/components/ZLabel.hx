@@ -203,8 +203,13 @@ class ZLabel extends DataProviderComponent {
 		// #if (quickgame)
 		// _display.y -= 5;
 		// #end
-		if (this.height < txtHeight / _scale #if quickgame_scale / _getCurrentScale() #end)
-			this.height = txtHeight / _scale #if quickgame_scale / _getCurrentScale() #end + 32;
+		#if (openfl < '9.0.0')
+		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
+			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end + 32;
+		#else
+		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
+			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end;
+		#end
 	}
 
 	override public function updateComponents():Void {

@@ -7,6 +7,11 @@ import zygame.core.Start;
  *  场景管理器
  */
 class ZSceneManager {
+	/**
+	 * 存放历史记录
+	 */
+	private static var _history:Array<Class<ZScene>> = [];
+
 	private static var _scenes:Array<ZScene>;
 
 	private static var _current:ZSceneManager;
@@ -91,10 +96,12 @@ class ZSceneManager {
 
 	/**
 	 *  替换场景，会将之前的场景移除
-	 *  @param cName - 
+	 *  @param cName 替换的新场景
+	 *  @param isReleaseScene 是否释放当前场景
+	 *  @param isHistory 是否需要记录历史记录
 	 *  @return ZScene
 	 */
-	public function replaceScene(cName:Class<ZScene>, isReleaseScene:Bool = false):ZScene {
+	public function replaceScene(cName:Class<ZScene>, isReleaseScene:Bool = false, isHistory:Bool = true):ZScene {
 		if (getCurrentScene() != null && Std.isOfType(getCurrentScene(), cName))
 			return getCurrentScene();
 		while (_scenes.length > 0) {
@@ -105,7 +112,30 @@ class ZSceneManager {
 			else
 				zscene.parent.removeChild(zscene);
 		}
+		if (isHistory) {
+			// 仅保留5个历史记录
+			_history.push(cName);
+			if (_history.length > 5) {
+				_history.shift();
+			}
+		}
 		return createScene(cName);
+	}
+
+	/**
+	 * 返回历史场景
+	 * @param isReleaseScene 
+	 * @return ZScene
+	 */
+	public function replaceHistoryScene(isReleaseScene:Bool = false):ZScene {
+		// 回退时，需要先将自已的场景移除掉
+		trace("_history", _history);
+		_history.pop();
+		var c = _history.pop();
+		if (c != null) {
+			this.replaceScene(c, isReleaseScene, true);
+		}
+		return null;
 	}
 
 	/**

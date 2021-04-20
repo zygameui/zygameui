@@ -285,7 +285,7 @@ class ZBuilder {
 			cast(ui, BLabel).updateText(value);
 		});
 		bindParsing(ZButton, "text", function(ui:Dynamic, name:String, value:String):Void {
-			zygame.utils.Lib.nextFrameCall(cast(ui, ZButton).setText, [value]);
+			cast(ui, ZButton).setText(value);
 		});
 		bindParsing(ZLabel, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).stroke(Std.parseInt(value));
@@ -458,6 +458,28 @@ class ZBuilder {
 				return atlas;
 		}
 		return null;
+	}
+
+	/**
+	 * 判断png/xml等资源是否存在
+	 * @param file 
+	 * @return Bool
+	 */
+	public static function existFile(file:String):Bool {
+		var type = StringUtils.getExtType(file);
+		var filename = StringUtils.getName(file);
+		for (assets in baseAssetsList) {
+			switch (type) {
+				case "png":
+					var bitmap = assets.getBitmapData(filename);
+					if (bitmap != null)
+						return true;
+				case "xml":
+					if (assets.getXml(StringUtils.getName(file)) != null)
+						return true;
+			}
+		}
+		return false;
 	}
 
 	public static function getBaseObject(value:String):Dynamic {

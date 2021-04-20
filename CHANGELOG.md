@@ -5,11 +5,16 @@
 
 # ZYGameUI 更新日志
 
+### 10.3.0
+- [改进] 改进`ZButton.text`的XML配置变为同步。
+
 ### 10.2.9
 - [改进] 改进`ZLabel`在高度不足时，自动扩展高度的计算。
 - [新增] 新增`ZSceneManager.replaceHistoryScene`返回上一个场景方法，仅支持记录5个场景记录。
 - [改进] 改进`ZSceneManager.replaceScene`新增isHistory是否允许列入历史场景中，默认为true。
 - [删除] 删除文本的深度清理功能，该功能会有一定的性能影响。
+- [新增] 新增`ZScene.replaceHistoryScene`方法
+- [改进] 优化单图载入的资源。
 
 ### 10.2.8
 - [兼容] 兼容IOS和安卓的`openfl-disable-graphics-upscaling`在OpenFL9的表现。

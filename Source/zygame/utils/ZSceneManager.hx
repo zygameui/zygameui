@@ -129,7 +129,6 @@ class ZSceneManager {
 	 */
 	public function replaceHistoryScene(isReleaseScene:Bool = false):ZScene {
 		// 回退时，需要先将自已的场景移除掉
-		trace("_history", _history);
 		_history.pop();
 		var c = _history.pop();
 		if (c != null) {

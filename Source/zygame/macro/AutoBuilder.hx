@@ -116,7 +116,10 @@ class AutoBuilder {
 						var files:Array<String> = $v{files};
 						var spines:Array<{png:String, atlas:String, json:String}> = $v{spines};
 						for (f in files) {
-							this.$bindBuilder.loadFiles([f]);
+							if(!zygame.components.ZBuilder.existFile(f)){
+								trace("开始加载：",f);
+								this.$bindBuilder.loadFiles([f]);
+							}
 						}
 						for (s in spines) {
 							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(s.png)) == null) {

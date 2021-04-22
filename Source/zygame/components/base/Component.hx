@@ -82,9 +82,9 @@ class Component extends TouchDisplayObjectContainer
     private function set_skin(s:BaseSkin):BaseSkin
     {
         if(_skin != null)
-            _skin.removeEventListener(Event.CHANGE,_onSkinChange);
+            _skin.removeEventListener(Event.CHANGE,onSkinChange);
         _skin = s;
-        _skin.addEventListener(Event.CHANGE,_onSkinChange);
+        _skin.addEventListener(Event.CHANGE,onSkinChange);
         this.updateComponents();
         return s;
     }
@@ -93,7 +93,7 @@ class Component extends TouchDisplayObjectContainer
         return _skin;
     }
 
-    private function _onSkinChange(e:Event):Void
+    public function onSkinChange(e:Event):Void
     {
         this.updateComponents();
     }

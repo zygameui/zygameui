@@ -45,7 +45,7 @@ class ZModel extends ZImage {
         label.setFontColor(0xffffff);
         label.setFontSize(fontSize);
         label.width = label.getTextWidth() + 32;
-        label.height = label.getTextHeight();
+        label.height = label.getTextHeight() + 32;
         var model = new ZModel(Lib.int(label.width),Lib.int(label.height + 5));
         Start.current.getTopView().addChild(model);
         model.x = (Start.current.getStageWidth() - model.width)/2;

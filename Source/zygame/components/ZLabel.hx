@@ -32,6 +32,8 @@ class ZLabel extends DataProviderComponent {
 
 	private var _height:Float = 0;
 
+	private var __height:Float = 0;
+
 	public var igoneChars:Array<String> = [];
 
 	private var __point:Point = new Point();
@@ -175,6 +177,21 @@ class ZLabel extends DataProviderComponent {
 
 	private function updateTextXY(txt:TextField):Void {
 		var txtHeight:Float = _display.textHeight;
+		// 新版本是否不再需要移动位移？
+		// #if (quickgame)
+		// _display.y -= 5;
+		// #end
+		#if (openfl < '9.0.0')
+		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
+			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end + 32;
+		#else
+		if (this.__height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end) {
+			this._height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end;
+		} else if (__height != 0 && __height != _height) {
+			this._height = __height;
+		}
+		_display.height = _height;
+		#end
 		if (txtHeight == 0)
 			txtHeight = _font.size;
 		switch (hAlign) {
@@ -199,17 +216,6 @@ class ZLabel extends DataProviderComponent {
 				txt.y -= (_height - _height / _getCurrentScale()) / 2;
 				#end
 		}
-		// 新版本是否不再需要移动位移？
-		// #if (quickgame)
-		// _display.y -= 5;
-		// #end
-		#if (openfl < '9.0.0')
-		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
-			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end + 32;
-		#else
-		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
-			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end;
-		#end
 	}
 
 	override public function updateComponents():Void {
@@ -339,6 +345,7 @@ class ZLabel extends DataProviderComponent {
 
 	override private function set_height(value:Float):Float {
 		_height = value #if quickgame_scale * _getCurrentScale() #end;
+		__height = value;
 		updateComponents();
 		return value;
 	}

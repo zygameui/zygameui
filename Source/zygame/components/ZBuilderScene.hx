@@ -57,7 +57,13 @@ class ZBuilderScene extends ZScene {
 
 	public function onLoaded() {}
 
-	public function onBuilded() {}
+	public function onBuilded() {
+		this.onBuildedEvent();
+	}
+
+	dynamic public function onBuildedEvent():Void{
+
+	}
 
 	/**
 	 * 构造失败，一般为加载失败时触发，当返回true时，该窗口会自动移除，返回false可自行处理。

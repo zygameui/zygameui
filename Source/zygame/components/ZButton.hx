@@ -139,6 +139,10 @@ class ZButton extends ToggleButton {
 		box.scaleY = 1;
 		box.x = 0;
 		box.y = 0;
+		if (_text != null) {
+			_text.width = this.width;
+			_text.height = this.height;
+		}
 		// if(skin != null && toggleState == ToggleButton.DOWN && skin.downSkin == null)
 		if (toggleState == ToggleButton.DOWN) {
 			img.scaleX = 0.94;
@@ -166,6 +170,7 @@ class ZButton extends ToggleButton {
 			_text.hAlign = "center";
 			_text.mouseEnabled = false;
 			box.addChild(_text);
+			trace(_text.width, _text.height);
 		}
 	}
 
@@ -187,6 +192,7 @@ class ZButton extends ToggleButton {
 
 	public function setText(text:String):Void {
 		initText();
+		trace("set", text);
 		_text.dataProvider = text;
 	}
 
@@ -203,5 +209,9 @@ class ZButton extends ToggleButton {
 		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);
 		if (img != null)
 			img.setScale9Grid(rect);
+	}
+
+	override function initComponents() {
+		super.initComponents();
 	}
 }

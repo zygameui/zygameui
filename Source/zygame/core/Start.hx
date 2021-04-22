@@ -117,7 +117,6 @@ class Start extends ZScene {
 	 */
 	public var iosRender:ZQuad;
 	#end
-
 	/**
 	 * 更新状态队列
 	 */
@@ -203,7 +202,6 @@ class Start extends ZScene {
 		topView = new StageDisplayObjectContainer();
 		stage.addChild(topView);
 		this.onStageSizeChange();
-
 	}
 
 	/**
@@ -253,7 +251,7 @@ class Start extends ZScene {
 		#end
 		#if ios
 		iosRender = new ZQuad();
-		#end 
+		#end
 	}
 
 	/**
@@ -333,7 +331,7 @@ class Start extends ZScene {
 	public function onDeActivate(e:Event):Void {
 		isActivate = false;
 		trace("返回至后台");
-		SoundChannelManager.current().stopAllEffectAndMusic();
+		SoundChannelManager.current().stopAllEffectAndMusic(true);
 	}
 
 	public function onActivate(e:Event):Void {
@@ -433,7 +431,7 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	private function onFrameEvent(e:Event):Void {
-		if(fps.visible)
+		if (fps.visible)
 			topView.addChild(fps);
 		#if ios
 		if (iosRender != null) {
@@ -504,8 +502,7 @@ class Start extends ZScene {
 	 * 重写onFrame
 	 */
 	override public function onFrame():Void {}
-}
-class UpdateStats {
+} class UpdateStats {
 	/**
 	 * 处理对象
 	 */
@@ -520,9 +517,4 @@ class UpdateStats {
 		this.display = display;
 		this.action = action;
 	}
-}
-
-class StageDisplayObjectContainer extends DisplayObjectContainer {
-
-
-}
+} class StageDisplayObjectContainer extends DisplayObjectContainer {}

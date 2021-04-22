@@ -50,10 +50,10 @@ class SoundChannelManager {
 			try {
 				if (_effectAvailable) {
 					var c = sound.play(0, loop);
-					if(c == null)
+					if (c == null)
 						return c;
 					_effectChannel.push(c);
-					cast(c,EventDispatcher).addEventListener(Event.SOUND_COMPLETE, function(e) {
+					cast(c, EventDispatcher).addEventListener(Event.SOUND_COMPLETE, function(e) {
 						_effectChannel.remove(c);
 					});
 					return c;
@@ -71,16 +71,16 @@ class SoundChannelManager {
 	 * @param sound
 	 */
 	private function playMusic(sound:Music):Void {
-        if(_musicChannel != null && sound == _music){
+		if (_musicChannel != null && sound == _music) {
 			return;
 		}
 		this.stopMusic();
 		_music = sound;
 		try {
-			if (_musicAvailable){
-                if(_music != null)
-                    _musicChannel = _music.play(99999);
-            }
+			if (_musicAvailable) {
+				if (_music != null)
+					_musicChannel = _music.play(99999);
+			}
 		} catch (e:Dynamic) {
 			trace("音频播放异常：", e);
 		}
@@ -89,12 +89,14 @@ class SoundChannelManager {
 	/**
 	 * 停止背景音效
 	 */
-	public function stopMusic():Void {
+	public function stopMusic(canResume:Bool = false):Void {
 		if (_musicChannel != null) {
 			trace("[背景音乐]stopMusic");
 			_musicChannel.stop();
 			_musicChannel = null;
 		}
+		if (!canResume)
+			_music = null;
 	}
 
 	/**
@@ -121,9 +123,9 @@ class SoundChannelManager {
 	/**
 	 * 停止所有音效和背景
 	 */
-	public function stopAllEffectAndMusic():Void {
+	public function stopAllEffectAndMusic(canResume:Bool = false):Void {
 		this.stopAllEffect();
-		this.stopMusic();
+		this.stopMusic(canResume);
 	}
 
 	/**
@@ -144,24 +146,24 @@ class SoundChannelManager {
 	 * @param bool
 	 */
 	public function setEffectAvailable(bool:Bool):Void {
-        _effectAvailable = bool;
-        if(!bool)
-            this.stopAllEffect();
-    }
+		_effectAvailable = bool;
+		if (!bool)
+			this.stopAllEffect();
+	}
 
-    /**
-     * 音效是否可用
-     * @return Bool
-     */
-    public function isEffectAvailable():Bool{
-        return _effectAvailable;
-    }
+	/**
+	 * 音效是否可用
+	 * @return Bool
+	 */
+	public function isEffectAvailable():Bool {
+		return _effectAvailable;
+	}
 
-    /**
-     * 背景音乐是否可用
-     * @return Bool
-     */
-    public function isMusicAvailable():Bool {
-        return _musicAvailable;
-    }
+	/**
+	 * 背景音乐是否可用
+	 * @return Bool
+	 */
+	public function isMusicAvailable():Bool {
+		return _musicAvailable;
+	}
 }

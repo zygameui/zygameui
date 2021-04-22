@@ -585,14 +585,17 @@ class ZBuilder {
 			if (bitmap != null)
 				break;
 		}
-		// 不再支持缺省值功能
-		// if (bitmap == null && useDefault) {
-		// 	// 获取缺省值
-		// 	if (Std.is(ui, BToggleButton) || Std.is(ui, ToggleButton))
-		// 		return defalutAssets.getBitmapData("ui:button");
-		// 	return defalutAssets.getBitmapData("ui:other");
-		// }
 		return bitmap;
+	}
+
+	public static function getBaseXml(name:String):Xml {
+		var xml:Xml = null;
+		for (assets in baseAssetsList) {
+			xml = assets.getXml(name);
+			if (xml != null)
+				break;
+		}
+		return xml;
 	}
 
 	/**
@@ -1125,14 +1128,15 @@ class AssetsBuilder extends Builder {
 	}
 
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
-		assets.loadFile(viewXmlPath);
+		if(!ZBuilder.existFile(viewXmlPath))
+			assets.loadFile(viewXmlPath);
 		assets.start((f) -> {
 			onProgress(f);
 			if (f == 1) {
 				ZBuilder.bindAssets(assets);
 				if (onloaded != null)
 					onloaded();
-				@:privateAccess ZBuilder.buildui(assets.getXml(StringUtils.getName(viewXmlPath)).firstElement(), _viewParent, this);
+				@:privateAccess ZBuilder.buildui(ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath)).firstElement(), _viewParent, this);
 				_viewParent = null;
 				ZBuilder.unbindAssets(assets);
 				cb(true);

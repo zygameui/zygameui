@@ -7,6 +7,9 @@
 
 ### 10.3.2
 - [改进] 改进背景音乐可能会重叠播放的问题。
+- [改进] 改进`ZBuilderScene`的xml文件缓存读取。
+- [新增] 新增`ZAssetsUtils.preload`API，可用于预加载XML配置。
+- [改进] 改进`ZAssets.start`如果加载资源是空的会立即返回成功。
 
 ### 10.3.1
 - [改进] 改进`ZButton.text`的XML配置变为同步。

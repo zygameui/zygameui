@@ -117,7 +117,6 @@ class AutoBuilder {
 						var spines:Array<{png:String, atlas:String, json:String}> = $v{spines};
 						for (f in files) {
 							if(!zygame.components.ZBuilder.existFile(f)){
-								trace("开始加载：",f);
 								this.$bindBuilder.loadFiles([f]);
 							}
 						}

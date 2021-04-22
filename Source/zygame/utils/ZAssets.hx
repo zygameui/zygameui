@@ -436,6 +436,8 @@ class ZAssets {
 	 * @return Float
 	 */
 	public function getProgress():Float {
+		if (_parsers.length == 0)
+			return 1;
 		var progress:Float = 0;
 		for (base in _loadingParsers) {
 			progress += base.progress;

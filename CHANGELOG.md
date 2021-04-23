@@ -10,6 +10,8 @@
 - [改进] 改进`ZBuilderScene`的xml文件缓存读取。
 - [新增] 新增`ZAssetsUtils.preload`API，可用于预加载XML配置。
 - [改进] 改进`ZAssets.start`如果加载资源是空的会立即返回成功。
+- [API变更] `SoundChannelManager.current()`变更为`SoundChannelManager.current`。
+- [新增] 新增`SoundChannelManagerEvent`事件，可以对`SoundChannelManager`进行侦听背景音乐停止与恢复时机。
 
 ### 10.3.1
 - [改进] 改进`ZButton.text`的XML配置变为同步。

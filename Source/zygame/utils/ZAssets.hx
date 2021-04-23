@@ -970,14 +970,14 @@ class ZAssets {
 		_bgid = id;
 		var sound:Music = getMusic(id);
 		trace("playBGMusic", sound);
-		@:privateAccess SoundChannelManager.current().playMusic(sound);
+		@:privateAccess SoundChannelManager.current.playMusic(sound);
 	}
 
 	/**
 	 * 停止背景音乐
 	 */
 	public function stopBGMusic():Void {
-		SoundChannelManager.current().stopMusic();
+		SoundChannelManager.current.stopMusic();
 	}
 
 	/**
@@ -987,7 +987,7 @@ class ZAssets {
 	 */
 	public function playSound(id:String, loop:Int = 1):SoundChannel {
 		var sound:Sound = getSound(id);
-		return @:privateAccess SoundChannelManager.current().playEffect(sound, loop);
+		return @:privateAccess SoundChannelManager.current.playEffect(sound, loop);
 	}
 
 	/**

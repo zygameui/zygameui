@@ -1,5 +1,6 @@
 package zygame.media;
 
+import zygame.events.SoundChannelManagerEvent;
 import openfl.events.EventDispatcher;
 import openfl.events.Event;
 import zygame.utils.load.MusicChannel;
@@ -10,10 +11,12 @@ import zygame.media.base.SoundChannel;
 /**
  * 声音渠道管理中心，用于控制所有的音频出入口
  */
-class SoundChannelManager {
+class SoundChannelManager extends EventDispatcher {
 	private static var _current:SoundChannelManager;
 
-	public static function current():SoundChannelManager {
+	public static var current(get, never):SoundChannelManager;
+
+	private static function get_current():SoundChannelManager {
 		if (_current == null)
 			_current = new SoundChannelManager();
 		return _current;
@@ -38,7 +41,9 @@ class SoundChannelManager {
 	 */
 	private var _effectAvailable:Bool = true;
 
-	public function new() {}
+	public function new() {
+		super();
+	}
 
 	/**
 	 * 播放音效入口
@@ -97,6 +102,7 @@ class SoundChannelManager {
 		}
 		if (!canResume)
 			_music = null;
+		this.dispatchEvent(new SoundChannelManagerEvent(SoundChannelManagerEvent.STOP_MUSIC));
 	}
 
 	/**
@@ -107,6 +113,7 @@ class SoundChannelManager {
 			trace("[背景音乐]resumeMusic");
 			this.playMusic(_music);
 		}
+		this.dispatchEvent(new SoundChannelManagerEvent(SoundChannelManagerEvent.RESUME_MUSIC));
 	}
 
 	/**

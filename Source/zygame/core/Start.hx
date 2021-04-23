@@ -331,7 +331,7 @@ class Start extends ZScene {
 	public function onDeActivate(e:Event):Void {
 		isActivate = false;
 		trace("返回至后台");
-		SoundChannelManager.current().stopAllEffectAndMusic(true);
+		SoundChannelManager.current.stopAllEffectAndMusic(true);
 	}
 
 	public function onActivate(e:Event):Void {
@@ -340,7 +340,7 @@ class Start extends ZScene {
 		zygame.utils.Lib.onResume();
 		#if qqquick
 		#else
-		SoundChannelManager.current().resumeMusic();
+		SoundChannelManager.current.resumeMusic();
 		#end
 	}
 

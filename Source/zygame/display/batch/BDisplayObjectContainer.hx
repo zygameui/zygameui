@@ -115,12 +115,7 @@ class BDisplayObjectContainer extends TileContainer implements ITileDisplayObjec
 	 * @param display
 	 */
 	public function addChild(display:Tile):Void {
-		super.addTile(display);
-		if (Std.is(display, BDisplayObjectContainer)) {
-			cast(display, BDisplayObjectContainer).onInit();
-		} else if (Std.is(display, BDisplayObject)) {
-			cast(display, BDisplayObject).onInit();
-		}
+		this.addChildAt(display, this.numTiles);
 	}
 
 	/**
@@ -129,7 +124,11 @@ class BDisplayObjectContainer extends TileContainer implements ITileDisplayObjec
 	 */
 	public function addChildAt(display:Tile, index:Int):Void {
 		super.addTileAt(display, index);
-		if (Std.is(display, BSprite))
+		if (Std.is(display, BDisplayObjectContainer)) {
+			cast(display, BDisplayObjectContainer).onInit();
+		} else if (Std.is(display, BDisplayObject)) {
+			cast(display, BDisplayObject).onInit();
+		} else if (Std.is(display, BSprite))
 			cast(display, BSprite).onInit();
 	}
 

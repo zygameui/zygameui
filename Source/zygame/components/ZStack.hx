@@ -15,13 +15,13 @@ class ZStack extends ZBox {
 
 	override function addChildAt(display:DisplayObject, index:Int):DisplayObject {
 		display.visible = display.name == currentId;
+		if (stacks.indexOf(display) == -1)
+			stacks.push(display);
 		if (display.visible) {
 			this.removeChildren();
 			currentSelect = display;
 			return super.addChildAt(display, 0);
 		}
-		if (stacks.indexOf(display) == -1)
-			stacks.push(display);
 		return display;
 	}
 

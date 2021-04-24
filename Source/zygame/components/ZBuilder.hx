@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.display.batch.BStack;
 import zygame.media.base.Sound;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
 import haxe.Exception;
@@ -136,6 +137,7 @@ class ZBuilder {
 		bind(ZSpine);
 		bind(BSpine);
 		bind(ZStack);
+		bind(BStack);
 		bind(ZParticles);
 
 		// 解析方法解析
@@ -448,6 +450,10 @@ class ZBuilder {
 		});
 		bindEnd(ZStack, function(obj:Dynamic):Void {
 			@:privateAccess cast(obj, ZStack).updateDisplay();
+		});
+		bindEnd(BStack, function(obj:Dynamic):Void {
+			trace("刷新");
+			@:privateAccess cast(obj, BStack).updateDisplay();
 		});
 	}
 
@@ -950,7 +956,7 @@ class ZBuilder {
 		else if (Std.is(parent, DisplayObjectContainer))
 			cast(parent, DisplayObjectContainer).addChild(ui);
 		else if (Std.is(parent, TileContainer)) {
-			cast(parent, TileContainer).addTile(ui);
+			cast(parent, TileContainer).addTileAt(ui, cast(parent, TileContainer).numTiles);
 		} else if (Std.is(parent, Tilemap))
 			cast(parent, Tilemap).addTile(ui);
 		var attr:Iterator<String> = xml.attributes();
@@ -1128,7 +1134,7 @@ class AssetsBuilder extends Builder {
 	}
 
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
-		if(!ZBuilder.existFile(viewXmlPath))
+		if (!ZBuilder.existFile(viewXmlPath))
 			assets.loadFile(viewXmlPath);
 		assets.start((f) -> {
 			onProgress(f);

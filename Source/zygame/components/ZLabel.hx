@@ -15,11 +15,23 @@ import openfl.geom.Rectangle;
 import openfl.events.MouseEvent;
 import zygame.components.base.ZTextField;
 
+enum ZLabelRenderType {
+	NATIVE;
+	CACHE;
+}
+
 /**
  * 文本类，用于显示文本内容使用的显示对象，可设置文本的一些基础属性，通过dataProvider进行赋值文本内容。
  */
 @:keep
 class ZLabel extends DataProviderComponent {
+	/**
+	 * 渲染模式：
+	 * 系统文字ZLabelRenderType.NATIVE，使用系统fillText渲染。
+	 * 缓存文字ZLabelRenderType.CACHE，使用缓存文字的基础上渲染。
+	 */
+	public static var renderType = NATIVE;
+
 	private var _defaultDisplay:ZTextField;
 
 	private var _display:ZTextField;

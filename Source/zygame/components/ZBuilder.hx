@@ -874,14 +874,15 @@ class ZBuilder {
 		if (base == null) {
 			// 当无法找到类型时，可在XML中查找
 			if (childxml != null) {
+				var newchildxml = Xml.parse(childxml.toString());
 				for (attr in xml.attributes()) {
 					switch (attr) {
 						case "id":
 						default:
-							childxml.firstElement().set(attr, xml.get(attr));
+							newchildxml.firstElement().set(attr, xml.get(attr));
 					}
 				}
-				ui = ZBuilder.buildui(childxml.firstElement(), parent, builder, null, null, xml.get("id"));
+				ui = ZBuilder.buildui(newchildxml.firstElement(), parent, builder, null, null, xml.get("id"));
 			} else
 				throw "Class name " + className + " is not define xml assets!";
 		} else {

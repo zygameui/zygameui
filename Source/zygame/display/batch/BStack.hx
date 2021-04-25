@@ -59,10 +59,8 @@ class BStack extends BBox {
 	}
 
 	private function updateDisplay():Void {
-		trace(stacks);
 		for (i in 0...this.stacks.length) {
 			var child = this.stacks[i];
-			trace("name", __getName(child));
 			child.visible = __getName(child) == currentId;
 			if (child.visible) {
 				this.addChild(child);

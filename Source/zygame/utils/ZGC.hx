@@ -65,17 +65,17 @@ class ZGC {
         disposeBitmapData(@:privateAccess display.__cacheBitmapData2);
         disposeBitmapData(@:privateAccess display.__cacheBitmapData3);
 
-        if(Std.is(display,MovieClip))
+        if(Std.isOfType(display,MovieClip))
         {
             //影片剪辑释放
             disposeMovieClip(cast display);
         }
-        else if(Std.is(display,Bitmap))
+        else if(Std.isOfType(display,Bitmap))
         {
             //影片剪辑释放
             disposeBitmap(cast display);
         }
-        else if(Std.is(display,DisplayObjectContainer))
+        else if(Std.isOfType(display,DisplayObjectContainer))
         {
             //精灵释放
             disposeSprite(cast display);
@@ -182,11 +182,11 @@ class ZGC {
         for(i in 0...spr.numTiles)
         {
             var tile = spr.getTileAt(i);
-            if(Std.is(tile,TileContainer))
+            if(Std.isOfType(tile,TileContainer))
             {
                 disposeTileRefresher(cast tile);
             }
-            else if(Std.is(tile,Refresher))
+            else if(Std.isOfType(tile,Refresher))
             {
                 Start.current.removeToUpdate(cast tile);
             }
@@ -199,17 +199,17 @@ class ZGC {
      */
     public static function disposeFrameEvent(display:Dynamic):Void
     {
-        if(Std.is(display,Refresher))
+        if(Std.isOfType(display,Refresher))
         {
             Start.current.removeToUpdate(cast display);
         }
-        if(Std.is(display,ITileContainer))
+        if(Std.isOfType(display,ITileContainer))
         {
             for (i in 0...cast(display,ITileContainer).numTiles) {
                 disposeFrameEvent(cast(display,ITileContainer).getTileAt(i));
             }
         }
-        else if(Std.is(display,DisplayObjectContainer))
+        else if(Std.isOfType(display,DisplayObjectContainer))
         {
             for (i in 0...cast(display,DisplayObjectContainer).numChildren) {
                 disposeFrameEvent(cast(display,DisplayObjectContainer).getChildAt(i));

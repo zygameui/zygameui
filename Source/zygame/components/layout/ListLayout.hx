@@ -23,7 +23,7 @@ class ListLayout extends BaseLayout
 
     override public function layout(box:ZBox):Void
     {
-        if(Std.is(box.parent,ZList)){
+        if(Std.isOfType(box.parent,ZList)){
             if(direction == VERTICAL)
                 layoutListV(cast box.parent);
             else if(direction == HORIZONTAL)

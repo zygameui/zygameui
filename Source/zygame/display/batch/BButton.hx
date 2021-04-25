@@ -114,7 +114,7 @@ class BButton extends BToggleButton {
 		if (skin != null && toggleState == ToggleButton.DOWN && skin.downSkin == null) {
 			box.scaleX = 0.94;
 			box.scaleY = 0.94;
-			if (Std.is(getDisplay(), BImage)) {
+			if (Std.isOfType(getDisplay(), BImage)) {
 				box.x = -anchorX + cast(getDisplay(), BImage).curWidth * 0.03;
 				box.y = -anchorY + cast(getDisplay(), BImage).curHeight * 0.03;
 			} else {
@@ -198,9 +198,9 @@ class BToggleButton extends BTouchSprite {
 			}
 			if (skinData == null)
 				skinData = skin.defalutSkin;
-			if (Std.is(img, BImage))
+			if (Std.isOfType(img, BImage))
 				cast(img, BImage).setFrame(skin.getFrameSkin(skinData));
-			else if (Std.is(img, BScale9Image))
+			else if (Std.isOfType(img, BScale9Image))
 				cast(img, BScale9Image).setFrame(skin.getFrameSkin(skinData));
 		}
 
@@ -238,7 +238,7 @@ class BToggleButton extends BTouchSprite {
 	override public function onTouchEnd(touch:TouchEvent):Void {
 		if (touch.touchPointID == _currentTouchID && touch != null) {
 			sendToggleState(ToggleButton.UP);
-			if (Std.is(touch.target, TouchImageBatchsContainer)) {
+			if (Std.isOfType(touch.target, TouchImageBatchsContainer)) {
 				var batchs:TouchImageBatchsContainer = cast touch.target;
 				if (batchs.getTilePosAt(batchs.mouseX, batchs.mouseY) == this) {
 					// batchs.dispatchEvent(new TileTouchEvent(touch.type+"Tile",this));
@@ -270,7 +270,7 @@ class BToggleButton extends BTouchSprite {
 
 	private function getDisplayWidth():Float {
 		if (getDisplay() != null) {
-			if (Std.is(getDisplay(), BImage)) {
+			if (Std.isOfType(getDisplay(), BImage)) {
 				return cast(getDisplay(), BImage).curWidth;
 			} else {
 				return cast(getDisplay(), BScale9Image).curWidth;
@@ -281,7 +281,7 @@ class BToggleButton extends BTouchSprite {
 
 	private function getDisplayHeight():Float {
 		if (getDisplay() != null) {
-			if (Std.is(getDisplay(), BImage)) {
+			if (Std.isOfType(getDisplay(), BImage)) {
 				return cast(getDisplay(), BImage).curHeight;
 			} else {
 				return cast(getDisplay(), BScale9Image).curHeight;

@@ -142,7 +142,7 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 			trace("key '" + key + "' is null");
 			return;
 		}
-		value.value = Std.is(data, Array) ? data : [data];
+		value.value = Std.isOfType(data, Array) ? data : [data];
 	}
 
 	/**

@@ -321,7 +321,7 @@ class Start extends ZScene {
 		focus = cast e.target;
 		if (oldfocus == focus)
 			return;
-		if (Std.is(oldfocus, ZLabel)) {
+		if (Std.isOfType(oldfocus, ZLabel)) {
 			var oldlabel = cast(oldfocus, ZLabel);
 			// 隐藏光标
 			@:privateAccess oldlabel.setSelectQuadVisible(false);
@@ -406,7 +406,7 @@ class Start extends ZScene {
 
 	public function onSceneSizeChange():Void {
 		for (i in 0...this.numChildren) {
-			if (Std.is(this.getChildAt(i), ZScene)) {
+			if (Std.isOfType(this.getChildAt(i), ZScene)) {
 				var scene:ZScene = cast this.getChildAt(i);
 				if (scene != null)
 					scene.updateComponents();

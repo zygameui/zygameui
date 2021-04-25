@@ -48,7 +48,7 @@ class DisplayObjectUtils {
      */
     public static function getValue(value:Dynamic,sceneData:MapliveSceneData):Dynamic
     {
-        if(Std.is(value,String))
+        if(Std.isOfType(value,String))
         {
             var curData:String = cast value;
             if(curData.indexOf("0x") == 0)
@@ -112,7 +112,7 @@ class DisplayObjectUtils {
             parent.addChild(display);
             DisplayObjectUtils.setDisplayObject(display,data.property,sceneData);
             DisplayObjectUtils.setDisplayObject(display,data.data,sceneData);
-            if(data.children != null && Std.is(display,DisplayObjectContainer))
+            if(data.children != null && Std.isOfType(display,DisplayObjectContainer))
             {
                 DisplayObjectUtils.createChildren(data.children,cast display,sceneData);
             }

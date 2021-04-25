@@ -38,11 +38,11 @@ class JSONData {
 				continue;
 			var keyValue = Reflect.getProperty(data, value);
 			var newField = null;
-			if (Std.is(keyValue, Array)) {
+			if (Std.isOfType(keyValue, Array)) {
 				var isDynamicArray:Bool = false;
 				var arr:Array<Dynamic> = cast keyValue;
 				for (index => value in arr) {
-					if (!Std.is(value, String)) {
+					if (!Std.isOfType(value, String)) {
 						isDynamicArray = true;
 						break;
 					}
@@ -184,16 +184,16 @@ class JSONData {
 	 * @return Dynamic
 	 */
 	static function getType(value:Dynamic,pos:Dynamic,doc:Dynamic):Dynamic {
-		if (Std.is(value,Bool))
+		if (Std.isOfType(value,Bool))
 			return macro:Bool;
-		if (Std.is(value, Int) || Std.is(value, Float))
+		if (Std.isOfType(value, Int) || Std.isOfType(value, Float))
 			return macro:Float;
-		else if (Std.is(value, Array)){
+		else if (Std.isOfType(value, Array)){
 			var v = value[0];
 			var t = getType(v,pos,doc);
 			return macro:Array<$t>;
 		}
-		else if (Std.is(value, String))
+		else if (Std.isOfType(value, String))
 			return macro:String;
 		var args:Array<Field> = [];
 		var keys = Reflect.fields(value);

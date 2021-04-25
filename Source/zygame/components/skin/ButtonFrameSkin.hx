@@ -25,7 +25,7 @@ class ButtonFrameSkin extends ButtonSkin {
     {
         if(skin == null)
             return null;
-        if(Std.is(skin,Frame))
+        if(Std.isOfType(skin,Frame))
             return skin;
         return null;
 

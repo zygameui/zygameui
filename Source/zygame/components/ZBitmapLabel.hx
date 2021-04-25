@@ -36,6 +36,7 @@ class ZBitmapLabel extends DataProviderComponent {
 	private var _textmap:Tilemap;
 	private var _node:BLabel;
 	private var _text:String = "";
+	private var __height:Float = 0;
 
 	/**
 	 * 位图文本渲染器
@@ -138,6 +139,18 @@ class ZBitmapLabel extends DataProviderComponent {
 	override public function updateComponents():Void {
 		// 批量渲染字
 		_node.updateText(_text);
+		var txtHeight:Float = getTextHeight();
+		// 新版本是否不再需要移动位移？
+		// #if (quickgame)
+		// _display.y -= 5;
+		// #end
+		if (this.__height < txtHeight) {
+			_textmap.height = txtHeight;
+			_node.height = _textmap.height;
+		} else if (__height != 0 && __height != _textmap.height) {
+			_textmap.height = __height;
+			_node.height = __height;
+		}
 	}
 
 	public function getTextHeight():Float {
@@ -166,6 +179,7 @@ class ZBitmapLabel extends DataProviderComponent {
 	public function set_height(value:Float) {
 		_textmap.height = value;
 		_node.height = value;
+		__height = value;
 		updateComponents();
 		return value;
 	}
@@ -189,6 +203,7 @@ class ZBitmapLabel extends DataProviderComponent {
 	override private function set_height(value:Float):Float {
 		_textmap.height = value;
 		_node.height = value;
+		__height = value;
 		updateComponents();
 		return value;
 	}
@@ -199,7 +214,7 @@ class ZBitmapLabel extends DataProviderComponent {
 	#end
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
-		if (Std.is(value, Int))
+		if (Std.isOfType(value, Int))
 			value = Std.string(value);
 		super.dataProvider = value;
 		_text = value;

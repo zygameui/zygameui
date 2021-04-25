@@ -20,7 +20,7 @@ class ExtendDynamic {
 		for (item in array) {
 			var path = item.kind.getParameters()[0];
 			if (path != null && item.access.indexOf(AStatic) == -1) {
-				if (Std.is(path, ComplexType)) {
+				if (Std.isOfType(path, ComplexType)) {
 					var cname:ComplexType = path;
 					if (cname != null && cname.getParameters() != null) {
 						var className = cname.getParameters()[0];

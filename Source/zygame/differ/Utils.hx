@@ -16,7 +16,7 @@ class Utils {
 	public static function getRect(shape:Shape):Rectangle {
 		if (shape == null)
 			return null;
-		if (Std.is(shape, Polygon)) {
+		if (Std.isOfType(shape, Polygon)) {
 			var polygon:Polygon = cast shape;
 			var minX:Float = 9999;
 			var minY:Float = 9999;

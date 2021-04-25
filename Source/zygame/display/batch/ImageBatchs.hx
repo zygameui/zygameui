@@ -104,7 +104,7 @@ class ImageBatchs extends Tilemap
      */
     override private function __hitTest (x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool
     {
-        if(!Std.is(this.parent,TouchImageBatchsContainer))
+        if(!Std.isOfType(this.parent,TouchImageBatchsContainer))
             return super.__hitTest(x,y,shapeFlag,stack,interactiveOnly,hitObject);
         var touchContainer:TouchImageBatchsContainer = cast this.parent;
         if(touchContainer.getTilePosAt(touchContainer.mouseX,touchContainer.mouseY) != null)

@@ -48,7 +48,7 @@ import away3d.cameras.Camera3D;
 	}
 
 	private function onAnimation(e:Asset3DEvent):Void {
-		if (e.asset.assetType == Asset3DType.CONTAINER && Std.is(e.asset, ParticleGroup)) {
+		if (e.asset.assetType == Asset3DType.CONTAINER && Std.isOfType(e.asset, ParticleGroup)) {
 			particleGroup = cast(e.asset, ParticleGroup);
 		}
 	}

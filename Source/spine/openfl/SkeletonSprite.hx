@@ -358,7 +358,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			atlasRegion = null;
 			// 如果骨骼的渲染物件存在
 			if (slot.attachment != null) {
-				if (Std.is(slot.attachment, RegionAttachment)) {
+				if (Std.isOfType(slot.attachment, RegionAttachment)) {
 					// 如果是矩形
 					var region:RegionAttachment = cast slot.attachment;
 					verticesLength = 8;
@@ -366,7 +366,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 					uvs = region.getUVs();
 					triangles = _quadTriangles;
 					atlasRegion = cast region.getRegion();
-				} else if (Std.is(slot.attachment, MeshAttachment)) {
+				} else if (Std.isOfType(slot.attachment, MeshAttachment)) {
 					// 如果是网格
 					var region:MeshAttachment = cast slot.attachment;
 					verticesLength = 8;
@@ -441,12 +441,12 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 				// 如果不可见的情况下，则隐藏
 				if (slot.color.a == 0)
 					continue;
-				if (Std.is(slot.attachment, ClippingAttachment)) {
+				if (Std.isOfType(slot.attachment, ClippingAttachment)) {
 					// 如果是剪切
 					// var region:ClippingAttachment = cast slot.attachment;
 					// clipper.clipStart(slot, region);
 					continue;
-				} else if (Std.is(slot.attachment, RegionAttachment)) {
+				} else if (Std.isOfType(slot.attachment, RegionAttachment)) {
 					// 如果是矩形
 					var region:RegionAttachment = cast slot.attachment;
 					verticesLength = 8;
@@ -454,7 +454,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 					uvs = region.getUVs();
 					triangles = _quadTriangles;
 					atlasRegion = cast region.getRegion();
-				} else if (Std.is(slot.attachment, MeshAttachment)) {
+				} else if (Std.isOfType(slot.attachment, MeshAttachment)) {
 					// 如果是网格
 					var region:MeshAttachment = cast slot.attachment;
 					verticesLength = 8;

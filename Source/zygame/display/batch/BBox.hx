@@ -110,11 +110,11 @@ class VBBox extends BLayoutBox {
         {
             var tile:Tile = this.getTileAt(i);
             tile.y = mathy;
-            if(Std.is(tile,BDisplayObject))
+            if(Std.isOfType(tile,BDisplayObject))
             {
                 mathy += cast(tile,BDisplayObject).height + gap;
             }
-            else if(Std.is(tile,BDisplayObjectContainer))
+            else if(Std.isOfType(tile,BDisplayObjectContainer))
             {
                 mathy += cast(tile,BDisplayObjectContainer).height + gap;
             }
@@ -140,11 +140,11 @@ class HBBox extends BLayoutBox {
         {
             var tile:Tile = this.getTileAt(i);
             tile.x = mathx;
-            if(Std.is(tile,BDisplayObject))
+            if(Std.isOfType(tile,BDisplayObject))
             {
                 mathx += cast(tile,BDisplayObject).width + gap;
             }
-            else if(Std.is(tile,BDisplayObjectContainer))
+            else if(Std.isOfType(tile,BDisplayObjectContainer))
             {
                 mathx += cast(tile,BDisplayObjectContainer).width + gap;
             }

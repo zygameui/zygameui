@@ -39,6 +39,11 @@ class BLabel extends BSprite{
      */
     public var gap:Int = 2;
 
+    /**
+     * 行距
+     */
+    public var lineGap:Int = -10;
+
     private var _width:Float = 0;
     private var _height:Float = 0;
 
@@ -170,7 +175,7 @@ class BLabel extends BSprite{
      */
     public function updateText(value:Dynamic,sizeChange:Bool = false):Void
     {
-        if(!Std.is(value,String))
+        if(!Std.isOfType(value,String))
             value = Std.string(value);
         if(_text != value || sizeChange)
         {
@@ -179,7 +184,7 @@ class BLabel extends BSprite{
             if(value == null || fntData == null)
                 return;
             _texts = value.split("");
-            if(Std.is(fntData,FntData))
+            if(Std.isOfType(fntData,FntData))
             {
                 _lineHeight = 0;
                 var curFntData:FntData = cast fntData;
@@ -220,10 +225,10 @@ class BLabel extends BSprite{
                 }
                 _maxWidth = offestX;
             }
-            else if(Std.is(fntData,TextureAtlas) || Std.is(fntData,SpineTextureAtals)){
+            else if(Std.isOfType(fntData,TextureAtlas) || Std.isOfType(fntData,SpineTextureAtals)){
                 //精灵表中的位图字渲染，7月2号开始支持Spine的位图渲染
                 var curSpriteDataGetBitmapDataFrame:String->Frame = null;
-                if(Std.is(fntData,TextureAtlas))
+                if(Std.isOfType(fntData,TextureAtlas))
                     curSpriteDataGetBitmapDataFrame = cast(fntData,TextureAtlas).getBitmapDataFrame;
                 else 
                     curSpriteDataGetBitmapDataFrame = cast(fntData,SpineTextureAtals).getBitmapDataFrame;
@@ -268,7 +273,7 @@ class BLabel extends BSprite{
                         if(wordWrap && (offestX + frame.width) * scaleFloat > this._width)
                         {
                             offestX = 0;
-                            offestY += frame.height;
+                            offestY += frame.height + lineGap;
                         }
                         var tile:FntTile = new FntTile(frame);
                         _node.addChild(tile);
@@ -281,7 +286,7 @@ class BLabel extends BSprite{
                         if(frame.frameY > 0){
                             tile.y += frame.frameY;
                         }
-                        offestX += Std.int(frame.width * 1.1 + gap);
+                        offestX += Std.int(frame.width + gap);
                         if(_maxHeight < offestY + frame.height)
                             _maxHeight = offestY + frame.height;
                         if(_maxWidth < offestX)
@@ -336,7 +341,7 @@ class BLabel extends BSprite{
             endIndex = _node.numTiles;
         for (i in startIndex...endIndex) {
             var tile:Tile = cast _node.getTileAt(i);
-            if(Std.is(fntData,TextTextureAtlas))
+            if(Std.isOfType(fntData,TextTextureAtlas))
                 tile.shader = new TextColorShader(color,cast(fntData,TextTextureAtlas).textColor);
             else
                 tile.shader = new ColorShader(color);
@@ -350,7 +355,7 @@ class BLabel extends BSprite{
     public function setFontColor(color:Int):Void
     {
         this.shader = new TextColorShader(color);
-        if(Std.is(fntData,TextTextureAtlas))
+        if(Std.isOfType(fntData,TextTextureAtlas))
             this.shader = new TextColorShader(color,cast(fntData,TextTextureAtlas).textColor);
         else
             this.shader = new ColorShader(color);

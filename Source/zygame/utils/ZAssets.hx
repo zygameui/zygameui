@@ -164,11 +164,11 @@ class ZAssets {
 	 *  @param path -
 	 */
 	public function loadFile(data:Dynamic):Void {
-		if (Std.is(data, ParserBase)) {
+		if (Std.isOfType(data, ParserBase)) {
 			_parsers.push(data);
 			return;
 		}
-		if (Std.is(data, String) && _loadfilelist.indexOf(data) == -1) {
+		if (Std.isOfType(data, String) && _loadfilelist.indexOf(data) == -1) {
 			// 检查该path可载入的支持
 			for (base in LoaderAssets.fileparser) {
 				var cheakpath:String = data;
@@ -211,7 +211,7 @@ class ZAssets {
 	 */
 	public function loadDynamicTextureAtlasImage(atlasName:String, path:String):Void {
 		for (loader in _parsers) {
-			if (Std.is(loader, DynamicTextureAtlasParser) && cast(loader, DynamicTextureAtlasParser).getName() == atlasName) {
+			if (Std.isOfType(loader, DynamicTextureAtlasParser) && cast(loader, DynamicTextureAtlasParser).getName() == atlasName) {
 				cast(loader, DynamicTextureAtlasParser).loader.loadFile(path);
 				return;
 			}
@@ -355,7 +355,7 @@ class ZAssets {
 		this.currentLoadedCount = 0;
 		this.currentLoadIndex = 0;
 		// 加载循序排序，优先加载zip资源
-		_parsers.sort((a, b) -> Std.is(a, ZIPAssetsParser) ? -1 : 0);
+		_parsers.sort((a, b) -> Std.isOfType(a, ZIPAssetsParser) ? -1 : 0);
 		#if debug
 		trace("PARSER LOAD START:", _parsers);
 		#end
@@ -393,7 +393,7 @@ class ZAssets {
 		_loadingParsers.push(parser);
 		parser.load(this);
 		// 如果是ZIP资源，需要等待ZIP载入完毕后，再载入其他资源
-		if (Std.is(parser, ZIPAssetsParser)) {
+		if (Std.isOfType(parser, ZIPAssetsParser)) {
 			return;
 		}
 		if (maxLoadNumber > currentLoadNumber) {

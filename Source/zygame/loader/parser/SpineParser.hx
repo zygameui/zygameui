@@ -29,7 +29,7 @@ class SpineParser extends ParserBase {
 		if (array.length > loadindex) {
 			// 载入位图
 			var img = array[loadindex];
-			if (Std.is(img, String)) {
+			if (Std.isOfType(img, String)) {
 				// 路径载入
 				AssetsUtils.loadBitmapData(img).onComplete(function(data):Void {
 					map.set(StringUtils.getName(img), data);

@@ -71,7 +71,7 @@ class BaseSkeletonDraw extends BSprite {
 			bitmapData = null;
 			// 如果骨骼的渲染物件存在
 			if (slot.attachment != null) {
-				if (Std.is(slot.attachment, RegionAttachment)) {
+				if (Std.isOfType(slot.attachment, RegionAttachment)) {
 					// 如果是矩形
 					var region:RegionAttachment = cast slot.attachment;
 					regionColor = region.getColor();
@@ -141,7 +141,7 @@ class BaseSkeletonDraw extends BSprite {
 								wrapper.blendMode = openfl.display.BlendMode.NORMAL;
 						}
 					}
-				} else if (Std.is(slot.attachment, MeshAttachment)) {
+				} else if (Std.isOfType(slot.attachment, MeshAttachment)) {
 					throw "tilemap not support MeshAttachment!";
 				}
 			}

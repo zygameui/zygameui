@@ -245,7 +245,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	public function destroy():Void {
 		for (i in 0...this.numChildren) {
 			var child:openfl.display.DisplayObject = this.getChildAt(i);
-			if (Std.is(child, DisplayObjectContainer)) {
+			if (Std.isOfType(child, DisplayObjectContainer)) {
 				cast(child, DisplayObjectContainer).destroy();
 			}
 		}

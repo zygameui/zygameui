@@ -41,7 +41,7 @@ class Lib {
 		if (sharedObject == null)
 			sharedObject = SharedObject.getLocal(saveName);
 		// 防CE逻辑实现
-		if (Std.is(data, Int) || Std.is(data, Float)) {
+		if (Std.isOfType(data, Int) || Std.isOfType(data, Float)) {
 			// 如果是数字，需要进行加密处理
 			data = ceEncode(data);
 		}
@@ -64,7 +64,7 @@ class Lib {
 	 * @return Float
 	 */
 	public static function ceDecode(value:Dynamic):Float {
-		if (value == null || !Std.is(value, String))
+		if (value == null || !Std.isOfType(value, String))
 			return value;
 		value = StringTools.replace(value, "CE#", "");
 		var bytes = Base64.decode(value);
@@ -95,7 +95,7 @@ class Lib {
 		if (value == null)
 			return defulatData;
 		// 防CE逻辑实现
-		if (Std.is(value, String) && cast(value, String).indexOf("CE#") != -1) {
+		if (Std.isOfType(value, String) && cast(value, String).indexOf("CE#") != -1) {
 			// 如果是数字，需要进行加密处理
 			value = ceDecode(value);
 		}
@@ -250,10 +250,10 @@ class Lib {
 	public static function cssRectangle(bitmapData:Dynamic, css:String):openfl.geom.Rectangle {
 		var width:Float = 0;
 		var height:Float = 0;
-		if (Std.is(bitmapData, BitmapData)) {
+		if (Std.isOfType(bitmapData, BitmapData)) {
 			width = cast(bitmapData, BitmapData).width;
 			height = cast(bitmapData, BitmapData).height;
-		} else if (Std.is(bitmapData, Frame)) {
+		} else if (Std.isOfType(bitmapData, Frame)) {
 			width = cast(bitmapData, Frame).width;
 			height = cast(bitmapData, Frame).height;
 		}

@@ -87,7 +87,7 @@ class ZQuad extends ZBox {
 
     #if (qq || wechat)
     override private function __hitTestMask (x:Float, y:Float):Bool {
-        if(Std.is(this.parent,zygame.components.ZScroll))
+        if(Std.isOfType(this.parent,zygame.components.ZScroll))
         {
             var point:Point = new Point(x,y);
             point = this.globalToLocal(point);

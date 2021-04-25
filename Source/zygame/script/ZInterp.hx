@@ -22,7 +22,7 @@ class ZInterp extends Interp {
 	public var miniAssets:MiniEngineAssets;
 
 	override function get(o:Dynamic, f:String):Dynamic {
-		if (Std.is(o, MiniExtend)) {
+		if (Std.isOfType(o, MiniExtend)) {
 			var c:MiniExtend = cast o;
 			if (c.baseBuilder != null && c.baseBuilder.ids.exists(f))
 				return Reflect.getProperty(c.baseBuilder.ids.get(f), "value");
@@ -33,7 +33,7 @@ class ZInterp extends Interp {
 	override function set(o:Dynamic, f:String, v:Dynamic):Dynamic {
 		#if cpp
 		var item:Dynamic = v;
-		if (Std.is(item, String)) {
+		if (Std.isOfType(item, String)) {
 			var utf = "";
 			for (i in 0...cast(item, String).length) {
 				utf += cast(item, String).charAt(i);
@@ -41,7 +41,7 @@ class ZInterp extends Interp {
 			v = utf;
 		}
 		#end
-		if (Std.is(o, MiniExtend)) {
+		if (Std.isOfType(o, MiniExtend)) {
 			var c:MiniExtend = cast o;
 			if (c.baseBuilder != null && c.baseBuilder.ids.exists(f)) {
 				Reflect.setProperty(c.baseBuilder.ids.get(f), "value", v);
@@ -55,7 +55,7 @@ class ZInterp extends Interp {
 		#if cpp
 		for (i2 in 0...args.length) {
 			var item:Dynamic = args[i2];
-			if (Std.is(item, String)) {
+			if (Std.isOfType(item, String)) {
 				var utf = "";
 				for (i in 0...cast(item, String).length) {
 					utf += cast(item, String).charAt(i);
@@ -64,13 +64,13 @@ class ZInterp extends Interp {
 			}
 		}
 		#end
-		if (Std.is(o, MiniExtend)) {
+		if (Std.isOfType(o, MiniExtend)) {
 			var c:MiniExtend = cast o;
 			if (c.baseBuilder != null && c.baseBuilder.ids.exists(f)) {
 				return this.call(o, Reflect.getProperty(c.baseBuilder.ids.get(f), "value"), args);
 			} else
 				return super.fcall(o, f, args);
-		} else if (Std.is(o, ZHaxe)) {
+		} else if (Std.isOfType(o, ZHaxe)) {
 			return Reflect.callMethod(o, cast(o, ZHaxe).value, args);
 		} else {
 			return super.fcall(o, f, args);
@@ -81,7 +81,7 @@ class ZInterp extends Interp {
 		#if cpp
 		for (i2 in 0...args.length) {
 			var item:Dynamic = args[i2];
-			if (Std.is(item, String)) {
+			if (Std.isOfType(item, String)) {
 				var utf = "";
 				for (i in 0...cast(item, String).length) {
 					utf += cast(item, String).charAt(i);
@@ -97,7 +97,7 @@ class ZInterp extends Interp {
 		#if cpp
 		for (i2 in 0...args.length) {
 			var item:Dynamic = args[i2];
-			if (Std.is(item, String)) {
+			if (Std.isOfType(item, String)) {
 				var utf = "";
 				for (i in 0...cast(item, String).length) {
 					utf += cast(item, String).charAt(i);

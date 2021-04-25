@@ -40,7 +40,7 @@ class ZBox extends Component
         // 可能对性能有影响
         // for(i in 0...childs.length)
         // {
-        //     if(Std.is(childs[i],Component))
+        //     if(Std.isOfType(childs[i],Component))
         //     {
         //         var box:Component = cast childs[i];
         //         if(box.isInit)
@@ -178,17 +178,17 @@ class ZBox extends Component
      */
     public function align(obj:DisplayObject, leftPx:Dynamic = null, rightPx:Dynamic = null, topPx:Dynamic= null, bottomPx:Dynamic= null,centerX:Dynamic = 0,centerY:Dynamic = 0):Void
     {
-        if(Std.is(leftPx,String))
+        if(Std.isOfType(leftPx,String))
             leftPx = Std.parseInt(leftPx);
-        if(Std.is(rightPx,String))
+        if(Std.isOfType(rightPx,String))
             rightPx = Std.parseInt(rightPx);
-        if(Std.is(topPx,String))
+        if(Std.isOfType(topPx,String))
             topPx = Std.parseInt(topPx);
-        if(Std.is(bottomPx,String))
+        if(Std.isOfType(bottomPx,String))
             bottomPx = Std.parseInt(bottomPx);
-        if(Std.is(centerX,String))
+        if(Std.isOfType(centerX,String))
             centerX = Std.parseInt(centerX);
-        if(Std.is(centerY,String))
+        if(Std.isOfType(centerY,String))
             centerY = Std.parseInt(centerY);
         var rect:Rectangle = obj.getBounds(obj.parent);
         var pos:Point = new Point(rect.x,rect.y);

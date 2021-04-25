@@ -77,7 +77,7 @@ class ZList extends ZScroll {
 	}
 
 	override private function set_dataProvider(data:Dynamic):Dynamic {
-		if (!Std.is(data, ListData) && data != null)
+		if (!Std.isOfType(data, ListData) && data != null)
 			throw "ZList对象只允许使用ListData数据，请使用ListData数据进行设置。";
 		super.dataProvider = data;
 		updateAll();
@@ -96,7 +96,7 @@ class ZList extends ZScroll {
 	override public function updateComponents():Void {
 		// 刷新容器布局，ZList布局只可以使用ListLayout布局对象
 		if (view != null) {
-			if (Std.is(view.layout, ListLayout))
+			if (Std.isOfType(view.layout, ListLayout))
 				view.updateComponents();
 			else
 				throw "ZList只可以使用ListLayout布局对象，ZList在被创建出来那一刻默认就是ListLayout布局。";

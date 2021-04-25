@@ -304,7 +304,7 @@ class ZLabel extends DataProviderComponent {
 		#end
 		// 多国语言化
 		#if (!neko && !hl)
-		if (value != null && Std.is(value, String) && value.indexOf("@") == 0)
+		if (value != null && Std.isOfType(value, String) && value.indexOf("@") == 0)
 			value = zygame.utils.LanguageUtils.getText(value);
 		#end
 		if (_isHtml)

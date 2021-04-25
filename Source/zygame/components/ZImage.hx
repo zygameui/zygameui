@@ -33,7 +33,7 @@ class ZImage extends DataProviderComponent {
 		if (display != null) {
 			var data:Dynamic = super.dataProvider;
 			if (data != null) {
-				if (Std.is(data, String)) {
+				if (Std.isOfType(data, String)) {
 					var path:String = data;
 					// 启动异步载入
 					isAysn = true;
@@ -46,8 +46,8 @@ class ZImage extends DataProviderComponent {
 						onBitmapDataUpdate();
 					});
 				}
-				// else if(Std.is(data,BitmapData) || Std.is(data,Frame) || Std.is(data,AsyncFrame))
-				else if (Std.is(data, BitmapData) || Std.is(data, Frame)) {
+				// else if(Std.isOfType(data,BitmapData) || Std.isOfType(data,Frame) || Std.isOfType(data,AsyncFrame))
+				else if (Std.isOfType(data, BitmapData) || Std.isOfType(data, Frame)) {
 					display.bitmapData = cast data;
 				}
 			}
@@ -104,7 +104,7 @@ class ZImage extends DataProviderComponent {
 	private override function set_dataProvider(data:Dynamic):Dynamic {
 		if (super.dataProvider == data)
 			return data;
-		if (this.display.bitmapData != null && isAysn && Std.is(this.display.bitmapData, BitmapData)) {
+		if (this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
 		super.dataProvider = data;
@@ -149,7 +149,7 @@ class ZImage extends DataProviderComponent {
 	override function destroy() {
 		super.destroy();
 		this.isDispose = true;
-		if (this.display.bitmapData != null && isAysn && Std.is(this.display.bitmapData, BitmapData)) {
+		if (this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
 	}

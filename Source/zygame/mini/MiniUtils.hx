@@ -20,7 +20,7 @@ class MiniUtils {
     public static function createTypeObject(assets:MiniEngineAssets,type:String,args:Array<Dynamic> = null):Dynamic
     {
         var builder = ZBuilder.buildXmlUI(assets,type,null);
-        if(Std.is(builder.display,MiniExtend))
+        if(Std.isOfType(builder.display,MiniExtend))
             cast(builder.display,MiniExtend).baseBuilder = builder;
         else 
             throw "Mini engine Class must extend MiniExtend!";

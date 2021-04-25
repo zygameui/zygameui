@@ -48,7 +48,7 @@ import zygame.utils.Lib;
 	 * 获取解析名
 	 */
 	public function getName():String {
-		if (Std.is(_data, String)) {
+		if (Std.isOfType(_data, String)) {
 			return getAssets() != null?getAssets().onPasingPathName(_data):_data;
 		} else if (_data.path != null) {
 			return getAssets() != null?getAssets().onPasingPathName(_data.path):_data.path;

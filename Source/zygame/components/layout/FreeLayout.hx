@@ -17,7 +17,7 @@ class FreeLayout extends BaseLayout {
     {
         for(i in 0...box.childs.length)
         {
-            if(Std.is(box.childs[i],Component)){
+            if(Std.isOfType(box.childs[i],Component)){
                 var c:Component = cast box.childs[i];
                 if(c.hasLayoutData())
                 {

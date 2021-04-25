@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.3.5
+- [兼容] 兼容Haxe4，全面弃用`Std.is`更改为`Std.isOfType`。
+- [新增] 新增`ZCacheBitmapLabel`缓存文字渲染支持（测试性功能）。
+
 ### 10.3.4
 - [新增] 新增`BStack`实现，与`ZStack`功能相同，但是暂没有切换效果支持。
 

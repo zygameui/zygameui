@@ -267,9 +267,9 @@ class TextureAtlas extends Atlas {
 	public function bindScale9(id:String, data:Dynamic):Void {
 		var curframe:Frame = getBitmapDataFrame(id);
 		var rect:Rectangle = null;
-		if (Std.is(data, String)) {
+		if (Std.isOfType(data, String)) {
 			rect = zygame.utils.Lib.cssRectangle(curframe, data);
-		} else if (Std.is(data, Rectangle))
+		} else if (Std.isOfType(data, Rectangle))
 			rect = cast data;
 		if (rect != null
 			&& curframe != null

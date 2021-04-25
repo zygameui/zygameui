@@ -123,7 +123,7 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 	 * @param e
 	 */
 	override public function onTouchEnd(e:TouchEvent):Void {
-		if (Std.is(e.target,TouchImageBatchsContainer) && e.target == this || Std.is(e.currentTarget,Stage))
+		if (Std.isOfType(e.target,TouchImageBatchsContainer) && e.target == this || Std.isOfType(e.currentTarget,Stage))
 			dispatchTileEvent(e);
 	}
 
@@ -153,8 +153,8 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 	private function dispatchTileEvent(e:TouchEvent):Void {
 		var tile:Tile = getTilePosAt(this.mouseX, this.mouseY);
 		if (tile != null) {
-			if (Std.is(tile, BTouchSprite)) {
-				if (!Std.is(e.currentTarget,Stage)) {
+			if (Std.isOfType(tile, BTouchSprite)) {
+				if (!Std.isOfType(e.currentTarget,Stage)) {
 					var touchTile:BTouchSprite = cast tile;
 					switch (e.type + "Tile") {
 						case TileTouchEvent.TOUCH_BEGIN_TILE:
@@ -166,15 +166,15 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 					}
 				}
                 //按钮应直接上发
-				if (Std.is(e.target,TouchImageBatchsContainer) && e.target == this) {
+				if (Std.isOfType(e.target,TouchImageBatchsContainer) && e.target == this) {
 					this.dispatchEvent(new TileTouchEvent(e.type + "Tile", tile));
 				}
-			} else if (Std.is(e.target,TouchImageBatchsContainer) && e.target == this) {
+			} else if (Std.isOfType(e.target,TouchImageBatchsContainer) && e.target == this) {
 				this.dispatchEvent(new TileTouchEvent(e.type + "Tile", tile));
 			}
 		} else {}
 		// 全局发布内容
-		if (Std.is(e.currentTarget,Stage)) {
+		if (Std.isOfType(e.currentTarget,Stage)) {
 			var num:Int = this.numChildren - 1;
 			while (num >= 0) {
 				this.getBatchs(num).getBSprite().dispatchTouchEvent(e);

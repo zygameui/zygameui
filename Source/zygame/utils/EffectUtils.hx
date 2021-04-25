@@ -19,7 +19,7 @@ class EffectUtils {
 	 */
 	public static function breathe(display:Dynamic):Void {
 		// 呼吸效果
-		var map:Dynamic = Std.is(display, Tile) ? batchmap : displaymap;
+		var map:Dynamic = Std.isOfType(display, Tile) ? batchmap : displaymap;
 		map.set(display, motion.Actuate.tween(display, 1, {
 			scaleX: 1.06,
 			scaleY: 1.06,
@@ -33,7 +33,7 @@ class EffectUtils {
 	 * @param display 
 	 */
 	public static function stop(display:Dynamic):Void {
-		var map:Dynamic = Std.is(display, Tile) ? batchmap : displaymap;
+		var map:Dynamic = Std.isOfType(display, Tile) ? batchmap : displaymap;
 		map.remove(display);
 	}
 }

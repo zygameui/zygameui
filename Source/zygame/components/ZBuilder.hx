@@ -139,6 +139,7 @@ class ZBuilder {
 		bind(ZStack);
 		bind(BStack);
 		bind(ZParticles);
+		bind(ZCacheBitmapLabel);
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {
@@ -327,6 +328,18 @@ class ZBuilder {
 		});
 		bindParsing(ZBitmapLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZBitmapLabel).dataProvider = value;
+		});
+		bindParsing(ZCacheBitmapLabel, "color", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZCacheBitmapLabel).setFontColor(Std.parseInt(value));
+		});
+		bindParsing(ZCacheBitmapLabel, "fontName", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZCacheBitmapLabel).setFontName(value);
+		});
+		bindParsing(ZCacheBitmapLabel, "size", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZCacheBitmapLabel).setFontSize(Std.parseInt(value));
+		});
+		bindParsing(ZCacheBitmapLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZCacheBitmapLabel).dataProvider = value;
 		});
 		bindParsing(ZInputLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZInputLabel).dataProvider = value;
@@ -655,12 +668,12 @@ class ZBuilder {
 	 */
 	public static function bind(obj:Dynamic):Void {
 		var className:String = null;
-		if (Std.is(obj, String))
+		if (Std.isOfType(obj, String))
 			className = obj;
 		else
 			className = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		classMaps.set(className, Std.is(obj, String) ? Type.resolveClass(obj) : obj);
+		classMaps.set(className, Std.isOfType(obj, String) ? Type.resolveClass(obj) : obj);
 	}
 
 	/**
@@ -704,7 +717,7 @@ class ZBuilder {
 	 */
 	public static function bindParsing(obj:Dynamic, key:String, fun:Dynamic->String->String->Void):Void {
 		var className:String = null;
-		if (Std.is(obj, String))
+		if (Std.isOfType(obj, String))
 			className = obj;
 		else
 			className = Type.getClassName(obj);
@@ -733,7 +746,7 @@ class ZBuilder {
 		var builder:Builder = new Builder();
 		buildui(xml.firstElement(), parent, builder);
 		builder.bindBuilder();
-		if (Std.is(builder.display, BuilderRootDisplay)) {
+		if (Std.isOfType(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
 			root.builder = builder;
 			root.onInitBuilder();
@@ -757,7 +770,7 @@ class ZBuilder {
 		var builder:Builder = new Builder();
 		buildui(xml.firstElement(), parent, builder);
 		builder.bindBuilder();
-		if (Std.is(builder.display, BuilderRootDisplay)) {
+		if (Std.isOfType(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
 			root.builder = builder;
 			root.onInitBuilder();
@@ -776,7 +789,7 @@ class ZBuilder {
 		var builder:Builder = new Builder();
 		buildui(xml.firstElement(), parent, builder, superInit, defalutArgs);
 		builder.bindBuilder();
-		if (Std.is(builder.display, BuilderRootDisplay)) {
+		if (Std.isOfType(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
 			root.builder = builder;
 			root.onInitBuilder();
@@ -874,20 +887,20 @@ class ZBuilder {
 		} else {
 			ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
 		}
-		if (!Std.is(ui, DisplayObject) && !Std.is(ui, Tile)) {
+		if (!Std.isOfType(ui, DisplayObject) && !Std.isOfType(ui, Tile)) {
 			// 着色器
-			if (Std.is(ui, ZShader)) {
+			if (Std.isOfType(ui, ZShader)) {
 				try {
-					if (Std.is(parent, DisplayObject)) {
+					if (Std.isOfType(parent, DisplayObject)) {
 						cast(parent, DisplayObject).shader = ui;
-					} else if (Std.is(parent, Tile)) {
+					} else if (Std.isOfType(parent, Tile)) {
 						cast(parent, Tile).shader = ui;
 					}
 				} catch (e:Exception) {
 					trace("异常：", e.message + "\n" + e.stack);
-					if (Std.is(parent, DisplayObject)) {
+					if (Std.isOfType(parent, DisplayObject)) {
 						cast(parent, DisplayObject).shader = null;
-					} else if (Std.is(parent, Tile)) {
+					} else if (Std.isOfType(parent, Tile)) {
 						cast(parent, Tile).shader = null;
 					}
 				}
@@ -896,13 +909,13 @@ class ZBuilder {
 			var idname:String = xml.get("id");
 			if (idname != null) {
 				builder.ids.set((idpush != null ? idpush + "_" : "") + idname, ui);
-				if (Std.is(ui, ZHaxe)) {
+				if (Std.isOfType(ui, ZHaxe)) {
 					if (idname == "super") {
 						cast(ui, ZHaxe).bindBuilder(builder);
 						cast(ui, ZHaxe).call();
 					} else if (xml.exists("args"))
 						cast(ui, ZHaxe).argsName = xml.get("args").split(",");
-				} else if (Std.is(ui, ZTween)) {
+				} else if (Std.isOfType(ui, ZTween)) {
 					cast(ui, ZTween).bindBuilder(builder, idpush);
 				}
 			} else
@@ -925,18 +938,18 @@ class ZBuilder {
 				var parsingName:String = className + "." + name;
 				if (parsingMaps.exists(parsingName)) {
 					parsingMaps.get(parsingName)(ui, name, value);
-				} else if (Std.is(att, Float) && value.indexOf("0x") == -1) {
+				} else if (Std.isOfType(att, Float) && value.indexOf("0x") == -1) {
 					if (value.indexOf("%") != -1) {
 						var bfb:Float = Std.parseFloat(value.substr(0, value.lastIndexOf("%")));
 						bfb = bfb / 100 * getProperty(parent, name);
 						setProperty(ui, name, bfb);
 					} else
 						setProperty(ui, name, Std.parseFloat(value));
-				} else if (Std.is(att, Int)) {
+				} else if (Std.isOfType(att, Int)) {
 					setProperty(ui, name, Std.parseInt(value));
-				} else if (Std.is(att, Bool)) {
+				} else if (Std.isOfType(att, Bool)) {
 					setProperty(ui, name, xml.get(name) == "true");
-				} else if (Std.is(att, String) || att == null) {
+				} else if (Std.isOfType(att, String) || att == null) {
 					setProperty(ui, name, xml.get(name));
 				}
 			}
@@ -951,13 +964,13 @@ class ZBuilder {
 			parentClassName = parentClassName.substr(parentClassName.lastIndexOf(".") + 1);
 		if (parentClassName != null && addMaps.exists(parentClassName))
 			addMaps.get(parentClassName)(ui, parent, xml);
-		else if (Std.is(parent, ImageBatchs))
+		else if (Std.isOfType(parent, ImageBatchs))
 			cast(parent, ImageBatchs).addChild(ui);
-		else if (Std.is(parent, DisplayObjectContainer))
+		else if (Std.isOfType(parent, DisplayObjectContainer))
 			cast(parent, DisplayObjectContainer).addChild(ui);
-		else if (Std.is(parent, TileContainer)) {
+		else if (Std.isOfType(parent, TileContainer)) {
 			cast(parent, TileContainer).addTileAt(ui, cast(parent, TileContainer).numTiles);
-		} else if (Std.is(parent, Tilemap))
+		} else if (Std.isOfType(parent, Tilemap))
 			cast(parent, Tilemap).addTile(ui);
 		var attr:Iterator<String> = xml.attributes();
 		while (attr.hasNext()) {
@@ -981,18 +994,18 @@ class ZBuilder {
 			var parsingName:String = className + "." + name;
 			if (parsingMaps.exists(parsingName)) {
 				parsingMaps.get(parsingName)(ui, name, value);
-			} else if (Std.is(att, Float) && value.indexOf("0x") == -1) {
+			} else if (Std.isOfType(att, Float) && value.indexOf("0x") == -1) {
 				if (value.indexOf("%") != -1) {
 					var bfb:Float = Std.parseFloat(value.substr(0, value.lastIndexOf("%")));
 					bfb = bfb / 100 * getProperty(parent, name);
 					setProperty(ui, name, bfb);
 				} else
 					setProperty(ui, name, Std.parseFloat(value));
-			} else if (Std.is(att, Int)) {
+			} else if (Std.isOfType(att, Int)) {
 				setProperty(ui, name, Std.parseInt(value));
-			} else if (Std.is(att, Bool)) {
+			} else if (Std.isOfType(att, Bool)) {
 				setProperty(ui, name, xml.get(name) == "true");
-			} else if (Std.is(att, String) || att == null) {
+			} else if (Std.isOfType(att, String) || att == null) {
 				setProperty(ui, name, xml.get(name));
 			}
 		}
@@ -1019,17 +1032,17 @@ class ZBuilder {
 
 	private static function align(#if (cpp || hl) obj:Dynamic, parent:Dynamic #else obj:DisplayObject, parent:DisplayObject #end, leftPx:Dynamic = null,
 			rightPx:Dynamic = null, topPx:Dynamic = null, bottomPx:Dynamic = null, centerX:Dynamic = null, centerY:Dynamic = null):Void {
-		if (Std.is(leftPx, String))
+		if (Std.isOfType(leftPx, String))
 			leftPx = Std.parseInt(leftPx);
-		if (Std.is(rightPx, String))
+		if (Std.isOfType(rightPx, String))
 			rightPx = Std.parseInt(rightPx);
-		if (Std.is(topPx, String))
+		if (Std.isOfType(topPx, String))
 			topPx = Std.parseInt(topPx);
-		if (Std.is(bottomPx, String))
+		if (Std.isOfType(bottomPx, String))
 			bottomPx = Std.parseInt(bottomPx);
-		if (Std.is(centerX, String))
+		if (Std.isOfType(centerX, String))
 			centerX = Std.parseInt(centerX);
-		if (Std.is(centerY, String))
+		if (Std.isOfType(centerY, String))
 			centerY = Std.parseInt(centerY);
 
 		// var bounds = obj.getBounds(obj.parent);
@@ -1195,9 +1208,9 @@ class Builder {
 	 */
 	public function getFunction(id:String):Dynamic {
 		var data:Dynamic = ids.get(id);
-		if (Std.is(data, ZHaxe))
+		if (Std.isOfType(data, ZHaxe))
 			return cast(data, ZHaxe).call;
-		if (Std.is(data, ZTween))
+		if (Std.isOfType(data, ZTween))
 			return cast(data, ZTween).play;
 		return null;
 	}
@@ -1207,7 +1220,7 @@ class Builder {
 	 */
 	public function bindBuilder():Void {
 		for (key => value in ids) {
-			if (Std.is(value, ZHaxe)) {
+			if (Std.isOfType(value, ZHaxe)) {
 				cast(value, ZHaxe).bindBuilder(this);
 			}
 		}
@@ -1223,7 +1236,7 @@ class Builder {
 			return;
 		for (key => value in ids) {
 			#if hscript
-			if (Std.is(value, ZHaxe)) {
+			if (Std.isOfType(value, ZHaxe)) {
 				cast(value, ZHaxe).interp.variables.set(func, data);
 			}
 			#end
@@ -1239,7 +1252,7 @@ class Builder {
 			return;
 		for (key => value in ids) {
 			#if hscript
-			if (Std.is(value, ZHaxe)) {
+			if (Std.isOfType(value, ZHaxe)) {
 				cast(value, ZHaxe).interp.miniAssets = miniAssets;
 			}
 			#end
@@ -1249,7 +1262,7 @@ class Builder {
 	public function dispose():Void {
 		if (ids != null) {
 			for (key => value in ids) {
-				if (Std.is(value, ZTween)) {
+				if (Std.isOfType(value, ZTween)) {
 					cast(value, ZTween).stop();
 				}
 			}
@@ -1259,7 +1272,7 @@ class Builder {
 	}
 
 	public function disposeView():Void {
-		if (this.display != null && Std.is(this.display, DisplayObject) && cast(this.display, DisplayObject).parent != null) {
+		if (this.display != null && Std.isOfType(this.display, DisplayObject) && cast(this.display, DisplayObject).parent != null) {
 			cast(this.display, DisplayObject).parent.removeChild(cast(this.display, DisplayObject));
 		}
 		this.dispose();

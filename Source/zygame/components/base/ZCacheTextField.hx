@@ -246,4 +246,22 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
         #end
     }
 
+    /**
+     * 设置字体大小
+     * @param size 
+     */
+    public function setFontSize(size:Int):Void{
+        f.size = size;
+        this.text = _text;
+    }
+
+    /**
+     * 更新字体颜色
+     * @param color 
+     */
+    public function setFontColor(color:Int):Void{
+        f.color = color;
+        this.text = _text;
+    }
+
 }

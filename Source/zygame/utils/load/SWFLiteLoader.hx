@@ -100,7 +100,7 @@ class SWFLiteLoader {
 		} else {
 			// 普通的bundle载入
 			openfl.utils.AssetLibrary.loadFromFile(AssetsUtils.ofPath(_path), "").onComplete(function(library):Void {
-				if (Std.is(library, SWFLiteLibrary)) {
+				if (Std.isOfType(library, SWFLiteLibrary)) {
 					cast(library, SWFLiteLibrary).name = zygame.utils.StringUtils.getName(_path);
 					call(cast library);
 				} else

@@ -15,7 +15,7 @@ class ZSound implements zygame.core.Refresher {
 		var len = array.length;
 		while (len >= 0) {
 			len--;
-			if (Std.is(array[len], ZSound)) {
+			if (Std.isOfType(array[len], ZSound)) {
 				cast(array[len], ZSound).stop();
 			}
 		}

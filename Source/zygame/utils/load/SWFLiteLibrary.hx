@@ -75,7 +75,7 @@ class SWFLiteLibrary extends #if (openfl <= '8.3.0') openfl._internal.swf.SWFLit
 			var bitmapSymbol:BitmapSymbol;
 
 			for (symbol in swf.symbols) {
-				if (Std.is(symbol, BitmapSymbol)) {
+				if (Std.isOfType(symbol, BitmapSymbol)) {
 					bitmapSymbol = cast symbol;
 
 					if (bitmapSymbol.className != null) {

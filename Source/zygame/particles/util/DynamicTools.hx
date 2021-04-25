@@ -10,7 +10,7 @@ class DynamicTools {
     }
 
     public static function asArray(value : Dynamic) : Array<DynamicExt> {
-        if (Std.is(value, Array)) {
+        if (Std.isOfType(value, Array)) {
             return value;
         } else {
             return new Array<Dynamic>();
@@ -18,9 +18,9 @@ class DynamicTools {
     }
 
     public static function asInt(value : Dynamic, def : Int = 0) : Int {
-        if (Std.is(value, Int)) {
+        if (Std.isOfType(value, Int)) {
             return value;
-        } else if (Std.is(value, Float)) {
+        } else if (Std.isOfType(value, Float)) {
             return Std.int(value);
         } else {
             return def;
@@ -28,9 +28,9 @@ class DynamicTools {
     }
 
     public static function asNullInt(value : Dynamic) : Null<Int> {
-        if (Std.is(value, Int)) {
+        if (Std.isOfType(value, Int)) {
             return value;
-        } else if (Std.is(value, Float)) {
+        } else if (Std.isOfType(value, Float)) {
             return Std.int(value);
         } else {
             return null;
@@ -38,7 +38,7 @@ class DynamicTools {
     }
 
     public static function asFloat(value : Dynamic, def : Float = 0.0) : Float {
-        if (Std.is(value, Float) || Std.is(value, Int)) {
+        if (Std.isOfType(value, Float) || Std.isOfType(value, Int)) {
             return value;
         } else {
             return def;
@@ -46,7 +46,7 @@ class DynamicTools {
     }
 
     public static function asNullFloat(value : Dynamic) : Null<Float> {
-        if (Std.is(value, Float) || Std.is(value, Int)) {
+        if (Std.isOfType(value, Float) || Std.isOfType(value, Int)) {
             return value;
         } else {
             return null;
@@ -54,7 +54,7 @@ class DynamicTools {
     }
 
     public static function asBool(value : Dynamic, def : Bool = false) : Bool {
-        if (Std.is(value, Bool)) {
+        if (Std.isOfType(value, Bool)) {
             return value;
         } else {
             return def;

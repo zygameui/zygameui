@@ -57,7 +57,7 @@ class Image extends DisplayObjectContainer {
 				_tilemap.visible = false;
 			if (_bitmap != null)
 				_bitmap.visible = false;
-		} else if (Std.is(bitmapData, BitmapData)) {
+		} else if (Std.isOfType(bitmapData, BitmapData)) {
 			isBitmapDataDraw = true;
 			if (_tilemap != null)
 				_tilemap.visible = false;
@@ -74,7 +74,7 @@ class Image extends DisplayObjectContainer {
 			#else
 			_bitmap.smoothing = true;
 			#end
-		} else if (Std.is(bitmapData, Frame)) {
+		} else if (Std.isOfType(bitmapData, Frame)) {
 			_curFrame = bitmapData;
 			isBitmapDataDraw = false;
 			if (_bitmap != null)
@@ -241,10 +241,10 @@ class Image extends DisplayObjectContainer {
 		super();
 		this.bitmapData = bitmapData;
 		this.mouseChildren = false;
-		if (Std.is(bitmapData, BitmapData)) {
+		if (Std.isOfType(bitmapData, BitmapData)) {
 			this.width = cast(bitmapData, BitmapData).width;
 			this.height = cast(bitmapData, BitmapData).height;
-		} else if (Std.is(bitmapData, Frame)) {
+		} else if (Std.isOfType(bitmapData, Frame)) {
 			var frame:Frame = cast(bitmapData, Frame);
 			this.width = frame.frameWidth > frame.width ? frame.frameWidth : frame.width;
 			this.height = frame.frameHeight > frame.height ? frame.frameHeight : frame.height;
@@ -477,7 +477,7 @@ class Image extends DisplayObjectContainer {
 		var display = getDisplay();
 		if (display == null)
 			return;
-		if (Std.is(display.shader, ZShader)) {
+		if (Std.isOfType(display.shader, ZShader)) {
 			cast(display.shader, ZShader).updateFrame(_curFrame);
 		}
 	}

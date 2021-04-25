@@ -19,7 +19,7 @@ class FrameEngine implements Refresher {
 		var len = array.length;
 		while (len >= 0) {
 			len--;
-			if (Std.is(array[len], FrameEngine)) {
+			if (Std.isOfType(array[len], FrameEngine)) {
 				array.removeAt(len);
 			}
 		}

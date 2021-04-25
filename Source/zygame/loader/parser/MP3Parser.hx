@@ -13,7 +13,7 @@ import zygame.utils.AssetsUtils;
 	 * @return Bool
 	 */
 	public static function supportType(data:Dynamic):Bool {
-		var file:String = Std.is(data, String) ? data : data.path;
+		var file:String = Std.isOfType(data, String) ? data : data.path;
 		return file.indexOf(".mp3") != -1 || file.indexOf(".ogg") != -1;
 	}
 
@@ -21,7 +21,7 @@ import zygame.utils.AssetsUtils;
 	 * 开始载入音频
 	 */
 	override function process() {
-		if (Std.is(getData(), String)) {
+		if (Std.isOfType(getData(), String)) {
 			this.setData({
 				type: "Sound",
 				path: getData()

@@ -50,30 +50,30 @@ class BSprite extends BDisplayObjectContainer {
 		var num:Int = this.numTiles - 1;
 		while (num >= 0) {
 			tile = this.getTileAt(num);
-			if (Std.is(tile, BSprite)) {
+			if (Std.isOfType(tile, BSprite)) {
 				var tile2:Tile = cast(tile, BSprite).getTileAtPos(posx, posy);
 				if (tile2 != null && cast(tile, BSprite).mouseEnabled && tile.visible)
 					return mouseChildren ? tile2 : this;
-			} else if (Std.is(tile, BImage)) {
+			} else if (Std.isOfType(tile, BImage)) {
 				var img:BImage = cast tile;
 				var rect:Rectangle = img.getClickBounds(this);
 				if (img.mouseEnabled && tile.visible && rect != null && rect.contains(posx, posy)) {
 					return mouseChildren ? tile : this;
 				}
-			} else if (Std.is(tile, BScale9Image)) {
+			} else if (Std.isOfType(tile, BScale9Image)) {
 				var img:BScale9Image = cast tile;
 				var rect:Rectangle = img.getClickBounds(this);
 				if (img.mouseEnabled && tile.visible && rect != null && rect.contains(posx, posy)) {
 					return mouseChildren ? tile : this;
 				}
-			} else if (Std.is(tile, BLabel)) {
+			} else if (Std.isOfType(tile, BLabel)) {
 				var img:BLabel = cast tile;
 				var rect:Rectangle = img.getBounds(this);
 				if (img.mouseEnabled && tile.visible && rect != null && rect.contains(posx, posy)) {
 					return mouseChildren ? tile : this;
 				}
 			}
-			else if (Std.is(tile, Tile)) {
+			else if (Std.isOfType(tile, Tile)) {
 				var img:Tile = cast tile;
 				var rect:Rectangle = img.getBounds(this);
 				if (tile.visible && rect != null && rect.contains(posx, posy)) {
@@ -94,8 +94,8 @@ class BSprite extends BDisplayObjectContainer {
 		var num:Int = this.numTiles - 1;
 		while (num >= 0) {
 			tile = this.getTileAt(num);
-			if (Std.is(tile, BSprite)) {
-				if (Std.is(tile, BTouchSprite)) {
+			if (Std.isOfType(tile, BSprite)) {
+				if (Std.isOfType(tile, BTouchSprite)) {
 					switch (e.type) {
 						case TouchEvent.TOUCH_BEGIN:
 							cast(tile, BTouchSprite).onTouchBegin(e);

@@ -118,7 +118,7 @@ class SkeletonBatchs extends Sprite implements SpineBaseDisplay{
      */
     override public function addChildAt(child:DisplayObject,index:Int):DisplayObject
     {
-        if(!Std.is(child,SkeletonSprite)){
+        if(!Std.isOfType(child,SkeletonSprite)){
             throw "请不要添加非spine.openfl.SkeletonSprite对象！";
         }
         var s:SkeletonSprite = cast(child,SkeletonSprite);

@@ -89,7 +89,7 @@ class ZHaxe {
 	public function bindBuilder(builder:Builder):Void {
 		#if hscript
 		for (key => value in builder.ids) {
-			if (Std.is(value, ZHaxe))
+			if (Std.isOfType(value, ZHaxe))
 				interp.variables.set(key, cast(value, ZHaxe).value);
 			else
 				interp.variables.set(key, value);

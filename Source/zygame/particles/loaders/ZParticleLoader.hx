@@ -27,7 +27,7 @@ class ZParticleLoader {
 	 * @param bitmapData
 	 */
 	public static function load(obj:Dynamic, cb:ParticleSystem->Void, bitmapData:BitmapData = null):Void {
-		if(Std.is(obj,String))
+		if(Std.isOfType(obj,String))
 			obj = Json.parse(obj);
 		var map:DynamicExt = obj;
 		var ps = new ParticleSystem();

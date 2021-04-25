@@ -28,6 +28,10 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
 
     private var _color:UInt;
 
+    #if cpp
+    private var _text:String = "";
+    #end
+
     /**
      * 缓存字是否进行换行，换行可能会减少杂点的情况，但是渲染的字数将会大大下降，默认为false。
      */
@@ -79,6 +83,7 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
      */
     public override function set_text(value:String):String {
         //文本筛选
+        _text = value;
         value = deWeighting(value);
         if(text == value)
             return value;

@@ -379,6 +379,8 @@ class ZScroll extends DataProviderComponent {
 
 			_v = Std.int(_v);
 			_h = Std.int(_h);
+
+			onScrolling(_v, _h);
 		} else {
 			_moveMath -= _moveMath > 0 ? 1 : 0;
 		}
@@ -407,6 +409,8 @@ class ZScroll extends DataProviderComponent {
 			}
 		}
 	}
+
+	dynamic public function onScrolling(v:Float, h:Float):Void {}
 
 	/**
 	 * 获取容器的实际宽度

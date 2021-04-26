@@ -297,10 +297,12 @@ class ZLabel extends DataProviderComponent {
 			value = StringTools.replace(value, "\n", "");
 			value = StringTools.replace(value, "\r", "");
 		}
+		#if !wechat
 		#if (quickgame || qqquick || minigame)
 		// 快游戏引擎不会清理文本画布，请在这里进行清理
 		if (untyped _display.__graphics.__context != null)
 			untyped _display.__graphics.__context.clearRect(0, 0, _display.__graphics.__canvas.width, _display.__graphics.__canvas.height);
+		#end
 		#end
 		// 多国语言化
 		#if (!neko && !hl)
@@ -312,7 +314,7 @@ class ZLabel extends DataProviderComponent {
 		else {
 			if (_display.text == value)
 				return value;
-			#if cpp
+			#if (cpp && openfl < '9.0.0')
 			// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
 			if (_display != null) {
 				var newText = new ZTextField();
@@ -329,8 +331,9 @@ class ZLabel extends DataProviderComponent {
 				this.addChild(_display);
 			}
 			#end
-			if (_display.text != Std.string(value))
-				@:privateAccess _display.__cleanup();
+			// 不再主动调用__cleanup();
+			// if (_display.text != Std.string(value))
+			// 	@:privateAccess _display.__cleanup();
 			_display.text = Std.string(value);
 		}
 		// 修复9.0.0设置无法正常格式化问题

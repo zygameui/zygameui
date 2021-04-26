@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.3.9
+- [新增] 新增`ZScroll.onScrolling`实时滑动侦听。
+- [改进] 改进C++的文本渲染。
+
 ### 10.3.8
 - [修复] 修复`ZBuilder.buildui`创建子XML时赋值会影响到原来的XML数据的问题。
 

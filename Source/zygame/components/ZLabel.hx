@@ -314,7 +314,7 @@ class ZLabel extends DataProviderComponent {
 		else {
 			if (_display.text == value)
 				return value;
-			#if (cpp && openfl < '9.0.0')
+			#if (cpp)
 			// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
 			if (_display != null) {
 				var newText = new ZTextField();

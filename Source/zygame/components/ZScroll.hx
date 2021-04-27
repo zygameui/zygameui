@@ -309,6 +309,7 @@ class ZScroll extends DataProviderComponent {
 			_lastMovePos.x = this.mouseX;
 			_lastMovePos.y = this.mouseY;
 			updateDisableSuperscreenEasing();
+			onScrolling(_v, _h);
 		}
 	}
 

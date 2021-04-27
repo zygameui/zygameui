@@ -70,14 +70,17 @@ class ZAnimation extends ZImage {
 	public function nextFrame():Void {
 		currentFrame++;
 		if (currentFrame >= _animation.frames.length) {
-			currentFrame = 0;
 			if (loop > 0)
 				loop--;
+			if (loop > 0) {
+				currentFrame = 0;
+			} else
+				currentFrame = _animation.frames.length - 1;
 			if (this.hasEventListener(Event.COMPLETE))
 				this.dispatchEvent(new Event(Event.COMPLETE));
 		}
 		updateFrame();
-    }
+	}
 
 	private function updateFrame():Void {
 		// 设置间隔帧

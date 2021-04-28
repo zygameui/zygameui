@@ -590,4 +590,16 @@ class ZLabel extends DataProviderComponent {
 			}
 		}
 	}
+
+	/**
+	 * 获取字符的坐标宽度
+	 * @param charIndex 
+	 * @return Rectangle
+	 */
+	public function getCharBounds(charIndex:Int):Rectangle {
+		var rect = _display.getCharBoundaries(charIndex);
+		rect.x += _display.x;
+		rect.y += _display.y;
+		return rect;
+	}
 }

@@ -1,5 +1,7 @@
+
 package zygame.display.batch;
 
+import openfl.geom.Rectangle;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
 import zygame.display.batch.BSprite;
 import zygame.utils.load.FntLoader;
@@ -405,6 +407,24 @@ class BLabel extends BSprite{
         #end
         return _maxHeight * _node.scaleY;
     }  
+
+    /**
+	 * 获取字符的坐标宽度
+	 * @param charIndex 
+	 * @return Rectangle
+	 */
+	public function getCharBounds(charIndex:Int):Rectangle {
+		var char = _node.getTileAt(charIndex);
+		if (char == null)
+			return null;
+        var rect = char.getBounds(char.parent);
+        if(rect != null)
+        {
+            rect.x += _node.x;
+            rect.y += _node.y;
+        }
+		return rect;
+	}
 }
 
 /**
@@ -456,5 +476,7 @@ class FntTile extends Tile{
             return curFrame.id;
         }
     }
+
+    
 
 }

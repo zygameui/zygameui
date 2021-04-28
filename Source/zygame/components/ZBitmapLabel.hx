@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.geom.Rectangle;
 import openfl.display.Bitmap;
 import zygame.utils.load.FntLoader.FntData;
 import zygame.components.base.DataProviderComponent;
@@ -220,5 +221,17 @@ class ZBitmapLabel extends DataProviderComponent {
 		_text = value;
 		updateComponents();
 		return value;
+	}
+
+	/**
+	 * 获取字符的坐标宽度
+	 * @param charIndex 
+	 * @return Rectangle
+	 */
+	public function getCharBounds(charIndex:Int):Rectangle {
+		var rect = _node.getCharBounds(charIndex);
+		rect.x += _node.x;
+		rect.y += _node.y;
+		return rect;
 	}
 }

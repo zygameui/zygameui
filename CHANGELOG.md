@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.4.3
+- [新增] 新增`ZBitmapLabel.getCharBounds`获取字符的位置尺寸API。
+- [新增] 新增`ZLabel.getCharBounds`获取字符的位置尺寸API。
+
 ### 10.4.2
 - [改进] 改进`ZAnimation`播放一次结束后将保持在最后一帧。
 - [修复] 修复文本显示区域不完整的问题。

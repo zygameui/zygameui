@@ -973,9 +973,14 @@ class ZBuilder {
 			cast(parent, TileContainer).addTileAt(ui, cast(parent, TileContainer).numTiles);
 		} else if (Std.isOfType(parent, Tilemap))
 			cast(parent, Tilemap).addTile(ui);
-		var attr:Iterator<String> = xml.attributes();
-		while (attr.hasNext()) {
-			var name:String = attr.next();
+		var attrIterator:Iterator<String> = xml.attributes();
+		var attr:Array<String> = [];
+		for (item in attrIterator) {
+			attr.push(item);
+		}
+		attr.sort((a,b)->return a == "text"?1:-1);
+		while (attr.length > 0) {
+			var name:String = attr.shift();
 			if (name == "id") {
 				var idname = (idpush != null ? idpush + "_" : "") + xml.get(name);
 				builder.ids.set(idname, ui);

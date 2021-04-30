@@ -8,6 +8,7 @@
 ### 10.4.3
 - [新增] 新增`ZBitmapLabel.getCharBounds`获取字符的位置尺寸API。
 - [新增] 新增`ZLabel.getCharBounds`获取字符的位置尺寸API。
+- [改进] 改进`ZBuilber`对`text`属性排序到最后。
 
 ### 10.4.2
 - [改进] 改进`ZAnimation`播放一次结束后将保持在最后一帧。

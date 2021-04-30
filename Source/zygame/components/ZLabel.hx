@@ -38,7 +38,7 @@ class ZLabel extends DataProviderComponent {
 
 	private var _font:TextFormat;
 
-	private var _isHtml:Bool;
+	private var _isHtml:Bool = false;
 
 	private var _width:Float = 100;
 
@@ -468,6 +468,7 @@ class ZLabel extends DataProviderComponent {
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
 		#if minigame
+		trace("zygame.core.KeyboardManager.keyboard=",zygame.core.KeyboardManager.keyboard);
 		if (zygame.core.KeyboardManager.keyboard != null) {
 			zygame.core.KeyboardManager.focus(_display);
 			zygame.core.KeyboardManager.keyboard.input(this);
@@ -602,4 +603,5 @@ class ZLabel extends DataProviderComponent {
 		rect.y += _display.y;
 		return rect;
 	}
+
 }

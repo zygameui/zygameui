@@ -113,6 +113,10 @@ class ZAssets {
 	private var _dynamicAtlas:Dictionary<String, DynamicTextureAtlas>;
 	private var _3dprticle:Dictionary<String, Dynamic>;
 
+	#if ldtk
+	private var _ldtk:Dictionary<String, zygame.ldtk.LDTKProject>;
+	#end
+
 	/**
 	 * 当前播放的背景音乐
 	 */
@@ -138,6 +142,9 @@ class ZAssets {
 		_3ds = new Dictionary();
 		_dynamicAtlas = new Dictionary();
 		_3dprticle = new Dictionary();
+		#if ldtk
+		_ldtk = new Dictionary();
+		#end
 	}
 
 	/**
@@ -301,6 +308,19 @@ class ZAssets {
 			path: texJsonPath,
 			base64: true
 		}));
+	}
+
+	/**
+	 * 获取LDTK编辑的地图数据，请注意，需要引入zygameui-ldtk库才能正常使用。
+	 * @param id 
+	 * @return #if ldtk zygame.ldtk.LDTKProject #else Dynamic #end
+	 */
+	public function getLDTKProject(id:String):#if ldtk zygame.ldtk.LDTKProject #else Dynamic #end{
+		#if ldtk
+		return _ldtk.get(id);
+		#else
+		return null;
+		#end
 	}
 
 	/**
@@ -479,6 +499,11 @@ class ZAssets {
 		// 资源分析
 		var t:Int = type;
 		switch (t) {
+			case LDTK:
+				// LDTK编辑器生成的地图数据
+				#if ldtk
+				_ldtk.set(parser.getName(), data);
+				#end
 			case SPARTICLE:
 				// 3D粒子特效
 				_3dprticle.set(parser.getName(), data);

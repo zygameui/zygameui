@@ -130,13 +130,20 @@ class Start extends ZScene {
 	private var _lockLandscape:Bool = false;
 
 	/**
+	 * 测试性功能，使缩放永远为0.5作为间隔缩放。
+	 */
+	private var scalePower:Bool = false;
+
+	/**
 	 * 启动一个启动器，用于启动进入游戏入口。
 	 *  @param HDWidth - 以宽适配时使用的宽度像素
 	 *  @param HDHeight - 以高适配时使用的高度像素
 	 *  @param isDebug - 是否显示debug数据，当该值为true时，FPSDebug对象将会建立，一般在发布正式版时，该值应该被设置为false。
+	 *  @param scalePower - 测试性功能，使缩放永远为0.5作为间隔缩放。
 	 */
-	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false) {
+	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
 		super();
+		this.scalePower = scalePower;
 		// RES资源绑定
 		zygame.net.UDP.init();
 		ZBuilder.init();
@@ -355,21 +362,32 @@ class Start extends ZScene {
 		var wscale:Float = 1;
 		var hscale:Float = 1;
 		if (_lockLandscape && stage.stageWidth < stage.stageHeight) {
-			hscale = Math.round(stage.stageWidth / this.HDHeight * 100) / 100;
-			wscale = Math.round(stage.stageHeight / this.HDWidth * 100) / 100;
+			hscale = Math.round(stage.stageWidth / this.HDHeight * 1000000) / 1000000;
+			wscale = Math.round(stage.stageHeight / this.HDWidth * 1000000) / 1000000;
 		} else {
-			wscale = Math.round(stage.stageWidth / this.HDWidth * 100) / 100;
-			hscale = Math.round(stage.stageHeight / this.HDHeight * 100) / 100;
+			wscale = Math.round(stage.stageWidth / this.HDWidth * 1000000) / 1000000;
+			hscale = Math.round(stage.stageHeight / this.HDHeight * 1000000) / 1000000;
 		}
+
 		if (wscale < hscale) {
-			this.scaleX = wscale;
-			this.scaleY = wscale;
 			currentScale = wscale;
 		} else {
-			this.scaleX = hscale;
-			this.scaleY = hscale;
 			currentScale = hscale;
 		}
+
+		if (scalePower) {
+			var currentScale2 = currentScale / 0.5;
+			var currentScale3 = Std.int(currentScale2);
+			if (currentScale != currentScale3) {
+				currentScale = currentScale3 - (currentScale + 0.5 < currentScale3 ? 0.5 : 0);
+			}
+			if (currentScale < 1) {
+				currentScale = 0.5;
+			}
+		}
+
+		this.scaleX = currentScale;
+		this.scaleY = currentScale;
 
 		// topView比例同步
 		topView.scaleX = this.scaleX;
@@ -401,6 +419,7 @@ class Start extends ZScene {
 			view3d.width = Start.stageWidth;
 			view3d.height = Start.stageHeight;
 		}
+
 		log("适配" + HDHeight + "x" + HDWidth, stage.stageHeight + "x" + stage.stageWidth, currentScale);
 	}
 

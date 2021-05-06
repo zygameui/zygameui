@@ -192,7 +192,6 @@ class ZButton extends ToggleButton {
 
 	public function setText(text:String):Void {
 		initText();
-		trace("set", text);
 		_text.dataProvider = text;
 	}
 

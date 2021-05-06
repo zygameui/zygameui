@@ -19,4 +19,5 @@ enum abstract AssetsType (Int) to Int from Int {
     public var SPINE = 15; // Spine纹理资源
     public var OBJ3D = 16; // 3DLoader资源
     public var SPARTICLE = 17; // Sprticle3D粒子特效
+    public var LDTK = 18; // LDTK编辑器的地图数据
 }

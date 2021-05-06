@@ -8,6 +8,9 @@ import zygame.loader.parser.CDBParser;
 import zygame.loader.parser.TextParser;
 import zygame.loader.parser.MP3Parser;
 import zygame.loader.parser.ParserBase;
+#if ldtk
+import zygame.loader.parser.LDTKParser;
+#end
 
 /**
  * ZAssets核心载入器，可简易使用扩展
@@ -24,5 +27,7 @@ class LoaderAssets {
 		XMLParser,
 		JSONParser,
 		BitmapDataParser
+		#if (ldtk), LDTKParser
+		#end
 	];
 }

@@ -5,6 +5,11 @@
 
 # ZYGameUI 更新日志
 
+### 10.4.4
+- [新增] 新增地图编辑器`LDTK`支持，该地图编辑器是由《细胞重生》的作者开发。
+- [改进] 改进`Start`的缩放精准度。
+- [新增] 新增`Start.new`新参数`scalePower`，可固定缩放比例为0.5作为间隔。
+
 ### 10.4.3
 - [新增] 新增`ZBitmapLabel.getCharBounds`获取字符的位置尺寸API。
 - [新增] 新增`ZLabel.getCharBounds`获取字符的位置尺寸API。

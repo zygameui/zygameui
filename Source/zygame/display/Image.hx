@@ -50,6 +50,29 @@ class Image extends DisplayObjectContainer {
 
 	public var bitmapData(get, set):Dynamic;
 
+	/**
+	 * 设置图片是否平滑
+	 */
+	public var smoothing(get, set):Bool;
+
+	private var _smoothing:Bool = #if !smoothing false #else true #end;
+
+	private function set_smoothing(bool:Bool):Bool {
+		_smoothing = bool;
+		var diplsy = getDisplay();
+		if (diplsy != null) {
+			if (Std.isOfType(diplsy, Tilemap))
+				cast(diplsy, Tilemap).smoothing = bool;
+			else if (Std.isOfType(diplsy, Bitmap))
+				cast(diplsy, Bitmap).smoothing = bool;
+		}
+		return bool;
+	}
+
+	private function get_smoothing():Bool {
+		return _smoothing;
+	}
+
 	private function set_bitmapData(bitmapData:Dynamic):Dynamic {
 		var isFrameRect:Bool = false;
 		if (bitmapData == null) {
@@ -95,9 +118,9 @@ class Image extends DisplayObjectContainer {
 			if (isFrameRect) {
 				this._tilemap.width = frame.width + Math.abs(frame.frameX);
 				this._tilemap.height = frame.height + Math.abs(frame.frameY);
-				if(this._tilemap.width < frame.frameWidth)
+				if (this._tilemap.width < frame.frameWidth)
 					this._tilemap.width = frame.frameWidth;
-				if(this._tilemap.height < frame.frameHeight)
+				if (this._tilemap.height < frame.frameHeight)
 					this._tilemap.height = frame.frameHeight;
 			} else {
 				this._tilemap.width = frame.width;
@@ -326,7 +349,7 @@ class Image extends DisplayObjectContainer {
 
 	override public function onAddToStage():Void {
 		super.onRemoveToStage();
-		if(_isPlay)
+		if (_isPlay)
 			setFrameEvent(_isPlay);
 	}
 

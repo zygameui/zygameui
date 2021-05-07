@@ -136,7 +136,7 @@ class ZImage extends DataProviderComponent {
 	}
 
 	override function get_shader():Shader {
-		if(display == null)
+		if (display == null)
 			return null;
 		return display.shader;
 	}
@@ -166,6 +166,20 @@ class ZImage extends DataProviderComponent {
 
 	override function alignPivot(?v:String = null, ?h:String = null) {
 		super.alignPivot(v, h);
-		this.display.alignPivot(v,h);
+		this.display.alignPivot(v, h);
+	}
+
+	/**
+	 * 设置图片是否平滑
+	 */
+	public var smoothing(get, set):Bool;
+
+	private function set_smoothing(bool:Bool):Bool {
+		this.display.smoothing = bool;
+		return bool;
+	}
+
+	private function get_smoothing():Bool {
+		return this.display.smoothing;
 	}
 }

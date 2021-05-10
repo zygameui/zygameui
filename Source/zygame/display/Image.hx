@@ -51,7 +51,7 @@ class Image extends DisplayObjectContainer {
 	public var bitmapData(get, set):Dynamic;
 
 	/**
-	 * 设置图片是否平滑
+	 * 设置图片是否平滑，当smoothing宏生效时，默认为true，否则为false
 	 */
 	public var smoothing(get, set):Bool;
 

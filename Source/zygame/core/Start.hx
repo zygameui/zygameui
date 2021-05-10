@@ -376,13 +376,12 @@ class Start extends ZScene {
 		}
 
 		if (scalePower) {
-			var currentScale2 = currentScale / 0.5;
-			var currentScale3 = Std.int(currentScale2);
+			var currentScale3 = Std.int(currentScale);
 			if (currentScale != currentScale3) {
-				currentScale = currentScale3 - (currentScale + 0.5 < currentScale3 ? 0.5 : 0);
+				currentScale = currentScale3 + 1;
 			}
 			if (currentScale < 1) {
-				currentScale = 0.5;
+				currentScale = 1;
 			}
 		}
 

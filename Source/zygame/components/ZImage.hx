@@ -170,7 +170,7 @@ class ZImage extends DataProviderComponent {
 	}
 
 	/**
-	 * 设置图片是否平滑
+	 * 设置图片是否平滑，当smoothing宏生效时，默认为true，否则为false
 	 */
 	public var smoothing(get, set):Bool;
 

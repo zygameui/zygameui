@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.loader.parser.AsepriteParser;
 #if zygame3d
 import zygame.utils.load.Loader3DData.ZLoader3D;
 #end
@@ -296,6 +297,26 @@ class ZAssets {
 	}
 
 	/**
+	 * 加载Aseprite生成的JSONTextureAtlas精灵图
+	 * @param texPath 
+	 * @param jsonPath 
+	 */
+	public function loadAsepriteTextureAtlas(texPath:String, jsonPath:String):Void {
+		_parsers.push(new AsepriteParser({
+			path: texPath,
+			json: jsonPath
+		}));
+	}
+
+	/**
+	 * 获取Aseprite的精灵图对象
+	 * @return AsepriteTextureAtlas
+	 */
+	public function getAsepriteTextureAtlas(id:String):AsepriteTextureAtlas {
+		return cast _textures.get(id);
+	}
+
+	/**
 	 * 加载Base64Spine纹理集资源
 	 * @param texPaths 需要提供路径/base64数据，支持多纹理
 	 * @param jsonData 纹理json数据
@@ -315,7 +336,7 @@ class ZAssets {
 	 * @param id 
 	 * @return #if ldtk zygame.ldtk.LDTKProject #else Dynamic #end
 	 */
-	public function getLDTKProject(id:String):#if ldtk zygame.ldtk.LDTKProject #else Dynamic #end{
+	public function getLDTKProject(id:String):#if ldtk zygame.ldtk.LDTKProject #else Dynamic #end {
 		#if ldtk
 		return _ldtk.get(id);
 		#else

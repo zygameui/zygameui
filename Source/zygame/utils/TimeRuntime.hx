@@ -35,7 +35,7 @@ class TimeRuntime {
 		}
 		_arraycall.sort((a, b) -> a.id < b.id ? -1 : 1);
 		for (call in _arraycall) {
-			if (call.call())
+			if (call != null && call.call())
 				_timecall.remove(call.id);
 		}
 		_arraycall.splice(0, _arraycall.length);
@@ -44,7 +44,8 @@ class TimeRuntime {
 			var call:Call = intervals.next();
 			call.call(true);
 		}
-		onResume();
+		// 使用onRender处理
+		// onResume();
 	}
 
 	/**
@@ -55,7 +56,7 @@ class TimeRuntime {
 		while (keys.hasNext()) {
 			var id:Int = keys.next();
 			var call:Call = _resumecall.get(id);
-			if (call.call())
+			if (call != null && call.call())
 				_resumecall.remove(id);
 		}
 	}
@@ -64,11 +65,12 @@ class TimeRuntime {
 	 * 当活动渲染时
 	 */
 	public function onRender():Void {
+		this.onResume();
 		var keys:Iterator<Int> = _rendercall.keys();
 		while (keys.hasNext()) {
 			var id:Int = keys.next();
 			var call:Call = _rendercall.get(id);
-			if (call.call())
+			if (call != null && call.call())
 				_rendercall.remove(id);
 		}
 	}

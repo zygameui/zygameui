@@ -19,6 +19,8 @@
 	<haxelib name="actuate" />
 	<!-- 静态数据类 -->
 	<haxelib name="castle" />
+	<!-- 编码库 -->
+	<haxelib name="crypto"/>
 	<!-- 无物理系统碰撞类 -->
 	<haxelib name="differ" />
 	<haxelib name="zygameui-nape" if="nape" />
@@ -46,8 +48,8 @@
 	<!-- 默认平滑 -->
 	<haxedef name="smoothing" if="cpp" unless="unsmoothing" />
 
-	<!-- 禁止图形使用软件刷新，使用OpenFL9将不再限制 -->
-	<define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl}" />
+	<!-- 禁止图形使用软件刷新，使用OpenFL9将不再限制，但是在Android和IOS上遇到了一些布局错误的问题 -->
+	<define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios" />
 
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf"/>
@@ -60,6 +62,8 @@
 
 	<!-- IOS不要v7 -->
 	<architecture name="arm64" exclude="armv7" if="ios" />
+	<!-- 安卓只要v7 -->
+	<architecture name="armv7" exclude="arm64" if="android" />
 
 	<!-- 测试 -->
 	<!-- <haxeflag name="-dce" value="full" /> -->

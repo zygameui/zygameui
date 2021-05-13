@@ -9,9 +9,14 @@
 --library tweenxcore
 --library crypto
 --library KengSDK
+--library feathersui
+--library swf
+--library differ
 -D vscode
 -D zygame
 -D api
+-D openfl_swf
 -lib KengSDK
 -cp src
+-cp openfl9-source
 --js bin/main.js

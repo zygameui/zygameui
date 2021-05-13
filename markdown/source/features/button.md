@@ -48,3 +48,18 @@ var button:BScale9Button = BButton.createScale9Button(精灵表,宽,高,默认�
 button.setConntent(精灵数据);
 ```
 
+## 默认音频
+
+当需要给`ZButton`以及`BButton`添加点击音效时，可直接设置：
+
+```haxe
+ZButton.defaultSound = "音频ID"; //点击成功会触发该ID的音频，资源需要与ZBuilder.bindAssets绑定。
+```
+
+如果需要给按钮覆盖音频，则为`sound`属性填写音频ID：
+
+```haxe
+var btn:ZButton = ZButton.createModelButton("测试");
+btn.sound = "音频ID"; //该音频优先级会比ZButton.defaultSound高。
+```
+

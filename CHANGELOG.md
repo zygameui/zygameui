@@ -5,12 +5,19 @@
 
 # ZYGameUI 更新日志
 
+### 10.4.5
+- [改进] 改进`TimeRuntion`的空处理。
+- [改进] 改进`V3Api`在HTML5平台上对https/http的兼容。
+
 ### 10.4.4
 - [新增] 新增地图编辑器`LDTK`支持，该地图编辑器是由《细胞重生》的作者开发。
 - [改进] 改进`Start`的缩放精准度。
 - [新增] 新增`Start.new`新参数`scalePower`，可固定缩放比例为整数作为间隔。
 - [新增] 新增`ZImage.smoothing`可设置图片的是否平滑的支持。
 - [新增] 新增`Image.smoothing`可设置图片的是否平滑的支持。
+- [新增] 新增`ZAssets.loadAsepriteTextureAtlas`加载，可用于加载Aseprite生成的精灵图文件。
+- [弃用] 弃用`Lib.resumeCall`：该resumeCall接口已弃用，但仍然兼容可用，它的效果与renderCall一致，请使用renderCall接口。
+    - resumeCall会有渲染异常的问题，可直接调用renderCall。
 
 ### 10.4.3
 - [新增] 新增`ZBitmapLabel.getCharBounds`获取字符的位置尺寸API。

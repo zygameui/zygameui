@@ -21,6 +21,7 @@
 - ImageBatchs （批渲染层）
 - ZButton （按钮）
 - ZSpine （Spine骨骼动画）
+- ZStack （页面管理器）
 
 批渲染组件：
 
@@ -62,6 +63,14 @@
 ```xml
 <ZBox>
 	<ZLabel text="data" width="100%" height="32"/>
+</ZBox>
+```
+
+## 父节点属性访问
+使用`${参数名}`来访问父节点的属性，它会一直往上的父节点查找。例如下面的文本的颜色值，会找到父节点的color值进行赋值。
+```xml
+<ZBox color="0xff0000">
+	<ZLabel text="data" width="100%" height="32" color="${color}"/>
 </ZBox>
 ```
 

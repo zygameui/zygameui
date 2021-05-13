@@ -226,6 +226,7 @@ class Lib {
 	 * @param args
 	 * @return Int
 	 */
+	@:deprecated("该resumeCall接口已弃用，它的效果与renderCall一致，请使用renderCall接口。")
 	public static function resumeCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).resumeCall(closure, args);
 	}

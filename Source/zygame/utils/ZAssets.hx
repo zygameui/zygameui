@@ -416,7 +416,8 @@ class ZAssets {
 				#if debug
 				trace("载入进度：" + Std.int(curprogress * 100) + "%");
 				#end
-				_callBack(curprogress);
+				if (_callBack != null)
+					_callBack(curprogress);
 			}
 			return;
 		}

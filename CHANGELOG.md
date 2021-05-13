@@ -5,6 +5,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.4.6
+- [改进] 改进`ZAssets`的进度回调空处理。
+
 ### 10.4.5
 - [改进] 改进`TimeRuntion`的空处理。
 - [改进] 改进`V3Api`在HTML5平台上对https/http的兼容。

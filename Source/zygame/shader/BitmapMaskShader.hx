@@ -2,9 +2,8 @@ package zygame.shader;
 
 import openfl.display.DisplayObjectShader;
 
-class BitmapMaskShader extends DisplayObjectShader{
-
-    @:glFragmentSource("
+class BitmapMaskShader extends DisplayObjectShader {
+	@:glFragmentSource("
 
         #pragma header
 
@@ -35,10 +34,8 @@ class BitmapMaskShader extends DisplayObjectShader{
 		}
 
     ")
-    public function new(bitmapData:openfl.display.BitmapData):Void
-    {
-        super();
-        this.mask_Texture.input = bitmapData;
-    }
-
+	public function new(bitmapData:openfl.display.BitmapData):Void {
+		super();
+		this.mask_Texture.input = bitmapData;
+	}
 }

@@ -42,7 +42,7 @@ class ExtendDynamic {
 									}),
 									pos: Context.currentPos()
 								};
-								
+
 								var getValue = {
 									name: "get" + item.name.charAt(0).toUpperCase() + item.name.substr(1) + "Value",
 									meta: [],

@@ -25,32 +25,44 @@ class OpenFLShader extends DisplayObjectShader {
 	 */
 	public var gl_openfl_Alphav:Float;
 
+	/**
+	 * 最终值输出
+	 */
 	public var gl_FragColor:Vec4;
 
+	/**
+	 * 当前着色器获得到的颜色
+	 */
 	public var color:Vec4;
 
-	public function asVec2(data:Dynamic):Vec2 {
-		return data;
-	}
-
-	public function asVec3(data:Dynamic):Vec3 {
-		return data;
-	}
-
-	public function asVec4(data:Dynamic):Vec4 {
-		return data;
-	}
-
-	public function floor(f:Float):Dynamic {
+	/**
+	 * 返回小于等于x的最大整数值
+	 * @param f 
+	 * @return Dynamic
+	 */
+	public function floor(f:Dynamic):Dynamic {
 		return f;
 	};
 
+
+	/**
+	 * 获取Texture2D颜色
+	 * @param texture 纹理对象
+	 * @param vec2 UV位置
+	 * @return Vec4
+	 */
 	public function texture2D(texture:Dynamic, vec2:Float):Vec4 {
 		return null;
 	}
 
+	/**
+	 * 片段着色器，需要时，请重写这个
+	 */
 	public function fragment():Void {}
 
+	/**
+	 * 顶点着色器，需要时，请重写这个
+	 */
 	public function vertex():Void {}
 
 	public function new() {

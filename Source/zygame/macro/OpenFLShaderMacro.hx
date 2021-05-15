@@ -10,6 +10,8 @@ import haxe.macro.Context;
 class OpenFLShaderMacro {
 	public static var uniform:Map<String, String>;
 
+	public static var lastType:String;
+
 	macro public static function buildShader():Array<Field> {
 		var fields = Context.getBuildFields();
 		var isDebug = Context.getLocalClass().get().meta.has(":debug");
@@ -52,7 +54,7 @@ class OpenFLShaderMacro {
 								// 定义局部变量
 								var vars = expr.getParameters()[0];
 								var varvalue = vars[0].expr;
-								line += "  " + (vars[0].type != null ? toExprType(vars[0].type) : "???") + " " + vars[0].name;
+								line += "  " + (vars[0].type != null ? toExprType(vars[0].type) : toExprType(varvalue.expr)) + " " + vars[0].name;
 								// trace(varvalue);
 								if (varvalue != null) line += "=" + toExprValue(varvalue.expr);
 							case "ECall":
@@ -88,7 +90,7 @@ class OpenFLShaderMacro {
 		}
 		var newField = null;
 		for (f in fields) {
-			if (f.name == "new"){
+			if (f.name == "new") {
 				newField = f;
 				newField.meta = [
 					{
@@ -132,12 +134,15 @@ class OpenFLShaderMacro {
 	public static function toExprType(expr:ExprDef):String {
 		var ret = "#invalidType#";
 		var type = expr.getName();
+		lastType = null;
 		switch (type) {
 			case "ENew", "TPath":
-				return expr.getParameters()[0].name.toLowerCase();
+				lastType = expr.getParameters()[0].name.toLowerCase();
+				return lastType;
 			case "EConst":
 				expr = expr.getParameters()[0];
-				return expr.getName().substr(1).toLowerCase();
+				lastType = expr.getName().substr(1).toLowerCase();
+				return lastType;
 			default:
 				throw "无法使用" + type + "建立类型关系";
 		}
@@ -217,6 +222,9 @@ class OpenFLShaderMacro {
 						value = "u_" + value;
 					if (value.indexOf("gl_openfl") == 0)
 						value = value.substr(3);
+					if(lastType == "float" && value.indexOf(".") == -1){
+						value = value + ".";
+					}
 				}
 				return value;
 			default:
@@ -237,5 +245,4 @@ class OpenFLShaderMacro {
 		}
 		return ret.join(",");
 	}
-
 }

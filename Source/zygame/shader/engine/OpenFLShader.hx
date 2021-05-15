@@ -73,6 +73,13 @@ class OpenFLShader extends DisplayObjectShader implements zygame.core.Refresher 
 		return a;
 	}
 
+	/**
+	 * 获得三个参数中大小处在中间的那个值，如果minVal > minMax的话，函数返回的结果是未定的。也就是说x的值大小没有限制，但是minval的值必须比maxVal小
+	 * @param a 
+	 * @param b 
+	 * @param c 
+	 * @return Dynamic
+	 */
 	public function clamp(a:Dynamic, b:Dynamic, c:Dynamic):Dynamic {
 		return a;
 	}

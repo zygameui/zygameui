@@ -1,31 +1,23 @@
 package zygame.shader;
 
-import openfl.display.DisplayObjectShader;
+import zygame.shader.engine.OpenFLShader;
 
 /**
  * 图层透明着色器
  */
-class LayerAlphaShader extends DisplayObjectShader {
+class LayerAlphaShader extends OpenFLShader {
+	@:uniform public var malpha:Float;
 
-    @:glFragmentSource("
-		
-		#pragma header
+	public function new(a:Float = 1) {
+		super();
+		this.u_malpha.value = [a];
+	}
 
-        uniform float malpha;
-				
-		void main(void) {
-			
-			#pragma body
-			gl_FragColor.r *= malpha;
-			gl_FragColor.g *= malpha;
-			gl_FragColor.b *= malpha;
-			gl_FragColor.a *= malpha;
-		}
-		
-	")
-    public function new(a:Float = 1){
-        super();
-		this.malpha.value = [a];
-    }
-
+	override function fragment() {
+		super.fragment();
+		gl_FragColor.r *= malpha;
+		gl_FragColor.g *= malpha;
+		gl_FragColor.b *= malpha;
+		gl_FragColor.a *= malpha;
+	}
 }

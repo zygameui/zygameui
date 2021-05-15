@@ -217,12 +217,13 @@ class OpenFLShaderMacro {
 			case "EConst":
 				expr = expr.getParameters()[0];
 				var value:Dynamic = expr.getParameters()[0];
+				var ctype = expr.getName();
 				if (Std.isOfType(value, String)) {
 					if (uniform.exists(value))
 						value = "u_" + value;
 					if (value.indexOf("gl_openfl") == 0)
 						value = value.substr(3);
-					if(lastType == "float" && value.indexOf(".") == -1){
+					if ((ctype == "CInt" || ctype == "CFloat") && lastType != null && lastType != "int" && value.indexOf(".") == -1) {
 						value = value + ".";
 					}
 				}

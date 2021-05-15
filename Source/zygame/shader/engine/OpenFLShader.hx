@@ -1,10 +1,11 @@
 package zygame.shader.engine;
 
+import zygame.core.Start;
 import openfl.display.DisplayObjectShader;
 import haxe.macro.Expr.Field;
 
 @:autoBuild(zygame.macro.OpenFLShaderMacro.buildShader())
-class OpenFLShader extends DisplayObjectShader {
+class OpenFLShader extends DisplayObjectShader implements zygame.core.Refresher {
 	/** 
 	 * 纹理UV
 	 */
@@ -52,31 +53,31 @@ class OpenFLShader extends DisplayObjectShader {
 		return a;
 	}
 
-	public function int(a:Dynamic):Dynamic{
+	public function int(a:Dynamic):Dynamic {
 		return a;
 	}
 
-	public function cos(a:Dynamic):Dynamic{
+	public function cos(a:Dynamic):Dynamic {
 		return a;
 	}
 
-	public function sin(a:Dynamic):Dynamic{
+	public function sin(a:Dynamic):Dynamic {
 		return a;
 	}
 
-	public function length(a:Dynamic):Dynamic{
+	public function length(a:Dynamic):Dynamic {
 		return a;
 	}
 
-	public function pow(a:Dynamic,a:Dynamic):Dynamic{
+	public function pow(a:Dynamic, a:Dynamic):Dynamic {
 		return a;
 	}
 
-	public function clamp(a:Dynamic,b:Dynamic,c:Dynamic):Dynamic{
+	public function clamp(a:Dynamic, b:Dynamic, c:Dynamic):Dynamic {
 		return a;
 	}
 
-	public function abs(a:Dynamic):Dynamic{
+	public function abs(a:Dynamic):Dynamic {
 		return a;
 	}
 
@@ -103,4 +104,21 @@ class OpenFLShader extends DisplayObjectShader {
 	public function new() {
 		super();
 	}
+
+	public function setFrameEvent(bool:Bool):Void {
+		if (bool)
+			Start.current.addToUpdate(this);
+		else
+			Start.current.removeToUpdate(this);
+	}
+
+	/**
+	 * 释放当前着色器
+	 */
+	public function dispose():Void {
+		Start.current.removeToUpdate(this);
+	}
+
+	public function onFrame():Void {}
+
 }

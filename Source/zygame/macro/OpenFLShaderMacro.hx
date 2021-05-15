@@ -26,13 +26,17 @@ class OpenFLShaderMacro {
 		var pos = Context.currentPos();
 		var fields = Context.getBuildFields();
 		var isDebug = Context.getLocalClass().get().meta.has(":debug");
+		var noShader = Context.getLocalClass().get().meta.has(":noshader");
+		if (noShader) {
+			trace("???return");
+			return fields;
+		}
 		var shader = "\n\r";
 		var defines:Array<String> = [];
 		var glslFuncs:Array<String> = [];
 		var maps:Map<String, String> = [];
 		uniform = [];
 		for (field in fields) {
-			// trace(field.kind.getName());
 			switch (field.kind.getName()) {
 				case "FVar":
 					var isUniform = field.meta.filter(f -> f.name == ":uniform").length > 0;
@@ -59,7 +63,6 @@ class OpenFLShaderMacro {
 					maps.set(field.name, "");
 					// 定义
 					for (index => value in field.meta) {
-						trace(value.name);
 						var line = null;
 						switch (value.name) {
 							case ":precision":
@@ -104,7 +107,6 @@ class OpenFLShaderMacro {
 					var array:Array<Dynamic> = func.getParameters()[0];
 					for (index => value in array) {
 						var expr:ExprDef = cast value.expr;
-						// trace("方法解析：", expr.getName());
 						var line:String = "";
 						switch (expr.getName()) {
 							case "EField":
@@ -162,6 +164,7 @@ class OpenFLShaderMacro {
 		fragment += maps.get("fragment");
 
 		if (isDebug) {
+			trace("class=", Context.getLocalClass());
 			trace("uniform=" + uniform);
 			trace("\n\rGLSL脚本：\n\r" + shader);
 			trace("fragment=\n\r" + fragment);

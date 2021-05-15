@@ -13,6 +13,9 @@
 - [新增] GLSL新增`@:precision`语法。
 - [新增] GLSL新增`@:define`宏定义语法。
 - [新增] GLSL新增`@:glsl`宏定义GLSL方法使用。
+- [改进] GLSL的数组语法访问支持。
+- [改进] 改进`ZUShader`的GLSL功能。
+- [弃用] 弃用`ZUShader`，改进`OpenFLShader`包含了`ZUShader`的API。
 
 ### 10.4.5
 - [改进] 改进`TimeRuntion`的空处理。

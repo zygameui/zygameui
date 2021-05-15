@@ -4,7 +4,6 @@ package zygame.shader;
  * 流光效果渲染
  */
 class FluxaySuperShader extends zygame.shader.engine.ZUShader {
-
 	public var speed:Float = 1;
 
 	@:glVertexSource("#pragma header
@@ -16,7 +15,6 @@ class FluxaySuperShader extends zygame.shader.engine.ZUShader {
 			#pragma body
 
 		}")
-
 	@:glFragmentSource("#pragma header
 
 		precision highp float;
@@ -59,17 +57,16 @@ class FluxaySuperShader extends zygame.shader.engine.ZUShader {
 			gl_FragColor = tex + color * tex;
 
 		}")
-	public function new(speed:Float = 1){
+	public function new(speed:Float = 1) {
 		super();
 		this.speed = speed;
-    }
-    
-    override function onFrame() {
-        super.onFrame();
-        if(this.time.value == null){
+	}
+
+	override function onFrame() {
+		super.onFrame();
+		if (this.time.value == null) {
 			this.time.value = [0];
 		}
-		this.time.value[0] += 1/60 * speed;
-    }
-
+		this.time.value[0] += 1 / 60 * speed;
+	}
 }

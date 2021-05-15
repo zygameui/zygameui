@@ -8,11 +8,22 @@ import haxe.macro.Context;
  * 解析OpenFLShader的宏处理
  */
 class OpenFLShaderMacro {
+	/**
+	 * uniform映射
+	 */
 	public static var uniform:Map<String, String>;
 
+	/**
+	 * 历史上一次类型记录
+	 */
 	public static var lastType:String;
 
+	/**
+	 * 自动编译buildShader
+	 * @return Array<Field>
+	 */
 	macro public static function buildShader():Array<Field> {
+		var pos = Context.currentPos();
 		var fields = Context.getBuildFields();
 		var isDebug = Context.getLocalClass().get().meta.has(":debug");
 		var shader = "\n\r";
@@ -40,7 +51,35 @@ class OpenFLShaderMacro {
 					if (field.name != "fragment")
 						continue;
 					maps.set(field.name, "");
+					// 定义
+					for (index => value in field.meta) {
+						trace(value.name);
+						var line = null;
+						switch (value.name) {
+							case ":precision":
+								var expr:ExprDef = value.params[0].expr.getParameters()[0];
+								line = "precision " + expr.getParameters()[0] + ";\n\r";
+							case ":define":
+								var expr:ExprDef = value.params[0].expr.getParameters()[0];
+								var defineValue = expr.getParameters()[0];
+								line = "#define " + defineValue + "\n\r";
+								var newDefineField = {
+									name: defineValue.substr(0, defineValue.indexOf(" ")),
+									doc: null,
+									meta: [],
+									access: [APublic],
+									kind: FVar(macro:Dynamic),
+									pos: pos
+								};
+								fields.push(newDefineField);
+						}
+						if (line != null) {
+							maps.set(field.name, maps.get(field.name) + line);
+							shader += line;
+						}
+					}
 					shader += "\n\rvoid " + field.name + "(){\n\r";
+					maps.set(field.name, maps.get(field.name) + "\n\r#pragma header \n void main(void){#pragma body\n");
 					var func:ExprDef = cast field.kind.getParameters()[0].expr.expr;
 					var array:Array<Dynamic> = func.getParameters()[0];
 					for (index => value in array) {
@@ -75,11 +114,11 @@ class OpenFLShaderMacro {
 						}
 					}
 					shader += "\n\r}";
+					maps.set(field.name, maps.get(field.name) + "\n\r}");
 			}
 		}
 		// 创建new
-		var pos = Context.currentPos();
-		var fragment = "#pragma header \n void main(void){#pragma body\n" + maps.get("fragment") + "\n}";
+		var fragment = maps.get("fragment");
 		for (key => value in uniform) {
 			fragment = value + fragment;
 		}
@@ -123,7 +162,6 @@ class OpenFLShaderMacro {
 			};
 			fields.push(newField);
 		}
-		// processFields(fragment, "uniform", fields, pos);
 		return fields;
 	}
 

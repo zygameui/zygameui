@@ -10,6 +10,8 @@
 - [新增] 新增`OpenFLShader`的支持，允许使用Haxe直接编写GLSL。
 - [新增] GLSL新增`Vec2`,`Vec3`,`Vec4`变量类型支持。
 - [新增] GLSL新增`@:uniform`变量类型支持。
+- [新增] GLSL新增`@:precision`语法。
+- [新增] GLSL新增`@:define`宏定义语法。
 
 ### 10.4.5
 - [改进] 改进`TimeRuntion`的空处理。

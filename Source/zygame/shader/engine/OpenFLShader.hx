@@ -20,9 +20,26 @@ class OpenFLShader extends DisplayObjectShader {
 	 */
 	public var gl_openfl_Texture:Dynamic;
 
+	/**
+	 * 当前纹理透明度
+	 */
+	public var gl_openfl_Alphav:Float;
+
 	public var gl_FragColor:Vec4;
 
 	public var color:Vec4;
+
+	public function asVec2(data:Dynamic):Vec2 {
+		return data;
+	}
+
+	public function asVec3(data:Dynamic):Vec3 {
+		return data;
+	}
+
+	public function asVec4(data:Dynamic):Vec4 {
+		return data;
+	}
 
 	public function floor(f:Float):Dynamic {
 		return f;
@@ -39,23 +56,4 @@ class OpenFLShader extends DisplayObjectShader {
 	public function new() {
 		super();
 	}
-}
-
-extern class Vec4 {
-	public var r:Float;
-	public var b:Float;
-	public var g:Float;
-	public var a:Float;
-	public var rgba:Float;
-	public var rgb:Float;
-	public var rga:Float;
-	public var rba:Float;
-	public function new(r:Float, g:Float, b:Float, a:Float);
-}
-
-extern class Vec2 {
-	public var x:Float;
-	public var y:Float;
-	public var xy:Float;
-	public function new(x:Float, y:Float);
 }

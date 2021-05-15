@@ -14,4 +14,6 @@ enum abstract Vec4(IVec.BaseVec) from IVec.BaseVec to IVec.BaseVec {
 		};
 	}
 
+	
+
 }

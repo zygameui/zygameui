@@ -27,6 +27,8 @@ class OpenFLShaderMacro {
 		var fields = Context.getBuildFields();
 		var isDebug = Context.getLocalClass().get().meta.has(":debug");
 		var shader = "\n\r";
+		var defines:Array<String> = [];
+		var glslFuncs:Array<String> = [];
 		var maps:Map<String, String> = [];
 		uniform = [];
 		for (field in fields) {
@@ -48,8 +50,12 @@ class OpenFLShaderMacro {
 					}
 				case "FFun":
 					// 方法解析
-					if (field.name != "fragment")
+					var isGLSLFunc = field.meta.filter((f) -> f.name == ":glsl").length != 0;
+					if (field.name != "fragment" && !isGLSLFunc)
 						continue;
+					if (isGLSLFunc) {
+						glslFuncs.push(field.name);
+					}
 					maps.set(field.name, "");
 					// 定义
 					for (index => value in field.meta) {
@@ -74,12 +80,26 @@ class OpenFLShaderMacro {
 								fields.push(newDefineField);
 						}
 						if (line != null) {
-							maps.set(field.name, maps.get(field.name) + line);
+							defines.push(line);
 							shader += line;
 						}
 					}
-					shader += "\n\rvoid " + field.name + "(){\n\r";
-					maps.set(field.name, maps.get(field.name) + "\n\r#pragma header \n void main(void){#pragma body\n");
+					var retType = toExprType(field.kind.getParameters()[0].ret);
+					if (isDebug)
+						trace("方法参数：", field.kind.getParameters()[0]);
+					shader += "\n\r" + retType + " " + field.name + "(" + toExprArgs(field.kind.getParameters()[0].args) + "){\n\r";
+					if (isGLSLFunc)
+						maps.set(field.name,
+							maps.get(field.name)
+							+ "\n"
+							+ retType
+							+ " "
+							+ field.name
+							+ "("
+							+ toExprArgs(field.kind.getParameters()[0].args)
+							+ "){");
+					else
+						maps.set(field.name, maps.get(field.name) + "\n void main(void){#pragma body\n");
 					var func:ExprDef = cast field.kind.getParameters()[0].expr.expr;
 					var array:Array<Dynamic> = func.getParameters()[0];
 					for (index => value in array) {
@@ -107,21 +127,40 @@ class OpenFLShaderMacro {
 							case "EIf":
 								// If判断
 								line += "  " + toExprValue(expr);
+							case "EReturn":
+								// return
+								line = "  " + toExprValue(expr);
+							case "EFor":
+								// for
+								line = "  " + toExprValue(expr);
+							default:
+								throw "意外的运行符：" + expr.getName();
 						}
 						if (line != "  null") {
 							maps.set(field.name, maps.get(field.name) + line + ";\n\r");
 							shader += line + ";\n\r";
 						}
 					}
-					shader += "\n\r}";
-					maps.set(field.name, maps.get(field.name) + "\n\r}");
+					shader += "\n\r}\n\r";
+					maps.set(field.name, maps.get(field.name) + "\n\r}\n\r");
 			}
 		}
 		// 创建new
-		var fragment = maps.get("fragment");
-		for (key => value in uniform) {
-			fragment = value + fragment;
+		var fragment = "#pragma header\n";
+		for (d in defines) {
+			fragment += d;
 		}
+		// 方法定义
+		for (index => value in glslFuncs) {
+			fragment += maps.get(value);
+		}
+		// uniform定义
+		for (key => value in uniform) {
+			fragment += value;
+		}
+
+		fragment += maps.get("fragment");
+
 		if (isDebug) {
 			trace("uniform=" + uniform);
 			trace("\n\rGLSL脚本：\n\r" + shader);
@@ -166,10 +205,25 @@ class OpenFLShaderMacro {
 	}
 
 	/**
+	 * 解析Args参数
+	 * @param array 
+	 * @return String
+	 */
+	public static function toExprArgs(array:Array<Dynamic>):String {
+		var rets = [];
+		for (index => value in array) {
+			rets.push(toExprType(value.type) + " " + value.name);
+		}
+		return rets.join(",");
+	}
+
+	/**
 	 * 解析Expr的层级类型
 	 * @return String
 	 */
 	public static function toExprType(expr:ExprDef):String {
+		if (expr == null)
+			return "void";
 		var ret = "#invalidType#";
 		var type = expr.getName();
 		lastType = null;
@@ -196,12 +250,14 @@ class OpenFLShaderMacro {
 		var ret = "#invalidValue#";
 		var type = expr.getName();
 		switch (type) {
+			case "OpSub":
+				return "-";
 			case "OpGt":
 				return ">";
 			case "OpLt":
 				return "<";
 			case "OpAssignOp":
-				return "*=";
+				return toExprValue(expr.getParameters()[0]) + "=";
 			case "OpAssign":
 				return "=";
 			case "OpAdd":
@@ -210,6 +266,42 @@ class OpenFLShaderMacro {
 				return "/";
 			case "OpMult":
 				return "*";
+			case "OpInterval":
+				return "...";
+			case "OpIn":
+				return "in";
+			case "EParenthesis":
+				return "(" + toExprValue(expr.getParameters()[0].expr) + ")";
+			case "EVars":
+				// 定义局部变量
+				var ret = "";
+				var vars = expr.getParameters()[0];
+				var varvalue = vars[0].expr;
+				ret += "  " + (vars[0].type != null ? toExprType(vars[0].type) : toExprType(varvalue.expr)) + " " + vars[0].name;
+				if (varvalue != null)
+					return ret + "=" + toExprValue(varvalue.expr);
+			case "EArray":
+				lastType = "int";
+				return toExprValue(expr.getParameters()[0].expr) + "[" + toExprValue(expr.getParameters()[1].expr) + "]";
+			case "EBlock":
+				var ret = "";
+				var array:Array<Dynamic> = expr.getParameters()[0];
+				for (index => value in array) {
+					ret += toExprValue(value.expr) + ";\n";
+				}
+				return ret;
+			case "EFor":
+				// For
+				var it:ExprDef = expr.getParameters()[0].expr;
+				var content:ExprDef = expr.getParameters()[1].expr;
+				lastType = "int";
+				var attr = toExprValue(it.getParameters()[1].expr);
+				var it2:ExprDef = it.getParameters()[2].expr;
+				var start = toExprValue(it2.getParameters()[1].expr);
+				var end = toExprValue(it2.getParameters()[2].expr);
+				return "for(int " + attr + " = " + start + ";" + attr + "<" + end + ";" + attr + "++){\n" + toExprValue(content) + "\n}";
+			case "EReturn":
+				return "return " + toExprValue(expr.getParameters()[0].expr);
 			case "ECast":
 				return toExprValue(expr.getParameters()[0].expr);
 			case "EIf":

@@ -12,6 +12,7 @@
 - [新增] GLSL新增`@:uniform`变量类型支持。
 - [新增] GLSL新增`@:precision`语法。
 - [新增] GLSL新增`@:define`宏定义语法。
+- [新增] GLSL新增`@:glsl`宏定义GLSL方法使用。
 
 ### 10.4.5
 - [改进] 改进`TimeRuntion`的空处理。

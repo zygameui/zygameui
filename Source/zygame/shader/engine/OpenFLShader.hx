@@ -44,6 +44,41 @@ class OpenFLShader extends DisplayObjectShader {
 		return f;
 	};
 
+	public function mod(a:Dynamic, b:Dynamic):Dynamic {
+		return a;
+	}
+
+	public function float(a:Dynamic):Dynamic {
+		return a;
+	}
+
+	public function int(a:Dynamic):Dynamic{
+		return a;
+	}
+
+	public function cos(a:Dynamic):Dynamic{
+		return a;
+	}
+
+	public function sin(a:Dynamic):Dynamic{
+		return a;
+	}
+
+	public function length(a:Dynamic):Dynamic{
+		return a;
+	}
+
+	public function pow(a:Dynamic,a:Dynamic):Dynamic{
+		return a;
+	}
+
+	public function clamp(a:Dynamic,b:Dynamic,c:Dynamic):Dynamic{
+		return a;
+	}
+
+	public function abs(a:Dynamic):Dynamic{
+		return a;
+	}
 
 	/**
 	 * 获取Texture2D颜色

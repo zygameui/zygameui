@@ -1,6 +1,6 @@
 package zygame.shader;
 
-import zygame.shader.engine.OpenFLShader;
+import glsl.OpenFLShader;
 import VectorMath;
 
 /**

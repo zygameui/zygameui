@@ -26,6 +26,7 @@
 	<haxelib name="zygameui-nape" if="nape" />
 	<!-- GLSL -->
 	<haxelib name="vector-math"/>
+	<haxelib name="openfl-glsl"/>
 
 	<!-- 禁止字体缩放 -->
 	<haxedef name="un_scale_label" unless="high_label"/>

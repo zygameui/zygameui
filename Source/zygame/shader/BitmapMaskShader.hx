@@ -4,6 +4,9 @@ import openfl.display.BitmapData;
 import glsl.OpenFLShader;
 import glsl.Sampler2D;
 
+/**
+ * 纹理遮罩着色器
+ */
 class BitmapMaskShader extends OpenFLShader {
 	@:uniform var bitmapData:Sampler2D;
 

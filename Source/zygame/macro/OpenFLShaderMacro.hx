@@ -1,8 +1,10 @@
 package zygame.macro;
 
+#if macro
 import haxe.macro.ExprTools;
 import haxe.macro.Expr;
 import haxe.macro.Context;
+#end
 
 /**
  * 解析OpenFLShader的宏处理
@@ -22,13 +24,15 @@ class OpenFLShaderMacro {
 	 * 自动编译buildShader
 	 * @return Array<Field>
 	 */
+	#if macro
 	macro public static function buildShader():Array<Field> {
-		var pos = Context.currentPos();
+		var pos:Position = Context.currentPos();
 		var fields = Context.getBuildFields();
 		var isDebug = Context.getLocalClass().get().meta.has(":debug");
 		var noShader = Context.getLocalClass().get().meta.has(":noshader");
+		var info = Context.getPosInfos(pos);
+		Context.registerModuleDependency(Context.getLocalModule(),info.file);
 		if (noShader) {
-			trace("???return");
 			return fields;
 		}
 		var shader = "\n\r";
@@ -88,8 +92,6 @@ class OpenFLShaderMacro {
 						}
 					}
 					var retType = toExprType(field.kind.getParameters()[0].ret);
-					if (isDebug)
-						trace("方法参数：", field.kind.getParameters()[0]);
 					shader += "\n\r" + retType + " " + field.name + "(" + toExprArgs(field.kind.getParameters()[0].args) + "){\n\r";
 					if (isGLSLFunc)
 						maps.set(field.name,
@@ -134,6 +136,8 @@ class OpenFLShaderMacro {
 								line = "  " + toExprValue(expr);
 							case "EFor":
 								// for
+								line = "  " + toExprValue(expr);
+							case "EConst":
 								line = "  " + toExprValue(expr);
 							default:
 								throw "意外的运行符：" + expr.getName();
@@ -323,8 +327,12 @@ class OpenFLShaderMacro {
 				var value = toExprValue(expr.getParameters()[0].expr);
 				if (uniform.exists(value))
 					value = "u_" + value;
-				if (value == "this")
-					return expr.getParameters()[1];
+				if (value == "this") {
+					value = expr.getParameters()[1];
+					if (value.indexOf("gl_openfl") == 0)
+						value = value.substr(3);
+					return value;
+				}
 				if (value.indexOf("gl_openfl") == 0)
 					value = value.substr(3);
 				var ret = value + "." + expr.getParameters()[1];
@@ -379,4 +387,5 @@ class OpenFLShaderMacro {
 		}
 		return ret.join(",");
 	}
+	#end
 }

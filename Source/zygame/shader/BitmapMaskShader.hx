@@ -1,41 +1,20 @@
 package zygame.shader;
 
-import openfl.display.DisplayObjectShader;
+import openfl.display.BitmapData;
+import glsl.OpenFLShader;
+import glsl.Sampler2D;
 
-class BitmapMaskShader extends DisplayObjectShader {
-	@:glFragmentSource("
+class BitmapMaskShader extends OpenFLShader {
+	@:uniform var bitmapData:Sampler2D;
 
-        #pragma header
-
-        uniform sampler2D mask_Texture;
-				
-		void main(void) {
-			
-			#pragma body
-
-            vec4 finalColor = texture2D(mask_Texture, openfl_TextureCoordv);
-            if(finalColor.a + finalColor.r + finalColor.g + finalColor.b == 0.)
-            {
-                color.r = 0.;
-                color.g = 0.;
-                color.b = 0.;
-                color.a = 0.;
-            }
-            else
-            {
-                color.r *= finalColor.a;
-                color.g *= finalColor.a;
-                color.b *= finalColor.a;
-                color.a *= finalColor.a;
-            }
-
-			gl_FragColor = color * openfl_Alphav;
-			
-		}
-
-    ")
-	public function new(bitmapData:openfl.display.BitmapData):Void {
+	public function new(bitmapData:BitmapData) {
 		super();
-		this.mask_Texture.input = bitmapData;
+		this.u_bitmapData.input = bitmapData;
+	}
+
+	override function fragment() {
+		super.fragment();
+		var maskColor:Vec4 = texture2D(bitmapData, gl_openfl_TextureCoordv);
+		gl_FragColor = maskColor.a * color * gl_openfl_Alphav;
 	}
 }

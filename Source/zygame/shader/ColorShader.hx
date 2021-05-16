@@ -1,9 +1,6 @@
 package zygame.shader;
 
 import zygame.shader.engine.OpenFLShader;
-import zygame.shader.engine.Vec3;
-import zygame.shader.engine.Vec4;
-import zygame.shader.engine.Vec2;
 
 /**
  * 图层透明着色器

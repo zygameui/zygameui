@@ -1,13 +1,12 @@
 package zygame.shader;
 
 import zygame.shader.engine.OpenFLShader;
-import zygame.shader.engine.Vec3;
-import zygame.shader.engine.Vec4;
-import zygame.shader.engine.Vec2;
+import VectorMath;
 
 /**
  * 流光效果渲染
  */
+@:debug
 class FluxaySuperShader extends OpenFLShader {
 	@:uniform public var speed:Float;
 
@@ -20,19 +19,19 @@ class FluxaySuperShader extends OpenFLShader {
 		// uv should be the 0-1 uv of texture...
 		var uv:Vec2 = gl_openfl_TextureCoordv.xy;
 		var p:Vec2 = mod(uv * TAU, TAU) - 250.0;
-		var i:Vec2 = new Vec2(p);
+		var i:Vec2 = vec2(p);
 		var c = 1.;
 		var inten = .0045;
 		for (n in 0...MAX_ITER) {
 			var t:Float = time * (1 - (3.5 / float(n + int(1))));
-			i = p + new Vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(1.5 * t + i.x));
-			c += 1.0 / length(new Vec2(p.x / (cos(i.x + t) / inten), p.y / (cos(i.y + t) / inten)));
+			i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(1.5 * t + i.x));
+			c += 1.0 / length(vec2(p.x / (cos(i.x + t) / inten), p.y / (cos(i.y + t) / inten)));
 		}
 		c /= float(MAX_ITER);
 		c = 1.17 - pow(c, 1.4);
 		var tex:Vec4 = texture2D(openfl_Texture, uv);
-		var colour:Vec3 = new Vec3(pow(abs(c), 20.0));
-		colour = clamp(colour + new Vec3(0.0, 0.0, .0), 0.0, tex.a);
+		var colour:Vec3 = vec3(pow(abs(c), 20.0));
+		colour = clamp(colour + vec3(0.0, 0.0, .0), 0.0, tex.a);
 		// 混合波光
 		var alpha:Float = c * tex[3];
 		tex[0] = tex[0] + colour[0] * alpha;

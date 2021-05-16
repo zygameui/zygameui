@@ -31,7 +31,7 @@ class OpenFLShaderMacro {
 		var isDebug = Context.getLocalClass().get().meta.has(":debug");
 		var noShader = Context.getLocalClass().get().meta.has(":noshader");
 		var info = Context.getPosInfos(pos);
-		Context.registerModuleDependency(Context.getLocalModule(),info.file);
+		Context.registerModuleDependency(Context.getLocalModule(), info.file);
 		if (noShader) {
 			return fields;
 		}
@@ -122,12 +122,11 @@ class OpenFLShaderMacro {
 								if (varvalue != null) line += "=" + toExprValue(varvalue.expr);
 							case "ECall":
 								// 调用方法
-								var callname = toExprValue(expr.getParameters()[0].expr);
-								line += "  " + callname;
+								var value = toExprValue(expr);
+								if (value.indexOf("null") != 0) line += "  " + value;
 							case "EBinop":
 								// 赋值
-								var varname = toExprValue(expr);
-								line += "  " + varname;
+								line += "  " + toExprValue(expr);
 							case "EIf":
 								// If判断
 								line += "  " + toExprValue(expr);
@@ -142,7 +141,7 @@ class OpenFLShaderMacro {
 							default:
 								throw "意外的运行符：" + expr.getName();
 						}
-						if (line != "  null") {
+						if (line != "") {
 							maps.set(field.name, maps.get(field.name) + line + ";\n\r");
 							shader += line + ";\n\r";
 						}

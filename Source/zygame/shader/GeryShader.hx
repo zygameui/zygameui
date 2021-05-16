@@ -1,6 +1,5 @@
 package zygame.shader;
 
-import zygame.shader.engine.Vec3;
 import zygame.shader.engine.OpenFLShader;
 
 /**

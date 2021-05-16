@@ -12,6 +12,8 @@
 --library feathersui
 --library swf
 --library differ
+--library vector-math
+--library openfl-glsl
 -D vscode
 -D zygame
 -D api

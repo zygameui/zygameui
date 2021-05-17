@@ -24,7 +24,7 @@ class ColorShader extends OpenFLShader {
 		// 更改颜色
 		this.gl_FragColor.rgb = mcolorvalue * color.a;
 		// 同步透明度
-		this.gl_FragColor.x = color.x;
+		this.gl_FragColor.w = color.w;
 		this.gl_FragColor *= gl_openfl_Alphav;
 	}
 

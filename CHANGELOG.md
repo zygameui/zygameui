@@ -7,15 +7,10 @@
 
 ### 10.4.6
 - [改进] 改进`ZAssets`的进度回调空处理。
-- [新增] 新增`OpenFLShader`的支持，允许使用Haxe直接编写GLSL。
-- [新增] GLSL新增`Vec2`,`Vec3`,`Vec4`变量类型支持。
-- [新增] GLSL新增`@:uniform`变量类型支持。
-- [新增] GLSL新增`@:precision`语法。
-- [新增] GLSL新增`@:define`宏定义语法。
-- [新增] GLSL新增`@:glsl`宏定义GLSL方法使用。
-- [改进] GLSL的数组语法访问支持。
+- [改进] 使用`openfl-glsl`作为编写GLSL的主要库。
 - [改进] 改进`ZUShader`的GLSL功能。
 - [弃用] 弃用`ZUShader`，改进`OpenFLShader`包含了`ZUShader`的API。
+- [新增] 新增`ImageBatchs`的`hitTestEnbled`支持，默认为true，禁用后整个`ImageBatchs`都可穿透。
 
 ### 10.4.5
 - [改进] 改进`TimeRuntion`的空处理。

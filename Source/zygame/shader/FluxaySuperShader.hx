@@ -6,7 +6,6 @@ import VectorMath;
 /**
  * 流光效果渲染
  */
-@:debug
 class FluxaySuperShader extends OpenFLShader {
 	@:uniform public var speed:Float;
 

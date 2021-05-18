@@ -10,7 +10,8 @@
 - [改进] 使用`openfl-glsl`作为编写GLSL的主要库。
 - [改进] 改进`ZUShader`的GLSL功能。
 - [弃用] 弃用`ZUShader`，改进`OpenFLShader`包含了`ZUShader`的API。
-- [新增] 新增`ImageBatchs`的`hitTestEnbled`支持，默认为true，禁用后整个`ImageBatchs`都可穿透。
+- [新增] 测试性功能：新增`ImageBatchs`的`hitTestEnbled`支持，默认为true，禁用后整个`ImageBatchs`都可穿透。
+    - 备用方法：如果需要穿透，套一个ZBox，然后设置mouseEnabled=false;
 
 ### 10.4.5
 - [改进] 改进`TimeRuntion`的空处理。

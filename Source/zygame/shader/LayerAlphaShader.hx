@@ -1,6 +1,7 @@
 package zygame.shader;
 
 import glsl.OpenFLShader;
+import glsl.GLSL;
 
 /**
  * 图层透明着色器

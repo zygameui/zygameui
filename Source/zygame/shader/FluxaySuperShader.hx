@@ -2,6 +2,8 @@ package zygame.shader;
 
 import glsl.OpenFLShader;
 import VectorMath;
+import glsl.GLSL;
+
 
 /**
  * 流光效果渲染

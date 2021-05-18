@@ -1,6 +1,7 @@
 package zygame.shader;
 
 import glsl.OpenFLShader;
+import glsl.GLSL;
 
 /**
  * 灰度着色器

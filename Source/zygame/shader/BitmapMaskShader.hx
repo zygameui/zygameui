@@ -3,6 +3,7 @@ package zygame.shader;
 import openfl.display.BitmapData;
 import glsl.OpenFLShader;
 import glsl.Sampler2D;
+import glsl.GLSL;
 
 /**
  * 纹理遮罩着色器

@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.4.7
+- [着色器] 新增`CircleMaskGLSL`圆形遮罩支持。
+- [着色器] 新增`RoundMaskShader`圆角遮罩，可以设置四个角的圆角大小。
+
 ### 10.4.6
 - [改进] 改进`ZAssets`的进度回调空处理。
 - [改进] 使用`openfl-glsl`作为编写GLSL的主要库。

@@ -8,7 +8,7 @@
 ### 10.4.7
 - [着色器] 新增`CircleMaskGLSL`圆形遮罩支持。
 - [着色器] 新增`RoundMaskShader`圆角遮罩，可以设置四个角的圆角大小。
-- [着色器] 删除`TextStrokeShader`文本描边着色器，改使用统一的描边着色器`StrokeShader`。
+- [着色器] 删除`TextStrokeShader`文本描边着色器，改使用统一的描边着色器`StrokeShader`，提高描边质量。
 
 ### 10.4.6
 - [改进] 改进`ZAssets`的进度回调空处理。

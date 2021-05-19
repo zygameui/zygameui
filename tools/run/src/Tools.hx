@@ -256,12 +256,17 @@ class Tools {
 					libs[i] = projectName + ":" + v;
 
 					var zipfiles:Array<String> = FileSystem.readDirectory(projectPath);
-					if (zipfiles.indexOf("Export") != -1)
-						zipfiles.remove("Export");
-					if (zipfiles.indexOf(".dev") != -1)
-						zipfiles.remove(".dev");
-					if (zipfiles.indexOf("tps") != -1)
-						zipfiles.remove("tps");
+					zipfiles = zipfiles.filter((f) -> {
+						if (f.indexOf("Export") != -1)
+							return false;
+						if (f.indexOf(".dev") != -1)
+							return false;
+						if (f.indexOf("tps") != -1)
+							return false;
+						if (f.indexOf(".") == 0)
+							return false;
+						return true;
+					});
 
 					// 上传成功后本地更改版本号
 					File.saveContent(projectPath + "/../version.json", libs.join("\n"));
@@ -298,5 +303,4 @@ class Tools {
 		trace(command);
 		Sys.command(command);
 	}
-
 }

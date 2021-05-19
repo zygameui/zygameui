@@ -1,6 +1,6 @@
 package zygame.components;
 
-import zygame.shader.TextStrokeShader;
+import zygame.shader.StrokeShader;
 import zygame.utils.Lib;
 #if html5
 import zygame.components.input.HTML5TextInput;
@@ -468,7 +468,7 @@ class ZLabel extends DataProviderComponent {
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
 		#if minigame
-		trace("zygame.core.KeyboardManager.keyboard=",zygame.core.KeyboardManager.keyboard);
+		trace("zygame.core.KeyboardManager.keyboard=", zygame.core.KeyboardManager.keyboard);
 		if (zygame.core.KeyboardManager.keyboard != null) {
 			zygame.core.KeyboardManager.focus(_display);
 			zygame.core.KeyboardManager.keyboard.input(this);
@@ -497,15 +497,15 @@ class ZLabel extends DataProviderComponent {
 	 * @param color 描边的颜色
 	 * @param blur 描边的厚度，默认建议使用1
 	 */
-	public function stroke(color:UInt, blur:Int = 1):Void {
-		this.getDisplay().shader = new zygame.shader.TextStrokeShader(color, blur, _font.size);
+	public function stroke(color:UInt, blur:Float = 1):Void {
+		this.getDisplay().shader = new zygame.shader.StrokeShader(blur, color);
 	}
 
 	/**
 	 * 加粗字体
 	 */
-	public function bold(blur:Int = 1):Void {
-		this.getDisplay().shader = new zygame.shader.TextStrokeShader(_font.color, blur, _font.size);
+	public function bold(blur:Float = 1):Void {
+		this.getDisplay().shader = new zygame.shader.StrokeShader(blur, _font.color);
 	}
 
 	#if android
@@ -603,5 +603,4 @@ class ZLabel extends DataProviderComponent {
 		rect.y += _display.y;
 		return rect;
 	}
-
 }

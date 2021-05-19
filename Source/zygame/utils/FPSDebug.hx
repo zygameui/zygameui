@@ -3,7 +3,6 @@ package zygame.utils;
 import zygame.components.ZBox;
 import zygame.components.ZQuad;
 import zygame.core.Start;
-import zygame.shader.TextFiledShader;
 import haxe.Timer;
 import openfl.events.Event;
 import openfl.system.System;

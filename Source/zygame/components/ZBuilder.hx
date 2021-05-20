@@ -978,7 +978,7 @@ class ZBuilder {
 		for (item in attrIterator) {
 			attr.push(item);
 		}
-		attr.sort((a,b)->return a == "text"?1:-1);
+		attr.sort((a, b) -> return a == "text" || a == "src"? 1 : -1);
 		while (attr.length > 0) {
 			var name:String = attr.shift();
 			if (name == "id") {

@@ -160,7 +160,7 @@ class Image extends DisplayObjectContainer {
 			return;
 		if (_scale9 != null)
 			_scale9.visible = false;
-		if (_curImg.curFrame.scale9frames != null) {
+		if (_curImg.curFrame.scale9rect != null) {
 			// 默认支持九宫格
 			if (_scale9 == null) {
 				_scale9 = new BScale9Image(_curFrame);
@@ -388,7 +388,7 @@ class Image extends DisplayObjectContainer {
 		updateScale9();
 		return height;
 	}
-
+	
 	#if flash @:setter(width)
 	public #else override private #end function set_width(width:Float):Float {
 		this._setWidth = true;

@@ -59,41 +59,42 @@ class Slice9Shader extends OpenFLShader {
 		var centerSliceWidth:Float = (isFrameSprite ? frameSpriteRect.z : gl_openfl_TextureSize.x) - s9d.x - s9d.y; // 中间原图宽度
 		var centerSliceHeight:Float = (isFrameSprite ? frameSpriteRect.w : gl_openfl_TextureSize.y) - s9d.z - s9d.w; // 中间原图高度
 		gl_FragColor = vec4(0);
-		if (uv.x < s9d.x && uv.y < s9d.z) {
+		if (uv.x <= s9d.x && uv.y <=s9d.z) {
 			// 左上(ok)
 			// gl_FragColor = vec4(1,0,0,1);
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(uv.x, uv.y));
-		} else if (uv.x > size.x - s9d.y && uv.y < s9d.z) {
+		} else if (uv.x >= size.x - s9d.y && uv.y <= s9d.z) {
 			// 右上(ok)
 			// gl_FragColor = vec4(1, 0, 0, 1);
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), uv.y));
-		} else if (uv.x < s9d.x && uv.y > size.y - s9d.w) {
+		} else if (uv.x <= s9d.x && uv.y >= size.y - s9d.w) {
 			// 左下
 			// gl_FragColor = vec4(1, 0, 0, 1);
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(uv.x, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
-		} else if (uv.x > size.x - s9d.y && uv.y > size.y - s9d.w) {
+		} else if (uv.x >= size.x - s9d.y && uv.y >= size.y - s9d.w) {
 			// 右下
 			// gl_FragColor = vec4(1, 0, 0, 1);
 			gl_FragColor = texture2D(gl_openfl_Texture,
 				getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
-		} else if (uv.y < s9d.z) {
+		} else if (uv.y <= s9d.z) {
 			// 上
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(s9d.x + (uv.y - s9d.z) / centerWidth * centerSliceWidth, uv.y));
-		} else if (uv.y > size.y - s9d.w) {
+		} else if (uv.y >= size.y - s9d.w) {
 			// 下
+			gl_FragColor = vec4(1,0,0,1);
 			gl_FragColor = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + (uv.y - s9d.z) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+				getUv(s9d.x + (uv.x - s9d.z) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 		} else if (uv.x <= s9d.x) {
 			// 左(ok)
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(uv.x, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
-		} else if (uv.x > size.x - s9d.y) {
+		} else if (uv.x >= size.x - s9d.y) {
 			// 右(ok)
 			gl_FragColor = texture2D(gl_openfl_Texture,
 				getUv(centerSliceWidth + s9d.x + uv.x - (size.x - s9d.y), s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		} else {
 			// 中间
 			gl_FragColor = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + (uv.y - s9d.z) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+				getUv(s9d.x + (uv.x - s9d.z) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		}
 		// if (isFrameSprite) {
 		// gl_FragColor += texture2D(gl_openfl_Texture, gl_openfl_TextureCoordv);
@@ -115,12 +116,13 @@ class Slice9Shader extends OpenFLShader {
 
 	public function updateFrame(frame:Frame):Void {
 		u_frameSpriteRect.value = [frame.x, frame.y, frame.width, frame.height];
-		trace("frame=", u_frameSpriteRect.value);
 	}
 
-	public function updateArgs(left:Float, top:Float, bottom:Float, right:Float, width:Float, height:Float) {
-		trace(left, right, top, bottom, width, height);
+	public function updateArgs(left:Float, top:Float, bottom:Float, right:Float) {
 		u_s9d.value = [left, right, top, bottom];
+	}
+
+	public function updateSize(width:Float, height:Float){
 		u_size.value = [width, height];
 	}
 }

@@ -1,6 +1,5 @@
 package zygame.display.batch;
 
-import openfl.geom.Rectangle;
 import zygame.shader.Slice9Shader;
 import zygame.utils.load.Frame;
 import zygame.display.batch.BImage;
@@ -73,32 +72,7 @@ class BScale9Image extends BImage {
 			var top:Float = curFrame.scale9rect.y;
 			cast(this.shader, Slice9Shader).updateArgs(left, top, bottom, right);
 		}
-		trace("updatesize=", this.width, this.height);
 		cast(this.shader, Slice9Shader).updateSize(this.width, this.height);
 	}
 
-	// override public function getClickBounds(tile:openfl.display.Tile):Rectangle {
-	// 	if (curFrame != null) {
-	// 		var rect:Rectangle = new Rectangle();
-	// 		rect.setTo(-this.originX, -this.originY, this._width, this._height);
-	// 		#if !flash
-	// 		@:privateAccess rect.__transform(rect, matrix);
-	// 		#end
-	// 		// if(tile != null)
-	// 		// {
-	// 		//     rect.width *= tile.scaleX;
-	// 		//     rect.height *= tile.scaleY;
-	// 		// }
-	// 		return rect;
-	// 	}
-	// 	return null;
-	// }
-	// override public function getBounds(tile:openfl.display.Tile):Rectangle {
-	// 	var rect:Rectangle = null;
-	// 	if (this.parent == tile)
-	// 		rect = getClickBounds(tile);
-	// 	if (rect == null)
-	// 		rect = super.getBounds(tile);
-	// 	return rect;
-	// }
 }

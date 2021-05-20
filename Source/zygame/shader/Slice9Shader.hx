@@ -96,9 +96,7 @@ class Slice9Shader extends OpenFLShader {
 			gl_FragColor = texture2D(gl_openfl_Texture,
 				getUv(s9d.x + (uv.x - s9d.z) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		}
-		// if (isFrameSprite) {
-		// gl_FragColor += texture2D(gl_openfl_Texture, gl_openfl_TextureCoordv);
-		// }
+		gl_FragColor *= gl_openfl_Alphav;
 	}
 
 	/**

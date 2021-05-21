@@ -126,8 +126,27 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	private var _shape:Sprite;
 
 	/**
-	 * 是否为本地渲染，如果为true时，将支持透明度渲染，但渲染数会增加。
+	 * 弃用多张纹理渲染模式，如果超过1张2048的纹理图时，可使用该方法进行渲染，但会消耗一定的性能。
 	 */
+	public var multipleTextureRender(get, set):Bool;
+
+	private function get_multipleTextureRender():Bool {
+		return _isNative;
+	}
+
+	private function set_multipleTextureRender(value:Bool):Bool {
+		if (_isNative && _spritePool == null)
+			_spritePool = new ObjectPool(() -> {
+				return new Sprite();
+			});
+		_isNative = value;
+		return _isNative;
+	}
+
+	/**
+	 * [弃用]是否为本地渲染，如果为true时，将支持透明度渲染，但渲染数会增加。
+	 */
+	@:deprecated("请注意isNative已经被弃用，并不会生效，如果仍然需要使用isNative支持，请设置multipleTextureRender=true")
 	public var isNative(get, set):Bool;
 
 	private var _isNative:Bool = false;
@@ -165,11 +184,11 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	private var _cached:Bool = false;
 
 	private function set_isNative(value:Bool):Bool {
-		_isNative = value;
-		if (_isNative && _spritePool == null)
-			_spritePool = new ObjectPool(() -> {
-				return new Sprite();
-			});
+		// _isNative = value;
+		// if (_isNative && _spritePool == null)
+		// 	_spritePool = new ObjectPool(() -> {
+		// 		return new Sprite();
+		// 	});
 		return _isNative;
 	}
 

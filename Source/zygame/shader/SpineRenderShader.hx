@@ -14,9 +14,14 @@ class SpineRenderShader extends OpenFLShader {
 	@:attribute public var texalpha:Float;
 
 	/**
-	 * BlendMode: 1为BlendMode.ADD
+	 * BlendMode: 1:BlendMode.ADD
 	 */
 	@:attribute public var texblendmode:Float;
+
+	/**
+	 * 颜色变更：rgba，其中a代表是否需要计算颜色变更
+	 */
+	@:attribute public var texcolor:Vec4;
 
 	/**
 	 * x:透明度
@@ -24,11 +29,19 @@ class SpineRenderShader extends OpenFLShader {
 	 */
 	@:varying public var alphaBlendMode:Vec2;
 
+	/**
+	 * 颜色相乘
+	 */
+	@:varying public var mulcolor:Vec4;
+
 	override function fragment() {
 		super.fragment();
 		gl_FragColor = color * alphaBlendMode.x * gl_openfl_Alphav;
 		if (alphaBlendMode.y == 1) {
-			gl_FragColor.w = 0;
+			gl_FragColor.a *= 0;
+		}
+		if (mulcolor.a == 1) {
+			gl_FragColor.rgb *= mulcolor.rgb;
 		}
 	}
 
@@ -38,5 +51,6 @@ class SpineRenderShader extends OpenFLShader {
 	override function vertex() {
 		super.vertex();
 		alphaBlendMode = vec2(texalpha, texblendmode);
+		mulcolor = texcolor;
 	}
 }

@@ -1,5 +1,6 @@
 package spine.openfl;
 
+import zygame.shader.SpineRenderShader;
 import spine.utils.SkeletonClipping;
 import spine.attachments.ClippingAttachment;
 import lime.utils.ObjectPool;
@@ -95,6 +96,21 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	private var allTriangles:Vector<Int> = new Vector<Int>();
 
 	/**
+	 * 所有顶点透明属性
+	 */
+	private var allTrianglesAlpha:Array<Float> = [];
+
+	/**
+	 * 所有顶点BlendMode属性
+	 */
+	private var allTrianglesBlendMode:Array<Float> = [];
+
+	/**
+	 * 所有顶点的颜色相乘
+	 */
+	private var allTrianglesColor:Array<Float> = [];
+
+	/**
 	 * 所有UV数据
 	 */
 	private var allUvs:Vector<Float> = new Vector<Float>();
@@ -122,6 +138,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	public var isCache(get, set):Bool;
 
 	private var _isCache:Bool = false;
+
+	private var _shader:SpineRenderShader = new SpineRenderShader();
 
 	private function set_isCache(value:Bool):Bool {
 		_isCache = value;
@@ -484,6 +502,22 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 						for (vi in 0...triangles.length) {
 							// 追加顶点
 							allTriangles[_buffdataPoint] = triangles[vi] + t;
+							// 添加顶点属性
+							allTrianglesAlpha[_buffdataPoint] = slot.color.a; // Alpha
+							switch (slot.data.blendMode) {
+								case BlendMode.additive:
+									allTrianglesBlendMode[_buffdataPoint] = 1;
+								case BlendMode.multiply:
+									allTrianglesBlendMode[_buffdataPoint] = 0;
+								case BlendMode.screen:
+									allTrianglesBlendMode[_buffdataPoint] = 0;
+								case BlendMode.normal:
+									allTrianglesBlendMode[_buffdataPoint] = 0;
+							}
+							allTrianglesColor[_buffdataPoint * 4] = (slot.color.r);
+							allTrianglesColor[_buffdataPoint * 4 + 1] = (slot.color.g);
+							allTrianglesColor[_buffdataPoint * 4 + 2] = (slot.color.b);
+							allTrianglesColor[_buffdataPoint * 4 + 3] = (1);
 							_buffdataPoint++;
 						}
 
@@ -504,7 +538,12 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 		if (batchs == null && allTriangles.length > 2) {
 			_shape.graphics.clear();
-			_shape.graphics.beginBitmapFill(bitmapData, null, false, false);
+			_shader.data.openfl_Texture.input = bitmapData;
+			_shader.a_texalpha.value = allTrianglesAlpha;
+			_shader.a_texblendmode.value = allTrianglesBlendMode;
+			_shader.a_texcolor.value = allTrianglesColor;
+			_shape.graphics.beginShaderFill(_shader);
+			// _shape.graphics.beginBitmapFill(bitmapData, null, false, false);
 			_shape.graphics.drawTriangles(allVerticesArray, allTriangles, allUvs, TriangleCulling.NONE);
 			_shape.graphics.endFill();
 			// 缓存

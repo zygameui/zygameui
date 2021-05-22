@@ -33,15 +33,21 @@ class SpineRenderShader extends OpenFLGraphicsShader {
 	 */
 	@:varying public var mulcolor:Vec4;
 
+	/**
+	 * 透明度
+	 */
+	@:uniform public var malpha:Float;
+
 	override function fragment() {
 		super.fragment();
-		gl_FragColor = color * alphaBlendMode.x * gl_openfl_Alphav;
+		gl_FragColor = color * alphaBlendMode.x;
 		if (alphaBlendMode.y == 1) {
 			gl_FragColor.a = gl_FragColor.a * 0;
 		}
 		if (mulcolor.a == 1) {
 			gl_FragColor.rgb = gl_FragColor.rgb * mulcolor.rgb;
 		}
+		gl_FragColor = gl_FragColor * malpha;
 	}
 
 	/**

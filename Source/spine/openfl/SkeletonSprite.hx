@@ -599,6 +599,11 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 		if (batchs == null && allTriangles.length > 2) {
 			_shape.graphics.clear();
+			if (Std.isOfType(this.parent, zygame.components.ZSpine)) {
+				_shader.data.u_malpha.value = [this.parent.alpha * this.alpha];
+			} else {
+				_shader.data.u_malpha.value = [this.alpha];
+			}
 			_shader.data.bitmap.input = bitmapData;
 			_shader.a_texalpha.value = allTrianglesAlpha;
 			_shader.a_texblendmode.value = allTrianglesBlendMode;

@@ -343,7 +343,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	public function advanceTime(delta:Float):Void {
 		if (_isPlay == false)
 			return;
-		if (isNative)
+		if (_isNative)
 			renderNative();
 		else {
 			if (isCache) {

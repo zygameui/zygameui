@@ -1,13 +1,12 @@
 package zygame.shader;
 
-import glsl.OpenFLShader;
-import glsl.GLSL;
+import glsl.OpenFLGraphicsShader;
 import VectorMath;
 
 /**
  * 用于实现Spine在Sprite模式下的透明值、BlendMode等支持
  */
-class SpineRenderShader extends OpenFLShader {
+class SpineRenderShader extends OpenFLGraphicsShader {
 	/**
 	 * 纹理透明度
 	 */
@@ -38,10 +37,10 @@ class SpineRenderShader extends OpenFLShader {
 		super.fragment();
 		gl_FragColor = color * alphaBlendMode.x * gl_openfl_Alphav;
 		if (alphaBlendMode.y == 1) {
-			gl_FragColor.a *= 0;
+			gl_FragColor.a = gl_FragColor.a * 0;
 		}
 		if (mulcolor.a == 1) {
-			gl_FragColor.rgb *= mulcolor.rgb;
+			gl_FragColor.rgb = gl_FragColor.rgb * mulcolor.rgb;
 		}
 	}
 

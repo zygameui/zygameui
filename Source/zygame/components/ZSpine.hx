@@ -99,7 +99,7 @@ class ZSpine extends ZBox {
 			spine = ZBuilder.createSpineSpriteSkeleton(atlasName, skeletionName);
 			if (spine == null)
 				throw atlasName + ":" + skeletionName + " spine is not create.";
-			spine.isNative = native;
+			// spine.isNative = native;
 			if (spine != null) {
 				this.addChild(spine);
 			}

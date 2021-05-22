@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.5.1
+- [改进] 改进`SpriteSpine`混合模式的兼容。
+- [修复] 修复`SpriteSpine`在C++上的呈现问题。
+
 ### 10.5.0
 - [弃用] 不再支持`SpriteSpine`的`isNative`渲染支持，默认失效；如果仍然有需求，请参考`multipleTextureRender`多纹理渲染支持。
 - [改进] 新增了`SpineRenderShader`着色器，改进`SpriteSpine`渲染，目前已新增了透明度、BlendMode.ADD、颜色修改等支持（网格同时支持）。

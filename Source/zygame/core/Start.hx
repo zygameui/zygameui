@@ -1,5 +1,6 @@
 package zygame.core;
 
+import openfl.display.OpenGLRenderer;
 import openfl.events.RenderEvent;
 import openfl.events.UncaughtErrorEvent;
 #if cmnt
@@ -227,7 +228,7 @@ class Start extends ZScene {
 	 * 渲染事件
 	 * @param e
 	 */
-	public function onRender(e:Event):Void {
+	public function onRender(e:RenderEvent):Void {
 		// trace("渲染时触发onRender",e.type);
 		Lib.onRender();
 	}

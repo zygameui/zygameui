@@ -40,25 +40,11 @@ class SpineRenderShader extends OpenFLGraphicsShader {
 	 */
 	@:uniform public var malpha:Float;
 
-	/**
-	 * 第二个纹理
-	 */
-	@:uniform public var bitmap2:Sampler2D;
-
 	override function fragment() {
 		super.fragment();
-		if (mulcolor.a == 1) {
-			color +=  texture2D(bitmap, gl_openfl_TextureCoordv);
-		} else {
-			color = texture2D(bitmap, gl_openfl_TextureCoordv);
-		}
 		gl_FragColor = color * alphaBlendMode.x;
-		if (alphaBlendMode.y == 1) {
-			gl_FragColor.a = gl_FragColor.a * 0;
-		}
-		// if (mulcolor.a == 1) {
+		gl_FragColor.a = gl_FragColor.a * (1 - alphaBlendMode.y);
 		gl_FragColor.rgb = gl_FragColor.rgb * mulcolor.rgb;
-		// }
 		gl_FragColor = gl_FragColor * malpha;
 	}
 

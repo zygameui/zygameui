@@ -608,15 +608,10 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 				_shader.data.u_malpha.value = [this.alpha];
 			}
 			_shader.data.bitmap.input = bitmaps[0];
-			_shader.u_bitmap2.input = bitmaps[0];
-
-			// if (bitmaps[1] != null)
-			// _shader.u_bitmap2.input = bitmaps[1];
 			_shader.a_texalpha.value = allTrianglesAlpha;
 			_shader.a_texblendmode.value = allTrianglesBlendMode;
 			_shader.a_texcolor.value = allTrianglesColor;
 			_shape.graphics.beginShaderFill(_shader);
-			// _shape.graphics.beginBitmapFill(bitmapData, null, false, false);
 			_shape.graphics.drawTriangles(allVerticesArray, allTriangles, allUvs, TriangleCulling.NONE);
 			_shape.graphics.endFill();
 			// 缓存

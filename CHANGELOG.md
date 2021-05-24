@@ -7,6 +7,7 @@
 
 ### 10.5.2
 - [修复] 修复九宫格scale9rect缺失时的异常。
+- [支持] 支持BScale9Image九宫格的GeryShader着色器。
 
 ### 10.5.1
 - [改进] 改进`SpriteSpine`混合模式的兼容。

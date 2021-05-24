@@ -16,9 +16,9 @@ class LayerAlphaShader extends OpenFLShader {
 
 	override function fragment() {
 		super.fragment();
-		gl_FragColor.r *= malpha;
-		gl_FragColor.g *= malpha;
-		gl_FragColor.b *= malpha;
-		gl_FragColor.a *= malpha;
+		gl_FragColor.x *= malpha;
+		gl_FragColor.y *= malpha;
+		gl_FragColor.z *= malpha;
+		gl_FragColor.w *= malpha;
 	}
 }

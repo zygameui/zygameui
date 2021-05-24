@@ -609,7 +609,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			}
 			_shader.data.bitmap.input = bitmaps[0];
 			_shader.u_bitmap2.input = bitmaps[0];
-			
+
 			// if (bitmaps[1] != null)
 			// _shader.u_bitmap2.input = bitmaps[1];
 			_shader.a_texalpha.value = allTrianglesAlpha;

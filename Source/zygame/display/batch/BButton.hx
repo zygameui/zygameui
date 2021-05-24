@@ -1,5 +1,8 @@
 package zygame.display.batch;
 
+import zygame.shader.Slice9Shader;
+import zygame.shader.GeryShader;
+import openfl.display.Shader;
 import zygame.components.ZButton;
 import zygame.components.ZBuilder;
 import zygame.display.batch.BTouchSprite;
@@ -31,6 +34,14 @@ class BScale9Button extends BButton {
 		cast(getDisplay(), BScale9Image).height = value;
 		this.updateComponents();
 		return value;
+	}
+
+	override private function set_shader(s:Shader):Shader {
+		super.set_shader(s);
+		if (getDisplay() != null && cast(getDisplay().shader, Slice9Shader) != null) {
+			cast(getDisplay().shader, Slice9Shader).u_isGeryShader.value = [Std.isOfType(s, GeryShader)];
+		}
+		return s;
 	}
 }
 

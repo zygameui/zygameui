@@ -30,6 +30,11 @@ class Slice9Shader extends OpenFLShader {
 	@:uniform public var size:Vec2;
 
 	/**
+	 * 是否灰度着色器
+	 */
+	@:uniform public var isGeryShader:Bool;
+
+	/**
 	 * 获取精灵图的Uv值
 	 * @return Vec2
 	 */
@@ -59,7 +64,7 @@ class Slice9Shader extends OpenFLShader {
 		var centerSliceWidth:Float = (isFrameSprite ? frameSpriteRect.z : gl_openfl_TextureSize.x) - s9d.x - s9d.y; // 中间原图宽度
 		var centerSliceHeight:Float = (isFrameSprite ? frameSpriteRect.w : gl_openfl_TextureSize.y) - s9d.z - s9d.w; // 中间原图高度
 		gl_FragColor = vec4(0);
-		if (uv.x <= s9d.x && uv.y <=s9d.z) {
+		if (uv.x <= s9d.x && uv.y <= s9d.z) {
 			// 左上(ok)
 			// gl_FragColor = vec4(1,0,0,1);
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(uv.x, uv.y));
@@ -81,7 +86,7 @@ class Slice9Shader extends OpenFLShader {
 			gl_FragColor = texture2D(gl_openfl_Texture, getUv(s9d.x + (uv.y - s9d.z) / centerWidth * centerSliceWidth, uv.y));
 		} else if (uv.y >= size.y - s9d.w) {
 			// 下
-			gl_FragColor = vec4(1,0,0,1);
+			gl_FragColor = vec4(1, 0, 0, 1);
 			gl_FragColor = texture2D(gl_openfl_Texture,
 				getUv(s9d.x + (uv.x - s9d.z) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 		} else if (uv.x <= s9d.x) {
@@ -97,6 +102,9 @@ class Slice9Shader extends OpenFLShader {
 				getUv(s9d.x + (uv.x - s9d.z) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		}
 		gl_FragColor *= gl_openfl_Alphav;
+		if (isGeryShader) {
+			gl_FragColor = vec4(vec3((gl_FragColor.r + gl_FragColor.g + gl_FragColor.b) / 3), gl_FragColor.a);
+		}
 	}
 
 	/**
@@ -120,7 +128,7 @@ class Slice9Shader extends OpenFLShader {
 		u_s9d.value = [left, right, top, bottom];
 	}
 
-	public function updateSize(width:Float, height:Float){
+	public function updateSize(width:Float, height:Float) {
 		u_size.value = [width, height];
 	}
 }

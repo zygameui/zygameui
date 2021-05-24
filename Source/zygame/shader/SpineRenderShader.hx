@@ -48,7 +48,7 @@ class SpineRenderShader extends OpenFLGraphicsShader {
 	override function fragment() {
 		super.fragment();
 		if (mulcolor.a == 1) {
-			color +=  texture2D(bitmap2, gl_openfl_TextureCoordv);
+			color +=  texture2D(bitmap, gl_openfl_TextureCoordv);
 		} else {
 			color = texture2D(bitmap, gl_openfl_TextureCoordv);
 		}

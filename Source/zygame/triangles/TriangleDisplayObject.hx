@@ -14,6 +14,8 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 
 	private function set_x(value:Float):Float {
 		_x = value;
+		changed = true;
+
 		return _x;
 	}
 
@@ -27,6 +29,7 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 
 	private function set_y(value:Float):Float {
 		_y = value;
+		changed = true;
 		return _y;
 	}
 
@@ -40,6 +43,7 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 
 	private function set_width(value:Float):Float {
 		_width = value;
+		changed = true;
 		return _width;
 	}
 
@@ -53,6 +57,7 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 
 	private function set_height(value:Float):Float {
 		_height = value;
+		changed = true;
 		return _height;
 	}
 
@@ -66,6 +71,7 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 
 	private function set_alpha(value:Float):Float {
 		_alpha = value;
+		changed = true;
 		return _alpha;
 	}
 
@@ -79,6 +85,7 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 
 	private function set_blendMode(value:Int):Int {
 		_blendMode = value;
+		changed = true;
 		return _blendMode;
 	}
 
@@ -86,7 +93,16 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 		return _blendMode;
 	}
 
+	/**
+	 * 当数据发生变更时，需要设置为true，才会触发onRenderReady事件
+	 */
+	public var changed:Bool;
+
 	public function new() {
 		vertices = new Vector();
 	}
+
+	public function onRenderReady():Void {
+		changed = false;
+	};
 }

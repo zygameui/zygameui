@@ -66,13 +66,14 @@ class BScale9Image extends BImage {
 	 */
 	public function updateScale9():Void {
 		if (curFrame != null) {
-			var left:Float = curFrame.scale9rect.x;
-			var right:Float = curFrame.width - curFrame.scale9rect.x - curFrame.scale9rect.width;
-			var bottom:Float = curFrame.height - curFrame.scale9rect.y - curFrame.scale9rect.height;
-			var top:Float = curFrame.scale9rect.y;
-			cast(this.shader, Slice9Shader).updateArgs(left, top, bottom, right);
+			if (curFrame.scale9rect != null) {
+				var left:Float = curFrame.scale9rect.x;
+				var right:Float = curFrame.width - curFrame.scale9rect.x - curFrame.scale9rect.width;
+				var bottom:Float = curFrame.height - curFrame.scale9rect.y - curFrame.scale9rect.height;
+				var top:Float = curFrame.scale9rect.y;
+				cast(this.shader, Slice9Shader).updateArgs(left, top, bottom, right);
+			}
 		}
 		cast(this.shader, Slice9Shader).updateSize(this.width, this.height);
 	}
-
 }

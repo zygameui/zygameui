@@ -5,6 +5,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.5.2
+- [修复] 修复九宫格scale9rect缺失时的异常。
+
 ### 10.5.1
 - [改进] 改进`SpriteSpine`混合模式的兼容。
 - [修复] 修复`SpriteSpine`在C++上的呈现问题。

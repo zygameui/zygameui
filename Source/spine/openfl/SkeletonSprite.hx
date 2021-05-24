@@ -480,6 +480,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 		var t:Int = 0;
 
+		var bitmaps = [];
+
 		for (i in 0...n) {
 			// 获取骨骼
 			slot = drawOrder[i];
@@ -527,8 +529,9 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 						// 上传到批量渲染
 						batchs.uploadBuffData(this, ofArrayFloat(_tempVerticesArray), ofArrayInt(triangles), ofArrayFloat(uvs));
 					} else {
-						if (bitmapData != atlasRegion.page.rendererObject) {
-							bitmapData = cast atlasRegion.page.rendererObject;
+						bitmapData = cast atlasRegion.page.rendererObject;
+						if (bitmaps.indexOf(bitmapData) == -1) {
+							bitmaps.push(bitmapData);
 						}
 						// 顶点重新计算
 						if (slot.data.blendMode != BlendMode.additive && slot.data.blendMode != BlendMode.normal) {
@@ -537,9 +540,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 							 */
 							var spr:Sprite = _spritePool.get();
 
-							var curBitmap:BitmapData = cast atlasRegion.page.rendererObject;
 							spr.graphics.clear();
-							spr.graphics.beginBitmapFill(curBitmap, null, true, true);
+							spr.graphics.beginBitmapFill(bitmapData, null, true, true);
 							spr.graphics.drawTriangles(ofArrayFloat(_tempVerticesArray), ofArrayInt(triangles), ofArrayFloat(uvs), TriangleCulling.NONE);
 							spr.graphics.endFill();
 							spr.alpha = slot.color.a;
@@ -577,7 +579,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 								allTrianglesColor[_buffdataPoint * 4] = (slot.color.r);
 								allTrianglesColor[_buffdataPoint * 4 + 1] = (slot.color.g);
 								allTrianglesColor[_buffdataPoint * 4 + 2] = (slot.color.b);
-								allTrianglesColor[_buffdataPoint * 4 + 3] = (1);
+								allTrianglesColor[_buffdataPoint * 4 + 3] = (bitmaps.indexOf(bitmapData));
+								// allTrianglesColor[_buffdataPoint * 4 + 3] = (1);
 								_buffdataPoint++;
 							}
 
@@ -604,7 +607,11 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			} else {
 				_shader.data.u_malpha.value = [this.alpha];
 			}
-			_shader.data.bitmap.input = bitmapData;
+			_shader.data.bitmap.input = bitmaps[0];
+			_shader.u_bitmap2.input = bitmaps[0];
+			
+			// if (bitmaps[1] != null)
+			// _shader.u_bitmap2.input = bitmaps[1];
 			_shader.a_texalpha.value = allTrianglesAlpha;
 			_shader.a_texblendmode.value = allTrianglesBlendMode;
 			_shader.a_texcolor.value = allTrianglesColor;

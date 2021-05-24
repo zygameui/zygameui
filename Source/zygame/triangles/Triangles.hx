@@ -1,5 +1,8 @@
 package zygame.triangles;
 
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import zygame.triangles.shader.TrianglesShader;
 import openfl.display.Shape;
 import openfl.Vector;
 
@@ -8,6 +11,19 @@ import openfl.Vector;
  * 在使用Triangles将仅支持BlendMode.ADD模式
  */
 class Triangles extends Shape {
+	private var _shader:zygame.triangles.shader.TrianglesShader;
+
+	private var _array:Vector<Float> = new Vector<Float>();
+
+	private var _ids:Vector<Int> = new Vector<Int>();
+
+	private var _changed:Bool = true;
+
+	public function new() {
+		super();
+		_shader = new TrianglesShader();
+	}
+
 	/**
 	 * 所有三角形
 	 */
@@ -34,10 +50,27 @@ class Triangles extends Shape {
 	 * 开始渲染三角形
 	 */
 	public function render():Void {
-		var array:Vector<Float> = new Vector<Float>();
-		for (index => value in _triangles) {
-			array = array.concat(value.vertices);
+		if (_changed) {
+			var id:Int = 0;
+			_ids.splice(0, _ids.length);
+			_array.splice(0, _array.length);
+			for (index => value in _triangles) {
+				if (value.changed)
+					value.onRenderReady();
+				_array = _array.concat(value.vertices);
+				_ids = _ids.concat(new Vector<Int>(6, false, [id, id + 1, id + 2, id + 2, id + 3, id]));
+				// Quad:0, 1, 2, 2, 3, 0
+				id += 4;
+			}
+			_changed = false;
 		}
-		this.graphics.beginFill(0xff0000);
+		this.graphics.clear();
+		this.graphics.beginShaderFill(_shader);
+		this.graphics.drawTriangles(_array, _ids);
+		this.graphics.endFill();
+	}
+
+	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
+		return false;
 	}
 }

@@ -387,7 +387,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			_spritePool.add(spr);
 			max--;
 		}
-		allTriangles.splice(0, allTriangles.length);
+		allTriangles = new Vector<Int>();
+		// allTriangles.splice(0, allTriangles.length);
 
 		var t:Int = 0;
 
@@ -476,7 +477,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 		}
 
 		_shape.graphics.clear();
-		allTriangles.splice(0, allTriangles.length);
+		allTriangles = new Vector<Int>();
+		// allTriangles.splice(0, allTriangles.length);
 
 		var t:Int = 0;
 

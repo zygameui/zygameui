@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import openfl.events.MouseEvent;
 import openfl.events.Event;
 import zygame.utils.load.Atlas;
 import openfl.display.Stage;
@@ -115,7 +116,8 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 	 * @param e
 	 */
 	override public function onTouchMove(e:TouchEvent):Void {
-		dispatchTileEvent(e);
+		if (this.hasEventListener(TileTouchEvent.TOUCH_MOVE_TILE))
+			dispatchTileEvent(e);
 	}
 
 	/**

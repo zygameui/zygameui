@@ -10,6 +10,8 @@ class BSpine extends BBox {
 	public var spineSkin(get, set):String;
 
 	private function set_spineSkin(name:String):String {
+		if (spine == null)
+			return name;
 		spine.skeleton.setSkinByName(name);
 		spine.skeleton.setBonesToSetupPose();
 		spine.skeleton.setSlotsToSetupPose();
@@ -17,17 +19,18 @@ class BSpine extends BBox {
 	}
 
 	private function get_spineSkin():String {
-		return spine.skeleton.getSkin() != null ? spine.skeleton.getSkin().name : null;
+		return spine == null ? null : spine.skeleton.getSkin() != null ? spine.skeleton.getSkin().name : null;
 	}
 
 	public var action(get, set):String;
 
 	private function get_action():String {
-		return spine.actionName;
+		return spine == null ? null : spine.actionName;
 	}
 
 	private function set_action(v:String):String {
-		spine.play(v, true);
+		if (spine != null)
+			spine.play(v, true);
 		return v;
 	}
 
@@ -42,11 +45,11 @@ class BSpine extends BBox {
 		spine = ZBuilder.createSpineTilemapSkeleton(atlasName, skeletionName);
 		if (spine != null) {
 			this.addChild(spine);
+			spine.mouseEnabled = true;
 		}
 	}
 
 	override function onInit() {
 		super.onInit();
-		spine.mouseEnabled = true;
 	}
 }

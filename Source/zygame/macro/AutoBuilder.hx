@@ -41,19 +41,19 @@ class AutoBuilder {
 		// 路径移除
 		path = StringTools.replace(project.assetsRenamePath.get(StringUtils.getName(xmlPath) + ".xml"), Sys.getCwd(), "");
 		var textures:Array<{png:String, xml:String}> = [];
-		var spines:Array<{png:String, atlas:String, json:String}> = [];
+		var spines:Array<{png:String, atlas:String}> = [];
 		var files:Array<String> = [];
 
 		// 开始遍历所需资源
 		for (file in builder.assetsLoads) {
-			if (project.assetsPath.exists(file + ".png")
-				&& project.assetsPath.exists(file + ".json")
-				&& project.assetsPath.exists(file + ".atlas")) {
+			if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".atlas")) {
 				spines.push({
 					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
-					atlas: StringTools.replace(project.assetsRenamePath.get(file + ".atlas"), Sys.getCwd(), ""),
-					json: StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), "")
+					atlas: StringTools.replace(project.assetsRenamePath.get(file + ".atlas"), Sys.getCwd(), "")
 				});
+				if (project.assetsPath.exists(file + ".json")) {
+					files.push(StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), ""));
+				}
 			} else if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".xml")) {
 				textures.push({
 					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
@@ -73,6 +73,10 @@ class AutoBuilder {
 			} else if (project.assetsPath.exists(file + ".xml")) {
 				// 单XML加载
 				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".xml"), Sys.getCwd(), ""));
+			}
+			if (project.assetsPath.exists(file + ".json")) {
+				// 单JSON加载
+				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), ""));
 			} else if (project.assetsPath.exists(file + ".mp3")) {
 				// 单MP3加载
 				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".mp3"), Sys.getCwd(), ""));
@@ -114,16 +118,16 @@ class AutoBuilder {
 						super($v{path});
 						var textures:Array<{png:String, xml:String}> = $v{textures};
 						var files:Array<String> = $v{files};
-						var spines:Array<{png:String, atlas:String, json:String}> = $v{spines};
+						var spines:Array<{png:String, atlas:String}> = $v{spines};
 						for (f in files) {
-							if(!zygame.components.ZBuilder.existFile(f)){
+							if (!zygame.components.ZBuilder.existFile(f)) {
 								this.$bindBuilder.loadFiles([f]);
 							}
 						}
 						for (s in spines) {
 							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(s.png)) == null) {
 								this.$bindBuilder.loadSpine([s.png], s.atlas);
-								this.$bindBuilder.loadFiles([s.json]);
+								// this.$bindBuilder.loadFiles([s.json]);
 							}
 						}
 						for (item in textures) {
@@ -180,7 +184,7 @@ class AutoBuilder {
 					return macro:zygame.components.ZBox.HBox;
 			}
 		} else if (typeName.indexOf("Z") != -1) {
-			if (typeName == "ZHaxe"){
+			if (typeName == "ZHaxe") {
 				return TPath({
 					pack: ["zygame", "script"],
 					name: typeName

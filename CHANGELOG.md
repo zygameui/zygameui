@@ -5,6 +5,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.5.3
+- [改进] 改进BSpine的空处理。
+
 ### 10.5.2
 - [修复] 修复九宫格scale9rect缺失时的异常。
 - [支持] 支持BScale9Image九宫格的GeryShader着色器。

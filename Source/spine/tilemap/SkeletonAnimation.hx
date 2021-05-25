@@ -59,7 +59,7 @@ class SkeletonAnimation extends SkeletonSprite {
 	override public function advanceTime(time:Float):Void {
 		if (!this.visible || !isPlay)
 			return;
-		_advanceTime(time);
+		// _advanceTime(time);
 	}
 
 	private function _advanceTime(time:Float) {

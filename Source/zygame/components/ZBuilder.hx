@@ -527,6 +527,8 @@ class ZBuilder {
 		var atlas:SpineTextureAtals = cast ZBuilder.getBaseTextureAtlas(atalsName);
 		if (atlas == null)
 			return null;
+		if(ZBuilder.getBaseObject(skeletonJsonName) == null)
+			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
 		return atlas.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(ZBuilder.getBaseObject(skeletonJsonName)));
 	}
 

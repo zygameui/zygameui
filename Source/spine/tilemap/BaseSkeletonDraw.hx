@@ -17,15 +17,14 @@ import spine.base.SpineBaseDisplay;
  * 基础的瓦片渲染Spine对象，只含骨骼渲染
  */
 class BaseSkeletonDraw extends BSprite {
+	public function new(skeleton:Skeleton) {
+		super();
+		this.skeleton = skeleton;
+	}
 
-    public function new(skeleton:Skeleton) {
-        super();
-        this.skeleton = skeleton;
-    }
+	public var skeleton:Skeleton;
 
-    public var skeleton:Skeleton;
-
-    /**
+	/**
 	 * 渲染骨骼对应关系
 	 */
 	private var _map:Map<Slot, TileContainer> = [];
@@ -36,18 +35,18 @@ class BaseSkeletonDraw extends BSprite {
 	public var disableColor:Bool = false;
 
 	private function renderTriangles():Void {
-
 		// removeTiles性能比较差，不适合频繁调用
 		// this.removeTiles();
+		// 将已存在的骨骼隐藏
 		for (key => value in _map) {
-			this.removeTile(value);
+			value.visible = false;
 		}
 
-		//不可见以及骨骼数据为null时，则不再渲染
-		if(!this.visible || skeleton == null){
+		// 不可见以及骨骼数据为null时，则不再渲染
+		if (!this.visible || skeleton == null) {
 			return;
 		}
-		
+
 		#if (spine_hx <= "3.6.0")
 		skeleton.setFlipY(true);
 		#end
@@ -61,7 +60,6 @@ class BaseSkeletonDraw extends BSprite {
 		var soltColor:Color;
 		var regionColor:Color;
 		// var blend:Int;
-
 
 		for (i in 0...n) {
 			// 获取骨骼
@@ -85,6 +83,7 @@ class BaseSkeletonDraw extends BSprite {
 							wrapper = new BSprite();
 							tile = new BImage(atlasRegion.page.rendererObject.getFrameByRegion(atlasRegion));
 							wrapper.addTile(tile);
+							this.addTile(wrapper);
 							_map.set(slot, wrapper);
 						} else {
 							tile = cast wrapper.getTileAt(0);
@@ -114,11 +113,12 @@ class BaseSkeletonDraw extends BSprite {
 						wrapper.x = bone.getWorldX();
 						wrapper.y = bone.getWorldY();
 						wrapper.rotation = bone.getWorldRotationX();
-						if(bone.getScaleX() < 0)
+						if (bone.getScaleX() < 0)
 							wrapper.rotation -= 180;
-						wrapper.scaleX = bone.getWorldScaleX() * (bone.getScaleX() < 0?-1:1);
-						wrapper.scaleY = bone.getWorldScaleY() * (bone.getScaleY() < 0?-1:1);
-						this.addTile(wrapper);
+						wrapper.scaleX = bone.getWorldScaleX() * (bone.getScaleX() < 0 ? -1 : 1);
+						wrapper.scaleY = bone.getWorldScaleY() * (bone.getScaleY() < 0 ? -1 : 1);
+						// this.addTile(wrapper);
+						wrapper.visible = true;
 
 						// 色值处理
 						if (!disableColor) {

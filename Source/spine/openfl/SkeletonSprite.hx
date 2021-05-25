@@ -187,13 +187,6 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	private var _cached:Bool = false;
 
 	private function set_isNative(value:Bool):Bool {
-		// #if cpp
-		// _isNative = value;
-		// #end
-		// if (_isNative && _spritePool == null)
-		// 	_spritePool = new ObjectPool(() -> {
-		// 		return new Sprite();
-		// 	});
 		return _isNative;
 	}
 
@@ -388,10 +381,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 			max--;
 		}
 		allTriangles = new Vector<Int>();
-		// allTriangles.splice(0, allTriangles.length);
-
 		var t:Int = 0;
-
 		for (i in 0...n) {
 			// 获取骨骼
 			slot = drawOrder[i];
@@ -478,8 +468,6 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 		_shape.graphics.clear();
 		allTriangles = new Vector<Int>();
-		// allTriangles.splice(0, allTriangles.length);
-
 		var t:Int = 0;
 
 		var bitmaps = [];
@@ -665,10 +653,6 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		// var bool:Bool = super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
-		// if (bool == true) {
-		// return true;
-		// }
 		if (this.mouseEnabled == false || this.visible == false)
 			return false;
 		if (this.getBounds(stage).contains(x, y)) {

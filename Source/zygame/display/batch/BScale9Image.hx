@@ -18,7 +18,7 @@ class BScale9Image extends BImage {
 		super();
 		// BScale9Image使用Slice9Shader着色器
 		this.shader = new zygame.shader.Slice9Shader(0, 0, 0, 0, 0, 0);
-		cast(this.shader, Slice9Shader).u_isFrameSprite.value = [true];
+		cast(this.shader, Slice9Shader).u_size.value[2] = 1;
 		setFrame(frame);
 	}
 

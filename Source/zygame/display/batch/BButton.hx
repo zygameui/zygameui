@@ -39,7 +39,7 @@ class BScale9Button extends BButton {
 	override private function set_shader(s:Shader):Shader {
 		super.set_shader(s);
 		if (getDisplay() != null && cast(getDisplay().shader, Slice9Shader) != null) {
-			cast(getDisplay().shader, Slice9Shader).u_isGeryShader.value = [Std.isOfType(s, GeryShader)];
+			cast(getDisplay().shader, Slice9Shader).u_size.value[3] = Std.isOfType(s, GeryShader) ? 1 : 0;
 		}
 		return s;
 	}

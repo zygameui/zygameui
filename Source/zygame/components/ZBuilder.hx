@@ -527,7 +527,7 @@ class ZBuilder {
 		var atlas:SpineTextureAtals = cast ZBuilder.getBaseTextureAtlas(atalsName);
 		if (atlas == null)
 			return null;
-		if(ZBuilder.getBaseObject(skeletonJsonName) == null)
+		if (ZBuilder.getBaseObject(skeletonJsonName) == null)
 			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
 		return atlas.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(ZBuilder.getBaseObject(skeletonJsonName)));
 	}
@@ -980,7 +980,7 @@ class ZBuilder {
 		for (item in attrIterator) {
 			attr.push(item);
 		}
-		attr.sort((a, b) -> return a == "text" || a == "src"? 1 : -1);
+		attr.sort((a, b) -> return a == "text" || a == "src" ? 1 : -1);
 		while (attr.length > 0) {
 			var name:String = attr.shift();
 			if (name == "id") {
@@ -1163,7 +1163,10 @@ class AssetsBuilder extends Builder {
 				ZBuilder.bindAssets(assets);
 				if (onloaded != null)
 					onloaded();
-				@:privateAccess ZBuilder.buildui(ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath)).firstElement(), _viewParent, this);
+				var viewxml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath));
+				if (viewxml == null)
+					throw "无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。";
+				@:privateAccess ZBuilder.buildui(viewxml.firstElement(), _viewParent, this);
 				_viewParent = null;
 				ZBuilder.unbindAssets(assets);
 				cb(true);

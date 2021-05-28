@@ -34,6 +34,7 @@ class ImageBatchs extends Tilemap {
 		super(pwidth, pheight, batchSprites == null ? null : batchSprites.getTileset(), smoothing);
 		_batchSprites = batchSprites;
 		_batch = new BSprite();
+		// this.cacheAsBitmap = true;
 		// 会有性能提升
 		// this.tileAlphaEnabled = false;
 		// this.tileBlendModeEnabled = false;

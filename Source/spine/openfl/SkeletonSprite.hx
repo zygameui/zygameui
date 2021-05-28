@@ -70,6 +70,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	 */
 	private var _isPlay:Bool = true;
 
+	private var _isDipose:Bool = false;
+
 	/**
 	 * 当前播放的动作名
 	 */
@@ -270,6 +272,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 		_spritePool = null;
 		removeChildren();
 		graphics.clear();
+		_isDipose = true;
 	}
 
 	/**
@@ -334,7 +337,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 	 * @param delta
 	 */
 	public function advanceTime(delta:Float):Void {
-		if (_isPlay == false)
+		if (_isPlay == false || _isDipose)
 			return;
 		if (_isNative)
 			renderNative();
@@ -528,6 +531,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 							/**
 							 * 注意，该实现现在存在层级问题，永远比非着色器的高一层，需要后续解决。
 							 */
+							if (_spritePool == null)
+								continue;
 							var spr:Sprite = _spritePool.get();
 
 							spr.graphics.clear();

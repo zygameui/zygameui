@@ -2,6 +2,7 @@ package zygame.shader;
 
 import glsl.OpenFLShader;
 import glsl.GLSL;
+import VectorMath;
 
 /**
  * 图层透明着色器

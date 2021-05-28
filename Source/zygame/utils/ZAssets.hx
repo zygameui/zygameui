@@ -33,7 +33,9 @@ import zygame.media.base.SoundChannel;
 import zygame.utils.load.Music;
 import zygame.utils.load.CDBLoader;
 import zygame.utils.load.SpineTextureAtalsLoader;
-import zygame.utils.load.SWFLiteLibrary;
+#if openfl_swf
+import swf.exporters.animate.AnimateLibrary;
+#end
 import openfl.display.MovieClip;
 import zygame.components.base.ZCacheTextField;
 import zygame.utils.load.AssetsZipLoader;
@@ -104,7 +106,7 @@ class ZAssets {
 	private var _maps:Dictionary<String, MapliveData>;
 	private var _spines:Dictionary<String, SpineTextureAtals>;
 	#if (openfl_swf)
-	private var _swflites:Dictionary<String, SWFLiteLibrary>;
+	private var _swflites:Dictionary<String, AnimateLibrary>;
 	#end
 	private var _zips:Dictionary<String, Zip>;
 	private var _cdbs:Dictionary<String, CDBData>;
@@ -117,7 +119,7 @@ class ZAssets {
 	#if ldtk
 	private var _ldtk:Dictionary<String, zygame.ldtk.LDTKProject>;
 	#end
-	
+
 	/**
 	 * 当前播放的背景音乐
 	 */
@@ -134,7 +136,7 @@ class ZAssets {
 		_maps = new Dictionary<String, MapliveData>();
 		_spines = new Dictionary<String, SpineTextureAtals>();
 		#if (openfl_swf)
-		_swflites = new Dictionary<String, SWFLiteLibrary>();
+		_swflites = new Dictionary<String, AnimateLibrary>();
 		#end
 		_zips = new Dictionary<String, Zip>();
 		_cdbs = new Dictionary<String, CDBData>();
@@ -538,6 +540,9 @@ class ZAssets {
 				this._dynamicAtlas.set(parser.getName(), data);
 			case SWF:
 				#if (openfl_swf)
+				#if debug
+				trace("Swf set ", parser.getName(), data);
+				#end
 				this._swflites.set(parser.getName(), data);
 				#end
 			case MAPLIVE:
@@ -684,7 +689,9 @@ class ZAssets {
 		return null;
 		#else
 		var arr:Array<String> = id.split(":");
-		var swf:SWFLiteLibrary = this._swflites.get(arr[0]);
+		trace("_swflites=", _swflites);
+		var swf:AnimateLibrary = this._swflites.get(arr[0]);
+		trace("swf=", swf);
 		return swf.getMovieClip(arr[1]);
 		#end
 	}

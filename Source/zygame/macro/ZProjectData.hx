@@ -1,6 +1,7 @@
 package zygame.macro;
 
 #if macro
+import sys.io.Process;
 import sys.io.File;
 import zygame.utils.StringUtils;
 import sys.FileSystem;
@@ -17,40 +18,49 @@ class ZProjectData {
 
 	public function new() {
 		var oldCwd = Sys.getCwd();
-		var zprojectData = createZProjectDataString();
-		if (zprojectData == null)
+		var zprojectPath = createZProjectDataString();
+		if (zprojectPath == null)
 			return;
 		nowCwd = Sys.getCwd();
 		Sys.setCwd(oldCwd);
-		var xml:Xml = Xml.parse(zprojectData);
+		this.readXml(zprojectPath, nowCwd);
+	}
+
+	public function readXml(xmlpath:String, rootPath:String):Void {
+		var xml:Xml = Xml.parse(File.getContent(xmlpath));
 		for (item in xml.firstElement().elements()) {
 			switch (item.nodeName) {
 				case "assets":
 					if (item.get("unparser") == "true")
 						continue;
-					readDir(nowCwd + item.get("path"), item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path")));
+					readDir(rootPath + item.get("path"), item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path")));
+				case "haxelib":
+					if (item.get("bind") == "true") {
+						var haxepath = new Process("haxelib path " + item.get("name")).stdout.readAll().toString().split("\n")[0];
+						readXml(haxepath + "../include.xml", haxepath + "../");
+					}
 			}
 		}
 	}
 
 	public function createZProjectDataString():String {
 		if (FileSystem.exists("zproject.xml"))
-			return File.getContent("zproject.xml");
+			return ("zproject.xml");
 		if (FileSystem.exists("../zproject.xml")) {
 			Sys.setCwd("../");
-			return File.getContent("zproject.xml");
+			return ("zproject.xml");
 		}
 		if (FileSystem.exists("../../zproject.xml")) {
 			Sys.setCwd("../../");
-			return File.getContent("zproject.xml");
+			return ("zproject.xml");
 		}
 		if (FileSystem.exists("../../../zproject.xml")) {
 			Sys.setCwd("../../../");
-			return File.getContent("zproject.xml");
+			return ("zproject.xml");
 		}
 		if (FileSystem.exists("../../../../zproject.xml")) {
 			Sys.setCwd("../../../../");
-			return File.getContent("zproject.xml");
+			return ("zproject.xml");
 		}
 		return null;
 	}

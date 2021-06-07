@@ -165,7 +165,6 @@ class AutoBuilder {
 			} else
 				createGetCall(fields, key, value, bindBuilder);
 		}
-
 		return fields;
 	}
 

@@ -23,7 +23,7 @@ class ZProjectData {
 			return;
 		nowCwd = Sys.getCwd();
 		Sys.setCwd(oldCwd);
-		this.readXml(zprojectPath, nowCwd);
+		this.readXml(nowCwd + "/" + zprojectPath, nowCwd);
 	}
 
 	public function readXml(xmlpath:String, rootPath:String):Void {

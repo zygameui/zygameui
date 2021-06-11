@@ -13,6 +13,20 @@ import haxe.Json;
  */
 class JSONData {
 	/**
+	 * 内嵌一个JSON动态类型，但不会进行解析类
+	 * @param jsonPath 
+	 */
+	public macro static function embed(jsonPath:String) {
+		var rootJsonPath = jsonPath;
+		var project:ZProjectData = new ZProjectData();
+		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
+		if (jsonPath == null)
+			jsonPath = rootJsonPath;
+		var data = File.getContent(jsonPath);
+		return macro haxe.Json.parse($v{data});
+	}
+
+	/**
 	 * 创建一个自定义JSON类型：{data:[obj,obj,obj]}，会自动解析第一层，以及数组的第二层数据
 	 * @param jsonPath json文件路径
 	 * @param indexNames 索引名，支持多索引名，可用于快速查找
@@ -22,7 +36,7 @@ class JSONData {
 		var rootJsonPath = jsonPath;
 		var project:ZProjectData = new ZProjectData();
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
-		if(jsonPath == null)
+		if (jsonPath == null)
 			jsonPath = rootJsonPath;
 		var data:Json = Json.parse(File.getContent(jsonPath));
 		var name = StringUtils.getName(jsonPath);
@@ -30,11 +44,11 @@ class JSONData {
 		var c = macro class $name {
 			public function new() {}
 		}
-		//doc文档
-		var doc = Reflect.getProperty(data,"doc");
+		// doc文档
+		var doc = Reflect.getProperty(data, "doc");
 		var keys = Reflect.fields(data);
 		for (index => value in keys) {
-			if(value == "doc") //doc为动态文档，可过滤
+			if (value == "doc") // doc为动态文档，可过滤
 				continue;
 			var keyValue = Reflect.getProperty(data, value);
 			var newField = null;
@@ -58,7 +72,7 @@ class JSONData {
 					};
 				} else {
 					var getData:Dynamic = keyValue[0];
-					var t = getType(getData,Context.currentPos(),doc);
+					var t = getType(getData, Context.currentPos(), doc);
 					// 将数组储存
 					newField = {
 						name: value,
@@ -83,8 +97,7 @@ class JSONData {
 								pos: Context.currentPos()
 							};
 							c.fields.push(getIndexMap);
-							var callName = funcName + "By" + indexName.charAt(0).toUpperCase()
-								+ indexName.substr(1).toLowerCase();
+							var callName = funcName + "By" + indexName.charAt(0).toUpperCase() + indexName.substr(1).toLowerCase();
 							var getIndexNamCall = {
 								name: callName,
 								doc: "根据" + indexName + "索引获取数据",
@@ -123,8 +136,7 @@ class JSONData {
 								pos: Context.currentPos()
 							};
 							c.fields.push(getIndexMap);
-							var callName = funcName + "ArrayBy" + typeName.charAt(0).toUpperCase()
-								+ typeName.substr(1).toLowerCase();
+							var callName = funcName + "ArrayBy" + typeName.charAt(0).toUpperCase() + typeName.substr(1).toLowerCase();
 							var getIndexNamCall = {
 								name: callName,
 								doc: null,
@@ -162,7 +174,7 @@ class JSONData {
 					doc: null,
 					meta: [],
 					access: [APublic],
-					kind: FVar(getType(keyValue,Context.currentPos(),doc), macro $v{keyValue}),
+					kind: FVar(getType(keyValue, Context.currentPos(), doc), macro $v{keyValue}),
 					pos: Context.currentPos()
 				};
 			}
@@ -183,17 +195,16 @@ class JSONData {
 	 * @param pos 
 	 * @return Dynamic
 	 */
-	static function getType(value:Dynamic,pos:Dynamic,doc:Dynamic):Dynamic {
-		if (Std.isOfType(value,Bool))
+	static function getType(value:Dynamic, pos:Dynamic, doc:Dynamic):Dynamic {
+		if (Std.isOfType(value, Bool))
 			return macro:Bool;
 		if (Std.isOfType(value, Int) || Std.isOfType(value, Float))
 			return macro:Float;
-		else if (Std.isOfType(value, Array)){
+		else if (Std.isOfType(value, Array)) {
 			var v = value[0];
-			var t = getType(v,pos,doc);
+			var t = getType(v, pos, doc);
 			return macro:Array<$t>;
-		}
-		else if (Std.isOfType(value, String))
+		} else if (Std.isOfType(value, String))
 			return macro:String;
 		var args:Array<Field> = [];
 		var keys = Reflect.fields(value);
@@ -201,10 +212,10 @@ class JSONData {
 			var kvalue = Reflect.getProperty(value, key);
 			args.push({
 				name: key,
-				doc: doc != null ? Reflect.getProperty(doc,key):null,
+				doc: doc != null ? Reflect.getProperty(doc, key) : null,
 				meta: [],
 				access: [APublic],
-				kind: FVar(getType(kvalue,pos,doc)),
+				kind: FVar(getType(kvalue, pos, doc)),
 				pos: pos
 			});
 		}

@@ -5,6 +5,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.5.8
+- [新增] 对`SpriteSpine`新增了遮罩渲染支持。
+
 ### 10.5.7
 - [修复] 修复IOS的swf载入错误的问题。
 - [新增] 新增对`<haxelib bind="true"/>`的`bind`识别处理，如果需要资源引入该库的include时，请开启`bind`属性。

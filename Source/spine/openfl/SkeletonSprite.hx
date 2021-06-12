@@ -473,6 +473,9 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 		allTriangles = new Vector<Int>();
 		var t:Int = 0;
 
+		var writeVertices:Array<Float> = null;
+		var writeTriangles:Array<Int> = null;
+
 		var bitmaps = [];
 
 		for (i in 0...n) {
@@ -489,8 +492,8 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 					continue;
 				if (Std.isOfType(slot.attachment, ClippingAttachment)) {
 					// 如果是剪切
-					// var region:ClippingAttachment = cast slot.attachment;
-					// clipper.clipStart(slot, region);
+					var region:ClippingAttachment = cast slot.attachment;
+					clipper.clipStart(slot, region);
 					continue;
 				} else if (Std.isOfType(slot.attachment, RegionAttachment)) {
 					// 如果是矩形
@@ -509,18 +512,38 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 					triangles = region.getTriangles();
 					atlasRegion = cast region.getRegion();
 				}
-
-				// if (clipper.isClipping()) {
-				// 	clipper.clipTriangles(_tempVerticesArray,_tempVerticesArray.length,triangles,triangles.length,uvs,1,1,false);
-				// 	_tempVerticesArray = clipper.getClippedVertices();
-				// 	triangles = clipper.getClippedTriangles();
-				// }
+				// 裁剪实现
+				if (clipper.isClipping()) {
+					clipper.clipTriangles(_tempVerticesArray, _tempVerticesArray.length, triangles, triangles.length, uvs, 1, 1, true);
+					if (clipper.getClippedTriangles().length == 0) {
+						clipper.clipEndWithSlot(slot);
+						continue;
+					} else {
+						var clippedVertices = clipper.getClippedVertices();
+						writeVertices = [];
+						uvs = [];
+						var i = 0;
+						while (true) {
+							writeVertices.push(clippedVertices[i]);
+							writeVertices.push(clippedVertices[i + 1]);
+							uvs.push(clippedVertices[i + 4]);
+							uvs.push(clippedVertices[i + 5]);
+							i += 6;
+							if (i >= clippedVertices.length)
+								break;
+						}
+						writeTriangles = clipper.getClippedTriangles();
+					}
+				} else {
+					writeVertices = _tempVerticesArray;
+					writeTriangles = triangles;
+				}
 
 				// 矩形绘制
 				if (atlasRegion != null) {
 					if (batchs != null) {
 						// 上传到批量渲染
-						batchs.uploadBuffData(this, ofArrayFloat(_tempVerticesArray), ofArrayInt(triangles), ofArrayFloat(uvs));
+						batchs.uploadBuffData(this, ofArrayFloat(writeVertices), ofArrayInt(writeTriangles), ofArrayFloat(uvs));
 					} else {
 						bitmapData = cast atlasRegion.page.rendererObject;
 						if (bitmaps.indexOf(bitmapData) == -1) {
@@ -537,7 +560,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 							spr.graphics.clear();
 							spr.graphics.beginBitmapFill(bitmapData, null, true, true);
-							spr.graphics.drawTriangles(ofArrayFloat(_tempVerticesArray), ofArrayInt(triangles), ofArrayFloat(uvs), TriangleCulling.NONE);
+							spr.graphics.drawTriangles(ofArrayFloat(writeVertices), ofArrayInt(writeTriangles), ofArrayFloat(uvs), TriangleCulling.NONE);
 							spr.graphics.endFill();
 							spr.alpha = slot.color.a;
 							// Color change
@@ -556,9 +579,9 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 							}
 							_shape.addChild(spr);
 						} else {
-							for (vi in 0...triangles.length) {
+							for (vi in 0...writeTriangles.length) {
 								// 追加顶点
-								allTriangles[_buffdataPoint] = triangles[vi] + t;
+								allTriangles[_buffdataPoint] = writeTriangles[vi] + t;
 								// 添加顶点属性
 								allTrianglesAlpha[_buffdataPoint] = slot.color.a; // Alpha
 								switch (slot.data.blendMode) {
@@ -581,7 +604,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 
 							for (ui in 0...uvs.length) {
 								// 追加坐标
-								allVerticesArray[uindex] = _tempVerticesArray[ui];
+								allVerticesArray[uindex] = writeVertices[ui];
 								// 追加UV
 								allUvs[uindex] = uvs[ui];
 								uindex++;
@@ -591,7 +614,7 @@ class SkeletonSprite extends #if !zygame Sprite #else DisplayObjectContainer #en
 					}
 				}
 
-				// clipper.clipEndWithSlot(slot);
+				clipper.clipEndWithSlot(slot);
 			}
 		}
 

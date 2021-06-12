@@ -52,7 +52,7 @@
 	<haxedef name="smoothing" if="cpp" unless="unsmoothing" />
 
 	<!-- 禁止图形使用软件刷新，使用OpenFL9将不再限制，但是在Android和IOS上遇到了一些布局错误的问题 -->
-	<define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios" />
+	<!-- <define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios" /> -->
 
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf"/>

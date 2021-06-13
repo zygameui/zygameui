@@ -33,6 +33,8 @@
 
 	<!-- zygameui框架标示 -->
 	<haxedef name="zygame" />
+	<define name="zygame" />
+	<haxelib name="openfl-spine"/>
 
 	<!-- 编译平台的自动引入处理 -->
 	<include path="platforms.xml" />

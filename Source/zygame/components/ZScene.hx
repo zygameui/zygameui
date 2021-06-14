@@ -30,7 +30,7 @@ class ZScene extends ZBox {
 	 *  @param cName - 
 	 *  @return ZScene
 	 */
-	public function createScene(cName:Class<ZScene>):ZScene {
+	public function createScene<T:ZScene>(cName:Class<T>):T {
 		return ZSceneManager.current.createScene(cName);
 	}
 
@@ -39,7 +39,7 @@ class ZScene extends ZBox {
 	 *  @param cName - 
 	 *  @return ZScene
 	 */
-	public function replaceScene(cName:Class<ZScene>, isReleaseScene:Bool = false):ZScene {
+	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false):T {
 		return ZSceneManager.current.replaceScene(cName, isReleaseScene);
 	}
 

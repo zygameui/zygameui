@@ -50,7 +50,7 @@ class ZSceneManager {
 	 *  @param cName - 
 	 *  @return ZScene
 	 */
-	public function createScene(cName:Class<ZScene>):ZScene {
+	public function createScene<T:ZScene>(cName:Class<T>):T {
 		var key = Type.getClassName(cName);
 		var scene:ZScene = _sceneMaps.get(key);
 		if (scene == null) {
@@ -62,7 +62,7 @@ class ZSceneManager {
 			scene.onSceneReset();
 		}
 		_scenes.push(scene);
-		return scene;
+		return cast scene;
 	}
 
 	/**
@@ -101,9 +101,9 @@ class ZSceneManager {
 	 *  @param isHistory 是否需要记录历史记录
 	 *  @return ZScene
 	 */
-	public function replaceScene(cName:Class<ZScene>, isReleaseScene:Bool = false, isHistory:Bool = true):ZScene {
+	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true):T {
 		if (getCurrentScene() != null && Std.isOfType(getCurrentScene(), cName))
-			return getCurrentScene();
+			return cast getCurrentScene();
 		while (_scenes.length > 0) {
 			var zscene:ZScene = _scenes.shift();
 			// 如果是释放场景，那么就会主动释放场景。
@@ -114,7 +114,7 @@ class ZSceneManager {
 		}
 		if (isHistory) {
 			// 仅保留5个历史记录
-			_history.push(cName);
+			_history.push(cast cName);
 			if (_history.length > 5) {
 				_history.shift();
 			}

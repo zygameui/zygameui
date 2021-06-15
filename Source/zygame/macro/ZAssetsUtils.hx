@@ -11,7 +11,7 @@ class ZAssetsUtils {
 			var builder:ZBuilderData = new ZBuilderData(path, project);
 			var textures:Array<{png:String, xml:String}> = [];
 			var spines:Array<{png:String, atlas:String, json:String}> = [];
-			var files:Array<String> = [path];
+			var files:Array<String> = [project.assetsRenamePath.get(StringUtils.getName(xmlid) + ".xml")];
 			// 开始遍历所需资源
 			for (file in builder.assetsLoads) {
 				if (project.assetsPath.exists(file + ".png")

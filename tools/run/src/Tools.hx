@@ -95,6 +95,10 @@ class Tools {
 				XlsBuild.build(args[3] + args[1], args[3] + args[2]);
 			case "-atlas":
 				AtlasTools.removeXmlItem(args[1]);
+			case "-ogg":
+				// 转换为OGG
+				trace("Mp3 to Ogg...", Sys.getCwd());
+				Sys.command("node", [Sys.getCwd() + "/tools/run/mp3toogg.js", args[1]]);
 		}
 	}
 

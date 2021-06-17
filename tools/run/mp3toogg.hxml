@@ -1,0 +1,4 @@
+--library hxnodejs
+--main ogg.Mp3ToOgg
+--js mp3toogg.js
+--class-path src

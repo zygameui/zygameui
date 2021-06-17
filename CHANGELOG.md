@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.6.0
+- [新增] 新增Mp3转Ogg命令：`haxelib run zygameui -ogg 资源目录`。
+- [修复] 修复九宫格的着色器在C++上的渲染问题。
+
 ### 10.5.9
 - [移除] 移除spine包，改使用`openfl-spine`库。
 - [改进] 场景API可直接返回当前类型的场景。

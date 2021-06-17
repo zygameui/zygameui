@@ -14,6 +14,7 @@
 --library differ
 --library vector-math
 --library openfl-glsl
+--library openfl-spine
 -D vscode
 -D zygame
 -D api

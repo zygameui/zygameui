@@ -1,5 +1,7 @@
 package zygame.components;
 
+import openfl.events.Event;
+import openfl.events.TextEvent;
 import zygame.shader.StrokeShader;
 import zygame.utils.Lib;
 #if html5
@@ -49,6 +51,28 @@ class ZLabel extends DataProviderComponent {
 	public var igoneChars:Array<String> = [];
 
 	private var __point:Point = new Point();
+
+	/**
+	 * 正则限制符
+	 */
+	public var restrict(get, set):String;
+
+	private var _restrict:String;
+
+	private var _restrictEreg:EReg;
+
+	private function get_restrict():String {
+		return _restrict;
+	}
+
+	private function set_restrict(value:String):String {
+		_restrict = value;
+		if (value.indexOf("^") == 0)
+			_restrictEreg = new EReg("[" + value.substr(1) + "]", "g");
+		else
+			_restrictEreg = new EReg("[^" + value + "]", "g");
+		return _restrict;
+	}
 
 	/**
 	 * 缩放系数
@@ -287,6 +311,11 @@ class ZLabel extends DataProviderComponent {
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
 		value = Std.string(value);
+
+		if (_restrictEreg != null) {
+			value = _restrictEreg.replace(value, "");
+		}
+
 		super.dataProvider = value;
 		if (value != null && value.length > _maxChars) {
 			if (_maxChars != 0) {

@@ -67,16 +67,6 @@ class ZInputLabel extends ZLabel {
 			return true;
 		}
 		return false;
-
-		// if (this.mouseEnabled == false || this.visible == false)
-		// 	return false;
-		// if (this.getBounds(stage).contains(x, y)) {
-		// 	if (stack != null) {
-		// 		stack.push(this);
-		// 	}
-		// 	return true;
-		// }
-		// return false;
 	}
 	#end
 }

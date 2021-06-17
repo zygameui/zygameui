@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.6.1
+- [新增] 新增`ZLabel.restrict`正则表达式支持。
+- [改进] 改进skin可以直接使用字符串设置，将从ZBuilder绑定资源中获取纹理。
+
 ### 10.6.0
 - [新增] 新增Mp3转Ogg命令：`haxelib run zygameui -ogg 资源目录`。
 - [修复] 修复九宫格的着色器在C++上的渲染问题。

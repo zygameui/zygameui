@@ -44,6 +44,13 @@ class ZScene extends ZBox {
 	}
 
 	/**
+	 * 释放当前场景
+	 */
+	public function releaseScene():Void {
+		ZSceneManager.current.releaseScene(this);
+	}
+
+	/**
 	 * 返回上一个场景，仅记录5个场景记录
 	 * @param isReleaseScene 
 	 * @return ZScene

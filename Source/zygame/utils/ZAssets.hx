@@ -665,7 +665,10 @@ class ZAssets {
 	 * @return spine.openfl.SkeletonAnimation
 	 */
 	public function createSpineSpriteSkeleton(atalsName:String, skeletonJsonName:String):spine.openfl.SkeletonAnimation {
-		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(this.getObject(skeletonJsonName)));
+		var jsonData = this.getObject(skeletonJsonName);
+		if (jsonData == null)
+			throw "Spine缺少json对象：" + skeletonJsonName;
+		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(jsonData));
 	}
 
 	/**
@@ -675,8 +678,10 @@ class ZAssets {
 	 * @return spine.tilemap.SkeletonAnimation
 	 */
 	public function createSpineTilemapSkeleton(atalsName:String, skeletonJsonName:String):spine.tilemap.SkeletonAnimation {
-		return _spines.get(atalsName)
-			.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(this.getObject(skeletonJsonName)));
+		var jsonData = this.getObject(skeletonJsonName);
+		if (jsonData == null)
+			throw "Spine缺少json对象：" + skeletonJsonName;
+		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(jsonData));
 	}
 
 	/**

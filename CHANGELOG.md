@@ -9,6 +9,7 @@
 - [新增] 新增`ZLabel.restrict`正则表达式支持。
 - [改进] 改进skin可以直接使用字符串设置，将从ZBuilder绑定资源中获取纹理。
 - [新增] 新增`ZScene.releaseScene`释放场景的API。
+- [改进] 为Spine创建的时候提供了json错误检测。
 
 ### 10.6.0
 - [新增] 新增Mp3转Ogg命令：`haxelib run zygameui -ogg 资源目录`。

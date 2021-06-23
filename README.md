@@ -50,6 +50,12 @@ pip3 install xlrd
 - spine-hx
 - hscript
 - tweenxcore
+- openfl-spine
+- openfl-glsl
+- actuate
+- crypto
+- vector-math
+- swf
 
 ## 平台支持
 

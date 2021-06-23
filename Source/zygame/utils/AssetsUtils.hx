@@ -148,19 +148,25 @@ class BytesLoader extends BaseLoader {
 	private var promise:Promise<Bytes>;
 	#end
 
+	private var _onCompleteAssetsCall:String->Bytes->Void;
+
+	private var _onCompleteCall:Bytes->Void;
+
 	/**
 	 * 回调，包含路径的回调
 	 * @param call
 	 * @return BitmapDataLoader
 	 */
 	public function onCompleteAssets(call:String->Bytes->Void):BytesLoader {
+		_onCompleteAssetsCall = call;
 		onComplete(function(bytes:Bytes):Void {
-			call(path, bytes);
+			_onCompleteAssetsCall(path, bytes);
 		});
 		return this;
 	}
 
 	public function onComplete(call:Bytes->Void):BytesLoader {
+		_onCompleteCall = call;
 		#if (cpp && !ios)
 		var uri:String = #if ios path #else AssetsUtils.ofPath(path) #end;
 		this.promise = new Promise<Bytes>();
@@ -179,11 +185,11 @@ class BytesLoader extends BaseLoader {
 						sys.io.File.saveBytes(lime.system.System.applicationStorageDirectory + md5path, bytes);
 					}
 				}
-				call(bytes);
-				call = null;
+				_onCompleteCall(bytes);
+				_onCompleteCall = null;
 			}).onError(function(err:Dynamic):Void {
 				callError("加载错误：" + err);
-				call = null;
+				_onCompleteCall = null;
 			});
 			if (sys.FileSystem.exists(lime.system.System.applicationStorageDirectory + md5path)) {
 				uri = lime.system.System.applicationStorageDirectory + md5path;
@@ -191,11 +197,11 @@ class BytesLoader extends BaseLoader {
 		} else {
 			// 普通载入，不作缓存处理
 			promise.future.onComplete(function(bytes:Bytes):Void {
-				call(bytes);
-				call = null;
+				_onCompleteCall(bytes);
+				_onCompleteCall = null;
 			}).onError(function(err:Dynamic):Void {
 				callError("加载错误：" + err);
-				call = null;
+				_onCompleteCall = null;
 			});
 		}
 		if (threadPool == null) {
@@ -213,12 +219,12 @@ class BytesLoader extends BaseLoader {
 		url.load(request);
 		url.addEventListener(Event.COMPLETE, function(e:Event):Void {
 			var bytes:ByteArray = url.data;
-			call(bytes);
-			call = null;
+			_onCompleteCall(bytes);
+			_onCompleteCall = null;
 		});
 		url.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):Void {
 			callError("无法加载" + path);
-			call = null;
+			_onCompleteCall = null;
 		});
 		#end
 
@@ -327,6 +333,10 @@ class BytesLoader extends BaseLoader {
 class BitmapDataLoader extends BaseLoader {
 	public var isAtf:Bool = false;
 
+	private var _onCompleteAssetsCall:String->BitmapData->Void;
+
+	private var _onCompleteCall:BitmapData->Void;
+
 	public function new(path:String, isAtf:Bool) {
 		super(path);
 		this.isAtf = isAtf;
@@ -338,13 +348,17 @@ class BitmapDataLoader extends BaseLoader {
 	 * @return BitmapDataLoader
 	 */
 	public function onCompleteAssets(call:String->BitmapData->Void):BitmapDataLoader {
+		_onCompleteAssetsCall = call;
 		onComplete(function(bitmapData:BitmapData):Void {
-			call(path, bitmapData);
+			if (_onCompleteAssetsCall != null)
+				_onCompleteAssetsCall(path, bitmapData);
+			_onCompleteAssetsCall = null;
 		});
 		return this;
 	}
 
 	public function onComplete(call:BitmapData->Void):BitmapDataLoader {
+		_onCompleteCall = call;
 		#if atf
 		AssetsUtils.loadBytes(path, false).onComplete(function(bytes:Bytes):Void {
 			var h = bytes.getInt32(0);
@@ -362,27 +376,28 @@ class BitmapDataLoader extends BaseLoader {
 						Context3DTextureFormat.COMPRESSED_ALPHA, false);
 					texture.uploadCompressedTextureFromByteArray(bytes, 0);
 					var bitmapData = BitmapData.fromTexture(texture);
-					call(bitmapData);
-					call = null;
+					if (_onCompleteCall != null)
+						_onCompleteCall(bitmapData);
+					_onCompleteCall = null;
 				} else {
 					callError("没有包含atf资源");
-					call = null;
+					_onCompleteCall = null;
 				}
 			} else {
 				// 普通的图片格式，正常载入
 				Image.loadFromBytes(bytes).onComplete((img) -> {
 					var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(img);
 					bitmapData.path = path;
-					if (call != null)
-						call(bitmapData);
-					call = null;
+					if (_onCompleteCall != null)
+						_onCompleteCall(bitmapData);
+					_onCompleteCall = null;
 				});
 			}
 		});
 
 		return this;
 		#else
-		return onComplete2(call);
+		return onComplete2(_onCompleteCall);
 		#end
 	}
 
@@ -400,7 +415,8 @@ class BitmapDataLoader extends BaseLoader {
 					var texture:Texture = zygame.core.Start.current.stage.context3D.createTexture(2048, 2048, Context3DTextureFormat.COMPRESSED_ALPHA, false);
 					texture.uploadCompressedTextureFromByteArray(bytes, 0);
 					var bitmapData = BitmapData.fromTexture(cast untyped texture);
-					call(bitmapData);
+					if (call != null)
+						call(bitmapData);
 					call = null;
 				} else {
 					callError("没有包含atf资源");
@@ -466,28 +482,38 @@ class TextLoader extends BaseLoader {
 	 */
 	public static var decodeCallback:String->String->String;
 
+	public var _onCompleteAssetsCall:String->String->Void;
+
+	public var _onCompleteCall:String->Void;
+
 	public function onCompleteAssets(call:String->String->Void):TextLoader {
+		_onCompleteAssetsCall = call;
 		onComplete(function(text:String):Void {
-			call(path, text);
+			if (_onCompleteAssetsCall != null)
+				_onCompleteAssetsCall(path, text);
+			_onCompleteAssetsCall = null;
 		});
 		return this;
 	}
 
 	public function onComplete(call:String->Void):TextLoader {
+		_onCompleteCall = call;
 		var url:URLRequest = new URLRequest(path);
 		var data:URLLoader = new URLLoader();
 		data.addEventListener(Event.COMPLETE, function(_):Void {
-			//特殊解码处理
+			// 特殊解码处理
 			if (decodeCallback != null)
 				data.data = decodeCallback(path, data.data);
-			call(data.data);
+			if (_onCompleteCall != null)
+				_onCompleteCall(data.data);
+			_onCompleteCall = null;
 		});
 		data.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
 				trace("重载：" + path + "," + loadTimes);
 				loadTimes++;
-				onComplete(call);
+				onComplete(_onCompleteCall);
 			} else
 				callError("无法加载" + path);
 		});
@@ -497,25 +523,34 @@ class TextLoader extends BaseLoader {
 }
 
 class SoundLoader extends BaseLoader {
+	private var _onCompleteCall:Sound->Void;
+	private var _onCompleteAssetsCall:String->Sound->Void;
+
 	public function onCompleteAssets(call:String->Sound->Void):BaseLoader {
+		_onCompleteAssetsCall = call;
 		onComplete(function(sound:Sound):Void {
-			call(path, sound);
+			if (_onCompleteAssetsCall != null)
+				_onCompleteAssetsCall(path, sound);
+			_onCompleteAssetsCall = null;
 		});
 		return this;
 	}
 
 	public function onComplete(call:Sound->Void):BaseLoader {
+		_onCompleteCall = call;
 		var url:URLRequest = new URLRequest(path);
 		var sound:Sound = new Sound();
 		sound.addEventListener(Event.COMPLETE, function(_):Void {
-			call(sound);
+			if (_onCompleteCall != null)
+				_onCompleteCall(sound);
+			_onCompleteCall = null;
 		});
 		sound.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
 				trace("重载：" + path + "," + loadTimes);
 				loadTimes++;
-				onComplete(call);
+				onComplete(_onCompleteCall);
 			} else
 				callError("无法加载" + path);
 		});
@@ -527,23 +562,32 @@ class SoundLoader extends BaseLoader {
 class BytesSoundLoader extends BaseLoader {
 	public var bytes:ByteArray;
 
+	private var _onCompleteAssetsCall:String->Sound->Void;
+
+	private var _onCompleteCall:Sound->Void;
+
 	public function new(path:String, bytes:ByteArray) {
 		super(path);
 		this.bytes = bytes;
 	}
 
 	public function onCompleteAssets(call:String->Sound->Void):BaseLoader {
+		_onCompleteAssetsCall = call;
 		onComplete(function(sound:Sound):Void {
-			call(path, sound);
+			if (_onCompleteAssetsCall != null)
+				_onCompleteAssetsCall(path, sound);
 		});
 		return this;
 	}
 
 	public function onComplete(call:Sound->Void):BaseLoader {
+		_onCompleteCall = call;
 		var url:URLRequest = new URLRequest(path);
 		var sound:Sound = new Sound();
 		sound.addEventListener(Event.COMPLETE, function(_):Void {
-			call(sound);
+			if (_onCompleteCall != null)
+				_onCompleteCall(sound);
+			_onCompleteCall = null;
 		});
 		sound.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
 			callError("无法加载" + path);

@@ -9,6 +9,7 @@
 - [改进] 改进`SpineManager`的渲染性能。
 - [改进] 改进`ZSpine`的visible渲染性能。
 - [改进] 改进`AssetsUtils`的加载回调引用关系。
+- [新增] 新增`GC`类，可用于引用变量。
 
 ### 10.6.1
 - [新增] 新增`ZLabel.restrict`正则表达式支持。

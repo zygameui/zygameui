@@ -1,5 +1,6 @@
 package zygame.mini;
 
+import zygame.utils.GC;
 import zygame.script.ZHaxe;
 import zygame.mini.MiniEvent;
 
@@ -8,18 +9,19 @@ import zygame.mini.MiniEvent;
  * 并通过loadHaxeApp来加载内置小游戏程序，自动解析Haxe为可运行的脚本。
  */
 class MiniEngine {
-
 	/**
 	 * 加载HaxeApp内置应用
 	 * @param url 内置小游戏zip包路径
 	 */
 	public static function loadHaxeApp(url:String, call:MiniEngineAssets->Void):Void {
+		GC.retain(call);
 		var assets:MiniEngineAssets = new MiniEngineAssets();
 		assets.path = url;
 		assets.loadAssetsZip(url);
 		assets.start(function(f) {
 			if (f == 1) {
 				call(assets);
+				GC.release(call);
 			}
 		});
 	}
@@ -84,7 +86,7 @@ class MiniEngine {
 class MiniEngineHaxe {
 	public static var IGONEATTR:Array<String> = ["x", "y", "alpha", "width", "height", "scaleX", "scaleY", "dataProvider"];
 
-	public static var VARATTR:Array<String> = ["1","2","3","4","5","6","7","8","9","0","-"];
+	public static var VARATTR:Array<String> = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-"];
 
 	public var xml:Xml = null;
 
@@ -173,24 +175,22 @@ class MiniEngineHaxe {
 					// if(func.hscript.indexOf("this." + att.target) != -1 || func.hscript.indexOf("." + att.target) == -1)
 					// 	func.hscript = StringTools.replace(func.hscript, att.target, att.name + ".value");
 					// else
-						func.hscript = StringTools.replace(func.hscript, att.target, att.name);
+					func.hscript = StringTools.replace(func.hscript, att.target, att.name);
 				} else if (vars.exists(att.name) && !vars.get(att.name).isStatic) {
-					if(func.hscript.indexOf("this." + att.target) != -1 || func.hscript.indexOf("." + att.target) == -1
-						|| func.hscript.indexOf(att.target + ".") != -1 || func.hscript.indexOf(att.target + "[") != -1)
-					{
+					if (func.hscript.indexOf("this." + att.target) != -1
+						|| func.hscript.indexOf("." + att.target) == -1
+						|| func.hscript.indexOf(att.target + ".") != -1
+						|| func.hscript.indexOf(att.target + "[") != -1) {
 						func.hscript = StringTools.replace(func.hscript, att.target, att.name + ".value");
-					}
-					else
-					{
+					} else {
 						func.hscript = StringTools.replace(func.hscript, att.target, att.name);
 					}
 				} else {
 					var attName:String = att.name;
-					if (attName.indexOf(":") != -1 && attName.length > 1){
+					if (attName.indexOf(":") != -1 && attName.length > 1) {
 						var mhend:String = attName.substr(attName.indexOf(":") + 1);
 						var start = mhend.charAt(0);
-						if(Func.NAMEPIX.indexOf(start) == -1 && VARATTR.indexOf(start) == -1 && start == start.toUpperCase())
-						{
+						if (Func.NAMEPIX.indexOf(start) == -1 && VARATTR.indexOf(start) == -1 && start == start.toUpperCase()) {
 							attName = attName.substr(0, attName.lastIndexOf(":"));
 						}
 					}
@@ -270,8 +270,7 @@ class Func {
 	 * @param str
 	 */
 	public function pushScript(str:String):Void {
-		if(str.indexOf("case ") != -1)
-		{
+		if (str.indexOf("case ") != -1) {
 			hscript += str + "\n";
 			return;
 		}

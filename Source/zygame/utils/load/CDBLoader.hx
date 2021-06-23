@@ -10,14 +10,20 @@ import cdb.Parser;
 class CDBLoader {
 	public var path:String;
 
+	private var _onLoaded:String->CDBData->Void;
+
+	private var _onError:String->Void;
+
 	public function new(path:String) {
 		this.path = path;
 	}
 
 	public function load(onLoaded:String->CDBData->Void, onError:String->Void):Void {
+		_onLoaded = onLoaded;
+		_onError = onError;
 		AssetsUtils.loadText(this.path).onComplete(function(data) {
-			onLoaded(this.path, new CDBData(data));
-		}).onError(onError);
+			_onLoaded(this.path, new CDBData(data));
+		}).onError(_onError);
 	}
 }
 
@@ -28,8 +34,8 @@ class CDBData {
 	public var data:Data;
 
 	public function new(data:String) {
-		if(data.indexOf("{") == -1){
-			//可能被base64编码处理
+		if (data.indexOf("{") == -1) {
+			// 可能被base64编码处理
 			data = Base64.decode(data).toString();
 		}
 		this.data = Parser.parse(data);
@@ -72,7 +78,6 @@ class CDBData {
 	 * @return Dynamic
 	 */
 	public function findDataByName(name:String, key:String, ifvalue:Dynamic):Dynamic {
-		return findData(getSheetByName(name),key,ifvalue);
+		return findData(getSheetByName(name), key, ifvalue);
 	}
-
 }

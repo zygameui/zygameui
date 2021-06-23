@@ -19,7 +19,7 @@ class GC {
 	 * @param value 
 	 */
 	public static function retain(value:Dynamic):Void {
-		if (_retain.indexOf(value) == -1)
+		if (value != null && _retain.indexOf(value) == -1)
 			_retain.push(value);
 	}
 
@@ -28,6 +28,7 @@ class GC {
 	 * @param value 
 	 */
 	public static function release(value:Dynamic):Void {
-		_retain.remove(value);
+		if (value != null)
+			_retain.remove(value);
 	}
 }

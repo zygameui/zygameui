@@ -1185,6 +1185,7 @@ class AssetsBuilder extends Builder {
 	 * 释放
 	 */
 	override public function dispose():Void {
+		super.dispose();
 		if (assets == null)
 			return;
 		assets.unloadAll();

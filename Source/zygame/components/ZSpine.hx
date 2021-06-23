@@ -28,7 +28,7 @@ class ZSpine extends ZBox {
 	}
 
 	public function getTilemapSpine():TilemapAnimation {
-		return bspine.spine;
+		return bspine != null ? bspine.spine : null;
 	}
 
 	private function set_spineSkin(name:String):String {
@@ -135,5 +135,13 @@ class ZSpine extends ZBox {
 		if (this.getTilemapSpine() != null)
 			this.getTilemapSpine().shader = value;
 		return value;
+	}
+
+	override public function set_visible(v:Bool):Bool {
+		if (getNativeSpine() != null)
+			getNativeSpine().visible = v;
+		if (getTilemapSpine() != null)
+			getTilemapSpine().visible = v;
+		return super.set_visible(v);
 	}
 }

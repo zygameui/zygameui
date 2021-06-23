@@ -21,7 +21,6 @@ import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;
 #end
 #end
-
 class FPSDebug extends ZBox {
 	public static var fnt:FntData;
 
@@ -46,16 +45,16 @@ class FPSDebug extends ZBox {
 			_text.width = 120;
 			_text.height = 150;
 			_text.vAlign = "top";
-            var bg = new ZQuad();
-            this.addChild(bg);
-            bg.width = _text.width;
-            bg.height = _text.height;
-            bg.alpha = 0.85;
+			var bg = new ZQuad();
+			this.addChild(bg);
+			bg.width = _text.width;
+			bg.height = _text.height;
+			bg.alpha = 0.85;
 			this.addChild(_text);
 
 			this.mouseChildren = true;
 			this.mouseEnabled = false;
-            bg.mouseEnabled = false;
+			bg.mouseEnabled = false;
 			_text.mouseEnabled = false;
 
 			addEventListener(Event.ENTER_FRAME, onEnter);
@@ -89,8 +88,8 @@ class FPSDebug extends ZBox {
 				// #if html5 + "\nTexture:" + zygame.core.Start.TEXTURE_COUNT #end 无意义，释放会由GC处理
 				var msg = "MODE:" + Lib.getRenderMode() + "\nMEM:" + mem + "MB\nMaxMEN:" + memPeak + "MB\nUPDATES:"
 					+ zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count() + "\nS_RUNING:" + SpineManager.playingCount
-					+ "\nFPS:" + getFps() + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale #if wechat + "\nContext:" + untyped window.contextCount + "\nImage:" +
-					untyped window.imageCount #end;
+					+ "\nFPS:" + getFps() + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale #if wechat + "\nContext:" +
+				untyped window.contextCount + "\nImage:" + untyped window.imageCount #end;
 				_text.dataProvider = msg;
 			}
 		}

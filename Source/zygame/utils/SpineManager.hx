@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.display.Stage;
 import spine.base.SpineBaseDisplay;
@@ -81,21 +82,24 @@ class SpineManager {
 			currentFpsTime = currentFpsTime / 1000;
 			_lastFpsTime = _newFpsTime;
 			for (display in spineOnFrames) {
-				if (display.visible && display.isPlay)
+				if (!display.isHidden() && display.isPlay) {
 					playingCount++;
-				display.onSpineUpdate(currentFpsTime);
+					display.onSpineUpdate(currentFpsTime);
+				}
 			}
 		} else if (fps.fps == 60) {
 			for (display in spineOnFrames) {
-				if (display.visible && display.isPlay)
+				if (!display.isHidden() && display.isPlay) {
 					playingCount++;
-				display.onSpineUpdate(1 / stage.frameRate);
+					display.onSpineUpdate(1 / stage.frameRate);
+				}
 			}
 		} else if (fps.update()) {
 			for (display in spineOnFrames) {
-				if (display.visible && display.isPlay)
+				if (!display.isHidden() && display.isPlay) {
 					playingCount++;
-				display.onSpineUpdate(1 / fps.fps);
+					display.onSpineUpdate(1 / fps.fps);
+				}
 			}
 		}
 	}

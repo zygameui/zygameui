@@ -5,6 +5,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.6.2
+- [改进] 改进`SpineManager`的渲染性能。
+- [改进] 改进`ZSpine`的visible渲染性能。
+
 ### 10.6.1
 - [新增] 新增`ZLabel.restrict`正则表达式支持。
 - [改进] 改进skin可以直接使用字符串设置，将从ZBuilder绑定资源中获取纹理。

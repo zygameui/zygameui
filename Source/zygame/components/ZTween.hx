@@ -220,11 +220,17 @@ class TweenFrame {
 			_canUpdateData = true;
 			return;
 		}
-		switch (type) {
-			case "backOut":
-				Reflect.setProperty(bind, key, timeline.backOut().lerp(from, to));
-			default:
+		if (type != null) {
+			var call = Reflect.getProperty(Easing, type);
+			if (call != null) {
+				var value = cast(call(timeline), Float);
+				value = value.lerp(from, to);
+				Reflect.setProperty(bind, key, value);
+			} else {
 				Reflect.setProperty(bind, key, timeline.linear().lerp(from, to));
+			}
+		} else {
+			Reflect.setProperty(bind, key, timeline.linear().lerp(from, to));
 		}
 	}
 }

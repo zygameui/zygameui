@@ -55,10 +55,17 @@ class ZList extends ZScroll {
 
 	override public function onTouchEnd(touch:TouchEvent):Void {
 		super.onTouchEnd(touch);
-		if (Std.isOfType(touch.target, itemRenderType) && getIsMoveing() == false && currentSelectItem != cast(touch.target, ItemRender).data) {
+		if (Std.isOfType(touch.target, itemRenderType)
+			&& getIsMoveing() == false
+			&& currentSelectItem != cast(touch.target, ItemRender).data) {
 			selectIndex = @:privateAccess cast(this.dataProvider, ListData)._data.indexOf(cast(touch.target, ItemRender).data);
 		}
 	}
+
+	/**
+	 * 是否开启Item自动适配高宽
+	 */
+	public var autoSize(get, set):Bool;
 
 	private var _selectIndex:Int = -1;
 
@@ -89,6 +96,9 @@ class ZList extends ZScroll {
 			while (view.childs.length > 0) {
 				removeItemRender(cast view.childs[0], true);
 			}
+		}
+		if(autoSize){
+			cast(this.layout, ListLayout).updateSize(this);
 		}
 		this.updateComponents();
 	}
@@ -181,5 +191,14 @@ class ZList extends ZScroll {
 			// 批渲染对象不为空时，请清理
 			batch.getBatchs().addChild(item.tileDisplayObject);
 		}
+	}
+
+	function get_autoSize():Bool {
+		return cast(this.layout, ListLayout).autoSize;
+	}
+
+	function set_autoSize(value:Bool):Bool {
+		cast(this.layout, ListLayout).autoSize = value;
+		return value;
 	}
 }

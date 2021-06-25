@@ -465,7 +465,6 @@ class ZBuilder {
 			@:privateAccess cast(obj, ZStack).updateDisplay();
 		});
 		bindEnd(BStack, function(obj:Dynamic):Void {
-			trace("刷新");
 			@:privateAccess cast(obj, BStack).updateDisplay();
 		});
 	}

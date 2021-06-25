@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.CacheAssets;
 import zygame.utils.ZGC;
 import openfl.display.Shader;
 import zygame.components.base.DataProviderComponent;
@@ -19,6 +20,11 @@ class ZImage extends DataProviderComponent {
 
 	public var display:Image;
 
+	/**
+	 * 缓存资源，如果定义缓存资源，ZImage的异步资源会从这里读取资源
+	 */
+	public var cacheAssets:CacheAssets;
+
 	public function new() {
 		super();
 		display = new Image(null);
@@ -35,16 +41,23 @@ class ZImage extends DataProviderComponent {
 			if (data != null) {
 				if (Std.isOfType(data, String)) {
 					var path:String = data;
-					// 启动异步载入
-					isAysn = true;
-					Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
-						if (isDispose) {
-							ZGC.disposeBitmapData(bitmapData);
-							return;
-						}
-						display.bitmapData = bitmapData;
-						onBitmapDataUpdate();
-					});
+					if (cacheAssets != null) {
+						cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
+							display.bitmapData = bitmapData;
+							onBitmapDataUpdate();
+						});
+					} else {
+						// 启动异步载入
+						isAysn = true;
+						Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
+							if (isDispose) {
+								ZGC.disposeBitmapData(bitmapData);
+								return;
+							}
+							display.bitmapData = bitmapData;
+							onBitmapDataUpdate();
+						});
+					}
 				}
 				// else if(Std.isOfType(data,BitmapData) || Std.isOfType(data,Frame) || Std.isOfType(data,AsyncFrame))
 				else if (Std.isOfType(data, BitmapData) || Std.isOfType(data, Frame)) {
@@ -149,9 +162,10 @@ class ZImage extends DataProviderComponent {
 	override function destroy() {
 		super.destroy();
 		this.isDispose = true;
-		if (this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
+		if (cacheAssets == null && this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
+		this.display.bitmapData = null;
 	}
 
 	override function set_vAlign(value:String):String {

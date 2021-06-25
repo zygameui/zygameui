@@ -310,7 +310,7 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
-		value = Std.string(value);
+		value = Std.isOfType(value, String) ? value : Std.string(value);
 
 		if (_restrictEreg != null) {
 			value = _restrictEreg.replace(value, "");
@@ -364,9 +364,10 @@ class ZLabel extends DataProviderComponent {
 			// if (_display.text != Std.string(value))
 			// 	@:privateAccess _display.__cleanup();
 			_display.text = Std.string(value);
+			// 修复9.0.0设置无法正常格式化问题
+			_display.setTextFormat(_font);
 		}
-		// 修复9.0.0设置无法正常格式化问题
-		_display.setTextFormat(_font);
+
 		// 刷新内容
 		updateComponents();
 		return value;
@@ -497,7 +498,6 @@ class ZLabel extends DataProviderComponent {
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
 		#if minigame
-		trace("zygame.core.KeyboardManager.keyboard=", zygame.core.KeyboardManager.keyboard);
 		if (zygame.core.KeyboardManager.keyboard != null) {
 			zygame.core.KeyboardManager.focus(_display);
 			zygame.core.KeyboardManager.keyboard.input(this);

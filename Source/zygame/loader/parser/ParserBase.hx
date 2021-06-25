@@ -48,10 +48,13 @@ import zygame.utils.Lib;
 	 * 获取解析名
 	 */
 	public function getName():String {
+		if (_data == null) {
+			throw "[" + Type.getClassName(Type.getClass(this)) + "]_data is null";
+		}
 		if (Std.isOfType(_data, String)) {
-			return getAssets() != null?getAssets().onPasingPathName(_data):_data;
+			return getAssets() != null ? getAssets().onPasingPathName(_data) : _data;
 		} else if (_data.path != null) {
-			return getAssets() != null?getAssets().onPasingPathName(_data.path):_data.path;
+			return getAssets() != null ? getAssets().onPasingPathName(_data.path) : _data.path;
 		}
 		return null;
 	}

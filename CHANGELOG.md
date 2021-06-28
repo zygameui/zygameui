@@ -5,6 +5,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.7.1
+- [新增] 新增`testRay`射线支持。
+
 ### 10.7.0
 - [新增] 新增`CacheAssets`缓存器，可用于实现异步缓存多张图片。
 - [改进] `ZAssets.start`方法新了错误调用的crash处理。

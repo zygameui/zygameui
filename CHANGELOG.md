@@ -6,7 +6,8 @@
 # ZYGameUI 更新日志
 
 ### 10.7.1
-- [新增] 新增`testRay`射线支持。
+- [新增] 新增`Shapes.testRay`射线支持。
+- [新增] 新增`zygame.shader.FlashShader`闪光效果支持。
 
 ### 10.7.0
 - [新增] 新增`CacheAssets`缓存器，可用于实现异步缓存多张图片。

@@ -1,5 +1,7 @@
 package zygame.differ;
 
+import differ.data.RayCollision;
+import differ.shapes.Ray;
 import differ.Collision;
 import differ.shapes.Shape;
 import differ.data.ShapeCollision;
@@ -21,7 +23,7 @@ class Shapes {
 	/**
 	 * 类型绑定
 	 */
-	public var typeMaps:Map<Shape,String> = [];
+	public var typeMaps:Map<Shape, String> = [];
 
 	/**
 	 * 碰撞结果
@@ -39,7 +41,7 @@ class Shapes {
 	 * @param type
 	 */
 	public function add(shape:Shape, type:String = null):Void {
-		if(list.indexOf(shape) != -1)
+		if (list.indexOf(shape) != -1)
 			return;
 		list.push(shape);
 		if (type != null) {
@@ -49,7 +51,7 @@ class Shapes {
 				typeList.set(type, list2);
 			}
 			list2.push(shape);
-			typeMaps.set(shape,type);
+			typeMaps.set(shape, type);
 		}
 	}
 
@@ -59,7 +61,7 @@ class Shapes {
 	 */
 	public function remove(shape:Shape):Void {
 		var type = typeMaps.get(shape);
-		if(type != null)
+		if (type != null)
 			typeList.get(type).remove(shape);
 		list.remove(shape);
 	}
@@ -77,15 +79,39 @@ class Shapes {
 		if (list == null)
 			return null;
 		for (shapeB in list) {
-            if(shape == shapeB)
-                continue;
+			if (shape == shapeB)
+				continue;
 			var ret = Collision.shapeWithShape(shape, shapeB);
 			if (ret != null) {
-                if (into == null) {
-                    into = new Results<ShapeCollision>(0);
-                }
-                into.push(ret);
-            }
+				if (into == null) {
+					into = new Results<ShapeCollision>(0);
+				}
+				into.push(ret);
+			}
+		}
+		return into;
+	}
+
+	/**
+	 * 测试射线碰撞
+	 * @param shape
+	 * @param into 用于接收碰撞结果
+	 * @param type 与什么类型进行碰撞
+	 * @param into 碰撞图形结果预设对象，使用该角色，可以减少垃圾回收
+	 * @return Bool
+	 */
+	public function testRay(shape:Ray, type:String = null, into:Results<RayCollision> = null):Results<RayCollision> {
+		var list:Array<Shape> = type != null ? typeList.get(type) : list;
+		if (list == null)
+			return null;
+		for (shapeB in list) {
+			var ret = Collision.rayWithShape(shape, shapeB);
+			if (ret != null) {
+				if (into == null) {
+					into = new Results<RayCollision>(0);
+				}
+				into.push(ret);
+			}
 		}
 		return into;
 	}

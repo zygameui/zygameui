@@ -143,7 +143,7 @@ class ZSceneManager {
 	 * @param isReleaseScene 
 	 * @return ZScene
 	 */
-	public function releaseSceneFormDisplay(scene:ZScene, isReleaseScene:Bool = false):ZScene {
+	public function replaceSceneFormDisplay(scene:ZScene, isReleaseScene:Bool = false):ZScene {
 		while (_scenes.length > 0) {
 			var zscene:ZScene = _scenes.shift();
 			// 如果是释放场景，那么就会主动释放场景。

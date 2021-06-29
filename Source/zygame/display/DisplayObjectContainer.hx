@@ -1,5 +1,7 @@
 package zygame.display;
 
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import zygame.core.Start;
 import zygame.components.ZBuilder.Builder;
 import zygame.core.Refresher;
@@ -54,17 +56,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		trace(_scrollMaskDislayObjectRect);
 		return value;
 	}
-
-	// override function invalidate():Void {
-	// 	super.invalidate();
-	// 	scrollMaskDislayObject = _scrollMaskDislayObject;
-	// }
-	// override function get_x():Float {
-	// 	return _scrollMaskDislayObject == null ? super.get_x() : _scrollMaskDislayObject.x;
-	// }
-	// override function get_y():Float {
-	// 	return _scrollMaskDislayObject == null ? super.get_y() : _scrollMaskDislayObject.y;
-	// }
 
 	/**
 	 * 绑定类型，Maplive可用
@@ -281,10 +272,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 */
 	public override function getBounds(target:openfl.display.DisplayObject):openfl.geom.Rectangle {
 		var rect:Rectangle = super.getBounds(target);
-		// if (rect.width < width)
-		// 	rect.width = width;
-		// if (rect.height < height)
-		// 	rect.height = height;
 		return rect;
 	}
+
 }

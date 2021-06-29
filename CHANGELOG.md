@@ -2,8 +2,18 @@
 - [已解决]当前OpenFL9.0.2版本，C++版本的文本支持异常。
 - [已解决]Haxe4.2.0目前不兼容当前的OpenFL&Lime版本。
 - [已解决]缓存字在9.1.0版本后显示失真。
+- [未解决]quartOut在JS压缩的情况下，会发生问题。
 
 # ZYGameUI 更新日志
+
+### 10.7.6
+- [改进] 改进`ZImage.onBitmapDataUpdate`事件在更换了图片就会触发。
+- [修复] 修复`ZImage.shader`在异步图片上无效的问题。
+
+### 10.7.5
+- [改进] 改进`ZTween`的`quartOut`的兼容性，会自动转换为`quintOut`运算。
+- [新增] 新增`ZScene.lock`以及`ZScene.unlock`锁定画面API，可用于提高性能。
+- [新增] 新增`ZScene.isLock`判断是否锁定的API。
 
 ### 10.7.1
 - [新增] 新增`Shapes.testRay`射线支持。

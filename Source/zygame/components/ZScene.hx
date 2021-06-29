@@ -1,8 +1,12 @@
 package zygame.components;
 
+import openfl.display.DisplayObject;
+import zygame.core.Start;
 import zygame.components.ZBox;
 import zygame.components.ZScene;
 import zygame.utils.ZSceneManager;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 
 /**
  *  场景，用于管理不同的场景使用
@@ -59,15 +63,6 @@ class ZScene extends ZBox {
 		return ZSceneManager.current.replaceHistoryScene(isReleaseScene);
 	}
 
-	#if flash
-	override public function get_width():Float {
-		return getStageWidth();
-	}
-
-	override public function get_height():Float {
-		return getStageHeight();
-	}
-	#else
 	override private function get_width():Float {
 		return getStageWidth();
 	}
@@ -75,5 +70,46 @@ class ZScene extends ZBox {
 	override private function get_height():Float {
 		return getStageHeight();
 	}
-	#end
+
+	private var _lockScene:ZLockScene;
+	private var _lockDisplay:DisplayObject;
+
+	/**
+	 * 是否被锁定
+	 * @return Bool
+	 */
+	public function isLock():Bool {
+		return _lockScene != null;
+	}
+
+	/**
+	 * 锁定画布渲染，锁定后可让draw变成1draw，当调用了lock之后，在更换新的场景之前，务必先调用unlock
+	 */
+	public function lock(display:DisplayObject):Void {
+		if (_lockDisplay != null)
+			return;
+		if (display.parent != this) {
+			throw "Display's parent not is this.";
+		}
+		_lockScene = new ZLockScene();
+		_lockScene.lockBitmapScene(this);
+		_lockDisplay = display;
+		var childIndex = this.getChildIndex(display);
+		display.parent.removeChild(display);
+		this.addChildAt(_lockScene, childIndex);
+	}
+
+	/**
+	 * 解除画布渲染锁定
+	 */
+	public function unlock():Void {
+		if (_lockDisplay != null) {
+			var childIndex = this.getChildIndex(_lockScene);
+			_lockScene.parent.removeChild(_lockScene);
+			_lockScene.releaseScene();
+			this.addChildAt(_lockDisplay, childIndex);
+			_lockDisplay = null;
+			_lockScene = null;
+		}
+	}
 }

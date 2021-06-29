@@ -18,6 +18,8 @@ class ZImage extends DataProviderComponent {
 
 	private var isAysn:Bool = false;
 
+	private var _shader:Shader;
+
 	public var display:Image;
 
 	/**
@@ -45,6 +47,7 @@ class ZImage extends DataProviderComponent {
 						cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
 							display.bitmapData = bitmapData;
 							onBitmapDataUpdate();
+							this.shader = _shader;
 						});
 					} else {
 						// 启动异步载入
@@ -56,12 +59,15 @@ class ZImage extends DataProviderComponent {
 							}
 							display.bitmapData = bitmapData;
 							onBitmapDataUpdate();
+							this.shader = _shader;
 						});
 					}
 				}
 				// else if(Std.isOfType(data,BitmapData) || Std.isOfType(data,Frame) || Std.isOfType(data,AsyncFrame))
 				else if (Std.isOfType(data, BitmapData) || Std.isOfType(data, Frame)) {
 					display.bitmapData = cast data;
+					onBitmapDataUpdate();
+					this.shader = _shader;
 				}
 			}
 			display.visible = data != null;
@@ -143,15 +149,14 @@ class ZImage extends DataProviderComponent {
 	 * @return Shader
 	 */
 	override function set_shader(value:Shader):Shader {
+		_shader = value;
 		if (display != null)
 			display.shader = value;
 		return value;
 	}
 
 	override function get_shader():Shader {
-		if (display == null)
-			return null;
-		return display.shader;
+		return _shader;
 	}
 
 	/**
@@ -166,6 +171,7 @@ class ZImage extends DataProviderComponent {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
 		this.display.bitmapData = null;
+		this._shader = null;
 	}
 
 	override function set_vAlign(value:String):String {

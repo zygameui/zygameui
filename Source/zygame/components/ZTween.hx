@@ -207,8 +207,9 @@ class TweenFrame {
 		lastFrame = frame;
 		var timeline:Float = end;
 		if (frame >= start && frame <= end) {
-			if (_canUpdateData || frame == start + 1)
+			if (_canUpdateData || frame == start) {
 				updateData();
+			}
 			timeline = (frame - start) / (timeline - start);
 			if (frame == end && onend != null)
 				onend();
@@ -221,13 +222,19 @@ class TweenFrame {
 			return;
 		}
 		if (type != null) {
-			var call = Reflect.getProperty(Easing, type);
-			if (call != null) {
-				var value = cast(call(timeline), Float);
-				value = value.lerp(from, to);
-				Reflect.setProperty(bind, key, value);
-			} else {
-				Reflect.setProperty(bind, key, timeline.linear().lerp(from, to));
+			switch (type) {
+				case "quartOut":
+					trace("Warring:quartOut在压缩状态下，会丢失真实的计算方式，会转换为quintOut进行计算");
+					Reflect.setProperty(bind, key, timeline.quintOut().lerp(from, to));
+				default:
+					var call = Reflect.getProperty(Easing, type);
+					if (call != null) {
+						var value:Float = cast(call(timeline), Float);
+						value = FloatTools.lerp(value, from, to);
+						Reflect.setProperty(bind, key, value);
+					} else {
+						Reflect.setProperty(bind, key, FloatTools.lerp(timeline.linear(), from, to));
+					}
 			}
 		} else {
 			Reflect.setProperty(bind, key, timeline.linear().lerp(from, to));

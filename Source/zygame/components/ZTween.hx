@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.display.DisplayObjectContainer;
 import zygame.core.Start;
 import zygame.core.Refresher;
 import zygame.script.ZHaxe;
@@ -14,9 +15,7 @@ using tweenxcore.Tools;
 class ZTween implements Refresher {
 	private var _baseXml:Xml;
 
-	private var _baseFrames:Array<TweenFrame> = [];
-
-	private var _builder:Builder;
+	private var _baseFrames:Array<TweenFrame>;
 
 	private var _crrentFrame:Int = 0;
 
@@ -42,11 +41,76 @@ class ZTween implements Refresher {
 	 * @param xml 动画配置
 	 */
 	public function new(xml:Xml) {
-		_baseXml = xml;
+		if (xml.nodeType == Document)
+			_baseXml = xml.firstElement();
+		else
+			_baseXml = xml;
+	}
+
+	public function bindDisplayObject(display:DisplayObjectContainer):Void {
+		_baseFrames = [];
+		if (_baseXml.get("auto") == "true") {
+			play();
+		}
+		if (_baseXml.exists("loop")) {
+			loop = Std.parseInt(_baseXml.get("loop"));
+		}
+		// 解析帧动画
+		var frames = _baseXml.elements();
+		var lastStart = 0;
+		while (frames.hasNext()) {
+			var xml = frames.next();
+			var tw = new TweenFrame(xml, display);
+			if (!xml.exists("start"))
+				tw.start = lastStart;
+			lastStart = tw.end + 1;
+			// if (xml.exists("onend"))
+			// 	tw.onend = builder.getFunction(xml.get("onend"));
+			// if (xml.exists("onstart"))
+			// 	tw.onstart = builder.getFunction(xml.get("onstart"));
+			// if (xml.exists("onframe"))
+			// 	tw.onframe = builder.getFunction(xml.get("onframe"));
+			if (tw.end > _maxFrame)
+				_maxFrame = tw.end;
+			pushTweenFrame(tw);
+		}
+	}
+
+	public function pushTweenFrame(tw:TweenFrame):Void {
+		_baseFrames.push(tw);
+		if (tw.getNodeName() == "scale") {
+			// 如果是缩放计算,则需要绑定X/Y位移的TweenFrame
+			var key = tw.getXml().get("key");
+			var newtwXml = Xml.createElement("tween");
+			switch (key) {
+				case "scaleX":
+					var xvalue:Float = Reflect.getProperty(tw.bind, "x");
+					var wvalue:Float = Reflect.getProperty(tw.bind, "width");
+					newtwXml.set("from", Std.string(xvalue + wvalue / 2 * (1 - tw.from)));
+					newtwXml.set("to", Std.string(xvalue));
+					newtwXml.set("start", tw.getXml().get("start"));
+					newtwXml.set("end", tw.getXml().get("end"));
+					newtwXml.set("type", tw.getXml().get("type"));
+					newtwXml.set("key", "x");
+					_baseFrames.push(new TweenFrame(newtwXml, tw.bind));
+				case "scaleY":
+					var yvalue = Reflect.getProperty(tw.bind, "y");
+					var hvalue = Reflect.getProperty(tw.bind, "height");
+					newtwXml.set("from", Std.string(yvalue + hvalue / 2 * (1 - tw.from)));
+					newtwXml.set("to", Std.string(yvalue));
+					newtwXml.set("start", tw.getXml().get("start"));
+					newtwXml.set("end", tw.getXml().get("end"));
+					newtwXml.set("type", tw.getXml().get("type"));
+					newtwXml.set("key", "y");
+					_baseFrames.push(new TweenFrame(newtwXml, tw.bind));
+				default:
+					throw "ZTween.scale标签仅可以提供给scaleX,scaleY属性使用";
+			}
+		}
 	}
 
 	public function bindBuilder(builder:Builder, parentid:String = null):Void {
-		_builder = builder;
+		_baseFrames = [];
 		if (_baseXml.get("auto") == "true") {
 			play();
 		}
@@ -120,7 +184,9 @@ class ZTween implements Refresher {
 		if (_crrentFrame > _maxFrame) {
 			if (_isPlay) {
 				_crrentFrame--;
-				if (loop <= 0) {
+				if (loop < 0) {
+					// 无限循环
+				} else if (loop == 0) {
 					stop();
 					return;
 				} else {
@@ -208,6 +274,10 @@ class TweenFrame {
 		return _baseXml.nodeName;
 	}
 
+	public function getXml():Xml {
+		return _baseXml;
+	}
+
 	public function update(frame:Int):Void {
 		if (lastFrame == frame)
 			return;
@@ -231,7 +301,7 @@ class TweenFrame {
 		if (type != null) {
 			switch (type) {
 				case "quartOut":
-					trace("Warring:quartOut在压缩状态下，会丢失真实的计算方式，会转换为quintOut进行计算");
+					// trace("Warring:quartOut在压缩状态下，会丢失真实的计算方式，会转换为quintOut进行计算");
 					Reflect.setProperty(bind, key, timeline.quintOut().lerp(from, to));
 				default:
 					var call = Reflect.getProperty(Easing, type);

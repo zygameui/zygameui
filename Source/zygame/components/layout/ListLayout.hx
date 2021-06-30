@@ -47,7 +47,8 @@ class ListLayout extends BaseLayout {
 			return;
 
 		// 虚拟高度
-		var itemOnw:ItemRender = virtualHeight == 0 ? list.createItemRender(null) : null;
+		// var itemOnw:ItemRender = virtualHeight == 0 ? list.createItemRender(null) : null;
+		var itemOnw:ItemRender = list.createItemRender(null);
 		if (itemOnw != null) {
 			list.view.addChildSuper(itemOnw);
 			if (itemOnw.tileDisplayObject != null)

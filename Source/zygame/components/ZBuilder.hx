@@ -863,6 +863,7 @@ class ZBuilder {
 			if (!isExists)
 				return null;
 		}
+		var tween:String = null;
 		var className:String = xml.nodeName;
 		var childxml = getXml(className);
 		if (childxml != null && childxml.firstElement().exists("classed")) {
@@ -940,7 +941,10 @@ class ZBuilder {
 				var value = xml.get(name);
 				var att:Dynamic = getProperty(ui, name);
 				var parsingName:String = className + "." + name;
-				if (parsingMaps.exists(parsingName)) {
+				if (name == "tween") {
+					// 过渡动画实现
+					trace("过渡动画实现：", parsingName);
+				} else if (parsingMaps.exists(parsingName)) {
 					parsingMaps.get(parsingName)(ui, name, value);
 				} else if (Std.isOfType(att, Float) && value.indexOf("0x") == -1) {
 					if (value.indexOf("%") != -1) {
@@ -1001,7 +1005,12 @@ class ZBuilder {
 
 			var att:Dynamic = getProperty(ui, name);
 			var parsingName:String = className + "." + name;
-			if (parsingMaps.exists(parsingName)) {
+			if (name == "tween") {
+				// 过渡动画实现
+				// trace("过渡动画实现：", parsingName);
+				tween = value;
+				// setProperty(ui, name, new ZTween(ZBuilder.getBaseXml(value)));
+			} else if (parsingMaps.exists(parsingName)) {
 				parsingMaps.get(parsingName)(ui, name, value);
 			} else if (Std.isOfType(att, Float) && value.indexOf("0x") == -1) {
 				if (value.indexOf("%") != -1) {
@@ -1036,6 +1045,11 @@ class ZBuilder {
 		// 对齐算法
 		if (parent != null)
 			align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));
+
+		// 动画最后赋值实现
+		if (tween != null) {
+			setProperty(ui, "tween", new ZTween(ZBuilder.getBaseXml(tween)));
+		}
 		return ui;
 	}
 

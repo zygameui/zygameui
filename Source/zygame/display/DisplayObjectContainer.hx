@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.components.ZTween;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import zygame.core.Start;
@@ -28,6 +29,28 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	private var _scrollMaskDislayObject:DisplayObject;
 	private var _scrollMaskDislayObjectRect:Rectangle;
+
+	/**
+	 * 动画配置：这里设置的ZTween将仅影响当前容器的动画
+	 */
+	public var tween(get, set):ZTween;
+
+	private var _tween:ZTween;
+
+	function get_tween():ZTween {
+		return _tween;
+	}
+
+	function set_tween(value:ZTween):ZTween {
+		if (_tween != null) {
+			_tween.stop();
+		}
+		_tween = value;
+		if (_tween != null && this.parent != null) {
+			_tween.bindDisplayObject(this);
+		}
+		return _tween;
+	}
 
 	/**
 	 * Bate功能：遮罩对象（依赖scrollRect实现的遮罩逻辑实现）
@@ -274,5 +297,4 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		var rect:Rectangle = super.getBounds(target);
 		return rect;
 	}
-
 }

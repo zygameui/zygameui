@@ -6,8 +6,14 @@
 
 # ZYGameUI 更新日志
 
+### 10.7.9
+- [改进] 改进`ZTween.loop`为-1时，则会无限播放。
+- [新增] 新增`ZTween.scale`标签支持，使用scale标签设置的scaleX、scaleY会始终以宽高中心缩放。
+- [新增] 为框架的对象新增`tween`的动画赋值，能够直接为对象设置动画。
+
 ### 10.7.8
 - [改进] 改进`replaceScene`API，替换场景时，会加载完毕后进行切换，不再发生漏背景切换。
+- [新增] 新增`ZStack.initAll`初始化所有组件的API。
 
 ### 10.7.7
 - [改进] 改进`ZTween`的tween的动画支持。

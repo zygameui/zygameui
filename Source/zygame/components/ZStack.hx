@@ -91,6 +91,19 @@ class ZStack extends ZBox {
 			}
 		}
 	}
+
+	/**
+	 * 初始化所有未初始化的组件
+	 */
+	public function initAll():Void {
+		for (i in 0...this.stacks.length) {
+			var child = this.stacks[i];
+			if (child.parent == null) {
+				super.addChildAt(child, 0);
+				super.removeChild(child);
+			}
+		}
+	}
 }
 
 /**

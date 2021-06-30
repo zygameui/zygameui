@@ -47,6 +47,13 @@ class ZBuilderData {
 				assetsLoads.push(src);
 			}
 		}
+		// 可能内置tween动画
+		if (item.exists("tween")) {
+			var src = item.get("tween");
+			if (assetsLoads.indexOf(src) == -1) {
+				assetsLoads.push(src);
+			}
+		}
 		if (item.exists("src")) {
 			var src = item.get("src");
 			if (src.indexOf(":") != -1) {

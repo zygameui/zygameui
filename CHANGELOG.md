@@ -6,6 +6,12 @@
 
 # ZYGameUI 更新日志
 
+### 10.7.8
+- [改进] 改进`replaceScene`API，替换场景时，会加载完毕后进行切换，不再发生漏背景切换。
+
+### 10.7.7
+- [改进] 改进`ZTween`的tween的动画支持。
+
 ### 10.7.6
 - [改进] 改进`ZImage.onBitmapDataUpdate`事件在更换了图片就会触发。
 - [修复] 修复`ZImage.shader`在异步图片上无效的问题。

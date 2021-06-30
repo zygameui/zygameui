@@ -1,5 +1,7 @@
 package zygame.utils;
 
+import openfl.events.Event;
+import zygame.components.ZBuilderScene;
 import zygame.components.ZScene;
 import zygame.core.Start;
 
@@ -94,6 +96,8 @@ class ZSceneManager {
 		}
 	}
 
+	private function _removeScene(scene:ZScene):Void {}
+
 	/**
 	 *  替换场景，会将之前的场景移除
 	 *  @param cName 替换的新场景
@@ -104,13 +108,9 @@ class ZSceneManager {
 	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true):T {
 		if (getCurrentScene() != null && Std.isOfType(getCurrentScene(), cName))
 			return cast getCurrentScene();
+		var zscene:ZScene = null;
 		while (_scenes.length > 0) {
-			var zscene:ZScene = _scenes.shift();
-			// 如果是释放场景，那么就会主动释放场景。
-			if (isReleaseScene)
-				releaseScene(zscene);
-			else
-				zscene.parent.removeChild(zscene);
+			zscene = _scenes.shift();
 		}
 		if (isHistory) {
 			// 仅保留5个历史记录
@@ -119,7 +119,26 @@ class ZSceneManager {
 				_history.shift();
 			}
 		}
-		return createScene(cName);
+		var newscene = createScene(cName);
+		if (zscene != null) {
+			if (!Std.isOfType(newscene, ZBuilderScene) || cast(newscene, ZBuilderScene).loaded) {
+				// 如果是释放场景，那么就会主动释放场景。
+				if (isReleaseScene)
+					releaseScene(zscene);
+				else
+					zscene.parent.removeChild(zscene);
+			} else {
+				GC.retain(zscene);
+				zscene.addEventListener(Event.COMPLETE, function(_) {
+					if (isReleaseScene)
+						releaseScene(zscene);
+					else
+						zscene.parent.removeChild(zscene);
+					GC.release(zscene);
+				});
+			}
+		}
+		return newscene;
 	}
 
 	/**

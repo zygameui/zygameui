@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.events.Event;
 import zygame.utils.ZSceneManager;
 import zygame.macro.AutoBuilder;
 import zygame.macro.JSONData;
@@ -10,7 +11,15 @@ import zygame.components.ZBuilder.AssetsBuilder;
  * 加载完成后会触发onBuilded事件；加载失败会触发onBuildError事件。场景在释放时，会自动释放掉assetsBuilder。
  */
 class ZBuilderScene extends ZScene {
+	/**
+	 * 资源管理对象
+	 */
 	public var assetsBuilder:AssetsBuilder;
+
+	/**
+	 * 是否已经加载完毕
+	 */
+	public var loaded:Bool = false;
 
 	public function new(xmlPath:String) {
 		super();
@@ -41,7 +50,9 @@ class ZBuilderScene extends ZScene {
 		assetsBuilder.build(function(bool) {
 			if (bool) {
 				ZBuilder.bindAssets(assetsBuilder.assets);
+				loaded = true;
 				onBuilded();
+				this.dispatchEvent(new Event(Event.COMPLETE));
 			} else {
 				if (onBuildError()) {
 					ZSceneManager.current.releaseScene(this);

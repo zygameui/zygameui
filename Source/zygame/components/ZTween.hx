@@ -174,6 +174,8 @@ class TweenFrame {
 
 	public var lastFrame:Int = 0;
 
+	private var _lockTo:Null<Float>;
+
 	public function new(tween:Xml, bind:Dynamic) {
 		this.bind = bind;
 		key = tween.get("key");
@@ -192,8 +194,13 @@ class TweenFrame {
 				type = _baseXml.get("type");
 			default:
 				from = _baseXml.exists("from") ? Std.parseFloat(_baseXml.get("from")) : Reflect.getProperty(bind, key);
-				to = Std.parseFloat(_baseXml.get("to"));
+				to = _baseXml.exists("to") ? Std.parseFloat(_baseXml.get("to")) : Reflect.getProperty(bind, key);
+				if (_lockTo != null)
+					to = _lockTo;
+				if (!_baseXml.exists("to"))
+					_lockTo = to;
 				type = _baseXml.get("type");
+				Reflect.setProperty(bind, key, from);
 		}
 	}
 

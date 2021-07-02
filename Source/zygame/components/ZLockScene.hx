@@ -47,7 +47,7 @@ class ZLockScene extends ZScene {
 		_scene = null;
 	}
 
-	override function lock(display:DisplayObject) {}
+	override function lockScene(display:DisplayObject) {}
 
-	override function unlock() {}
+	override function unlockScene() {}
 }

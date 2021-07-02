@@ -78,14 +78,14 @@ class ZScene extends ZBox {
 	 * 是否被锁定
 	 * @return Bool
 	 */
-	public function isLock():Bool {
+	public function isLockScene():Bool {
 		return _lockScene != null;
 	}
 
 	/**
 	 * 锁定画布渲染，锁定后可让draw变成1draw，当调用了lock之后，在更换新的场景之前，务必先调用unlock
 	 */
-	public function lock(display:DisplayObject):Void {
+	public function lockScene(display:DisplayObject):Void {
 		if (_lockDisplay != null)
 			return;
 		if (display.parent != this) {
@@ -102,7 +102,7 @@ class ZScene extends ZBox {
 	/**
 	 * 解除画布渲染锁定
 	 */
-	public function unlock():Void {
+	public function unlockScene():Void {
 		if (_lockDisplay != null) {
 			var childIndex = this.getChildIndex(_lockScene);
 			_lockScene.parent.removeChild(_lockScene);

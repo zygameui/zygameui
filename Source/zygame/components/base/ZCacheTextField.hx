@@ -28,7 +28,7 @@ class ZCacheTextField extends #if (html5 && !no_html5_cache_render) HTML5CacheTe
 
     private var _color:UInt;
 
-    #if cpp
+    #if (cpp || !(html5 && !no_html5_cache_render))
     private var _text:String = "";
     #end
 

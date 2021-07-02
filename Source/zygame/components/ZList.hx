@@ -181,7 +181,7 @@ class ZList extends ZScroll {
 
 	override public function onFrame():Void {
 		super.onFrame();
-		if (_vMoveing || _hMoveing)
+		if ((_vMoveing || _hMoveing) && _moveMath > 0)
 			view.updateComponents();
 	}
 

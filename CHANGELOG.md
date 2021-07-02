@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 10.8.0
+- [修复] 修复ZScene切换时，没有隐藏旧的Scene的问题。
+
 ### 10.7.9
 - [改进] 改进`ZTween.loop`为-1时，则会无限播放。
 - [新增] 新增`ZTween.scale`标签支持，使用scale标签设置的scaleX、scaleY会始终以宽高中心缩放。

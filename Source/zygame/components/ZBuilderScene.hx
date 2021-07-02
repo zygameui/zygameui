@@ -52,13 +52,20 @@ class ZBuilderScene extends ZScene {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				loaded = true;
 				onBuilded();
-				this.dispatchEvent(new Event(Event.COMPLETE));
+				postCompleteEvent();
 			} else {
 				if (onBuildError()) {
 					ZSceneManager.current.releaseScene(this);
 				}
 			}
 		}, onLoaded);
+	}
+
+	/**
+	 * 发起加载完成的事件
+	 */
+	private function postCompleteEvent() {
+		this.dispatchEvent(new Event(Event.COMPLETE));
 	}
 
 	/**

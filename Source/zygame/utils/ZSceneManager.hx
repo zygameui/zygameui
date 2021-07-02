@@ -129,7 +129,7 @@ class ZSceneManager {
 					zscene.parent.removeChild(zscene);
 			} else {
 				GC.retain(zscene);
-				zscene.addEventListener(Event.COMPLETE, function(_) {
+				newscene.addEventListener(Event.COMPLETE, function(_) {
 					if (isReleaseScene)
 						releaseScene(zscene);
 					else

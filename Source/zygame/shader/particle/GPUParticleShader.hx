@@ -142,6 +142,9 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		var aliveTime:Float = mod(nowtime, life);
 		aliveTime = aliveTime * step(0, nowtime);
 
+		// 剩余的生命周期
+		this.outlife = (life - aliveTime) / life;
+
 		lifeAlpha = 1;
 
 		// 非循环
@@ -153,8 +156,8 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		var d:Mat4 = rotaion(0, vec3(0, 0, 1), vec3(gl_openfl_TextureSize.x * 0.5, gl_openfl_TextureSize.y * 0.5, 0));
 
 		// 缩放
-		var sx:Float = 1.;
-		var sy:Float = 1.;
+		var sx:Float = 1. * outlife;
+		var sy:Float = 1. * outlife;
 		var s:Mat4 = scale(sx, sy);
 		// 平移
 		var smove:Vec2 = vec2((sx - 1.) * 0.25 * 0.25 * gl_openfl_TextureSize.x, (sy - 1.) * 0.25 * 0.25 * gl_openfl_TextureSize.y);
@@ -163,7 +166,7 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		var uv:Vec2 = 2. / stageSize.xy;
 
 		// 坐标实现
-		var positionNew:Vec2 = vec2(0, 0) + velocity * aliveTime + acceleration * aliveTime * aliveTime;
+		var positionNew:Vec2 = vec2(0, 0) + velocity * aliveTime + acceleration * aliveTime * aliveTime * 0.5;
 
 		// 最终位移
 		var t:Mat4 = translation(-uv.x * (gl_openfl_TextureSize.x * 0.5 + smove.x - positionNew.x),
@@ -171,14 +174,14 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		// 位移
 		this.gl_Position = (gl_openfl_Matrix + t) * d * s * gl_openfl_Position;
 
-		// 剩余的生命周期
-		this.outlife = (life - aliveTime) / life;
+		
 	}
 
 	override function fragment() {
 		super.fragment();
-		color.a = 0.;
-		color.rgb *= outlife;
+		// color.a = 0.;
+		color.rgba *= outlife;
+		// color.rgb *= vec3(1,0.1,0.1);
 		this.gl_FragColor = color * lifeAlpha;
 	}
 

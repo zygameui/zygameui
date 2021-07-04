@@ -6,6 +6,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.8.1
+- [改进] 改进ZScene的lockScene、unlockScene的接口。
+- [改进] 改进九宫格图着色器在C++上的运行。
+
 ### 10.8.0
 - [修复] 修复ZScene切换时，没有隐藏旧的Scene的问题。
 

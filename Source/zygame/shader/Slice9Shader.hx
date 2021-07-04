@@ -46,6 +46,16 @@ class Slice9Shader extends OpenFLShader {
 		return vec2(x / gl_openfl_TextureSize.x, y / gl_openfl_TextureSize.y);
 	}
 
+	@:glsl public function texture2Dgery(u:Vec2):Vec4 {
+		var color:Vec4 = texture2D(gl_openfl_Texture, u);
+		var colorAdd:Float = (color.r + color.b + color.g) / 3.;
+		// 灰度实现
+		color.r = step(size.w, 0.5) * color.r + colorAdd * step(0.5, size.w);
+		color.g = step(size.w, 0.5) * color.g + colorAdd * step(0.5, size.w);
+		color.b = step(size.w, 0.5) * color.b + colorAdd * step(0.5, size.w);
+		return color;
+	}
+
 	#if vivo
 	override function fragment() {
 		super.fragment();
@@ -54,8 +64,7 @@ class Slice9Shader extends OpenFLShader {
 		var centerHeight:Float = size.y - s9d.z - s9d.w; // 中间高度
 		var centerSliceWidth:Float = (size.z == 1 ? frameSpriteRect.z : gl_openfl_TextureSize.x) - s9d.x - s9d.y; // 中间原图宽度
 		var centerSliceHeight:Float = (size.z == 1 ? frameSpriteRect.w : gl_openfl_TextureSize.y) - s9d.z - s9d.w; // 中间原图高度
-		color = texture2D(gl_openfl_Texture,
-			getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+		color = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		if (color.a == 0) {
 			gl_FragColor *= 0.;
 		} else {
@@ -63,43 +72,39 @@ class Slice9Shader extends OpenFLShader {
 		}
 		if (uv.x <= s9d.x && uv.y <= s9d.z) {
 			// 左上(ok)
-			color = texture2D(gl_openfl_Texture, getUv(uv.x, uv.y));
+			color = texture2Dgery(getUv(uv.x, uv.y));
 			gl_FragColor = color;
 		} else if (uv.x >= size.x - s9d.y && uv.y <= s9d.z) {
 			// 右上(ok)
-			color = texture2D(gl_openfl_Texture, getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), uv.y));
+			color = texture2Dgery(getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), uv.y));
 			gl_FragColor = color;
 		} else if (uv.x <= s9d.x && uv.y >= size.y - s9d.w) {
 			// 左下
-			color = texture2D(gl_openfl_Texture, getUv(uv.x, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color = texture2Dgery(getUv(uv.x, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 			gl_FragColor = color;
 		} else if (uv.x >= size.x - s9d.y && uv.y >= size.y - s9d.w) {
 			// 右下
-			color = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color = texture2Dgery(getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 			gl_FragColor = color;
 		} else if (uv.y <= s9d.z) {
 			// 上
-			color = texture2D(gl_openfl_Texture, getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, uv.y));
+			color = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, uv.y));
 			gl_FragColor = color;
 		} else if (uv.x <= s9d.x) {
 			// 左(ok)
-			color = texture2D(gl_openfl_Texture, getUv(uv.x, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+			color = texture2Dgery(getUv(uv.x, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 			gl_FragColor = color;
 		} else if (uv.y >= size.y - s9d.w) {
 			// 下
-			color = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 			gl_FragColor = color;
 		} else if (uv.y >= size.y - s9d.w) {
 			// 下
-			color = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 			gl_FragColor = color;
 		} else if (uv.x >= size.x - s9d.y) {
 			// 右(ok)
-			color = texture2D(gl_openfl_Texture,
-				getUv(centerSliceWidth + s9d.x + uv.x - (size.x - s9d.y), s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+			color = texture2Dgery(getUv(centerSliceWidth + s9d.x + uv.x - (size.x - s9d.y), s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 			gl_FragColor = color;
 		}
 		gl_FragColor *= gl_openfl_Alphav;
@@ -118,43 +123,108 @@ class Slice9Shader extends OpenFLShader {
 		var color2:Vec4 = vec4(0);
 		if (uv.x <= s9d.x && uv.y <= s9d.z) {
 			// 左上(ok)
-			color2 = texture2D(gl_openfl_Texture, getUv(uv.x, uv.y));
+			color2 = texture2Dgery(getUv(uv.x, uv.y));
 		} else if (uv.x >= size.x - s9d.y && uv.y <= s9d.z) {
 			// 右上(ok)
-			color2 = texture2D(gl_openfl_Texture, getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), uv.y));
+			color2 = texture2Dgery(getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), uv.y));
 		} else if (uv.x <= s9d.x && uv.y >= size.y - s9d.w) {
 			// 左下
-			color2 = texture2D(gl_openfl_Texture, getUv(uv.x, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color2 = texture2Dgery(getUv(uv.x, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 		} else if (uv.x >= size.x - s9d.y && uv.y >= size.y - s9d.w) {
 			// 右下
-			color2 = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color2 = texture2Dgery(getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 		} else if (uv.y <= s9d.z) {
 			// 上
-			color2 = texture2D(gl_openfl_Texture, getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, uv.y));
+			color2 = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, uv.y));
 		} else if (uv.y >= size.y - s9d.w) {
 			// 下
-			color2 = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
+			color2 = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, centerSliceHeight + s9d.z + uv.y - (size.y - s9d.w)));
 		} else if (uv.x <= s9d.x) {
 			// 左(ok)
-			color2 = texture2D(gl_openfl_Texture, getUv(uv.x, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+			color2 = texture2Dgery(getUv(uv.x, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		} else if (uv.x >= size.x - s9d.y) {
 			// 右(ok)
-			color2 = texture2D(gl_openfl_Texture,
-				getUv(centerSliceWidth + s9d.x + uv.x - (size.x - s9d.y), s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+			color2 = texture2Dgery(getUv(centerSliceWidth + s9d.x + uv.x - (size.x - s9d.y), s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		} else {
 			// 中间
-			color2 = texture2D(gl_openfl_Texture,
-				getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
+			color2 = texture2Dgery(getUv(s9d.x + (uv.x - s9d.x) / centerWidth * centerSliceWidth, s9d.z + (uv.y - s9d.z) / centerHeight * centerSliceHeight));
 		}
-		if (size.w == 1) {
-			color2 = vec4(vec3((color2.r + color2.g + color2.b) / 3), gl_FragColor.a);
-		}
+		// if (size.w == 1) {
+		// color2 = vec4(vec3((color2.r + color2.g + color2.b) / 3), gl_FragColor.a);
+		// }
 		gl_FragColor = color2 * gl_openfl_Alphav;
 	}
 	#end
 
+	/**
+		* Bate 测试内容
+		* override function fragment() {
+			super.fragment();
+			var uv:Vec2 = size.z == 1 ? getFrameCoodv() * size.xy : gl_openfl_TextureCoordv * size.xy;
+			var centerWidth:Float = size.x - s9d.x - s9d.y; // 中间宽度
+			var centerHeight:Float = size.y - s9d.z - s9d.w; // 中间高度
+			var centerSliceWidth:Float = (size.z == 1 ? frameSpriteRect.z : gl_openfl_TextureSize.x) - s9d.x - s9d.y; // 中间原图宽度
+			var centerSliceHeight:Float = (size.z == 1 ? frameSpriteRect.w : gl_openfl_TextureSize.y) - s9d.z - s9d.w; // 中间原图高度
+			var color2:Vec4 = vec4(0);
+
+			var uvx:Float = uv.x;
+			var uvy:Float = uv.y;
+			var s9dx:Float = s9d.x;
+			var s9dy:Float = s9d.y;
+			var s9dz:Float = s9d.z;
+			var s9dw:Float = s9d.w;
+			var sizex:Float = size.x;
+			var sizey:Float = size.y;
+
+			// 左上
+			// if (uv.x <= s9d.x && uv.y <= s9d.z) {
+			var if1:Float = step(uvx, s9dx);
+			var if2:Float = step(uvy, s9dy);
+			color2 += texture2Dgery( getUv(uvx, uvy)) * if1 * if2;
+			// 右上
+			// } else if (uv.x >= size.x - s9d.y && uv.y <= s9d.z) {
+			var if3:Float = step(sizex - s9dy, uvx);
+			var if4:Float = step(uvy, s9dz);
+			color2 += if3 * if4 * texture2Dgery( getUv(s9dx + centerSliceWidth + uvx - (sizex - s9dy), uvy));
+			// 左下
+			var if5:Float = step(uvx, s9dx);
+			var if6:Float = step(sizey - s9dw, uvy);
+			color2 += if5 * if6 * texture2Dgery( getUv(uvx, centerSliceHeight + s9dz + uvy - (sizey - s9dw)));
+			// 右下
+			var if7:Float = step(sizex - s9dy, uvx);
+			var if8:Float = step(sizey - s9dw, uvy);
+			color2 += if7 * if8 * texture2Dgery(
+				getUv(s9dx + centerSliceWidth + uvx - (sizex - s9dy), centerSliceHeight + s9dz + uvy - (sizey - s9dw)));
+			// 上
+			var if9:Float = step(uvy , s9dz);
+			color2 += if9 * texture2Dgery( getUv(s9dx + (uvx - s9dx) / centerWidth * centerSliceWidth, uvy));
+			// 下
+			var if10:Float = step(sizey - s9dw, uvy);
+			color2 += if10 * texture2Dgery(
+				getUv(s9d.x + (uvx - s9dx) / centerWidth * centerSliceWidth, centerSliceHeight + s9dz + uvy - (sizey - s9dw)));
+			// 左
+			var if11:Float = step(uvx, s9dx);
+			color2 += if11 * texture2Dgery( getUv(uvx, s9dz + (uvy - s9dz) / centerHeight * centerSliceHeight));
+			// 右
+			var if12:Float = step(sizex - s9dy, uvx);
+			color2 += if12
+				+ texture2Dgery(
+					getUv(centerSliceWidth + s9dx + uvx - (sizex - s9dy), s9dz + (uvy - s9dz) / centerHeight * centerSliceHeight));
+
+			if (color.rgb == vec3(0, 0, 0)) {
+				// 中间
+				color2 = texture2Dgery(
+					getUv(s9dx + (uvx - s9dx) / centerWidth * centerSliceWidth, s9dz + (uvy - s9dz) / centerHeight * centerSliceHeight));
+			}
+
+			if (size.w == 1) {
+				var rgb:Float = (color2.r + color2.g + color2.b) / 3.;
+				color2 = vec4(rgb, rgb, rgb, gl_FragColor.a);
+			}
+			gl_FragColor = color2 * gl_openfl_Alphav;
+		}
+		#end
+	 */
 	/**
 	 * @param left 左间距
 	 * @param top 上间距

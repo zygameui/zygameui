@@ -11,6 +11,11 @@ import VectorMath;
  */
 class GPUParticleShader extends OpenFLGraphicsShader {
 	/**
+	 * 初始化坐标
+	 */
+	@:attribute public var pos:Vec2;
+
+	/**
 	 * 随机值
 	 */
 	@:attribute public var random:Float;
@@ -166,15 +171,13 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		var uv:Vec2 = 2. / stageSize.xy;
 
 		// 坐标实现
-		var positionNew:Vec2 = vec2(0, 0) + velocity * aliveTime + acceleration * aliveTime * aliveTime * 0.5;
+		var positionNew:Vec2 = pos + velocity * aliveTime + acceleration * aliveTime * aliveTime * 0.5;
 
 		// 最终位移
 		var t:Mat4 = translation(-uv.x * (gl_openfl_TextureSize.x * 0.5 + smove.x - positionNew.x),
 			uv.y * (gl_openfl_TextureSize.y * 0.5 + smove.y - positionNew.y));
 		// 位移
 		this.gl_Position = (gl_openfl_Matrix + t) * d * s * gl_openfl_Position;
-
-		
 	}
 
 	override function fragment() {

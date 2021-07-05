@@ -115,6 +115,10 @@ class Tasks {
 				command: "wechat"
 			},
 			{
+				name: "快手小游戏",
+				command: "ks"
+			},
+			{
 				name: "4399游戏盒",
 				command: "g4399"
 			},
@@ -221,9 +225,10 @@ class Tasks {
 			{
 				name: "Electron",
 				command: "electron"
-			},{
+			},
+			{
 				name: "生成Lime架构包",
-				command : "haxelib run zygameui -pkg"
+				command: "haxelib run zygameui -pkg"
 			}
 		]
 	};

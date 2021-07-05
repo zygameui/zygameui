@@ -26,6 +26,11 @@ class Wechat extends BuildSuper {
 class G4399 extends Wechat {}
 
 /**
+ * 快手小游戏
+ */
+class Ks extends Wechat {}
+
+/**
  * Bilibili平台
  */
 class Bili extends Wechat {}

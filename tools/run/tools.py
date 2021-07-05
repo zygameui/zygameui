@@ -122,15 +122,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex = None
+            startIndex1 = None
             _hx_len = None
-            if (startIndex is None):
+            if (startIndex1 is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex + 1))
-                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex1 + 1))
+                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -1107,6 +1107,7 @@ class Tools:
         try:
             random = int(x)
         except BaseException as _g:
+            None
             random = None
         downloadPath = Tools.webPath
         haxe_Log.trace(((("开始更新库:" + ("null" if downloadPath is None else downloadPath)) + "haxelib/version.json?version=") + Std.string(random)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 134, 'className': "Tools", 'methodName': "updateLib"}))
@@ -3895,6 +3896,22 @@ platforms_G4399._hx_class = platforms_G4399
 _hx_classes["platforms.G4399"] = platforms_G4399
 
 
+class platforms_Ks(platforms_Wechat):
+    _hx_class_name = "platforms.Ks"
+    __slots__ = ()
+    _hx_fields = []
+    _hx_methods = []
+    _hx_statics = []
+    _hx_interfaces = []
+    _hx_super = platforms_Wechat
+
+
+    def __init__(self,args,dir):
+        super().__init__(args,dir)
+platforms_Ks._hx_class = platforms_Ks
+_hx_classes["platforms.Ks"] = platforms_Ks
+
+
 class platforms_Bili(platforms_Wechat):
     _hx_class_name = "platforms.Bili"
     __slots__ = ()
@@ -3976,9 +3993,9 @@ class platforms_Mgc(platforms_Wechat):
         super().buildAfter()
         code = Sys.command("haxelib run lebox-build-tools")
         if (code == 0):
-            haxe_Log.trace("梦工厂包编译成功",_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 60, 'className': "platforms.Mgc", 'methodName': "buildAfter"}))
+            haxe_Log.trace("梦工厂包编译成功",_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 65, 'className': "platforms.Mgc", 'methodName': "buildAfter"}))
         else:
-            haxe_Log.trace("Warring:梦工厂包编译时，需要安装lebox-build-tools库",_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 63, 'className': "platforms.Mgc", 'methodName': "buildAfter"}))
+            haxe_Log.trace("Warring:梦工厂包编译时，需要安装lebox-build-tools库",_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 68, 'className': "platforms.Mgc", 'methodName': "buildAfter"}))
 
 platforms_Mgc._hx_class = platforms_Mgc
 _hx_classes["platforms.Mgc"] = platforms_Mgc
@@ -3999,12 +4016,12 @@ class platforms_Qihoo(platforms_Wechat):
 
     def buildAfter(self):
         super().buildAfter()
-        haxe_Log.trace("Build qihoo path:",_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 74, 'className': "platforms.Qihoo", 'methodName': "buildAfter", 'customParams': [self.dir]}))
+        haxe_Log.trace("Build qihoo path:",_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 79, 'className': "platforms.Qihoo", 'methodName': "buildAfter", 'customParams': [self.dir]}))
         if sys_FileSystem.exists((HxOverrides.stringOrNull(self.dir) + "/game.zip")):
             sys_FileSystem.deleteFile((HxOverrides.stringOrNull(self.dir) + "/game.zip"))
         npmInstall = sys_FileSystem.exists((HxOverrides.stringOrNull(self.dir) + "/../html5/bin/tools/qihoosdk/node_modules"))
         command = ((((("\n\t\tcd " + HxOverrides.stringOrNull(self.dir)) + "/../html5/bin/tools/qihoosdk") + HxOverrides.stringOrNull((("" if npmInstall else "\n\t\tnpm install")))) + "\n\t\tnode ./index.js -i ") + HxOverrides.stringOrNull(self.dir))
-        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 87, 'className': "platforms.Qihoo", 'methodName': "buildAfter"}))
+        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/platforms/Wechat.hx", 'lineNumber': 92, 'className': "platforms.Qihoo", 'methodName': "buildAfter"}))
         Sys.command(command)
         python_FileUtils.copyFile((HxOverrides.stringOrNull(self.dir) + "/../html5/bin/tools/qihoosdk/dist/game.zip"),self.dir)
 
@@ -6368,7 +6385,7 @@ Math.POSITIVE_INFINITY = float("inf")
 Math.NaN = float("nan")
 Math.PI = python_lib_Math.pi
 
-Build.platforms = ["android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", "g4399", "xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc", "wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron"]
+Build.platforms = ["android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", "g4399", "xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc", "wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks"]
 Build.mainFileName = None
 Defines.defineMaps = haxe_ds_StringMap()
 Tools.authorizationMaps = haxe_ds_StringMap()
@@ -6397,6 +6414,6 @@ python_Boot.keywords = set(["and", "del", "from", "not", "with", "as", "elif", "
 python_Boot.prefixLength = len("_hx_")
 python_Lib.lineEnd = ("\r\n" if ((Sys.systemName() == "Windows")) else "\n")
 sys_Http.PROXY = None
-task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"}), _hx_AnonObject({'name': "HashLink", 'command': "hl"}), _hx_AnonObject({'name': "Electron", 'command': "electron"}), _hx_AnonObject({'name': "生成Lime架构包", 'command': "haxelib run zygameui -pkg"})]})
+task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "快手小游戏", 'command': "ks"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"}), _hx_AnonObject({'name': "HashLink", 'command': "hl"}), _hx_AnonObject({'name': "Electron", 'command': "electron"}), _hx_AnonObject({'name': "生成Lime架构包", 'command': "haxelib run zygameui -pkg"})]})
 
 Tools.main()

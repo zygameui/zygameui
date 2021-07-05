@@ -18,7 +18,7 @@ class Build {
 		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron"
+		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron","ks"
 	];
 
 	/**

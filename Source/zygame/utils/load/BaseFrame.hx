@@ -3,6 +3,7 @@ package zygame.utils.load;
 /**
  * 基础帧
  */
+@:keep
 class BaseFrame {
 
      /**

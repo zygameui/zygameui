@@ -11,6 +11,11 @@ import VectorMath;
  */
 class GPUParticleShader extends OpenFLGraphicsShader {
 	/**
+	 * 动态点，如果z为0时，则使用动态点，不使用原坐标
+	 */
+	@:attribute public var dynamicPos:Vec3;
+
+	/**
 	 * 初始化坐标
 	 */
 	@:attribute public var pos:Vec2;
@@ -147,6 +152,9 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 	override function vertex() {
 		super.vertex();
 
+		// 准备原坐标
+		var mat:Mat4 = gl_openfl_Matrix;
+
 		// 生命
 		var nowtime:Float = time - life * random;
 		var aliveTime:Float = mod(nowtime, life);
@@ -178,11 +186,17 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		// 坐标实现
 		var positionNew:Vec2 = pos + velocity * aliveTime + acceleration * aliveTime * aliveTime * 0.5;
 
+		// 动态坐标实现
+		// mat[3].x = mat[3].x * (1. - dynamicPos.z) + dynamicPos.x * uv.x * dynamicPos.z;
+		// mat[3].y = mat[3].y * (1. - dynamicPos.z) + dynamicPos.y * uv.y * dynamicPos.z;
+		mat[3].x = mat[3].x * (1. - dynamicPos.z) + (dynamicPos.x * uv.x - 1.) * dynamicPos.z;
+		mat[3].y = mat[3].y * (1. - dynamicPos.z) - (dynamicPos.y * uv.y - 1.) * dynamicPos.z;
+
 		// 最终位移
 		var t:Mat4 = translation(-uv.x * (gl_openfl_TextureSize.x * 0.5 * sx + smove.x - positionNew.x),
 			uv.y * (gl_openfl_TextureSize.y * 0.5 * sy + smove.y - positionNew.y));
 		// 位移
-		this.gl_Position = (gl_openfl_Matrix + t) * d * s * gl_openfl_Position;
+		this.gl_Position = (mat + t) * d * s * gl_openfl_Position;
 	}
 
 	override function fragment() {
@@ -190,7 +204,7 @@ class GPUParticleShader extends OpenFLGraphicsShader {
 		// color.a = 0.;
 		color.rgba *= outlife;
 		color.rgb *= vec3(1, 0.2, 0.2);
-		this.gl_FragColor = color * lifeAlpha;
+		this.gl_FragColor = color * lifeAlpha * gl_openfl_Alphav;
 	}
 
 	override function onFrame() {

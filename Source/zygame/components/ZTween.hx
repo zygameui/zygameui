@@ -284,7 +284,7 @@ class TweenFrame {
 		lastFrame = frame;
 		var timeline:Float = end;
 		if (frame >= start && frame <= end) {
-			if (_canUpdateData || frame == start) {
+			if (_canUpdateData || frame == start + 1) {
 				updateData();
 			}
 			timeline = (frame - start) / (timeline - start);

@@ -52,6 +52,7 @@ class StrokeShader extends OpenFLShader {
 				}
 			}
 		}
+		gl_FragColor *= gl_openfl_Alphav;
 	}
 
 	public function new(size:Float = 1.5, color:UInt = 0x0) {

@@ -56,7 +56,7 @@ class Slice9Shader extends OpenFLShader {
 		return color;
 	}
 
-	#if vivo
+	#if (vivo || ks)
 	override function fragment() {
 		super.fragment();
 		var uv:Vec2 = size.z == 1 ? getFrameCoodv() * size.xy : gl_openfl_TextureCoordv * size.xy;

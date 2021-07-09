@@ -702,9 +702,7 @@ class ZAssets {
 		return null;
 		#else
 		var arr:Array<String> = id.split(":");
-		trace("_swflites=", _swflites);
 		var swf:AnimateLibrary = this._swflites.get(arr[0]);
-		trace("swf=", swf);
 		return swf.getMovieClip(arr[1]);
 		#end
 	}

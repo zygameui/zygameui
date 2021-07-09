@@ -27,6 +27,8 @@
 	<!-- GLSL -->
 	<haxelib name="vector-math"/>
 	<haxelib name="openfl-glsl"/>
+	<!-- GPU粒子库 -->
+	<haxelib name="openfl-gpu-particles"/>
 
 	<!-- 禁止字体缩放 -->
 	<haxedef name="un_scale_label" unless="high_label"/>

@@ -15,6 +15,7 @@
 --library vector-math
 --library openfl-glsl
 --library openfl-spine
+--library openfl-gpu-particles
 -D vscode
 -D zygame
 -D api

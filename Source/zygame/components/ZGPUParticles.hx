@@ -10,7 +10,7 @@ class ZGPUParticles extends DataProviderComponent {
 	/**
 	 * GPU粒子系统
 	 */
-	private var _gpuSystem:GPUParticleSprite;
+	public var gpuSystem:GPUParticleSprite;
 
 	public function new() {
 		super();
@@ -19,19 +19,21 @@ class ZGPUParticles extends DataProviderComponent {
 	override function set_dataProvider(data:Dynamic):Dynamic {
 		var array = cast(data, String).split(":");
 		this.destroy();
-		_gpuSystem = GPUParticleSprite.fromJson(ZBuilder.getBaseObject(array[1]), ZBuilder.getBaseBitmapData(array[0]));
-		this.addChild(_gpuSystem);
-		_gpuSystem.start();
+		gpuSystem = GPUParticleSprite.fromJson(ZBuilder.getBaseObject(array[1]), ZBuilder.getBaseBitmapData(array[0]));
+		this.addChild(gpuSystem);
+		gpuSystem.start();
 		return super.set_dataProvider(data);
 	}
+
+	override function onInit() {}
 
 	/**
 	 * 释放当前粒子
 	 */
 	override function destroy() {
 		super.destroy();
-		if (_gpuSystem != null) {
-			_gpuSystem.stop();
+		if (gpuSystem != null) {
+			gpuSystem.stop();
 		}
 	}
 

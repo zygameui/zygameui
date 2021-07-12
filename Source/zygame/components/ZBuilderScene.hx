@@ -19,7 +19,9 @@ class ZBuilderScene extends ZScene {
 	/**
 	 * 是否已经加载完毕
 	 */
-	public var loaded:Bool = false;
+	public var loaded(get, never):Bool;
+
+	private var _loaded:Bool = false;
 
 	public function new(xmlPath:String) {
 		super();
@@ -50,7 +52,7 @@ class ZBuilderScene extends ZScene {
 		assetsBuilder.build(function(bool) {
 			if (bool) {
 				ZBuilder.bindAssets(assetsBuilder.assets);
-				loaded = true;
+				_loaded = true;
 				onBuilded();
 				postCompleteEvent();
 			} else {
@@ -94,5 +96,9 @@ class ZBuilderScene extends ZScene {
 		ZBuilder.unbindAssets(assetsBuilder.assets);
 		assetsBuilder.dispose();
 		assetsBuilder = null;
+	}
+
+	function get_loaded():Bool {
+		return _loaded;
 	}
 }

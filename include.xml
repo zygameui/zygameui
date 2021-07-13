@@ -41,6 +41,9 @@
 	<!-- 编译平台的自动引入处理 -->
 	<include path="platforms.xml" />
 
+	<!-- IOS的一些修复 -->
+	<haxedef name="ios_render_fix" if="ios || ks"/>
+
 	<!-- C++测试模块 -->
 	<haxedef name="debuginput" if="debug cpp !ios" />
 	<haxedef name="debugnetwork" if="debug cpp !ios" />

@@ -112,7 +112,7 @@ class Start extends ZScene {
 	 */
 	public var topView:StageDisplayObjectContainer;
 
-	#if ios
+	#if ios_render_fix
 	/**
 	 * IOS渲染器修复
 	 */
@@ -257,7 +257,7 @@ class Start extends ZScene {
 			superInitEvent(e);
 		}
 		#end
-		#if ios
+		#if ios_render_fix
 		iosRender = new ZQuad();
 		#end
 	}
@@ -452,7 +452,7 @@ class Start extends ZScene {
 	private function onFrameEvent(e:Event):Void {
 		if (fps.visible)
 			topView.addChild(fps);
-		#if ios
+		#if (ios_render_fix)
 		if (iosRender != null) {
 			stage.addChild(iosRender);
 			iosRender.scale(topView.scaleX);

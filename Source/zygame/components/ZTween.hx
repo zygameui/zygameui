@@ -248,10 +248,10 @@ class TweenFrame {
 		_baseXml = tween;
 		start = Std.parseInt(tween.get("start"));
 		end = Std.parseInt(tween.get("end"));
-		updateData();
+		updateData(false);
 	}
 
-	public function updateData():Void {
+	public function updateData(setKey:Bool):Void {
 		_canUpdateData = false;
 		switch (_baseXml.nodeName) {
 			case "add":
@@ -266,7 +266,8 @@ class TweenFrame {
 				if (!_baseXml.exists("to"))
 					_lockTo = to;
 				type = _baseXml.get("type");
-				Reflect.setProperty(bind, key, from);
+				if (setKey)
+					Reflect.setProperty(bind, key, from);
 		}
 	}
 
@@ -285,7 +286,7 @@ class TweenFrame {
 		var timeline:Float = end;
 		if (frame >= start && frame <= end) {
 			if (_canUpdateData || frame == start + 1) {
-				updateData();
+				updateData(true);
 			}
 			timeline = (frame - start) / (timeline - start);
 			if (frame == end && onend != null)

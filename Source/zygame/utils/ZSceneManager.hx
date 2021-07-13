@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.components.ZBuilder;
 import openfl.events.Event;
 import zygame.components.ZBuilderScene;
 import zygame.components.ZScene;
@@ -52,15 +53,17 @@ class ZSceneManager {
 	 *  @param cName - 
 	 *  @return ZScene
 	 */
-	public function createScene<T:ZScene>(cName:Class<T>):T {
+	public function createScene<T:ZScene>(cName:Class<T>, added:Bool = false):T {
 		var key = Type.getClassName(cName);
 		var scene:ZScene = _sceneMaps.get(key);
 		if (scene == null) {
 			scene = Type.createInstance(cName, []);
 			_sceneMaps.set(key, scene);
-			Start.current.addChild(scene);
+			if (added)
+				Start.current.addChild(scene);
 		} else {
-			Start.current.addChild(scene);
+			if (added)
+				Start.current.addChild(scene);
 			scene.onSceneReset();
 		}
 		_scenes.push(scene);
@@ -72,6 +75,9 @@ class ZSceneManager {
 	 *  @param zScene - 指定场景
 	 */
 	public function releaseScene(zScene:ZScene):Void {
+		#if debug
+		trace("releaseScene:", zScene);
+		#end
 		zScene.onSceneRelease();
 		_sceneMaps.remove(Type.getClassName(Type.getClass(zScene)));
 		_scenes.remove(zScene);
@@ -119,6 +125,13 @@ class ZSceneManager {
 				_history.shift();
 			}
 		}
+		#if debug
+		trace("replaceScene:", cName);
+		#end
+		// 如果是释放，则提前将ZAssets释放掉
+		if (isReleaseScene && Std.isOfType(zscene, ZBuilderScene)) {
+			ZBuilder.unbindAssets(cast(zscene, ZBuilderScene).assetsBuilder.assets);
+		}
 		var newscene = createScene(cName);
 		if (zscene != null) {
 			if (!Std.isOfType(newscene, ZBuilderScene) || cast(newscene, ZBuilderScene).loaded) {
@@ -138,6 +151,10 @@ class ZSceneManager {
 				});
 			}
 		}
+		#if debug
+		trace("replaceScene addChild:", cName);
+		#end
+		Start.current.addChild(newscene);
 		return newscene;
 	}
 

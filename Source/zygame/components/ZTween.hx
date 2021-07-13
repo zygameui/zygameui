@@ -248,7 +248,7 @@ class TweenFrame {
 		_baseXml = tween;
 		start = Std.parseInt(tween.get("start"));
 		end = Std.parseInt(tween.get("end"));
-		updateData(false);
+		updateData(tween.get("start") == "0");
 	}
 
 	public function updateData(setKey:Bool):Void {

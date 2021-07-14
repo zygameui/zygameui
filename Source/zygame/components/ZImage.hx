@@ -121,8 +121,10 @@ class ZImage extends DataProviderComponent {
 	#end
 
 	private override function set_dataProvider(data:Dynamic):Dynamic {
-		if (super.dataProvider == data)
+		if (super.dataProvider == data){
+			this.onBitmapDataUpdate();
 			return data;
+		}
 		if (this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}

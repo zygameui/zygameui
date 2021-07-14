@@ -6,6 +6,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.8.8
+- [64位] IOS与安卓都将编译为64位游戏。
+- [改进] 改进`ZImage.onBitmapDataUpdate`接口。
+
 ### 10.8.6
 - [修复] 修复`ZTween.tween`的运算问题。
 - [修复] 修复`ZSceneManager`在切换场景存在释放资源先后循序错误的问题。

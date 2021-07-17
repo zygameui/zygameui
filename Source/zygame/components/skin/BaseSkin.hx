@@ -24,7 +24,7 @@ class BaseSkin extends EventDispatcher {
 	 *  @param skin - 可使用图片路径、可使用位图对象
 	 */
 	public function setSkinValue(key:String, skin:Dynamic):Void {
-		if (Std.is(skin, String))
+		if (Std.isOfType(skin, String))
 			skin = ZBuilder.getBaseBitmapData(skin);
 		_dist.set(key, skin);
 		if (key == "up")

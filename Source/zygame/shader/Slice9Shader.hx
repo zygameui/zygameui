@@ -56,7 +56,27 @@ class Slice9Shader extends OpenFLShader {
 		return color;
 	}
 
-	#if (vivo || ks)
+	#if oppo
+	override function fragment() {
+		super.fragment();
+		var uv:Vec2 = size.z == 1 ? getFrameCoodv() * size.xy : gl_openfl_TextureCoordv * size.xy;
+		var centerWidth:Float = size.x - s9d.x - s9d.y; // 中间宽度
+		var centerHeight:Float = size.y - s9d.z - s9d.w; // 中间高度
+		var centerSliceWidth:Float = (size.z == 1 ? frameSpriteRect.z : gl_openfl_TextureSize.x) - s9d.x - s9d.y; // 中间原图宽度
+		var centerSliceHeight:Float = (size.z == 1 ? frameSpriteRect.w : gl_openfl_TextureSize.y) - s9d.z - s9d.w; // 中间原图高度
+		var if1:Float = step(s9d.x , uv.x);
+		var if2:Float = step(s9d.z , uv.y);
+		color = texture2Dgery(getUv(uv.x, uv.y)) * if1 * if2;
+		if1 = step(uv.x, size.x - s9d.y);
+		if2 = step(s9d.z, uv.y);
+		color += texture2Dgery(getUv(s9d.x + centerSliceWidth + uv.x - (size.x - s9d.y), uv.y)) * if1 * if2;
+		gl_FragColor = color;
+		
+		// if (uv.x <= s9d.x && uv.y <= s9d.z) {
+			// 左上(ok)
+		// }
+	}
+	#elseif (vivo || ks)
 	override function fragment() {
 		super.fragment();
 		var uv:Vec2 = size.z == 1 ? getFrameCoodv() * size.xy : gl_openfl_TextureCoordv * size.xy;

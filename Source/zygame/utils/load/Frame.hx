@@ -7,7 +7,7 @@ import openfl.geom.Rectangle;
 import openfl.display.Tileset;
 
 @:keep
-class Frame extends BaseFrame {
+class Frame extends Slice9Frame {
 
 	public var name:String = null;
 
@@ -25,8 +25,6 @@ class Frame extends BaseFrame {
 	 * UVS数据
 	 */
 	private var uvs:Array<Float>;
-
-	public var parent:TextureAtlas;
 
 	/**
 	 * Away3D使用的纹理
@@ -51,17 +49,19 @@ class Frame extends BaseFrame {
 		return frame;
 	}
 
-	public var scale9rect(get,set):Rectangle;
-	private var _rect:Rectangle = null;
-	private function get_scale9rect():Rectangle{
-		return _rect;
-	}
-	private function set_scale9rect(rect:Rectangle):Rectangle {
-		_rect = rect;
-		return _rect;
-	}
+	// public var scale9rect(get,set):Rectangle;
+	// private var _rect:Rectangle = null;
+	// private function get_scale9rect():Rectangle{
+	// 	return _rect;
+	// }
+	// private function set_scale9rect(rect:Rectangle):Rectangle {
+	// 	_rect = rect;
+	// 	return _rect;
+	// }
 
-	public function new() {}
+	public function new() {
+		super();
+	}
 
 	/**
 	 * 获取九宫格配置

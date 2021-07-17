@@ -1,0 +1,59 @@
+package zygame.utils.load;
+
+import openfl.Vector;
+import zygame.utils.load.TextureLoader;
+import zygame.utils.load.BaseFrame;
+import openfl.geom.Rectangle;
+import openfl.display.Tileset;
+
+class Slice9Frame extends BaseFrame {
+	/**
+	 * 九宫格配置
+	 */
+	public var scale9frames(get, never):Array<Frame>;
+
+	private var _scale9frames:Array<Frame>;
+
+	public var scale9rect(get, set):Rectangle;
+
+	private var _rect:Rectangle = null;
+
+    public var parent:TextureAtlas;
+
+	private function get_scale9rect():Rectangle {
+		return _rect;
+	}
+
+	private function set_scale9rect(rect:Rectangle):Rectangle {
+		_rect = rect;
+		if (_scale9frames != null) {
+			_scale9frames = null;
+		}
+		return _rect;
+	}
+
+	public function new() {}
+
+	private function get_scale9frames():Array<Frame> {
+		if (scale9rect == null) {
+			return null;
+		}
+		if (_scale9frames != null)
+			return _scale9frames;
+		var rects:Array<Rectangle> = zygame.utils.Scale9Utils.createScale9Rects(this.x, this.y, this.width, this.height, scale9rect);
+		_scale9frames = [];
+		for (rect in rects) {
+			@:privateAccess parent._tileset.addRect(rect);
+			// 创建批处理帧
+			var frame:Frame = new Frame();
+			frame.id = @:privateAccess parent._tileset.numRects - 1;
+			frame.x = rect.x;
+			frame.y = rect.y;
+			frame.width = rect.width;
+			frame.height = rect.height;
+			frame.parent = parent;
+			_scale9frames.push(frame);
+		}
+		return _scale9frames;
+	}
+}

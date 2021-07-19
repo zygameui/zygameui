@@ -15,6 +15,8 @@ import sys.FileSystem;
 class ImportAllClasses {
 	#if macro
 	macro public static function build(path:String):Array<Field> {
+		if(!FileSystem.exists(path))
+			path = "../../../../" + path;
 		var files = FileSystem.readDirectory(path);
 		var array = Context.getBuildFields();
 		for (hxfile in files) {

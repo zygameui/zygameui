@@ -23,6 +23,8 @@ class ZSpine extends ZBox {
 
 	public var spineSkin(get, set):String;
 
+	public var independent(get, set):Bool;
+
 	public function getNativeSpine():SkeletonAnimation {
 		return spine;
 	}
@@ -143,5 +145,21 @@ class ZSpine extends ZBox {
 		if (getTilemapSpine() != null)
 			getTilemapSpine().visible = v;
 		return super.set_visible(v);
+	}
+
+	function get_independent():Bool {
+		if (getNativeSpine() != null)
+			return getNativeSpine().independent;
+		if (getTilemapSpine() != null)
+			return getTilemapSpine().independent;
+		return false;
+	}
+
+	function set_independent(value:Bool):Bool {
+		if (getNativeSpine() != null)
+			getNativeSpine().independent = value;
+		else if (getTilemapSpine() != null)
+			getTilemapSpine().independent = value;
+		return value;
 	}
 }

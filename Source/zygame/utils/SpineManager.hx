@@ -75,28 +75,33 @@ class SpineManager {
 	private static function onFrame(event:Event):Void {
 		if (!enbed)
 			return;
+		_newFpsTime = Date.now().getTime();
+		var currentFpsTime = _newFpsTime - _lastFpsTime;
+		currentFpsTime = currentFpsTime / 1000;
+		_lastFpsTime = _newFpsTime;
 		playingCount = 0;
+		for (display in spineOnFrames) {
+			if (display.independent) {
+				display.onSpineUpdate(currentFpsTime);
+			}
+		}
 		if (!isLockFrameFps) {
-			_newFpsTime = Date.now().getTime();
-			var currentFpsTime = _newFpsTime - _lastFpsTime;
-			currentFpsTime = currentFpsTime / 1000;
-			_lastFpsTime = _newFpsTime;
 			for (display in spineOnFrames) {
-				if (!display.isHidden() && display.isPlay) {
+				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
 					display.onSpineUpdate(currentFpsTime);
 				}
 			}
 		} else if (fps.fps == 60) {
 			for (display in spineOnFrames) {
-				if (!display.isHidden() && display.isPlay) {
+				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
 					display.onSpineUpdate(1 / stage.frameRate);
 				}
 			}
 		} else if (fps.update()) {
 			for (display in spineOnFrames) {
-				if (!display.isHidden() && display.isPlay) {
+				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
 					display.onSpineUpdate(1 / fps.fps);
 				}

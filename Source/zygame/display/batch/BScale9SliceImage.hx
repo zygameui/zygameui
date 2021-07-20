@@ -79,7 +79,7 @@ class BScale9SliceImage extends BDisplayObjectContainer {
 		if (_width < curFrame.width)
 			this.scaleX = _width / curFrame.width;
 		if (_height < curFrame.height)
-			this.scaleX = _height / curFrame.height;
+			this.scaleY = _height / curFrame.height;
 		for (i in 0...9) {
 			var tile:Tile = this.getTileAt(i);
 			var left:Float = curFrame.scale9rect.x;

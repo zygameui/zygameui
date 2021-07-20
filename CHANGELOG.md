@@ -8,6 +8,9 @@
 
 ### 10.9.2
 - [新增] 新增`ZSpine.independent`独立帧率支持，不会受到锁定的速率影响播放频率。
+- [更改] 默认启动`gpu_particles`GPU粒子渲染。
+- [修复] 修复`ImportAllClasses`IOSXCode编译错误。
+- [修复] 修复九宫格图渲染。
 
 ### 10.9.0
 - [改进] 九宫格图优化。

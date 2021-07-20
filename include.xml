@@ -114,4 +114,6 @@
 	<!-- HLCheak  -->
 	<haxeflag name="-D" value="hl-check" if="hl" />
 
+	<!-- 默认启动GPU粒子 -->
+	<haxedef name="gpu_particles"/>
 </project>

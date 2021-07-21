@@ -355,6 +355,7 @@ class ZLabel extends DataProviderComponent {
 				newText.wordWrap = true;
 				newText.selectable = false;
 				newText.maxChars = _display.maxChars;
+				newText.displayAsPassword = _display.displayAsPassword;
 				this.removeChild(_display);
 				_display = newText;
 				this.addChild(_display);

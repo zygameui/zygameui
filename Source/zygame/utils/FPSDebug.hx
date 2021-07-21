@@ -26,7 +26,6 @@ class FPSDebug extends ZBox {
 
 	public static var debugMsg:Dynamic = null;
 
-	private var times:Array<Float>;
 	private var memPeak:Float = 0;
 	private var _text:ZBitmapLabel;
 	private var _qqfps:Int = 0;
@@ -35,15 +34,13 @@ class FPSDebug extends ZBox {
 	public function new(inX:Float = 0.0, inY:Float = 0.0, inCol:Int = 0xffffff) {
 		super();
 
-		times = [];
-
 		BitmapData.loadFromBase64(FPSAssets.assets, "image/png").onComplete(function(bitmapData:BitmapData):Void {
 			fnt = new FntData(bitmapData, Xml.parse(FPSAssets.fnt), null);
 			_text = new ZBitmapLabel(fnt);
 			_text.x = inX;
 			this.y = inY;
 			_text.width = 120;
-			_text.height = 150;
+			_text.height = 250;
 			_text.vAlign = "top";
 			var bg = new ZQuad();
 			this.addChild(bg);
@@ -69,11 +66,6 @@ class FPSDebug extends ZBox {
 	private function onEnter(_) {
 		_qqfps--;
 
-		var now = Timer.stamp();
-		times.push(now);
-		while (times[0] < now - 1)
-			times.shift();
-
 		var mem:Float = Math.round(System.totalMemory / 1024 / 1024 * 100) / 100;
 		if (mem > memPeak)
 			memPeak = mem;
@@ -86,10 +78,30 @@ class FPSDebug extends ZBox {
 				_text.dataProvider = debugMsg;
 			else {
 				// #if html5 + "\nTexture:" + zygame.core.Start.TEXTURE_COUNT #end 无意义，释放会由GC处理
-				var msg = "MODE:" + Lib.getRenderMode() + "\nMEM:" + mem + "MB\nMaxMEN:" + memPeak + "MB\nUPDATES:"
-					+ zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count() + "\nS_RUNING:" + SpineManager.playingCount
-					+ "\nFPS:" + getFps() + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale + "\nRETAIN:" +
-					GC.getRetainCounts() #if wechat + "\nContext:" + untyped window.contextCount + "\nImage:" + untyped window.imageCount #end;
+				var msg = "DT:"
+					+ zygame.core.Start.current.getIntervalTime()
+					+ "\nCPU:" // CPU分了50%的CPU给到渲染使用
+					+ (Std.int(zygame.core.Start.current.getCPUTime() / 8 * 100) / 100)
+					+ "\nMODE:"
+					+ Lib.getRenderMode()
+					+ "\nMEM:"
+					+ mem
+					+ "MB\nMaxMEN:"
+					+ memPeak
+					+ "MB\nUPDATES:"
+					+ zygame.core.Start.current.getUpdateLength()
+					+ "\nSUPDATES:"
+					+ SpineManager.count()
+					+ "\nS_RUNING:"
+					+ SpineManager.playingCount
+					+ "\nFPS:"
+					+ getFps()
+					+ "\nDrawCalls:"
+					+ (_curDrawCall - 2)
+					+ "\nScale:"
+					+ Start.currentScale
+					+ "\nRETAIN:"
+					+ GC.getRetainCounts() #if wechat + "\nContext:" + untyped window.contextCount + "\nImage:" + untyped window.imageCount #end;
 				_text.dataProvider = msg;
 			}
 		}
@@ -106,7 +118,7 @@ class FPSDebug extends ZBox {
 	}
 
 	public function getFps():Int {
-		return times.length - 1;
+		return Std.int(16 / zygame.core.Start.current.getIntervalTime() * 60);
 	}
 }
 

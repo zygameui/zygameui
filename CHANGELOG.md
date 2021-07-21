@@ -6,6 +6,10 @@
 
 # ZYGameUI 更新日志
 
+### 10.9.3
+- [改进] 优化FPSDebug.fps参数改进。
+- [新增] 新增CPU占用量预判。
+
 ### 10.9.2
 - [新增] 新增`ZSpine.independent`独立帧率支持，不会受到锁定的速率影响播放频率。
 - [更改] 默认启动`gpu_particles`GPU粒子渲染。

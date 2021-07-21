@@ -1,5 +1,6 @@
 package zygame.core;
 
+import haxe.Timer;
 import openfl.display.OpenGLRenderer;
 import openfl.events.RenderEvent;
 import openfl.events.UncaughtErrorEvent;
@@ -134,6 +135,13 @@ class Start extends ZScene {
 	 * 测试性功能，使缩放永远为0.5作为间隔缩放。
 	 */
 	private var scalePower:Bool = false;
+
+	/**
+	 * 时间戳
+	 */
+	private var _lastTime:Float = 0;
+	private var _dt:Float = 0;
+	private var _cpuDt:Float = 0;
 
 	/**
 	 * 启动一个启动器，用于启动进入游戏入口。
@@ -294,6 +302,7 @@ class Start extends ZScene {
 		stage.quality = openfl.display.StageQuality.HIGH;
 
 		// 唯一帧刷新事件
+		_lastTime = Timer.stamp();
 		this.addEventListener(Event.ENTER_FRAME, onFrameEvent);
 		stage.addEventListener(Event.RESIZE, onResize);
 		stage.addEventListener(MouseEvent.CLICK, onStageMouseClick);
@@ -446,10 +455,29 @@ class Start extends ZScene {
 	}
 
 	/**
+	 * 获取每帧间隔时间
+	 * @return Float
+	 */
+	public function getIntervalTime():Float {
+		return _dt;
+	}
+
+	/**
+	 * 获取CPU运行时间
+	 * @return Float
+	 */
+	public function getCPUTime():Float {
+		return _cpuDt;
+	}
+
+	/**
 	 * 帧事件
 	 * @param e
 	 */
 	private function onFrameEvent(e:Event):Void {
+		var newTime = Timer.stamp();
+		_dt = Std.int((newTime - _lastTime) * 1000);
+		_lastTime = newTime;
 		if (fps.visible)
 			topView.addChild(fps);
 		#if (ios_render_fix)
@@ -490,6 +518,8 @@ class Start extends ZScene {
 				zygame.core.Start3D.current.onRender();
 			#end
 		}
+		var cpu = Timer.stamp();
+		_cpuDt = Std.int((cpu - newTime) * 1000);
 	}
 
 	/**

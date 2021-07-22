@@ -351,6 +351,8 @@ class ZLabel extends DataProviderComponent {
 				newText.height = _display.height;
 				newText.scaleX = 1 / _scale;
 				newText.scaleY = 1 / _scale;
+				newText.x = _display.x;
+				newText.y = _display.y;
 				newText.setTextFormat(_font);
 				newText.wordWrap = true;
 				newText.selectable = false;

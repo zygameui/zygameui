@@ -30,6 +30,9 @@ class FPSDebug extends ZBox {
 	private var _text:ZBitmapLabel;
 	private var _qqfps:Int = 0;
 	private var _curDrawCall:Int = 0;
+	private var _alltimes:Float = 0;
+	private var _alldt:Float = 0;
+	private var _allcpu:Float = 0;
 
 	public function new(inX:Float = 0.0, inY:Float = 0.0, inCol:Int = 0xffffff) {
 		super();
@@ -40,7 +43,7 @@ class FPSDebug extends ZBox {
 			_text.x = inX;
 			this.y = inY;
 			_text.width = 120;
-			_text.height = 250;
+			_text.height = 200;
 			_text.vAlign = "top";
 			var bg = new ZQuad();
 			this.addChild(bg);
@@ -61,6 +64,8 @@ class FPSDebug extends ZBox {
 
 		this.scaleX = Start.current.HDHeight / 640;
 		this.scaleY = this.scaleX;
+
+
 	}
 
 	private function onEnter(_) {
@@ -77,11 +82,13 @@ class FPSDebug extends ZBox {
 			if (debugMsg != null)
 				_text.dataProvider = debugMsg;
 			else {
+				_alldt += zygame.core.Start.current.getIntervalTime();
+				_allcpu += zygame.core.Start.current.getCPUTime();
+				_alltimes++;
+				var fps = Std.int(_alldt / _alltimes);
 				// #if html5 + "\nTexture:" + zygame.core.Start.TEXTURE_COUNT #end 无意义，释放会由GC处理
-				var msg = "DT:"
-					+ zygame.core.Start.current.getIntervalTime()
-					+ "\nCPU:" // CPU分了50%的CPU给到渲染使用
-					+ (Std.int(zygame.core.Start.current.getCPUTime() / 8 * 100) / 100)
+				var msg = "CPU:" // CPU分了50%的CPU给到渲染使用
+					+ Std.int(_allcpu / _alltimes / 8 * 100)
 					+ "\nMODE:"
 					+ Lib.getRenderMode()
 					+ "\nMEM:"
@@ -95,7 +102,7 @@ class FPSDebug extends ZBox {
 					+ "\nS_RUNING:"
 					+ SpineManager.playingCount
 					+ "\nFPS:"
-					+ getFps()
+					+ Std.int(16 / fps * 60)
 					+ "\nDrawCalls:"
 					+ (_curDrawCall - 2)
 					+ "\nScale:"
@@ -103,6 +110,11 @@ class FPSDebug extends ZBox {
 					+ "\nRETAIN:"
 					+ GC.getRetainCounts() #if wechat + "\nContext:" + untyped window.contextCount + "\nImage:" + untyped window.imageCount #end;
 				_text.dataProvider = msg;
+				if (_alltimes > 60) {
+					_alldt = 0;
+					_allcpu = 0;
+					_alltimes = 0;
+				}
 			}
 		}
 	}

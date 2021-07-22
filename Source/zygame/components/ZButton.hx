@@ -18,6 +18,8 @@ class ZButton extends ToggleButton {
 
 	private var _text:ZLabel;
 
+	public var label(get, never):ZLabel;
+
 	/**
 	 * 创建模态按钮（zygame框架中的按钮样式）
 	 * @param txt
@@ -170,7 +172,6 @@ class ZButton extends ToggleButton {
 			_text.hAlign = "center";
 			_text.mouseEnabled = false;
 			box.addChild(_text);
-			trace(_text.width, _text.height);
 		}
 	}
 
@@ -212,5 +213,10 @@ class ZButton extends ToggleButton {
 
 	override function initComponents() {
 		super.initComponents();
+	}
+
+	function get_label():ZLabel {
+		this.initText();
+		return _text;
 	}
 }

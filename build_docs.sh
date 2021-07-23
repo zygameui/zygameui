@@ -15,7 +15,7 @@ function getImport(){
 			src=${src//$2\//}
 			src=${src////.};
 			src=${src//.hx/}
-			echo "import "$src";\n\r";
+			echo "import "$src";";
 			fi
 		fi
 	done
@@ -37,5 +37,5 @@ echo "生成Doc";
 haxelib run dox -i bin -o docs -in zygame -in KengSDK -in UMengSDK -in qq -in wx
 echo "生成结束";
 
-rm -rf Export
-rm -rf bin
+# rm -rf Export
+# rm -rf bin

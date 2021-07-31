@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.Lib;
 import openfl.events.Event;
 import zygame.utils.ZSceneManager;
 import zygame.macro.AutoBuilder;
@@ -54,7 +55,7 @@ class ZBuilderScene extends ZScene {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				_loaded = true;
 				onBuilded();
-				zygame.utils.Lib.nextFrameCall(postCompleteEvent);
+				postCompleteEvent();
 			} else {
 				if (onBuildError()) {
 					ZSceneManager.current.releaseScene(this);
@@ -94,8 +95,11 @@ class ZBuilderScene extends ZScene {
 	override function onSceneRelease() {
 		super.onSceneRelease();
 		ZBuilder.unbindAssets(assetsBuilder.assets);
-		assetsBuilder.dispose();
-		assetsBuilder = null;
+		// 如果太早释放资源，可能会造成画面黑块的问题，延迟一定时间释放
+		Lib.setTimeout(function() {
+			assetsBuilder.dispose();
+			assetsBuilder = null;
+		}, 1000);
 	}
 
 	function get_loaded():Bool {

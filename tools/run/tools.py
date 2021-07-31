@@ -246,7 +246,7 @@ class Build:
                             python_FileUtils.copyFile(srcPath,path2)
             elif (_hx_local_0 == 3):
                 if (_g == "app"):
-                    if item1.exists("file"):
+                    if (item1.exists("file") and Defines.cheak(item1)):
                         Build.mainFileName = item1.get("file")
             elif (_hx_local_0 == 7):
                 if (_g == "include"):
@@ -339,9 +339,9 @@ class Build:
         if sys_FileSystem.exists("Export/ios_temp"):
             sys_FileSystem.rename("Export/ios","Export/ios_temp1")
             sys_FileSystem.rename("Export/ios_temp","Export/ios")
-            python_FileUtils.copyDic((("Export/ios_temp1/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/assets"),(("Export/ios/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/assets"))
-            python_FileUtils.copyDic((("Export/ios_temp1/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/haxe"),(("Export/ios/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/haxe"))
-            python_FileUtils.copyDic((("Export/ios_temp1/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/Images.xcassets"),(("Export/ios/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/Images.xcassets"))
+            python_FileUtils.copyDic((("Export/ios_temp1/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/assets"),("Export/ios/" + HxOverrides.stringOrNull(Build.mainFileName)))
+            python_FileUtils.copyDic((("Export/ios_temp1/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/haxe"),("Export/ios/" + HxOverrides.stringOrNull(Build.mainFileName)))
+            python_FileUtils.copyDic((("Export/ios_temp1/" + HxOverrides.stringOrNull(Build.mainFileName)) + "/Images.xcassets"),("Export/ios/" + HxOverrides.stringOrNull(Build.mainFileName)))
             python_FileUtils.removeDic("Export/ios_temp1")
 
     @staticmethod
@@ -440,7 +440,7 @@ class Defines:
 
     @staticmethod
     def define(name,value = None):
-        haxe_Log.trace(((("Define " + ("null" if name is None else name)) + "=") + ("null" if value is None else value)),_hx_AnonObject({'fileName': "src/Defines.hx", 'lineNumber': 11, 'className': "Defines", 'methodName': "define"}))
+        haxe_Log.trace(((("Define " + ("null" if name is None else name)) + "=") + ("null" if value is None else value)),_hx_AnonObject({'fileName': "src/Defines.hx", 'lineNumber': 8, 'className': "Defines", 'methodName': "define"}))
         Defines.defineMaps.h[name] = value
 
     @staticmethod
@@ -453,7 +453,7 @@ class Defines:
             raise haxe_Exception.thrown(("Bad node type, expected Element but found " + HxOverrides.stringOrNull((("null" if ((item.nodeType is None)) else _Xml_XmlType_Impl_.toString(item.nodeType))))))
         if (item.nodeName == "assets"):
             return True
-        result = (False if (item.exists("if")) else True)
+        result = (False if ((item.exists("if") or item.exists("unless"))) else True)
         if item.exists("if"):
             data = item.get("if")
             startIndex = None

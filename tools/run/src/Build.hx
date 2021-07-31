@@ -155,11 +155,11 @@ class Build {
 			FileSystem.rename("Export/ios", "Export/ios_temp1");
 			FileSystem.rename("Export/ios_temp", "Export/ios");
 			// 开始拷贝资源
-			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/assets", "Export/ios/" + Build.mainFileName + "/assets");
+			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/assets", "Export/ios/" + Build.mainFileName);
 			// 拷贝编译配置
-			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/haxe", "Export/ios/" + Build.mainFileName + "/haxe");
+			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/haxe", "Export/ios/" + Build.mainFileName);
 			// 拷贝图标资源
-			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/Images.xcassets", "Export/ios/" + Build.mainFileName + "/Images.xcassets");
+			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/Images.xcassets", "Export/ios/" + Build.mainFileName);
 			FileUtils.removeDic("Export/ios_temp1");
 		}
 	}
@@ -242,7 +242,7 @@ class Build {
 					if (!after)
 						Defines.define(item.get("name"), item.get("value"));
 				case "app":
-					if (item.exists("file"))
+					if (item.exists("file") && Defines.cheak(item))
 						mainFileName = item.get("file");
 				case "shell":
 					// 执行自定义脚本使用

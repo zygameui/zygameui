@@ -109,9 +109,10 @@ class ZSceneManager {
 	 *  @param cName 替换的新场景
 	 *  @param isReleaseScene 是否释放当前场景
 	 *  @param isHistory 是否需要记录历史记录
+	 *  @param forceReplace 是否强制切换场景
 	 *  @return ZScene
 	 */
-	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true):T {
+	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true, forceReplace:Bool = false):T {
 		if (getCurrentScene() != null && Std.isOfType(getCurrentScene(), cName))
 			return cast getCurrentScene();
 		var zscene:ZScene = null;
@@ -134,7 +135,7 @@ class ZSceneManager {
 		}
 		var newscene = createScene(cName);
 		if (zscene != null) {
-			if (!Std.isOfType(newscene, ZBuilderScene) || cast(newscene, ZBuilderScene).loaded) {
+			if (!Std.isOfType(newscene, ZBuilderScene) || cast(newscene, ZBuilderScene).loaded || forceReplace) {
 				// 如果是释放场景，那么就会主动释放场景。
 				if (isReleaseScene)
 					releaseScene(zscene);

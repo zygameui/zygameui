@@ -18,7 +18,7 @@ class Build {
 		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron","ks"
+		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks"
 	];
 
 	/**
@@ -119,7 +119,7 @@ class Build {
 		trace("开始编译平台资源");
 		if (!FileSystem.exists(dir))
 			FileSystem.createDirectory(dir);
-		if(mainFileName == null)
+		if (mainFileName == null)
 			throw "Build.mainFileName is NULL!";
 		// 通用资源拷贝
 		FileUtils.copyDic("Export/html5/bin/lib", dir);
@@ -141,11 +141,27 @@ class Build {
 	 */
 	public static function buildIos():Void {
 		trace("开始编译IOS");
+		// 检查是否已经存在IOS目录
+		if (FileSystem.exists("Export/ios")) {
+			FileSystem.rename("Export/ios", "Export/ios_temp");
+		}
 		var args:Array<String> = Sys.args();
 		if (args.indexOf("-debug") != -1)
 			Sys.command("lime build ios -debug");
 		else
 			Sys.command("lime build ios");
+		if (FileSystem.exists("Export/ios_temp")) {
+			// 存在缓存IOS，直接更新
+			FileSystem.rename("Export/ios", "Export/ios_temp1");
+			FileSystem.rename("Export/ios_temp", "Export/ios");
+			// 开始拷贝资源
+			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/assets", "Export/ios/" + Build.mainFileName + "/assets");
+			// 拷贝编译配置
+			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/haxe", "Export/ios/" + Build.mainFileName + "/haxe");
+			// 拷贝图标资源
+			FileUtils.copyDic("Export/ios_temp1/" + Build.mainFileName + "/Images.xcassets", "Export/ios/" + Build.mainFileName + "/Images.xcassets");
+			FileUtils.removeDic("Export/ios_temp1");
+		}
 	}
 
 	/**
@@ -226,7 +242,7 @@ class Build {
 					if (!after)
 						Defines.define(item.get("name"), item.get("value"));
 				case "app":
-					if(item.exists("file"))
+					if (item.exists("file"))
 						mainFileName = item.get("file");
 				case "shell":
 					// 执行自定义脚本使用

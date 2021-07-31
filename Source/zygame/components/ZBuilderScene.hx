@@ -54,7 +54,7 @@ class ZBuilderScene extends ZScene {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				_loaded = true;
 				onBuilded();
-				postCompleteEvent();
+				zygame.utils.Lib.nextFrameCall(postCompleteEvent);
 			} else {
 				if (onBuildError()) {
 					ZSceneManager.current.releaseScene(this);

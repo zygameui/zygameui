@@ -7,4 +7,9 @@ import zygame.display.DisplayObjectContainer;
  */
 class Screen extends DisplayObjectContainer {
     
+    /**
+     * 是否忽略舞台发生变化时的更改，默认为false
+     */
+    public var igoneChange:Bool = false;
+
 }

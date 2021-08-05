@@ -467,7 +467,7 @@ class Start extends ZScene {
 			}
 		}
 		for (screen in screens) {
-			if (screen != topView) {
+			if (screen != topView && !screen.igoneChange) {
 				screen.x = topView.x;
 				screen.y = topView.y;
 				screen.scaleX = topView.scaleX;

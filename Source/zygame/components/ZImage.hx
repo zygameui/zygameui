@@ -121,7 +121,7 @@ class ZImage extends DataProviderComponent {
 	#end
 
 	private override function set_dataProvider(data:Dynamic):Dynamic {
-		if (super.dataProvider == data){
+		if (super.dataProvider == data) {
 			return data;
 		}
 		if (this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
@@ -202,5 +202,9 @@ class ZImage extends DataProviderComponent {
 
 	private function get_smoothing():Bool {
 		return this.display.smoothing;
+	}
+
+	override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
+		super.__update(transformOnly, updateChildren);
 	}
 }

@@ -297,4 +297,10 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		var rect:Rectangle = super.getBounds(target);
 		return rect;
 	}
+
+	// override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
+	// trace("__update?");
+	// if (this.visible)
+	// super.__update(transformOnly, updateChildren);
+	// }
 }

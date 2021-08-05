@@ -96,10 +96,8 @@ class ZBuilderScene extends ZScene {
 		super.onSceneRelease();
 		ZBuilder.unbindAssets(assetsBuilder.assets);
 		// 如果太早释放资源，可能会造成画面黑块的问题，延迟一定时间释放
-		Lib.setTimeout(function() {
-			assetsBuilder.dispose();
-			assetsBuilder = null;
-		}, 1000);
+		assetsBuilder.dispose();
+		assetsBuilder = null;
 	}
 
 	function get_loaded():Bool {

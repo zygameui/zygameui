@@ -1,4 +1,4 @@
-<project>
+<project><define name="zybuild"/><define name="html5-platform"/>
 	<haxelib name="zygameui"/>
 	<haxedef name="builddoc"/>
 	<haxeflag name="-xml bin/doc.xml"/>

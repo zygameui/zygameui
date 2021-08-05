@@ -109,9 +109,27 @@ class Start extends ZScene {
 	public var fps:FPSDebug;
 
 	/**
+	 * 层级渲染对象，默认会有1个topView的层级渲染对象
+	 */
+	public var screens:Array<Screen> = [new Screen()];
+
+	/**
 	 * 最顶层显示，该窗口会根据缩放比例进行适配，能够与实际游戏内容的坐标匹配。
 	 */
-	public var topView:StageDisplayObjectContainer;
+	public var topView(get, never):Screen;
+
+	private function get_topView():Screen {
+		return screens[0];
+	}
+
+	/**
+	 * 添加一层顶层显示
+	 * @param screen 
+	 */
+	public function addScreen(screen:Screen):Void {
+		screens.push(screen);
+		this.updateScreens();
+	}
 
 	#if ios_render_fix
 	/**
@@ -215,9 +233,17 @@ class Start extends ZScene {
 		if (untyped window.localStorage != null)
 			untyped window.localStorage.removeItem = function() {};
 		#end
-		topView = new StageDisplayObjectContainer();
-		stage.addChild(topView);
+		this.updateScreens();
 		this.onStageSizeChange();
+	}
+
+	/**
+	 * 更新屏幕列表
+	 */
+	private function updateScreens():Void {
+		for (screen in screens) {
+			stage.addChild(screen);
+		}
 	}
 
 	/**
@@ -440,6 +466,15 @@ class Start extends ZScene {
 					scene.updateComponents();
 			}
 		}
+		for (screen in screens) {
+			if (screen != topView) {
+				screen.x = topView.x;
+				screen.y = topView.y;
+				screen.scaleX = topView.scaleX;
+				screen.scaleY = topView.scaleY;
+				screen.rotation = topView.rotation;
+			}
+		}
 	}
 
 	private function onResize(e:Event):Void {
@@ -551,7 +586,8 @@ class Start extends ZScene {
 	 * 重写onFrame
 	 */
 	override public function onFrame():Void {}
-} class UpdateStats {
+}
+class UpdateStats {
 	/**
 	 * 处理对象
 	 */
@@ -566,4 +602,4 @@ class Start extends ZScene {
 		this.display = display;
 		this.action = action;
 	}
-} class StageDisplayObjectContainer extends DisplayObjectContainer {}
+}

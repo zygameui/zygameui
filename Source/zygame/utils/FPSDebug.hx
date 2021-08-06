@@ -64,8 +64,6 @@ class FPSDebug extends ZBox {
 
 		this.scaleX = Start.current.HDHeight / 640;
 		this.scaleY = this.scaleX;
-
-
 	}
 
 	private function onEnter(_) {
@@ -87,28 +85,10 @@ class FPSDebug extends ZBox {
 				_alltimes++;
 				var fps = Std.int(_alldt / _alltimes);
 				// #if html5 + "\nTexture:" + zygame.core.Start.TEXTURE_COUNT #end 无意义，释放会由GC处理
-				var msg = "CPU:" // CPU分了50%的CPU给到渲染使用
-					+ Std.int(_allcpu / _alltimes / 8 * 100)
-					+ "\nMODE:"
-					+ Lib.getRenderMode()
-					+ "\nMEM:"
-					+ mem
-					+ "MB\nMaxMEN:"
-					+ memPeak
-					+ "MB\nUPDATES:"
-					+ zygame.core.Start.current.getUpdateLength()
-					+ "\nSUPDATES:"
-					+ SpineManager.count()
-					+ "\nS_RUNING:"
-					+ SpineManager.playingCount
-					+ "\nFPS:"
-					+ Std.int(16 / fps * 60)
-					+ "\nDrawCalls:"
-					+ (_curDrawCall - 2)
-					+ "\nScale:"
-					+ Start.currentScale
-					+ "\nRETAIN:"
-					+ GC.getRetainCounts() #if wechat + "\nContext:" + untyped window.contextCount + "\nImage:" + untyped window.imageCount #end;
+				var msg = "CPU:" + Std.int(_allcpu / _alltimes / 8 * 100) + "\nMODE:" + Lib.getRenderMode() + "\nMEM:" + mem + "MB\nMaxMEN:" + memPeak
+					+ "MB\nUPDATES:" + zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count() + "\nS_RUNING:"
+					+ SpineManager.playingCount + "\nFPS:" + Std.int(16 / fps * 60) + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale
+					+ "\nRETAIN:" + GC.getRetainCounts() #if wechat + "\nContext:" + untyped window.contextCount + "\nImage:" + untyped window.imageCount #end;
 				_text.dataProvider = msg;
 				if (_alltimes > 60) {
 					_alldt = 0;

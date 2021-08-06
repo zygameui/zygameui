@@ -27,7 +27,7 @@ class ZParticleLoader {
 	 * @param bitmapData
 	 */
 	public static function load(obj:Dynamic, cb:ParticleSystem->Void, bitmapData:BitmapData = null):Void {
-		if(Std.isOfType(obj,String))
+		if (Std.isOfType(obj, String))
 			obj = Json.parse(obj);
 		var map:DynamicExt = obj;
 		var ps = new ParticleSystem();
@@ -77,12 +77,12 @@ class ZParticleLoader {
 			ps.textureBitmapData = bitmapData;
 			cb(ps);
 		} else {
-			BitmapData.loadFromBase64(map["textureImageData"].asString(),"image/png").onComplete(function(data:BitmapData){
-                ps.textureBitmapData = data;
-                cb(ps);
-            }).onError(function(err){
-                trace("粒子效果解析错误：",err);
-            });
+			BitmapData.loadFromBase64(map["textureImageData"].asString(), "image/png").onComplete(function(data:BitmapData) {
+				ps.textureBitmapData = data;
+				cb(ps);
+			}).onError(function(err) {
+				throw "粒子效果解析错误：" + err;
+			});
 		}
 	}
 

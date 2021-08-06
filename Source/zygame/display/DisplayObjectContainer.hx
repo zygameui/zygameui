@@ -76,7 +76,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		_scrollMaskDislayObjectRect.height = value.height;
 		this.scrollRect = _scrollMaskDislayObjectRect;
 		_scrollMaskDislayObject.visible = false;
-		trace(_scrollMaskDislayObjectRect);
 		return value;
 	}
 
@@ -298,9 +297,15 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		return rect;
 	}
 
-	// override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
-	// trace("__update?");
-	// if (this.visible)
-	// super.__update(transformOnly, updateChildren);
-	// }
+	/**
+	 * 优化__update性能
+	 * @param transformOnly 
+	 * @param updateChildren 
+	 */
+	override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
+		var renderParent = __renderParent != null ? __renderParent : parent;
+		var renderable = (__visible && __scaleX != 0 && __scaleY != 0 && !__isMask && (renderParent == null || !renderParent.__isMask));
+		if (this.visible || __renderable != renderable)
+			super.__update(transformOnly, updateChildren);
+	}
 }

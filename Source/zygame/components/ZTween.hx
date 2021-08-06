@@ -302,7 +302,7 @@ class TweenFrame {
 		if (type != null) {
 			switch (type) {
 				case "quartOut":
-					// trace("Warring:quartOut在压缩状态下，会丢失真实的计算方式，会转换为quintOut进行计算");
+					// quartOut在压缩状态下，会丢失真实的计算方式，会转换为quintOut进行计算
 					Reflect.setProperty(bind, key, timeline.quintOut().lerp(from, to));
 				default:
 					var call = Reflect.getProperty(Easing, type);

@@ -1,5 +1,6 @@
 package zygame.core;
 
+import lime.graphics.RenderContext;
 import haxe.Timer;
 import openfl.display.OpenGLRenderer;
 import openfl.events.RenderEvent;
@@ -42,6 +43,11 @@ class Start extends ZScene {
 	#if vscode
 	public static function main() {};
 	#end
+
+	/**
+	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true
+	 */
+	public var dynamicFps:Bool = true;
 
 	/**
 	 * 焦点对象
@@ -263,7 +269,6 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	public function onRender(e:RenderEvent):Void {
-		// trace("渲染时触发onRender",e.type);
 		Lib.onRender();
 	}
 
@@ -316,7 +321,31 @@ class Start extends ZScene {
 		#end
 	}
 
+	private var _update:Int = 0;
+
+	private function onGameRender(context:RenderContext):Void {
+		var newTime = Timer.stamp();
+		_dt = Std.int((newTime - _lastTime) * 1000);
+		_lastTime = newTime;
+
+		if (!dynamicFps || _dt < 20 || _update >= 2) {
+			_update = 0;
+			@:privateAccess stage.__onLimeRender(context);
+		} else {
+			_update++;
+			@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
+			@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
+			@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));
+		}
+
+		var cpu = Timer.stamp();
+		_cpuDt = Std.int((cpu - newTime) * 1000);
+	}
+
 	override public function onInit():Void {
+		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
+		stage.window.onRender.add(onGameRender);
+
 		stage.frameRate = 60;
 		SpineManager.init(stage);
 
@@ -510,9 +539,6 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	private function onFrameEvent(e:Event):Void {
-		var newTime = Timer.stamp();
-		_dt = Std.int((newTime - _lastTime) * 1000);
-		_lastTime = newTime;
 		if (fps.visible)
 			topView.addChild(fps);
 		#if (ios_render_fix)
@@ -553,8 +579,6 @@ class Start extends ZScene {
 				zygame.core.Start3D.current.onRender();
 			#end
 		}
-		var cpu = Timer.stamp();
-		_cpuDt = Std.int((cpu - newTime) * 1000);
 	}
 
 	/**

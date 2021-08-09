@@ -7,6 +7,7 @@
 # ZYGameUI 更新日志
 
 ### 11.0.0
+- [改进] 改进`SpineManager`批处理逻辑顺序。
 
 ### 10.9.9
 - [改进] 改进`DisplayObjectContainer.__update`的性能。

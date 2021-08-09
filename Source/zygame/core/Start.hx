@@ -1,5 +1,6 @@
 package zygame.core;
 
+import zygame.utils.CullingRenderUtils;
 import lime.graphics.RenderContext;
 import haxe.Timer;
 import openfl.display.OpenGLRenderer;
@@ -330,6 +331,8 @@ class Start extends ZScene {
 
 		if (!dynamicFps || _dt < 20 || _update >= 2) {
 			_update = 0;
+			// 剔除
+			// CullingRenderUtils.culling(stage);
 			@:privateAccess stage.__onLimeRender(context);
 		} else {
 			_update++;

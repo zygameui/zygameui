@@ -11,6 +11,8 @@ import spine.base.SpineBaseDisplay;
 class SpineManager {
 	private static var spineOnFrames:Array<SpineBaseDisplay> = [];
 
+	private static var spineOnFramesOut:Array<SpineBaseDisplay> = [];
+
 	private static var stage:Stage;
 
 	/**
@@ -92,12 +94,18 @@ class SpineManager {
 					display.onSpineUpdate(currentFpsTime);
 				}
 			}
+			for (display in spineOnFramesOut) {
+				display.onSpineUpdate(0);
+			}
 		} else if (fps.fps == 60) {
 			for (display in spineOnFrames) {
 				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
 					display.onSpineUpdate(1 / stage.frameRate);
 				}
+			}
+			for (display in spineOnFramesOut) {
+				display.onSpineUpdate(0);
 			}
 		} else if (fps.update()) {
 			for (display in spineOnFrames) {
@@ -106,19 +114,23 @@ class SpineManager {
 					display.onSpineUpdate(1 / fps.fps);
 				}
 			}
+			for (display in spineOnFramesOut) {
+				display.onSpineUpdate(0);
+			}
 		}
+
 	}
 
 	/**
 	 * 添加到更新器中
 	 * @param spine
 	 */
-	public static function addOnFrame(s:SpineBaseDisplay):Void {
+	public static function addOnFrame(s:SpineBaseDisplay, out:Bool = false):Void {
 		if (spineOnFrames.indexOf(s) == -1) {
-			if (!Std.isOfType(s, spine.openfl.SkeletonSpriteBatchs))
+			if (!out)
 				spineOnFrames.push(s);
 			else
-				spineOnFrames.insert(0, s);
+				spineOnFramesOut.push(s);
 		}
 	}
 
@@ -128,6 +140,7 @@ class SpineManager {
 	 */
 	public static function removeOnFrame(spine:SpineBaseDisplay):Void {
 		spineOnFrames.remove(spine);
+		spineOnFramesOut.remove(spine);
 	}
 
 	/**

@@ -6,8 +6,9 @@
 
 # ZYGameUI 更新日志
 
-### 11.0.0
+### 11.0.2
 - [改进] 改进`SpineManager`批处理逻辑顺序。
+- [新增] 新增`ZSpine.isCache`缓存支持。
 
 ### 10.9.9
 - [改进] 改进`DisplayObjectContainer.__update`的性能。

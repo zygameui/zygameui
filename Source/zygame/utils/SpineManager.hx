@@ -118,7 +118,6 @@ class SpineManager {
 				display.onSpineUpdate(0);
 			}
 		}
-
 	}
 
 	/**

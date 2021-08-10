@@ -25,6 +25,24 @@ class ZSpine extends ZBox {
 
 	public var independent(get, set):Bool;
 
+	/**
+	 * 仅在spine的情况下才能够缓存
+	 */
+	public var isCache(get, set):Bool;
+
+	private var _isCache = false;
+
+	function get_isCache():Bool {
+		return _isCache;
+	}
+
+	function set_isCache(value:Bool):Bool {
+		_isCache = value;
+		if (getNativeSpine() != null)
+			getNativeSpine().isCache = value;
+		return _isCache;
+	}
+
 	public function getNativeSpine():SkeletonAnimation {
 		return spine;
 	}

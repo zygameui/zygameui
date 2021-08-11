@@ -250,7 +250,7 @@ class TweenFrame {
 		_baseXml = tween;
 		start = Std.parseInt(tween.get("start"));
 		end = Std.parseInt(tween.get("end"));
-		updateData(parentSync || tween.get("start") == "0" || tween.get("sync") == "true");
+		updateData((parentSync && tween.get("sync") != "false") || tween.get("start") == "0" || tween.get("sync") == "true");
 	}
 
 	public function updateData(setKey:Bool):Void {

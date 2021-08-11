@@ -113,6 +113,7 @@ class ZTween implements Refresher {
 
 	public function bindBuilder(builder:Builder, parentid:String = null):Void {
 		_baseFrames = [];
+		this.sync = _baseXml.get("sync") == "true";
 		if (_baseXml.get("auto") == "true") {
 			play();
 		}

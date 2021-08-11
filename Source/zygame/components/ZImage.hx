@@ -22,6 +22,20 @@ class ZImage extends DataProviderComponent {
 
 	public var display:Image;
 
+	public var fill(get, set):Bool;
+
+	private var _fill:Bool = false;
+
+	private function set_fill(value:Bool):Bool {
+		_fill = value;
+		this.updateComponents();
+		return value;
+	}
+
+	private function get_fill():Bool {
+		return _fill;
+	}
+
 	/**
 	 * 缓存资源，如果定义缓存资源，ZImage的异步资源会从这里读取资源
 	 */
@@ -75,6 +89,10 @@ class ZImage extends DataProviderComponent {
 				display.width = @:privateAccess display._width;
 			if (@:privateAccess display._setHeight)
 				display.height = @:privateAccess display._height;
+		}
+		if (fill) {
+			this.scale(1);
+			ZImage.fillStageImage(this);
 		}
 	}
 
@@ -219,5 +237,6 @@ class ZImage extends DataProviderComponent {
 		display.scale(scale);
 		display.x = (display.getStageWidth() - display.width) / 2;
 		display.y = (display.getStageHeight() - display.height) / 2;
+		trace("比例：",scale);
 	}
 }

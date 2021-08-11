@@ -207,4 +207,17 @@ class ZImage extends DataProviderComponent {
 	override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
 		super.__update(transformOnly, updateChildren);
 	}
+
+	/**
+	 * 为舞台等比例铺满背景
+	 * @param display 
+	 */
+	public static function fillStageImage(display:ZImage):Void {
+		var scale1 = display.width / display.getStageWidth();
+		var scale2 = display.height / display.getStageHeight();
+		var scale = Math.max(scale1, scale2);
+		display.scale(scale);
+		display.x = (display.getStageWidth() - display.width) / 2;
+		display.y = (display.getStageHeight() - display.height) / 2;
+	}
 }

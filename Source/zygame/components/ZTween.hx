@@ -25,6 +25,8 @@ class ZTween implements Refresher {
 
 	public var isPlay(get, never):Bool;
 
+	public var sync:Bool = false;
+
 	private function get_isPlay():Bool {
 		return _isPlay;
 	}
@@ -60,7 +62,7 @@ class ZTween implements Refresher {
 		var lastStart = 0;
 		while (frames.hasNext()) {
 			var xml = frames.next();
-			var tw = new TweenFrame(xml, display);
+			var tw = new TweenFrame(xml, display, sync);
 			if (!xml.exists("start"))
 				tw.start = lastStart;
 			lastStart = tw.end + 1;
@@ -92,7 +94,7 @@ class ZTween implements Refresher {
 					newtwXml.set("end", tw.getXml().get("end"));
 					newtwXml.set("type", tw.getXml().get("type"));
 					newtwXml.set("key", "x");
-					_baseFrames.push(new TweenFrame(newtwXml, tw.bind));
+					_baseFrames.push(new TweenFrame(newtwXml, tw.bind, sync));
 				case "scaleY":
 					var yvalue = Reflect.getProperty(tw.bind, "y");
 					var hvalue = Reflect.getProperty(tw.bind, "height");
@@ -102,7 +104,7 @@ class ZTween implements Refresher {
 					newtwXml.set("end", tw.getXml().get("end"));
 					newtwXml.set("type", tw.getXml().get("type"));
 					newtwXml.set("key", "y");
-					_baseFrames.push(new TweenFrame(newtwXml, tw.bind));
+					_baseFrames.push(new TweenFrame(newtwXml, tw.bind, sync));
 				default:
 					throw "ZTween.scale标签仅可以提供给scaleX,scaleY属性使用";
 			}
@@ -125,7 +127,7 @@ class ZTween implements Refresher {
 			var bindid = (parentid != null ? parentid + "_" : "") + xml.get("bind");
 			if (!builder.ids.exists(bindid))
 				throw xml.toString() + ":Bind Error (" + bindid + ")";
-			var tw = new TweenFrame(xml, builder.ids.get(bindid));
+			var tw = new TweenFrame(xml, builder.ids.get(bindid), sync);
 			if (!xml.exists("start"))
 				tw.start = lastStart;
 			lastStart = tw.end + 1;
@@ -242,13 +244,13 @@ class TweenFrame {
 
 	private var _lockTo:Null<Float>;
 
-	public function new(tween:Xml, bind:Dynamic) {
+	public function new(tween:Xml, bind:Dynamic, parentSync:Bool) {
 		this.bind = bind;
 		key = tween.get("key");
 		_baseXml = tween;
 		start = Std.parseInt(tween.get("start"));
 		end = Std.parseInt(tween.get("end"));
-		updateData(tween.get("start") == "0");
+		updateData(parentSync || tween.get("start") == "0" || tween.get("sync") == "true");
 	}
 
 	public function updateData(setKey:Bool):Void {

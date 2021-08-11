@@ -6,6 +6,11 @@
 
 # ZYGameUI 更新日志
 
+### 11.0.3
+- [新增] 新增`ZImage.fillStageImage`铺满舞台背景的支持。
+- [新增] 新增`ZStackMoveAnimateStyle.LEFT_RIGHT`从左到右的动画支持。
+- [新增] 新增`ZTween.sync`参数，在动画标签的start不为0的情况下，又希望强制一开始准备的情况下，可设置。如果希望所有动态参数生效，则填写到ZTween标签上。
+
 ### 11.0.2
 - [改进] 改进`SpineManager`批处理逻辑顺序。
 - [新增] 新增`ZSpine.isCache`缓存支持。

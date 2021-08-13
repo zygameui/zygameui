@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 11.0.4
+- [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。
+
 ### 11.0.3
 - [新增] 新增`ZImage.fillStageImage`铺满舞台背景的支持。
 - [新增] 新增`ZStackMoveAnimateStyle.LEFT_RIGHT`从左到右的动画支持。

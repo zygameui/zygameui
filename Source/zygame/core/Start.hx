@@ -48,7 +48,7 @@ class Start extends ZScene {
 	/**
 	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true
 	 */
-	public var dynamicFps:Bool = true;
+	public var dynamicFps:Bool = #if disable_dynamic_fps false #else true #end;
 
 	/**
 	 * 焦点对象
@@ -329,7 +329,11 @@ class Start extends ZScene {
 		_dt = Std.int((newTime - _lastTime) * 1000);
 		_lastTime = newTime;
 
+		#if !disable_dynamic_fps
 		if (!dynamicFps || _dt < 20 || _update >= 2) {
+		#else
+		if (true) {
+		#end
 			_update = 0;
 			// 剔除
 			// CullingRenderUtils.culling(stage);

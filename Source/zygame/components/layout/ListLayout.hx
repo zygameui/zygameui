@@ -47,15 +47,15 @@ class ListLayout extends BaseLayout {
 			return;
 
 		// 虚拟高度
-		// var itemOnw:ItemRender = virtualHeight == 0 ? list.createItemRender(null) : null;
-		var itemOnw:ItemRender = list.createItemRender(null);
+		var itemOnw:ItemRender = virtualHeight == 0 ? list.createItemRender(null) : null;
+		// var itemOnw:ItemRender = list.createItemRender(null);
 		if (itemOnw != null) {
 			list.view.addChildSuper(itemOnw);
 			if (itemOnw.tileDisplayObject != null)
 				list.batch.getBatchs().addChild(itemOnw.tileDisplayObject);
 			virtualHeight = itemOnw.height + list.gap;
-			if (list.cache == false)
-				list.removeItemRender(itemOnw);
+			// if (list.cache == false)
+			list.removeItemRender(itemOnw);
 		}
 
 		// 开始索引

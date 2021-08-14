@@ -147,6 +147,7 @@ class AutoBuilder {
 						if ($v{embed}) {
 							this.$bindBuilder = zygame.components.ZBuilder.build(Xml.parse($v{builder.content}), this);
 						} else {
+							// trace("build:",$v{path});
 							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName($v{path}), this);
 						}
 					}

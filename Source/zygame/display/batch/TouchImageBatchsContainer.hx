@@ -153,6 +153,8 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 	 * @param e
 	 */
 	private function dispatchTileEvent(e:TouchEvent):Void {
+		if (!this.mouseEnabled)
+			return;
 		var tile:Tile = getTilePosAt(this.mouseX, this.mouseY);
 		if (tile != null) {
 			if (Std.isOfType(tile, BTouchSprite)) {

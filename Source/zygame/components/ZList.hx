@@ -97,7 +97,7 @@ class ZList extends ZScroll {
 				removeItemRender(cast view.childs[0], true);
 			}
 		}
-		if(autoSize){
+		if (autoSize) {
 			cast(this.layout, ListLayout).updateSize(this);
 		}
 		this.updateComponents();
@@ -149,6 +149,10 @@ class ZList extends ZScroll {
 			return _itemRenders.shift();
 		}
 		var item:ItemRender = null;
+		trace("数量", this.view.numChildren);
+		if(this.view.numChildren > 200){
+			throw "???";
+		}
 		if (itemRenderType != null)
 			item = Type.createInstance(itemRenderType, []);
 		else

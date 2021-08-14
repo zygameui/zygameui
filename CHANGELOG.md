@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 11.0.5
+- [修复] 修复ZList.cache的缓存错误的问题。
+
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。
 

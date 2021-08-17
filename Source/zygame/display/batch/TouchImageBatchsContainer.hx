@@ -18,6 +18,15 @@ import zygame.display.batch.BTouchSprite;
  */
 @:keep
 class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
+	public var tileAlphaEnabled(never, set):Bool;
+	public var tileBlendModeEnabled(never, set):Bool;
+	public var tileColorTransformEnabled(never, set):Bool;
+
+	/**
+	 * 设置为性能模式
+	 */
+	public var performanceMode(never, set):Bool;
+
 	public function new(batchSprites:Atlas, pwidth:Int = -1, pheight:Int = -1) {
 		super();
 		if (pwidth == -1)
@@ -189,5 +198,39 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 
 	override function dispatchEvent(event:Event):Bool {
 		return super.dispatchEvent(event);
+	}
+
+	function set_tileAlphaEnabled(value:Bool):Bool {
+		for (i in 0...this.numChildren) {
+			var batch = this.getBatchs(i);
+			if (batch != null)
+				batch.tileAlphaEnabled = value;
+		}
+		return value;
+	}
+
+	function set_tileBlendModeEnabled(value:Bool):Bool {
+		for (i in 0...this.numChildren) {
+			var batch = this.getBatchs(i);
+			if (batch != null)
+				batch.tileBlendModeEnabled = value;
+		}
+		return value;
+	}
+
+	function set_tileColorTransformEnabled(value:Bool):Bool {
+		for (i in 0...this.numChildren) {
+			var batch = this.getBatchs(i);
+			if (batch != null)
+				batch.tileColorTransformEnabled = value;
+		}
+		return value;
+	}
+
+	function set_performanceMode(value:Bool):Bool {
+		this.tileAlphaEnabled = !value;
+		this.tileBlendModeEnabled = !value;
+		this.tileColorTransformEnabled = !value;
+		return value;
 	}
 }

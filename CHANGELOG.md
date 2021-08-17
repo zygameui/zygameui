@@ -8,6 +8,7 @@
 
 ### 11.0.5
 - [修复] 修复ZList.cache的缓存错误的问题。
+- [新增] 新增`ZLabel.setFontSelectColor`方法可设置文本局部颜色或者大小等。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

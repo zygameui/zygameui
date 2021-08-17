@@ -438,6 +438,20 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
+	 * 设置颜色
+	 * @param start 
+	 * @param end 
+	 * @param color 
+	 */
+	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
+		var endIndex:Int = startIndex + len;
+		var rootColor = _font.color;
+		_font.color = color;
+		_display.setTextFormat(_font, startIndex, endIndex);
+		_font.color = rootColor;
+	}
+
+	/**
 	 * 设置HTML标签文本，但在部分设备上渲染可能会存在问题，建议使用简易格式的渲染。
 	 * @param bool
 	 */

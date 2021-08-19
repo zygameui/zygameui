@@ -100,6 +100,16 @@ class ZQuad extends ZBox {
     }
     #end
 
+    @:keep
+    public var fill(never,set):Bool;
+    private function set_fill(value:Bool):Bool{
+        if(value){
+            this.width = getStageWidth();
+            this.height = getStageHeight();
+        }
+        return value;
+    }
+
 }
 
 #if !api

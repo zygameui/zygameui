@@ -22,7 +22,7 @@ class NativeZBitmapLabel extends ZLabel {
 
 	public var wordWrap:Bool = false;
 
-	public function setFontSelectColor(startIndex:Int, len:Int, color:Int):Void {}
+	override public function setFontSelectColor(startIndex:Int, len:Int, color:Int):Void {}
 }
 #else
 typedef NativeZBitmapLabel = ZBitmapLabel;

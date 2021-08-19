@@ -1,5 +1,6 @@
 package zygame.components;
 
+import haxe.Exception;
 import openfl.display.Shader;
 import zygame.utils.SpineManager;
 import spine.AnimationState;
@@ -52,12 +53,16 @@ class ZSpine extends ZBox {
 	}
 
 	private function set_spineSkin(name:String):String {
-		if (btilemap != null)
-			bspine.spineSkin = name;
-		else {
-			spine.skeleton.setSkinByName(name);
-			spine.skeleton.setBonesToSetupPose();
-			spine.skeleton.setSlotsToSetupPose();
+		try {
+			if (btilemap != null)
+				bspine.spineSkin = name;
+			else {
+				spine.skeleton.setSkinByName(name);
+				spine.skeleton.setBonesToSetupPose();
+				spine.skeleton.setSlotsToSetupPose();
+			}
+		} catch (e:Exception) {
+			trace("异常，无法找到皮肤：" + name);
 		}
 		return name;
 	}

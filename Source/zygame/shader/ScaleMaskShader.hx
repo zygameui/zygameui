@@ -35,4 +35,13 @@ class ScaleMaskShader extends DisplayObjectShader {
 		return this.scale.value[0];
 	}
 
+	public var scaleX(get,set):Float;
+	private function get_scaleX():Float{
+		return getScaleX();
+	}
+	private function set_scaleX(value:Float):Float{
+		setScaleX(value);
+		return value;
+	}
+
 }

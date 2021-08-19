@@ -281,6 +281,8 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	/**
 	 * 获取屏幕比例，>= 0.62的基本是平板尺寸
+	 * 4.7 全屏屏
+	 * 5.7 IPHON8
 	 * @return Float
 	 */
 	public function getAspectRatio():Float {

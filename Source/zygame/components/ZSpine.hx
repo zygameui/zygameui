@@ -57,9 +57,11 @@ class ZSpine extends ZBox {
 			if (btilemap != null)
 				bspine.spineSkin = name;
 			else {
-				spine.skeleton.setSkinByName(name);
-				spine.skeleton.setBonesToSetupPose();
-				spine.skeleton.setSlotsToSetupPose();
+				if (spine != null) {
+					spine.skeleton.setSkinByName(name);
+					spine.skeleton.setBonesToSetupPose();
+					spine.skeleton.setSlotsToSetupPose();
+				}
 			}
 		} catch (e:Exception) {
 			trace("异常，无法找到皮肤：" + name);
@@ -68,6 +70,8 @@ class ZSpine extends ZBox {
 	}
 
 	private function get_spineSkin():String {
+		if (spine == null && bspine == null)
+			return null;
 		if (bspine == null) {
 			return spine.skeleton.getSkin() != null ? spine.skeleton.getSkin().name : null;
 		}
@@ -88,7 +92,9 @@ class ZSpine extends ZBox {
 		if (bspine != null) {
 			return bspine.action;
 		}
-		return spine.actionName;
+		if(spine != null)
+			return spine.actionName;
+		return null;
 	}
 
 	private function set_action(v:String):String {
@@ -96,7 +102,8 @@ class ZSpine extends ZBox {
 			bspine.action = v;
 			return v;
 		}
-		spine.playForce(v, isLoop);
+		if(spine != null)
+			spine.playForce(v, isLoop);
 		return v;
 	}
 
@@ -123,7 +130,7 @@ class ZSpine extends ZBox {
 		} else {
 			spine = ZBuilder.createSpineSpriteSkeleton(atlasName, skeletionName);
 			if (spine == null)
-				throw atlasName + ":" + skeletionName + " spine is not create.";
+				trace("Error:" + atlasName + ":" + skeletionName + " spine is not create");
 			// spine.isNative = native;
 			if (spine != null) {
 				this.addChild(spine);
@@ -135,7 +142,7 @@ class ZSpine extends ZBox {
 		super.onInit();
 		if (bspine != null)
 			bspine.mouseEnabled = true;
-		else
+		else if(spine != null)
 			spine.mouseEnabled = true;
 	}
 

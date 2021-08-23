@@ -194,6 +194,7 @@ class BLabel extends BSprite{
                 var offestX:Float = 0;
                 var offestY:Float = 0;
                 var scaleFloat:Float = this._size > 0?(this._size / _lineHeight):1;
+                var lastWidth:Float = 0;
                 for(char in _texts)
                 {
                     var id:Int = char.charCodeAt(0);
@@ -211,12 +212,13 @@ class BLabel extends BSprite{
                         tile.x = offestX + frame.xoffset;
                         tile.y = offestY + frame.yoffset;
                         offestX += Std.int(frame.xadvance);
+                        lastWidth = frame.width;
                         if(_lineHeight < frame.height)
                             _lineHeight = frame.height; 
                     }
                     else if(char == " ")
                     {
-                        offestX += _size * 0.8;
+                        offestX += (_size != 0 ? _size : lastWidth) * 0.8;
                     }
                     else if(char == "\n")
                     {
@@ -251,6 +253,7 @@ class BLabel extends BSprite{
                 }
                 var scaleFloat:Float = this._size > 0?(this._size / _lineHeight):1;
                 var emoj:String = "";
+                var lastWidth:Float = 0;
                 for(char in _texts)
                 {
                     var frame:Frame = null;
@@ -289,6 +292,7 @@ class BLabel extends BSprite{
                             tile.y += frame.frameY;
                         }
                         offestX += Std.int(frame.width + gap);
+                        lastWidth = frame.width;
                         if(_maxHeight < offestY + frame.height)
                             _maxHeight = offestY + frame.height;
                         if(_maxWidth < offestX)
@@ -296,7 +300,7 @@ class BLabel extends BSprite{
                     }
                     else if(char == " ")
                     {
-                        offestX += _size * 0.8;
+                        offestX += (_size != 0 ? _size : lastWidth) * 0.8;
                     }
                     else if(char == "\n")
                     {

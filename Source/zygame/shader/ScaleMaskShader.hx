@@ -3,8 +3,9 @@ package zygame.shader;
 import openfl.display.DisplayObjectShader;
 
 /**
- *             //计算纹理的映射，公式：（当前图片宽度 * 当前纹理坐标 - 当前图片精灵偏移X） / 当前图片精灵宽度 
+ * //计算纹理的映射，公式：（当前图片宽度 * 当前纹理坐标 - 当前图片精灵偏移X） / 当前图片精灵宽度 
  */
+@:keep
 class ScaleMaskShader extends DisplayObjectShader {
     
     @:glFragmentSource("

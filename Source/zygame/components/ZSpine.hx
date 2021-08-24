@@ -85,7 +85,9 @@ class ZSpine extends ZBox {
 	private function get_state():AnimationState {
 		if (bspine != null)
 			return bspine.state;
-		return spine.state;
+		if (spine != null)
+			return spine.state;
+		return null;
 	}
 
 	private function get_action():String {

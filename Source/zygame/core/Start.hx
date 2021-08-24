@@ -51,6 +51,11 @@ class Start extends ZScene {
 	public var dynamicFps:Bool = #if disable_dynamic_fps false #else true #end;
 
 	/**
+	 * 低频模式
+	 */
+	public var lowFps:Bool = false;
+
+	/**
 	 * 焦点对象
 	 */
 	public static var focus:DisplayObject;
@@ -330,7 +335,10 @@ class Start extends ZScene {
 		_lastTime = newTime;
 
 		#if !disable_dynamic_fps
-		if (!dynamicFps || _dt < 20 || _update >= 2) {
+		var isCanRender = !dynamicFps || _dt < 20;
+		if(lowFps)
+			isCanRender = false;
+		if (isCanRender || _update >= 2) {
 		#else
 		if (true) {
 		#end

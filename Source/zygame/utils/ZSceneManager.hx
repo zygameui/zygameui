@@ -113,7 +113,9 @@ class ZSceneManager {
 	 *  @return ZScene
 	 */
 	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true, forceReplace:Bool = false):T {
-		if (getCurrentScene() != null && Std.isOfType(getCurrentScene(), cName))
+		var key = Type.getClassName(cName);
+		var key2 = getCurrentScene() != null ? Type.getClassName(Type.getClass(getCurrentScene())) : null;
+		if (getCurrentScene() != null && key == key2)
 			return cast getCurrentScene();
 		var zscene:ZScene = null;
 		while (_scenes.length > 0) {
@@ -168,6 +170,7 @@ class ZSceneManager {
 		// 回退时，需要先将自已的场景移除掉
 		_history.pop();
 		var c = _history.pop();
+		trace("_history=", c);
 		if (c != null) {
 			return this.replaceScene(c, isReleaseScene, true);
 		}

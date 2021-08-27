@@ -25,6 +25,9 @@ class AutoBuilder {
 		if (path == null) {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
+
+		Context.registerModuleDependency(Context.getLocalModule(), path);
+
 		var builder:ZBuilderData = new ZBuilderData(path, project);
 		var fields = Context.getBuildFields();
 

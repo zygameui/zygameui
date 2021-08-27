@@ -1,5 +1,7 @@
 package zygame.macro;
 
+import haxe.Timer;
+import haxe.Json;
 #if macro
 import sys.io.Process;
 import sys.io.File;
@@ -21,9 +23,14 @@ class ZProjectData {
 		var zprojectPath = createZProjectDataString();
 		if (zprojectPath == null)
 			return;
+		if (!FileSystem.exists(".macro")) {
+			FileSystem.createDirectory(".macro");
+		}
+
 		nowCwd = Sys.getCwd();
 		Sys.setCwd(oldCwd);
 		this.readXml(nowCwd + "/" + zprojectPath, nowCwd);
+
 	}
 
 	public function readXml(xmlpath:String, rootPath:String):Void {

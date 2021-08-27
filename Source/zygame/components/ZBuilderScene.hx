@@ -39,15 +39,17 @@ class ZBuilderScene extends ZScene {
 		return assetsBuilder.get(id, type);
 	}
 
+	public var bgDisplay:ZQuad;
+
 	override function onInit() {
 		super.onInit();
 
 		// 透明层，避免重复点击
-		var bg:ZQuad = new ZQuad();
-		this.addChild(bg);
-		bg.alpha = 0;
-		bg.width = getStageWidth();
-		bg.height = getStageHeight();
+		bgDisplay = new ZQuad();
+		this.addChild(bgDisplay);
+		bgDisplay.alpha = 0;
+		bgDisplay.width = getStageWidth();
+		bgDisplay.height = getStageHeight();
 
 		this.onLoad();
 		assetsBuilder.build(function(bool) {

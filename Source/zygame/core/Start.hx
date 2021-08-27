@@ -255,6 +255,7 @@ class Start extends ZScene {
 	private function updateScreens():Void {
 		for (screen in screens) {
 			stage.addChild(screen);
+			screen.scale(currentScale);
 		}
 	}
 

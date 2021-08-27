@@ -169,7 +169,7 @@ class ZSceneManager {
 		_history.pop();
 		var c = _history.pop();
 		if (c != null) {
-			this.replaceScene(c, isReleaseScene, true);
+			return this.replaceScene(c, isReleaseScene, true);
 		}
 		return null;
 	}

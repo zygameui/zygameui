@@ -94,7 +94,7 @@ class ZSpine extends ZBox {
 		if (bspine != null) {
 			return bspine.action;
 		}
-		if(spine != null)
+		if (spine != null)
 			return spine.actionName;
 		return null;
 	}
@@ -104,9 +104,19 @@ class ZSpine extends ZBox {
 			bspine.action = v;
 			return v;
 		}
-		if(spine != null)
+		if (spine != null)
 			spine.playForce(v, isLoop);
 		return v;
+	}
+
+	/**
+	 * 停止
+	 */
+	public function stop():Void {
+		if (bspine != null)
+			bspine.spine.stop();
+		if (spine != null)
+			spine.stop();
 	}
 
 	override function set_width(value:Float):Float {
@@ -144,7 +154,7 @@ class ZSpine extends ZBox {
 		super.onInit();
 		if (bspine != null)
 			bspine.mouseEnabled = true;
-		else if(spine != null)
+		else if (spine != null)
 			spine.mouseEnabled = true;
 	}
 

@@ -40,7 +40,6 @@ class JSONData {
 			jsonPath = rootJsonPath;
 		var data:Json = Json.parse(File.getContent(jsonPath));
 		var name = StringUtils.getName(jsonPath);
-		var t = null;
 		name = "AutoJson" + name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
 		var c = macro class $name {
 			public function new() {}
@@ -73,8 +72,7 @@ class JSONData {
 					};
 				} else {
 					var getData:Dynamic = keyValue[0];
-					if (t == null)
-						t = getType(getData, Context.currentPos(), doc);
+					var t = getType(getData, Context.currentPos(), doc);
 					// 将数组储存
 					newField = {
 						name: value,

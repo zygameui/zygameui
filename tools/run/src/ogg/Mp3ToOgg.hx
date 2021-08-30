@@ -32,6 +32,7 @@ class Mp3ToOgg {
 	public static function ffmpeg(path:String):Void {
 		if (thridCounts >= maxThridCounts) {
 			cache.push(path);
+			trace("列入缓存：", path);
 			return;
 		}
 		thridCounts++;
@@ -39,6 +40,12 @@ class Mp3ToOgg {
 		ChildProcess.exec(command, function(e, i, o) {
 			okCounts++;
 			trace("已完成" + path + "(" + okCounts + ")");
+			thridCounts--;
+			var path = cache.shift();
+			if (path != null) {
+				trace("开始缓存任务：", path);
+				ffmpeg(path);
+			}
 		});
 	}
 }

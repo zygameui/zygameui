@@ -1,5 +1,6 @@
 package zygame.display;
 
+import openfl.geom.Point;
 import zygame.components.ZTween;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -309,5 +310,15 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		var renderable = (__visible && __scaleX != 0 && __scaleY != 0 && !__isMask && (renderParent == null || !renderParent.__isMask));
 		if (this.visible || __renderable != renderable)
 			super.__update(transformOnly, updateChildren);
+	}
+
+	/**
+	 * 从Start层转换最终坐标点
+	 * @return Point
+	 */
+	public function localToGlobalInParentStart(point:Point):Point{
+		point = this.parent.localToGlobal(point);
+		point = Start.current.globalToLocal(point);
+		return point;
 	}
 }

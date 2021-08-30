@@ -96,6 +96,10 @@ class ZList extends ZScroll {
 			while (view.childs.length > 0) {
 				removeItemRender(cast view.childs[0], true);
 			}
+		} else {
+			for (c in view.childs) {
+				cast(c, ItemRender).data = null;
+			}
 		}
 		if (autoSize) {
 			cast(this.layout, ListLayout).updateSize(this);

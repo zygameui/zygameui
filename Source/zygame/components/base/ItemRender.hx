@@ -55,4 +55,16 @@ class ItemRender extends ZBox {
             tileDisplayObject = new BBox();
         tileDisplayObject.addTile(tile);
     }
+
+    /**
+     * 承载ItemRender的Scroll是否正在滑动
+     * @return Bool
+     */
+    public function isMoveing():Bool{
+        var scroll:ZScroll = cast this.parent.parent;
+        if (scroll != null && !scroll.getIsMoveing()) {
+            return false;
+        }
+        return true;
+    }
 }

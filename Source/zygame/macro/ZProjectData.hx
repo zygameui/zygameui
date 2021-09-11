@@ -38,8 +38,9 @@ class ZProjectData {
 		for (item in xml.firstElement().elements()) {
 			switch (item.nodeName) {
 				case "assets":
-					if (item.get("unparser") == "true")
+					if (item.get("unparser") == "true"){
 						continue;
+					}
 					readDir(rootPath + item.get("path"), item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path")));
 				case "haxelib":
 					if (item.get("bind") == "true") {

@@ -115,6 +115,7 @@ class ZSceneManager {
 	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true, forceReplace:Bool = false):T {
 		var key = Type.getClassName(cName);
 		var key2 = getCurrentScene() != null ? Type.getClassName(Type.getClass(getCurrentScene())) : null;
+		// 验证：C++运行正常
 		if (getCurrentScene() != null && key == key2)
 			return cast getCurrentScene();
 		var zscene:ZScene = null;

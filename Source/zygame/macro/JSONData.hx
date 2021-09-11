@@ -23,7 +23,7 @@ class JSONData {
 		if (jsonPath == null)
 			jsonPath = rootJsonPath;
 		var data = File.getContent(jsonPath);
-		return macro haxe.Json.parse($v{data});
+		return macro $v{haxe.Json.parse(data)};
 	}
 
 	/**

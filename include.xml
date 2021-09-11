@@ -72,7 +72,8 @@
 
 	<!-- IOS以及Android进行64位支持 -->
 	<architecture name="arm64" exclude="armv7" if="ios" />
-	<architecture name="arm64" if="android" />
+	<architecture name="arm64" if="android final" />
+	<architecture name="armv7" exclude="arm64" if="android" unless="final"/>
 	<!-- 安卓只要v7 -->
 	<!-- <architecture name="armv7" exclude="arm64" if="android" /> -->
 	<!-- <architecture name="arm64" exclude="armv7" if="android" /> -->

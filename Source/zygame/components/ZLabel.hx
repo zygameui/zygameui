@@ -36,6 +36,8 @@ class ZLabel extends DataProviderComponent {
 
 	private var _defaultDisplay:ZTextField;
 
+	private var _clickquad:ZQuad;
+
 	private var _display:ZTextField;
 
 	private var _font:TextFormat;
@@ -163,6 +165,9 @@ class ZLabel extends DataProviderComponent {
 
 	public function new() {
 		super();
+		_clickquad = new ZQuad();
+		this.addChild(_clickquad);
+		_clickquad.alpha = 0;
 		_display = new ZTextField();
 		#if ios
 		_font = new TextFormat("assets/" + zygame.components.base.ZConfig.fontName);
@@ -257,6 +262,8 @@ class ZLabel extends DataProviderComponent {
 	override public function updateComponents():Void {
 		_display.width = _width * _scale;
 		_display.height = _height;
+		_clickquad.width = _width;
+		_clickquad.height = _height;
 
 		for (text in igoneChars) {
 			_display.text = StringTools.replace(_display.text, text, "");

@@ -391,7 +391,7 @@ class ZAssets {
 	 *  @param canError - 是否允许容错加载，如果设置为true，则永远不会触发errorCall
 	 */
 	public function start(func:Float->Void, errorCall:String->Void = null, canError:Bool = false):Void {
-		if(!_loadStop){
+		if (!_loadStop) {
 			throw "ZAssets已经在载入资源中，不能再次调用start方法";
 		}
 		this.canError = canError;
@@ -437,7 +437,7 @@ class ZAssets {
 		}
 
 		#if debug
-		trace("载入进度：" + currentLoadIndex, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
+		trace("载入进度：" + currentLoadIndex, currentLoadNumber, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
 		#end
 		parser.out = onAssetsOut;
 		parser.done = loadDone;
@@ -600,7 +600,7 @@ class ZAssets {
 		if (_callBack != null)
 			_callBack(getProgress());
 		#if debug
-		trace("载入进度：" + Std.int(getProgress() * 100) + "%");
+		trace(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
 		#end
 	}
 

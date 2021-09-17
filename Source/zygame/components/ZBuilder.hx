@@ -1293,8 +1293,9 @@ class Builder {
 					cast(value, ZTween).stop();
 				}
 			}
-			ids = null;
-			display = null;
+			// 如果这里不进行释放，是否可以解决空访问的问题
+			// ids = null;
+			// display = null;
 		}
 	}
 

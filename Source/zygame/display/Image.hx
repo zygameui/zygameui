@@ -19,6 +19,7 @@ import zygame.utils.load.TextureLoader;
 import zygame.display.batch.BScale9Image;
 
 class Image extends DisplayObjectContainer {
+
 	/**
 	 * MapliveScene创建时可用
 	 */

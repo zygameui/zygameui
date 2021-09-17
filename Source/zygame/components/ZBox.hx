@@ -88,66 +88,49 @@ class ZBox extends Component {
 		return value;
 	}
 
+	private var _setWidth:Bool = false;
 	private var _componentWidth:Float = 0;
 
+	private var _setHeight:Bool = false;
 	private var _componentHeight:Float = 0;
 
-	#if flash
-	@:setter(width)
-	public function set_width(value:Float):Float {
-		_componentWidth = value;
-		return value;
-	}
-
-	@:setter(height)
-	public function set_height(value:Float):Float {
-		_componentHeight = value;
-		return value;
-	}
-
-	@:getter(width)
-	public function get_width():Float {
-		if (_componentWidth == 0)
-			return super.width;
-		return _componentWidth;
-	}
-
-	@:getter(height)
-	public function get_height():Float {
-		if (_componentHeight == 0)
-			return super.height;
-		return _componentHeight;
-	}
-	#else
 	override private function set_width(value:Float):Float {
+		_setWidth = true;
 		_componentWidth = value;
 		return value;
 	}
 
 	override private function set_height(value:Float):Float {
+		_setHeight = true;
 		_componentHeight = value;
 		return value;
 	}
 
 	override private function get_width():Float {
-		if (_componentWidth == 0)
+		if (_setWidth)
+			return _componentWidth;
+		else
 			return Math.abs(super.width);
-		return _componentWidth;
 	}
 
 	override private function get_height():Float {
-		if (_componentHeight == 0)
+		if (_setHeight)
+			return _componentHeight;
+		else
 			return Math.abs(super.height);
-		return _componentHeight;
 	}
-	#end
 
 	public function isAutoWidth():Bool {
-		return _componentWidth == 0;
+		return !_setWidth;
 	}
 
 	public function isAutoHeight():Bool {
-		return _componentHeight == 0;
+		return !_setHeight;
+	}
+
+	public function autoSize():Void {
+		_setWidth = false;
+		_setHeight = false;
 	}
 
 	/**
@@ -226,7 +209,6 @@ class ZLayoutBox extends zygame.display.DisplayObjectContainer {
 			return super.height;
 		return _componentHeight;
 	}
-
 }
 
 class VBox extends ZLayoutBox {

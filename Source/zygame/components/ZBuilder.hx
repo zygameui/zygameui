@@ -868,6 +868,8 @@ class ZBuilder {
 		var childxml = getXml(className);
 		if (childxml != null && childxml.firstElement().exists("classed")) {
 			className = childxml.firstElement().get("classed");
+		} else if (xml.exists("classed")) {
+			className = xml.get("classed");
 		}
 		var ui:Dynamic = null;
 		var base:Class<Dynamic> = null;

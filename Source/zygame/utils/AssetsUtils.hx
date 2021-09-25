@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.Json;
 import haxe.macro.Compiler;
 import haxe.io.Encoding;
 #if extsound
@@ -49,6 +50,17 @@ class AssetsUtils {
 	public static var nativePath:String = Compiler.getDefine("REMOTE_PATH");
 
 	/**
+	 * 将ZAssets当前加载列表资源导出
+	 */
+	 public static function parserAssetsConfigToXml(assets:ZAssets):String {
+		var parserLog:Array<Dynamic> = [];
+		for (base in assets.getParsers()) {
+			parserLog.push(base.getData());
+		}
+		return Json.stringify(parserLog);
+	}
+
+	/**
 	 * 在ZIP中查找资源
 	 * @return Entry
 	 */
@@ -80,7 +92,7 @@ class AssetsUtils {
 	public static function ofPath(path:String):String {
 		if (path == null)
 			return null;
-		if (path.indexOf("photo://") == 0)
+		if (path.indexOf("://") != -1)
 			return path;
 		#if (web && !wechat && !qq && !minigame)
 		if (path.indexOf("?") > -1) {
@@ -595,4 +607,6 @@ class BytesSoundLoader extends BaseLoader {
 		sound.loadCompressedDataFromByteArray(this.bytes, this.bytes.bytesAvailable);
 		return this;
 	}
+
+	
 }

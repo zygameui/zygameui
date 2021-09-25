@@ -128,6 +128,9 @@ class ZBox extends Component {
 		return !_setHeight;
 	}
 
+	/**
+	 * 当设置了宽高后，宽高会被自动固定，需要自动尺寸时，可调用该方法。
+	 */
 	public function autoSize():Void {
 		_setWidth = false;
 		_setHeight = false;

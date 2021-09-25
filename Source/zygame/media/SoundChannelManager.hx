@@ -76,15 +76,19 @@ class SoundChannelManager extends EventDispatcher {
 	 * @param sound
 	 */
 	private function playMusic(sound:Music):Void {
+		trace("[背景音乐]playMusic");
 		if (_musicChannel != null && sound == _music) {
+			trace("[背景音乐]不能重复播放");
 			return;
 		}
 		this.stopMusic();
 		_music = sound;
 		try {
 			if (_musicAvailable) {
-				if (_music != null)
+				if (_music != null) {
+					trace("[背景音乐]开始播放");
 					_musicChannel = _music.play(99999);
+				}
 			}
 		} catch (e:Dynamic) {
 			trace("音频播放异常：", e);
@@ -95,8 +99,8 @@ class SoundChannelManager extends EventDispatcher {
 	 * 停止背景音效
 	 */
 	public function stopMusic(canResume:Bool = false):Void {
+		trace("[背景音乐]stopMusic");
 		if (_musicChannel != null) {
-			trace("[背景音乐]stopMusic");
 			_musicChannel.stop();
 			_musicChannel = null;
 		}
@@ -107,10 +111,14 @@ class SoundChannelManager extends EventDispatcher {
 
 	/**
 	 * 恢复背景音效
+	 * @param force 是否强制恢复
 	 */
-	public function resumeMusic():Void {
+	public function resumeMusic(force:Bool = false):Void {
+		trace("[背景音乐]resumeMusic:force="+force);
+		if (force) {
+			stopMusic(true);
+		}
 		if (_music != null) {
-			trace("[背景音乐]resumeMusic");
 			this.playMusic(_music);
 		}
 		this.dispatchEvent(new SoundChannelManagerEvent(SoundChannelManagerEvent.RESUME_MUSIC));

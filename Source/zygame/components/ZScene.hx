@@ -84,12 +84,17 @@ class ZScene extends ZBox {
 
 	/**
 	 * 锁定画布渲染，锁定后可让draw变成1draw，当调用了lock之后，在更换新的场景之前，务必先调用unlock
+	 * @param display 如果不传递时，在ZBuilderScene类下，会自动定位显示对象，其他类型需要传递
 	 */
-	public function lockScene(display:DisplayObject):Void {
+	public function lockScene(display:DisplayObject = null):Void {
 		if (_lockDisplay != null)
 			return;
-		if (display.parent != this) {
-			throw "Display's parent not is this.";
+		if (display == null && Std.isOfType(this, ZBuilderScene)) {
+			display = cast(this, ZBuilderScene).assetsBuilder.display;
+		}
+		if (display == null || display.parent != this) {
+			trace("lockScene Error:Display's parent not is this.");
+			return;
 		}
 		_lockScene = new ZLockScene();
 		_lockScene.lockBitmapScene(this);

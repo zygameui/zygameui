@@ -1,5 +1,7 @@
 package zygame.utils;
 
+import zygame.events.GlobalAssetsLoadEvent;
+import openfl.events.EventDispatcher;
 import zygame.loader.parser.AsepriteParser;
 #if zygame3d
 import zygame.utils.load.Loader3DData.ZLoader3D;
@@ -47,6 +49,11 @@ import haxe.macro.Compiler;
  */
 @:keep
 class ZAssets {
+	/**
+	 * 全局事件侦听器，如果文件加载失败的统一入口
+	 */
+	public static var globalListener:EventDispatcher = new EventDispatcher();
+
 	/**
 	 * 最大可同时加载数量
 	 */
@@ -462,6 +469,14 @@ class ZAssets {
 			// TODO 回调错误
 			GameUtils.reportErrorLog("加载API", "加载失败：" + msg, "无", "API", ErrorLogLevel.ERROR);
 			#end
+
+			// 全局加载失败事件
+			if (globalListener != null && globalListener.hasEventListener(GlobalAssetsLoadEvent.LOAD_ERROR)) {
+				var event = new GlobalAssetsLoadEvent(GlobalAssetsLoadEvent.LOAD_ERROR);
+				event.url = msg;
+				globalListener.dispatchEvent(event);
+			}
+
 			_loadStop = true;
 			_parsers = [];
 			_loadfilelist = [];
@@ -1278,5 +1293,9 @@ class ZAssets {
 			load += key + "\n";
 		}
 		return load;
+	}
+
+	public function getParsers():Array<ParserBase>{
+		return _parsers;
 	}
 }

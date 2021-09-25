@@ -337,7 +337,7 @@ class Start extends ZScene {
 
 		#if !(disable_dynamic_fps || cpp)
 		var isCanRender = !dynamicFps || _dt < 20;
-		if(lowFps)
+		if (lowFps)
 			isCanRender = false;
 		if (isCanRender || _update >= 2) {
 		#else
@@ -347,17 +347,18 @@ class Start extends ZScene {
 			// 剔除
 			// CullingRenderUtils.culling(stage);
 			@:privateAccess stage.__onLimeRender(context);
-		} else {
-			_update++;
-			@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
-			@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
-			@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));
 		}
 
+	else {
+		_update++;
+		@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
+		@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
+		@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));
+	}
 		var cpu = Timer.stamp();
+
 		_cpuDt = Std.int((cpu - newTime) * 1000);
 	}
-
 	override public function onInit():Void {
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
@@ -428,7 +429,8 @@ class Start extends ZScene {
 		zygame.utils.Lib.onResume();
 		#if qqquick
 		#else
-		SoundChannelManager.current.resumeMusic();
+		// 需要强制恢复
+		SoundChannelManager.current.resumeMusic(true);
 		#end
 	}
 
@@ -527,33 +529,33 @@ class Start extends ZScene {
 	}
 
 	/**
-	 * 获取帧侦听数量
-	 * @return Int
-	 */
+ * 获取帧侦听数量
+ * @return Int
+ */
 	public function getUpdateLength():Int {
 		return updates.length;
 	}
 
 	/**
-	 * 获取每帧间隔时间
-	 * @return Float
-	 */
+ * 获取每帧间隔时间
+ * @return Float
+ */
 	public function getIntervalTime():Float {
 		return _dt;
 	}
 
 	/**
-	 * 获取CPU运行时间
-	 * @return Float
-	 */
+ * 获取CPU运行时间
+ * @return Float
+ */
 	public function getCPUTime():Float {
 		return _cpuDt;
 	}
 
 	/**
-	 * 帧事件
-	 * @param e
-	 */
+ * 帧事件
+ * @param e
+ */
 	private function onFrameEvent(e:Event):Void {
 		if (fps.visible)
 			topView.addChild(fps);
@@ -598,9 +600,9 @@ class Start extends ZScene {
 	}
 
 	/**
-	 *  添加对象到帧事件
-	 *  @param display -
-	 */
+ *  添加对象到帧事件
+ *  @param display -
+ */
 	public function addToUpdate(display:Refresher):Void {
 		if (isFrameing)
 			this.updateStatsList.push(new UpdateStats(display, 0));
@@ -609,9 +611,9 @@ class Start extends ZScene {
 	}
 
 	/**
-	 *  将对象从帧事件移除
-	 *  @param display -
-	 */
+ *  将对象从帧事件移除
+ *  @param display -
+ */
 	public function removeToUpdate(display:Refresher):Void {
 		if (isFrameing)
 			this.updateStatsList.push(new UpdateStats(display, 1));
@@ -623,11 +625,11 @@ class Start extends ZScene {
 	}
 
 	/**
-	 * 重写onFrame
-	 */
+ * 重写onFrame
+ */
 	override public function onFrame():Void {}
-}
-class UpdateStats {
+} class UpdateStats {
+
 	/**
 	 * 处理对象
 	 */

@@ -233,12 +233,12 @@ class Lib {
 
 	/**
 	 * 当活动恢复时，进行调用
+	 * 请注意，从2021年9月29日开始，该接口需要恢复触发才会进行刷新。如果需要安全线程的恢复接口，请使用renderCall。
 	 * @param closure
 	 * @param delay
 	 * @param args
 	 * @return Int
 	 */
-	@:deprecated("该resumeCall接口已弃用，它的效果与renderCall一致，请使用renderCall接口。")
 	public static function resumeCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).resumeCall(closure, args);
 	}

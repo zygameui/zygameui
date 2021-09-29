@@ -74,7 +74,7 @@ class TimeRuntime {
 	 * 当活动渲染时
 	 */
 	public function onRender():Void {
-		this.onResume();
+		// this.onResume();
 		var keys:Iterator<Int> = _rendercall.keys();
 		while (keys.hasNext()) {
 			var id:Int = keys.next();
@@ -170,10 +170,10 @@ class TimeRuntime {
 	 */
 	public function resumeCall(closure:Function, args:Array<Dynamic> = null):Int {
 		// 当活动是处于活动的情况下，则直接走setTimeout
-		if (zygame.core.Start.isActivate) {
-			Reflect.callMethod(closure, closure, args == null ? [] : args);
-			return -1;
-		}
+		// if (zygame.core.Start.isActivate) {
+		// 	Reflect.callMethod(closure, closure, args == null ? [] : args);
+		// 	return -1;
+		// }
 		_id++;
 		_resumecall.set(_id, new Call(_id, 0, closure, args));
 		return _id;

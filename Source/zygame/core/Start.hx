@@ -571,6 +571,10 @@ class Start extends ZScene {
 		#end
 		#if (invalidate || hl)
 		this.invalidate();
+		#else
+		if (Lib.hasRenderEvent()) {
+			this.invalidate();
+		}
 		#end
 		if (fps.getFps() < 61 || fps60.update()) {
 			this.onFrame();

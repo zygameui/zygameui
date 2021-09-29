@@ -37,11 +37,8 @@ class ZBuilderData {
 		var idname = null;
 		if (item.exists("id")) {
 			idname = (parentId != null ? parentId + "_" : "") + item.get("id");
-			if (!item.exists("classed") || !isClassed) {
-				if (item.exists("classed")) {
-					ids.set(idname, item.get("classed"));
-				} else
-					ids.set(idname, item.nodeName);
+			if (!item.exists("classed") && !isClassed) {
+				ids.set(idname, item.nodeName);
 			}
 		}
 		// 可能内置音效功能

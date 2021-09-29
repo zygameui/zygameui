@@ -222,7 +222,8 @@ class AutoBuilder {
 	public static function createGetCall(fields:Array<Field>, id:String, type:String, buildAttr):Void {
 		var t = getType(type);
 		var myFunc:Function = {
-			expr: macro return (this.$buildAttr == null || this.$buildAttr.ids == null) ? null : this.$buildAttr.ids.get($v{id}), // actual value
+			expr: macro return this.$buildAttr.ids.get($v{id}),
+			// expr: macro return (this.$buildAttr == null || this.$buildAttr.ids == null) ? null : this.$buildAttr.ids.get($v{id}), // actual value
 			ret: t, // ret = return type
 			args: [] // no arguments here
 		}

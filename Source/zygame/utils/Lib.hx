@@ -123,6 +123,18 @@ class Lib {
 	}
 
 	/**
+	 * 是否存在渲染事件
+	 * @return Bool
+	 */
+	public static function hasRenderEvent():Bool {
+		for (runtime in _timeRuntimes) {
+			if (runtime.hasRenderEvent())
+				return true;
+		}
+		return false;
+	}
+
+	/**
 	 * 当渲染时触发
 	 */
 	public static function onRender():Void {
@@ -428,5 +440,4 @@ class Lib {
 	public static function int(num:Float):Int {
 		return Std.int(num);
 	}
-
 }

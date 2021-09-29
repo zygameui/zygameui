@@ -15,6 +15,11 @@ class TimeRuntime {
 
 	private var _timecall:Map<Int, Call> = new Map<Int, Call>();
 
+	/**
+	 * 渲染事件引用数
+	 */
+	public var renderCounts = 0;
+
 	private var _rendercall:Map<Int, Call> = new Map<Int, Call>();
 
 	private var _interval:Map<Int, Call> = new Map<Int, Call>();
@@ -61,6 +66,10 @@ class TimeRuntime {
 		}
 	}
 
+	public function hasRenderEvent():Bool {
+		return renderCounts > 0;
+	}
+
 	/**
 	 * 当活动渲染时
 	 */
@@ -70,8 +79,10 @@ class TimeRuntime {
 		while (keys.hasNext()) {
 			var id:Int = keys.next();
 			var call:Call = _rendercall.get(id);
-			if (call != null && call.call())
+			if (call != null && call.call()) {
 				_rendercall.remove(id);
+				renderCounts--;
+			}
 		}
 	}
 
@@ -178,6 +189,7 @@ class TimeRuntime {
 		// 当活动是处于活动的情况下，则直接走setTimeout
 		_id++;
 		_rendercall.set(_id, new Call(_id, 0, closure, args));
+		renderCounts++;
 		return _id;
 	}
 }

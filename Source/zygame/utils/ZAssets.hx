@@ -55,9 +55,9 @@ class ZAssets {
 	public static var globalListener:EventDispatcher = new EventDispatcher();
 
 	/**
-	 * 最大可同时加载数量
+	 * 最大可同时加载数量，改进默认最大载入数为10
 	 */
-	public var maxLoadNumber:Int = #if MAX_LOAD_COUNT Std.parseInt(Compiler.getDefine("MAX_LOAD_COUNT")) #elseif ios 10 #else 5 #end;
+	public var maxLoadNumber:Int = #if MAX_LOAD_COUNT Std.parseInt(Compiler.getDefine("MAX_LOAD_COUNT")) #elseif ios 10 #else 10 #end;
 
 	/**
 	 * 当前正在加载的数量

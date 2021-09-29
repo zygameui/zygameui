@@ -839,6 +839,10 @@ class ZBuilder {
 		if (defalutArgs == null)
 			defalutArgs = [];
 		// 定义判断
+		if (xml.get("load") == "true") {
+			// 如果存在load = true的情况下，意味着当前组件仅加载
+			return null;
+		}
 		if (xml.exists("if")) {
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("if").split(" ");
@@ -868,8 +872,6 @@ class ZBuilder {
 		var childxml = getXml(className);
 		if (childxml != null && childxml.firstElement().exists("classed")) {
 			className = childxml.firstElement().get("classed");
-		} else if (xml.exists("classed")) {
-			className = xml.get("classed");
 		}
 		var ui:Dynamic = null;
 		var base:Class<Dynamic> = null;

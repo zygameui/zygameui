@@ -9,6 +9,11 @@ class ListData {
 	 */
 	public var reverseOrder:Bool = false;
 
+	public var data(get,never):Array<Dynamic>;
+	private function get_data():Array<Dynamic>{
+		return _data;
+	}
+
 	private var _data:Array<Dynamic>;
 
 	public function new(arr:Array<Dynamic> = null) {

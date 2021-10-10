@@ -19,7 +19,6 @@ import zygame.utils.load.TextureLoader;
 import zygame.display.batch.BScale9Image;
 
 class Image extends DisplayObjectContainer {
-
 	/**
 	 * MapliveScene创建时可用
 	 */
@@ -93,11 +92,7 @@ class Image extends DisplayObjectContainer {
 				_bitmap.visible = true;
 				_bitmap.bitmapData = bitmapData;
 			}
-			#if (mac || !smoothing)
-			_bitmap.smoothing = false;
-			#else
-			_bitmap.smoothing = true;
-			#end
+			_bitmap.smoothing = _smoothing;
 		} else if (Std.isOfType(bitmapData, Frame)) {
 			_curFrame = bitmapData;
 			isBitmapDataDraw = false;
@@ -106,7 +101,7 @@ class Image extends DisplayObjectContainer {
 			var frame:Frame = cast bitmapData;
 			// 精灵表单渲染
 			if (_tilemap == null) {
-				_tilemap = new Tilemap(0, 0, frame.parent.getTileset(), #if !smoothing false #else true #end);
+				_tilemap = new Tilemap(0, 0, frame.parent.getTileset(), _smoothing);
 				this.addChild(_tilemap);
 				_curImg = new BImage();
 				_tilemap.addTile(_curImg);
@@ -389,7 +384,7 @@ class Image extends DisplayObjectContainer {
 		updateScale9();
 		return height;
 	}
-	
+
 	#if flash @:setter(width)
 	public #else override private #end function set_width(width:Float):Float {
 		this._setWidth = true;

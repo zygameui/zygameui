@@ -26,10 +26,12 @@ class AutoBuilder {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
 
-		Context.registerModuleDependency(Context.getLocalModule(), path);
+		var fields = Context.getBuildFields();
+		// return fields;
+
+		// Context.registerModuleDependency(Context.getLocalModule(), path);
 
 		var builder:ZBuilderData = new ZBuilderData(path, project);
-		var fields = Context.getBuildFields();
 
 		bindBuilder = bindBuilder == null ? "assetsBuilder" : bindBuilder;
 

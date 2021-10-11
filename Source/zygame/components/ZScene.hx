@@ -39,12 +39,17 @@ class ZScene extends ZBox {
 	}
 
 	/**
-	 *  替换场景
-	 *  @param cName - 
+	 *  替换场景，会将之前的场景移除
+	 *  @param cName 替换的新场景
+	 *  @param isReleaseScene 是否释放当前场景
+	 *  @param isHistory 是否需要记录历史记录
+	 *  @param forceReplace 是否强制切换场景
+	 *  @param parameter 定义属性变更，如果传递的时候，设置的属性，则可以变更对应的参数
 	 *  @return ZScene
 	 */
-	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false):T {
-		return ZSceneManager.current.replaceScene(cName, isReleaseScene);
+	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true, forceReplace:Bool = false,
+			parameter:Dynamic = null):T {
+		return ZSceneManager.current.replaceScene(cName, isReleaseScene, isHistory, forceReplace, parameter);
 	}
 
 	/**

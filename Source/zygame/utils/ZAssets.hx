@@ -1295,7 +1295,7 @@ class ZAssets {
 		return load;
 	}
 
-	public function getParsers():Array<ParserBase>{
+	public function getParsers():Array<ParserBase> {
 		return _parsers;
 	}
 }

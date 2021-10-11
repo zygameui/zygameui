@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.Exception;
 import zygame.components.ZBuilder;
 import openfl.events.Event;
 import zygame.components.ZBuilderScene;
@@ -110,9 +111,11 @@ class ZSceneManager {
 	 *  @param isReleaseScene 是否释放当前场景
 	 *  @param isHistory 是否需要记录历史记录
 	 *  @param forceReplace 是否强制切换场景
+	 *  @param parameter 定义属性变更，如果传递的时候，设置的属性，则可以变更对应的参数
 	 *  @return ZScene
 	 */
-	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true, forceReplace:Bool = false):T {
+	public function replaceScene<T:ZScene>(cName:Class<T>, isReleaseScene:Bool = false, isHistory:Bool = true, forceReplace:Bool = false,
+			parameter:Dynamic = null):T {
 		var key = Type.getClassName(cName);
 		var key2 = getCurrentScene() != null ? Type.getClassName(Type.getClass(getCurrentScene())) : null;
 		// 验证：C++运行正常
@@ -137,6 +140,17 @@ class ZSceneManager {
 			ZBuilder.unbindAssets(cast(zscene, ZBuilderScene).assetsBuilder.assets);
 		}
 		var newscene = createScene(cName);
+		// 更新参数
+		if (parameter != null) {
+			var keys = Reflect.fields(parameter);
+			try {
+				for (index => value in keys) {
+					Reflect.setProperty(newscene, value, Reflect.getProperty(parameter, value));
+				}
+			} catch (e:Exception) {
+				trace("无法赋值");
+			}
+		}
 		if (zscene != null) {
 			if (!Std.isOfType(newscene, ZBuilderScene) || cast(newscene, ZBuilderScene).loaded || forceReplace) {
 				// 如果是释放场景，那么就会主动释放场景。

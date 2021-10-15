@@ -427,6 +427,7 @@ class BitmapDataLoader extends BaseLoader {
 					var texture:Texture = zygame.core.Start.current.stage.context3D.createTexture(2048, 2048, Context3DTextureFormat.COMPRESSED_ALPHA, false);
 					texture.uploadCompressedTextureFromByteArray(bytes, 0);
 					var bitmapData = BitmapData.fromTexture(cast untyped texture);
+					GPUUtils.addBitmapData(bitmapData);
 					if (call != null)
 						call(bitmapData);
 					call = null;
@@ -444,6 +445,7 @@ class BitmapDataLoader extends BaseLoader {
 			AssetsUtils.loadBytes(path).onComplete((bytes) -> {
 				Image.loadFromBytes(bytes).onComplete((img) -> {
 					var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(img);
+					GPUUtils.addBitmapData(bitmapData);
 					if (bitmapData == null) {
 						if (callError != null)
 							callError("无法加载" + path);
@@ -468,6 +470,7 @@ class BitmapDataLoader extends BaseLoader {
 						callError("无法加载" + path);
 				} else {
 					bitmapData.path = path;
+					GPUUtils.addBitmapData(bitmapData);
 					if (call != null)
 						call(bitmapData);
 				}

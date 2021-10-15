@@ -49,6 +49,7 @@ import haxe.macro.Compiler;
  */
 @:keep
 class ZAssets {
+
 	/**
 	 * 全局事件侦听器，如果文件加载失败的统一入口
 	 */
@@ -578,15 +579,10 @@ class ZAssets {
 				_sounds.set(parser.getName(), data);
 			case TEXTUREATLAS:
 				var pname:String = parser.getName();
-				var textures:TextureAtlas = getTextureAtlas(pname);
-				if (textures != null)
-					textures.dispose();
-				_textures.set(pname, data);
+				this.putTextureAtlas(pname, data);
 			case BITMAP:
 				var pname:String = parser.getName();
-				if (_bitmaps.exists(pname))
-					getBitmapData(pname).dispose();
-				_bitmaps.set(pname, data);
+				setBitmapData(pname, data);
 			case TEXT:
 				_strings.set(parser.getName(), data);
 			case XML:
@@ -789,6 +785,9 @@ class ZAssets {
 	 *  @param textureAtlas -
 	 */
 	public function putTextureAtlas(id:String, textureAtlas:TextureAtlas):Void {
+		var textures:TextureAtlas = getTextureAtlas(id);
+		if (textures != null)
+			textures.dispose();
 		_textures.set(id, textureAtlas);
 	}
 

@@ -97,7 +97,6 @@ class ZBuilderScene extends ZScene {
 	override function onSceneRelease() {
 		super.onSceneRelease();
 		ZBuilder.unbindAssets(assetsBuilder.assets);
-		// 如果太早释放资源，可能会造成画面黑块的问题，延迟一定时间释放
 		assetsBuilder.dispose();
 		// todo 如果这里不释放，是否可以解决空对象访问，内存是否能正常释放
 		// assetsBuilder = null;

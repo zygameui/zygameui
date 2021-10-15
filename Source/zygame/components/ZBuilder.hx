@@ -578,6 +578,14 @@ class ZBuilder {
 		return null;
 	}
 
+	public static function findById(b:Builder, id:String):Dynamic {
+		if (b == null)
+			return null;
+		if (b.ids == null)
+			return null;
+		return b.ids.get(id);
+	}
+
 	private static function getSpineAtlas(value:String):Atlas {
 		for (assets in baseAssetsList) {
 			var atlas:Atlas = assets.getSpineTextureAlats(value);
@@ -1295,6 +1303,9 @@ class Builder {
 			for (key => value in ids) {
 				if (Std.isOfType(value, ZTween)) {
 					cast(value, ZTween).stop();
+				}
+				if (Std.isOfType(value, ZImage)) {
+					cast(value, ZImage).destroy();
 				}
 			}
 			// 如果这里不进行释放，是否可以解决空访问的问题

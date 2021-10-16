@@ -899,6 +899,17 @@ class ZBuilder {
 					}
 				}
 				ui = ZBuilder.buildui(newchildxml.firstElement(), parent, builder, null, null, xml.get("id"));
+			} else if (xml.exists("extends")) {
+				// 如果找不到的时候，会有一个默认的extends
+				className = xml.get("extends");
+				if (!classMaps.exists(className)) {
+					base = Type.resolveClass(className);
+				} else
+					base = classMaps.get(className);
+				if (base == null) {
+					throw "Extends Class name " + className + " is not find!";
+				}
+				ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
 			} else
 				throw "Class name " + className + " is not define xml assets!";
 		} else {

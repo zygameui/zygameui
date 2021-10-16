@@ -27,6 +27,8 @@ class ZScene extends ZBox {
 	public function onSceneRelease():Void {
 		setFrameEvent(false);
 		setTouchEvent(false);
+		// 测试性
+		this.destroy();
 	}
 
 	/**

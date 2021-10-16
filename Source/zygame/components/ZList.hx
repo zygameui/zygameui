@@ -205,4 +205,11 @@ class ZList extends ZScroll {
 		cast(this.layout, ListLayout).autoSize = value;
 		return value;
 	}
+
+	override function destroy() {
+		super.destroy();
+		for (index => value in _itemRenders) {
+			value.destroy();
+		}
+	}
 }

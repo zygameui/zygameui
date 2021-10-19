@@ -207,6 +207,10 @@ class Tasks {
 				command: "4399"
 			},
 			{
+				name: "连信H5小游戏",
+				command: "lianxin"
+			},
+			{
 				name: "小米赚赚H5小游戏",
 				command: "xiaomi-zz"
 			},

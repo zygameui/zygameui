@@ -25,6 +25,7 @@
 - [新增] 新增`GPUUtils`工具，用于统计GPU内存的使用。
 - [增强] 增强`ZList`的`destroy`接口。
 - [增强] 增强统一在`releaseScene`接口上调用`destroy`释放接口。
+- [新增] 新增连信H5游戏导出支持。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

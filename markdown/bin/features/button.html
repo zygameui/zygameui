@@ -270,5 +270,11 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> button:BScale9Button = BButton.createScale9Button(精灵表,宽,高,默认皮肤);</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">//很多时候九宫格都是不含内容的，需要追加内容时，请使用精灵数据通过setConntent方法添加。</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>button.setConntent(精灵数据);</span></code></pre></div>
+<h2 id="默认音频">默认音频</h2>
+<p>当需要给<code>ZButton</code>以及<code>BButton</code>添加点击音效时，可直接设置：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ZButton.defaultSound = <span class="st">&quot;音频ID&quot;</span>; <span class="co">//点击成功会触发该ID的音频，资源需要与ZBuilder.bindAssets绑定。</span></span></code></pre></div>
+<p>如果需要给按钮覆盖音频，则为<code>sound</code>属性填写音频ID：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> btn:ZButton = ZButton.createModelButton(<span class="st">&quot;测试&quot;</span>);</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>btn.sound = <span class="st">&quot;音频ID&quot;</span>; <span class="co">//该音频优先级会比ZButton.defaultSound高。</span></span></code></pre></div>
 </body>
 </html>

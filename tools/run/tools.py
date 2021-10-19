@@ -191,14 +191,14 @@ class Build:
             haxe_Log.trace((("RUN " + ("null" if platformName is None else platformName)) + " FAIL"),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 135, 'className': "Build", 'methodName': "buildPlatformAssets"}))
 
     def buildHtml5(self):
-        haxe_Log.trace("开始编译HTML5",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 207, 'className': "Build", 'methodName': "buildHtml5"}))
+        haxe_Log.trace("开始编译HTML5",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 209, 'className': "Build", 'methodName': "buildHtml5"}))
         args = Sys.args()
         code = 0
         if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
             code = Sys.command("lime build html5 -final")
         else:
             code = Sys.command("lime build html5")
-        haxe_Log.trace(("BUILDED " + Std.string(code)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 214, 'className': "Build", 'methodName': "buildHtml5"}))
+        haxe_Log.trace(("BUILDED " + Std.string(code)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 216, 'className': "Build", 'methodName': "buildHtml5"}))
         if (code != 0):
             raise haxe_Exception.thrown("编译发生了错误！")
 
@@ -239,7 +239,7 @@ class Build:
                     if after:
                         path2 = ((("null" if dir is None else dir) + "/") + HxOverrides.stringOrNull(item1.get("rename")))
                         srcPath = item1.get("path")
-                        haxe_Log.trace(((("copy " + ("null" if srcPath is None else srcPath)) + " to ") + ("null" if path2 is None else path2)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 229, 'className': "Build", 'methodName': "action"}))
+                        haxe_Log.trace(((("copy " + ("null" if srcPath is None else srcPath)) + " to ") + ("null" if path2 is None else path2)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 231, 'className': "Build", 'methodName': "action"}))
                         if sys_FileSystem.isDirectory(srcPath):
                             python_FileUtils.copyDic(srcPath,path2)
                         else:
@@ -252,7 +252,7 @@ class Build:
                 if (_g == "include"):
                     xmlPath = item1.get("path")
                     xml = Xml.parse(sys_io_File.getContent(xmlPath))
-                    haxe_Log.trace(("include xml parsing:" + ("null" if xmlPath is None else xmlPath)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 278, 'className': "Build", 'methodName': "action"}))
+                    haxe_Log.trace(("include xml parsing:" + ("null" if xmlPath is None else xmlPath)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 280, 'className': "Build", 'methodName': "action"}))
                     self.action(xml.firstElement(),args,dir,after)
             elif (_hx_local_0 == 6):
                 if (_g == "assets"):
@@ -266,7 +266,7 @@ class Build:
                         if ((python_internal_ArrayImpl.indexOf(cp,(args[1] if 1 < len(args) else None),None) != -1) or ((python_internal_ArrayImpl.indexOf(cp,"all",None) != -1))):
                             filepath = (item1.get("rename") if (item1.exists("rename")) else item1.get("path"))
                             path = ((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/") + ("null" if filepath is None else filepath))
-                            haxe_Log.trace(("CP " + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 266, 'className': "Build", 'methodName': "action", 'customParams': ["root=", Build.currentBuild.root]}))
+                            haxe_Log.trace(("CP " + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 268, 'className': "Build", 'methodName': "action", 'customParams': ["root=", Build.currentBuild.root]}))
                             if sys_FileSystem.isDirectory(path):
                                 python_FileUtils.copyDic(path,(((("null" if dir is None else dir) + "/") + HxOverrides.stringOrNull(Build.currentBuild.root)) if ((Build.currentBuild.root is not None)) else dir))
                             else:
@@ -348,14 +348,16 @@ class Build:
     def buildAndroid():
         haxe_Log.trace("开始编译ANDROID",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 171, 'className': "Build", 'methodName': "buildAndroid"}))
         args = Sys.args()
-        if (python_internal_ArrayImpl.indexOf(args,"-debug",None) != -1):
+        if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
+            Sys.command("lime build android -final")
+        elif (python_internal_ArrayImpl.indexOf(args,"-debug",None) != -1):
             Sys.command("lime build android -debug")
         else:
             Sys.command("lime build android")
 
     @staticmethod
     def buildHashlink():
-        haxe_Log.trace("开始编译HashLink",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 183, 'className': "Build", 'methodName': "buildHashlink"}))
+        haxe_Log.trace("开始编译HashLink",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 185, 'className': "Build", 'methodName': "buildHashlink"}))
         args = Sys.args()
         if (python_internal_ArrayImpl.indexOf(args,"-debug",None) != -1):
             Sys.command("lime build hl -debug")
@@ -364,7 +366,7 @@ class Build:
 
     @staticmethod
     def buildElectron():
-        haxe_Log.trace("开始编译Electron",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 195, 'className': "Build", 'methodName': "buildElectron"}))
+        haxe_Log.trace("开始编译Electron",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 197, 'className': "Build", 'methodName': "buildElectron"}))
         args = Sys.args()
         if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
             Sys.command("lime build electron -final")
@@ -6396,7 +6398,7 @@ Math.POSITIVE_INFINITY = float("inf")
 Math.NaN = float("nan")
 Math.PI = python_lib_Math.pi
 
-Build.platforms = ["android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", "g4399", "xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc", "wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks"]
+Build.platforms = ["android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", "g4399", "xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc", "wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin"]
 Build.mainFileName = None
 Defines.defineMaps = haxe_ds_StringMap()
 Tools.authorizationMaps = haxe_ds_StringMap()
@@ -6425,6 +6427,6 @@ python_Boot.keywords = set(["and", "del", "from", "not", "with", "as", "elif", "
 python_Boot.prefixLength = len("_hx_")
 python_Lib.lineEnd = ("\r\n" if ((Sys.systemName() == "Windows")) else "\n")
 sys_Http.PROXY = None
-task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "快手小游戏", 'command': "ks"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"}), _hx_AnonObject({'name': "HashLink", 'command': "hl"}), _hx_AnonObject({'name': "Electron", 'command': "electron"}), _hx_AnonObject({'name': "生成Lime架构包", 'command': "haxelib run zygameui -pkg"})]})
+task_Tasks.tasks = _hx_AnonObject({'list': [_hx_AnonObject({'name': "HTML5", 'command': "html5"}), _hx_AnonObject({'name': "微信小游戏", 'command': "wechat"}), _hx_AnonObject({'name': "快手小游戏", 'command': "ks"}), _hx_AnonObject({'name': "4399游戏盒", 'command': "g4399"}), _hx_AnonObject({'name': "Bilibili快游戏", 'command': "bili"}), _hx_AnonObject({'name': "字节跳动快游戏", 'command': "tt"}), _hx_AnonObject({'name': "手Q小游戏", 'command': "qqquick"}), _hx_AnonObject({'name': "百度小游戏", 'command': "baidu"}), _hx_AnonObject({'name': "梦工厂小游戏", 'command': "mgc"}), _hx_AnonObject({'name': "奇虎小游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "Facebook小游戏", 'command': "facebook"}), _hx_AnonObject({'name': "魅族快游戏", 'command': "meizu"}), _hx_AnonObject({'name': "华为快游戏", 'command': "huawei"}), _hx_AnonObject({'name': "小米快游戏", 'command': "xiaomi"}), _hx_AnonObject({'name': "移动MMH5小游戏", 'command': "mmh5"}), _hx_AnonObject({'name': "Vivo快游戏", 'command': "vivo"}), _hx_AnonObject({'name': "Oppo快游戏", 'command': "oppo"}), _hx_AnonObject({'name': "Wifi无极环境小游戏", 'command': "wifi"}), _hx_AnonObject({'name': "豹趣H5小游戏", 'command': "html5:baoqu"}), _hx_AnonObject({'name': "趣头条H5小游戏", 'command': "html5:quyouxi"}), _hx_AnonObject({'name': "360奇虎快游戏", 'command': "qihoo"}), _hx_AnonObject({'name': "九游UCH5小游戏", 'command': "html5:uc"}), _hx_AnonObject({'name': "安卓Android", 'command': "android"}), _hx_AnonObject({'name': "苹果IOS", 'command': "ios"}), _hx_AnonObject({'name': "4399H5全平台兼容小游戏", 'command': "4399"}), _hx_AnonObject({'name': "连信H5小游戏", 'command': "lianxin"}), _hx_AnonObject({'name': "小米赚赚H5小游戏", 'command': "xiaomi-zz"}), _hx_AnonObject({'name': "YY小游戏（H5）", 'command': "html5:yy"}), _hx_AnonObject({'name': "更新内部haxelib库", 'command': "haxelib run zygameui -updatelib"}), _hx_AnonObject({'name': "HashLink", 'command': "hl"}), _hx_AnonObject({'name': "Electron", 'command': "electron"}), _hx_AnonObject({'name': "生成Lime架构包", 'command': "haxelib run zygameui -pkg"})]})
 
 Tools.main()

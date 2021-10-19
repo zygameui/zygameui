@@ -18,7 +18,7 @@ class Build {
 		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks"
+		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin"
 	];
 
 	/**
@@ -170,7 +170,9 @@ class Build {
 	public static function buildAndroid():Void {
 		trace("开始编译ANDROID");
 		var args:Array<String> = Sys.args();
-		if (args.indexOf("-debug") != -1)
+		if (args.indexOf("-final") != -1)
+			Sys.command("lime build android -final");
+		else if (args.indexOf("-debug") != -1)
 			Sys.command("lime build android -debug");
 		else
 			Sys.command("lime build android");

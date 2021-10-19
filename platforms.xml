@@ -21,4 +21,7 @@
     <section if="meizu">
         <haxelib name="meizu-rpk-core" />
     </section>
+    <section if="lianxin">
+        <haxelib name="lianxin-sdk"/>
+    </section>
 </project>

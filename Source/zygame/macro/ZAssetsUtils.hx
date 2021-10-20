@@ -2,7 +2,16 @@ package zygame.macro;
 
 import zygame.utils.StringUtils;
 
+/**
+ * 通过预加载宏工具加载资源，可以自动识别页面所需的所有资源，无需再手动添加、分析页面所需的资源
+ */
 class ZAssetsUtils {
+	/**
+	 * 预加载页面资源
+	 * @param assets 资源载入器
+	 * @param xmlid 页面文件名
+	 * @return Dynamic
+	 */
 	macro public static function preload(assets:Dynamic, xmlid:String):Dynamic {
 		var project:ZProjectData = new ZProjectData();
 		var path = project.assetsPath.get(StringUtils.getName(xmlid) + ".xml");

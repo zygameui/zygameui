@@ -59,7 +59,6 @@ class ZBuilderScene extends ZScene {
 		this.scale(currentScale);
 		_hdwidth = Std.int(getStageWidth() / this.scaleX) + 1;
 		_hdheight = Std.int(getStageHeight() / this.scaleY) + 1;
-		trace("缩放关系：", currentScale, Start.currentScale, _hdwidth, _hdheight);
 	}
 
 	override function onInit() {

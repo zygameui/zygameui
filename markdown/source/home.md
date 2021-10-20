@@ -8,7 +8,7 @@
 
 - [入门](doc/start.md)
 - [引擎支持](doc/support.md)
-- 资料
+- [Haxe基础](https://haxemcn.top/#)
 - API
 - 使用说明
 
@@ -43,3 +43,4 @@ pip3 install xlrd
 - 小米赚赚H5小游戏（xiaomi-zz）
 - YYH5小游戏（yy-sdk）
 - 章鱼输入法小游戏（zhangyu-sdk）
+- 连信小游戏（lianxin-sdk）

@@ -75,6 +75,9 @@ class ZButton extends ToggleButton {
 	 */
 	public var sound:String;
 
+	/**
+	 * 点击事件
+	 */
 	public var clickEvent(never, set):Void->Void;
 
 	private var _clickEventCall:Void->Void;

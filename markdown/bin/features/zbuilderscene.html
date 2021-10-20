@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>project</title>
+  <title>zbuilderscene</title>
   <style type="text/css">
     html {
       line-height: 1.7;
@@ -246,91 +246,28 @@
   </style>
 </head>
 <body>
-<h2 id="zproject-项目配置">ZProject 项目配置</h2>
-<p>在项目中配置zproject.xml文件后，将允许使用<code>haxelib run zygameui -build html5</code>等平台API，用于便捷编译其他平台所可用的游戏版本。</p>
-<h2 id="haxedef-define-定义">Haxedef Define 定义</h2>
-<p>由引擎提供的宏定义功能列表：</p>
-<table>
-<colgroup>
-<col style="width: 32%" />
-<col style="width: 67%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">定义</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">define:version</td>
-<td>API游戏版本号。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">haxedef:debug</td>
-<td>打开额外的LOG信息。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">define:REMOTE_PATH</td>
-<td>配置远程加载地址。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">define:untrace</td>
-<td>禁用trace输入功能。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">haxedef:no_html5_cache_render</td>
-<td>禁止使用<code>zygame.components.renders.text.HTML5CacheTextFieldBitmapData</code>。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">haxedef:un_scale_label</td>
-<td>禁止使用字号缩放，当使用1080P分辨率设计游戏时，可禁止该功能提高性能。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">haxedef:invalidate</td>
-<td>启动invalidate每帧自动刷新，部分小游戏渠道需要开启该功能才能正常渲染。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">haxedef:minigame</td>
-<td>小游戏渠道兼容。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">haxedef:unapi</td>
-<td>禁止使用v1/v2/v3所有HTTP API。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">define:gl_stats</td>
-<td>收集GL的drawcall信息。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">haxedef:no_spaces</td>
-<td>缓存文字禁止使用空格。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">haxedef:un_emoj</td>
-<td>缓存文字禁止使用Emoj符号。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">haxedef:use_default_ui</td>
-<td>使用zygameui-edit-server库时，在不存在任何UI的情况下，可以使用默认UI。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">haxedef:smoothing</td>
-<td>启动平滑处理，默认禁用。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">haxedef:extsound</td>
-<td>启动扩展音频API，将引用<code>zygame.common.Sound</code>以及<code>zygame.common.SoundChannel</code>等自定义音频协议。</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">haxedef:disable_res</td>
-<td>禁用R资源引用识别功能。（<a href="R.html">资源引用参考</a>）</td>
-</tr>
-</tbody>
-</table>
-<h2 id="库资源绑定">库资源绑定</h2>
-<p>某些库会有用到<code>zygame.macro.AutoBuilder.build</code>的宏方法，所绑定的资源可能存在了库中，这时候需要在zproject.xml中在对应的库上，新增<code>bind</code>属性进行绑定：</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- 通过绑定可以读取到库里的资源，以防无法识别 --&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxelib</span><span class="ot"> name=</span><span class="st">&quot;库名&quot;</span><span class="ot"> bind=</span><span class="st">&quot;true&quot;</span> <span class="kw">/&gt;</span></span></code></pre></div>
+<h2 id="zbuilderscene">ZBuilderScene</h2>
+<p>通过xml配置异步展示场景，如果在ZBuilder缓存池里能够找到资源的话，则不需要加载，直接显示。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> View <span class="kw">extends</span> ZBuilderScene {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="kw">function</span> <span class="kw">new</span>(){</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>(<span class="st">&quot;assets/view.xml&quot;</span>);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">override</span> <span class="kw">public</span> <span class="kw">function</span> onBuilded():<span class="dt">Void</span>{</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 页面构造成功，通过这里进行实现界面逻辑</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>使用时：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> view = <span class="kw">new</span> View();</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">this</span>.addChild(view);</span></code></pre></div>
+<h2 id="自动构造">自动构造</h2>
+<p>ZBuilderScene允许使用<code>zygame.macro.AutoBuilder.build</code>建造宏，同时支持异步载入资源展示。<a href="updoc/autobuild.html">详情文档</a></p>
+<h2 id="自适配">自适配</h2>
+<p>当页面需要指定分辨率进行适配时，需要xml文件新增<code>hdwidth</code>以及<code>hdheight</code>两个属性：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ZBox</span><span class="ot"> hdwidth=</span><span class="st">&quot;1080&quot;</span><span class="ot"> hdheight=</span><span class="st">&quot;1920&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ZBox&gt;</span></span></code></pre></div>
+<p>当定义了hdwidth/hdheight后，当前页面在任何分辨率上渲染，都是以1080x1920的比例进行渲染。</p>
 </body>
 </html>

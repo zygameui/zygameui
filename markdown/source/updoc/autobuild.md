@@ -34,6 +34,8 @@ class DiaryGoodsView extends ZBuilderScene {
 }
 ```
 
+#### 注意：使用AutoBuilder构造的页面，是可以直接在Haxe中通过id访问到对应的显示对象。
+
 #### 其他显示对象
 
 当你对其他显示对象使用该宏构造时，会自动创建一个assetsBuilder属性（ZAssetsBuilder），并创建时是同步接口，可直接重写`onInit`接口来直接实现逻辑。

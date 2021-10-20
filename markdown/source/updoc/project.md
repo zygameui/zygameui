@@ -25,5 +25,12 @@
 | haxedef:extsound              | 启动扩展音频API，将引用`zygame.common.Sound`以及`zygame.common.SoundChannel`等自定义音频协议。 |
 | haxedef:disable_res           | 禁用R资源引用识别功能。（[资源引用参考](R.md)）              |
 
+## 库资源绑定
 
+某些库会有用到`zygame.macro.AutoBuilder.build`的宏方法，所绑定的资源可能存在了库中，这时候需要在zproject.xml中在对应的库上，新增`bind`属性进行绑定：
+
+```xml
+<!-- 通过绑定可以读取到库里的资源，以防无法识别 -->
+<haxelib name="库名" bind="true" />
+```
 

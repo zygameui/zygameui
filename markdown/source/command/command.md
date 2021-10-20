@@ -18,30 +18,13 @@ haxelib run zygameui -updatedev 库名
 
 ## 编译项目
 
-引擎支持的编译平台很多，目前已支持的平台指令有：
+引擎支持的编译平台很多，可以通过以下命令进行更新命令行：
 
-- wechat（微信小游戏）
-- tt（头条小游戏）
-- baidu（百度小游戏）
-- android（安卓）
-- ios（IOS）
-- oppo（OPPO快游戏）
-- vivo（VIVO快游戏）
-- qqquick（QQ小游戏）
-- html5（H5版本）
-- 4399（4399H5）
-- g4399（4399快游戏）
-- xiaomi-zz（小米赚赚）
-- xiaomi-h5（小米H5）
-- xiaomi（小米快游戏）
-- mgc（梦工厂小游戏）
-- wifi（WIFI连尚无极小游戏）
-- meizu（魅族快游戏）
-- mmh5（MM移动H5小游戏）
-- facebook（FaceBook小游戏）
-- huawei（华为快游戏）
-- qihoo（奇虎360快游戏）
-- bili（BiliBili小游戏）
+- 如果初始化失败，请确保目录下存在.vscode目录，不存在可手动创建。
+
+```shell
+haxelib run zygameui -inittask
+```
 
 编译命令：
 

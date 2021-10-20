@@ -1,5 +1,8 @@
 package zygame.components;
 
+import zygame.core.Start;
+import zygame.utils.ScaleUtils;
+import zygame.utils.StringUtils;
 import zygame.utils.Lib;
 import openfl.events.Event;
 import zygame.utils.ZSceneManager;
@@ -12,6 +15,16 @@ import zygame.components.ZBuilder.AssetsBuilder;
  * 加载完成后会触发onBuilded事件；加载失败会触发onBuildError事件。场景在释放时，会自动释放掉assetsBuilder。
  */
 class ZBuilderScene extends ZScene {
+	/**
+	 * 自适配宽度
+	 */
+	private var _hdwidth:Null<Float> = null;
+
+	/**
+	 * 自适配高度
+	 */
+	private var _hdheight:Null<Float> = null;
+
 	/**
 	 * 资源管理对象
 	 */
@@ -41,6 +54,14 @@ class ZBuilderScene extends ZScene {
 
 	public var bgDisplay:ZQuad;
 
+	public function onSizeChange(width:Float, height:Float):Void {
+		var currentScale = ScaleUtils.mathScale(getStageWidth(), getStageHeight(), width, height, false, false);
+		this.scale(currentScale);
+		_hdwidth = Std.int(getStageWidth() / this.scaleX) + 1;
+		_hdheight = Std.int(getStageHeight() / this.scaleY) + 1;
+		trace("缩放关系：", currentScale, Start.currentScale, _hdwidth, _hdheight);
+	}
+
 	override function onInit() {
 		super.onInit();
 
@@ -52,6 +73,7 @@ class ZBuilderScene extends ZScene {
 		bgDisplay.height = getStageHeight();
 
 		this.onLoad();
+		assetsBuilder.onSizeChange = onSizeChange;
 		assetsBuilder.build(function(bool) {
 			if (bool) {
 				ZBuilder.bindAssets(assetsBuilder.assets);
@@ -104,5 +126,13 @@ class ZBuilderScene extends ZScene {
 
 	function get_loaded():Bool {
 		return _loaded;
+	}
+
+	override function getStageWidth():Float {
+		return _hdwidth != null ? _hdwidth : super.getStageWidth();
+	}
+
+	override function getStageHeight():Float {
+		return _hdheight != null ? _hdheight : super.getStageHeight();
 	}
 }

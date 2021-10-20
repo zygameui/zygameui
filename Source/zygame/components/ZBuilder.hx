@@ -1192,6 +1192,11 @@ class AssetsBuilder extends Builder {
 		return this;
 	}
 
+	/**
+	 * 当需要自适配时触发
+	 */
+	public var onSizeChange:Float->Float->Void;
+
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
 		if (!ZBuilder.existFile(viewXmlPath))
 			assets.loadFile(viewXmlPath);
@@ -1204,6 +1209,12 @@ class AssetsBuilder extends Builder {
 				var viewxml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath));
 				if (viewxml == null)
 					throw "无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。";
+				// 分辨率自适配
+				// 需要同时配置了hdwidth、hdheight值，会进行屏幕适配
+				if (onSizeChange != null && viewxml.firstElement().exists("hdwidth") && viewxml.firstElement().exists("hdheight")) {
+					// todo 是否需要兼容强制横幅、缩放取整支持
+					onSizeChange(Std.parseFloat(viewxml.firstElement().get("hdwidth")), Std.parseFloat(viewxml.firstElement().get("hdheight")));
+				}
 				@:privateAccess ZBuilder.buildui(viewxml.firstElement(), _viewParent, this);
 				_viewParent = null;
 				ZBuilder.unbindAssets(assets);

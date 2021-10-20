@@ -1,5 +1,6 @@
 package zygame.core;
 
+import zygame.utils.ScaleUtils;
 import zygame.utils.CullingRenderUtils;
 import lime.graphics.RenderContext;
 import haxe.Timer;
@@ -442,31 +443,8 @@ class Start extends ZScene {
 			onSceneSizeChange();
 			return;
 		}
-		var wscale:Float = 1;
-		var hscale:Float = 1;
-		if (_lockLandscape && stage.stageWidth < stage.stageHeight) {
-			hscale = Math.round(stage.stageWidth / this.HDHeight * 1000000) / 1000000;
-			wscale = Math.round(stage.stageHeight / this.HDWidth * 1000000) / 1000000;
-		} else {
-			wscale = Math.round(stage.stageWidth / this.HDWidth * 1000000) / 1000000;
-			hscale = Math.round(stage.stageHeight / this.HDHeight * 1000000) / 1000000;
-		}
 
-		if (wscale < hscale) {
-			currentScale = wscale;
-		} else {
-			currentScale = hscale;
-		}
-
-		if (scalePower) {
-			var currentScale3 = Std.int(currentScale);
-			if (currentScale != currentScale3) {
-				currentScale = currentScale3 + 1;
-			}
-			if (currentScale < 1) {
-				currentScale = 1;
-			}
-		}
+		currentScale = ScaleUtils.mathScale(stage.stageWidth, stage.stageHeight, this.HDWidth, this.HDHeight, _lockLandscape, scalePower);
 
 		this.scaleX = currentScale;
 		this.scaleY = currentScale;
@@ -478,8 +456,6 @@ class Start extends ZScene {
 		#if html5
 		js.Syntax.code("window.currentScale=zygame_core_Start.currentScale");
 		#end
-
-		log("适配结果：", wscale, hscale);
 
 		Start.stageWidth = Std.int(stage.stageWidth / this.scaleX) + 1;
 		Start.stageHeight = Std.int(stage.stageHeight / this.scaleY) + 1;

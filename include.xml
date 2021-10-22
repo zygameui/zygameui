@@ -112,8 +112,8 @@
 	<haxeflag name='--macro keep("tweenxcore.MatrixTools")' />
 
 	<!-- 宏耗时输出 -->
-	<haxeflag name='--times' />
-	<define name="macro_times"/>
+	<!-- <haxeflag name='--times' />
+	<define name="macro_times"/> -->
 
 	<!-- 发布最终版时，会移除所有trace语句，提高性能 -->
 	<haxeflag name="--no-traces" if="final-no-traces" />

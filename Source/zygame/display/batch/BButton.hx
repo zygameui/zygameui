@@ -162,7 +162,15 @@ class BToggleButton extends BTouchSprite {
 	 */
 	public var skin:ButtonFrameSkin;
 
+	/**
+	 * 音效配置
+	 */
 	public var sound:String;
+
+	/**
+	 * 禁止产生音效
+	 */
+	public var disableSound:Bool = false;
 
 	/**
 	 * 点击事件触发
@@ -253,10 +261,12 @@ class BToggleButton extends BTouchSprite {
 				var batchs:TouchImageBatchsContainer = cast touch.target;
 				if (batchs.getTilePosAt(batchs.mouseX, batchs.mouseY) == this) {
 					// batchs.dispatchEvent(new TileTouchEvent(touch.type+"Tile",this));
-					if (sound != null || ZButton.defaultSound != null) {
-						var playsound = ZBuilder.getBaseSound(sound == null ? ZButton.defaultSound : sound);
-						if (playsound != null) {
-							playsound.play(0, 1);
+					if (!disableSound) {
+						if (sound != null || ZButton.defaultSound != null) {
+							var playsound = ZBuilder.getBaseSound(sound == null ? ZButton.defaultSound : sound);
+							if (playsound != null) {
+								playsound.play(0, 1);
+							}
 						}
 					}
 					if (clickEvent != null)

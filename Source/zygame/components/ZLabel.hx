@@ -329,6 +329,7 @@ class ZLabel extends DataProviderComponent {
 				value = value.substr(0, _maxChars);
 			}
 		}
+		
 		if (getDisplay().wordWrap == false) {
 			value = StringTools.replace(value, "\n", "");
 			value = StringTools.replace(value, "\r", "");
@@ -598,7 +599,7 @@ class ZLabel extends DataProviderComponent {
 	override public function destroy():Void {
 		super.destroy();
 		this.removeChild(_display);
-		_display = null;
+		// _display = null;
 		setFrameEvent(false);
 	}
 

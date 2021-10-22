@@ -30,7 +30,6 @@ class ZProjectData {
 		nowCwd = Sys.getCwd();
 		Sys.setCwd(oldCwd);
 		this.readXml(nowCwd + "/" + zprojectPath, nowCwd);
-
 	}
 
 	public function readXml(xmlpath:String, rootPath:String):Void {
@@ -38,13 +37,30 @@ class ZProjectData {
 		for (item in xml.firstElement().elements()) {
 			switch (item.nodeName) {
 				case "assets":
-					if (item.get("unparser") == "true"){
+					if (item.get("unparser") == "true") {
 						continue;
 					}
 					readDir(rootPath + item.get("path"), item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path")));
+				case "include":
+					if (item.get("bind") == "true") {
+						readXml(item.get("path"), rootPath);
+					}
 				case "haxelib":
 					if (item.get("bind") == "true") {
-						var haxepath = new Process("haxelib path " + item.get("name")).stdout.readAll().toString().split("\n")[0];
+						if (!FileSystem.exists(".macro")) {
+							FileSystem.createDirectory(".macro");
+						}
+						if (!FileSystem.exists(".macro/" + item.get("name") + "_path")) {
+							Sys.command("echo `haxelib path " + item.get("name") + "` > .macro/" + item.get("name") + "_path");
+						}
+						var array = File.getContent(".macro/" + item.get("name") + "_path").split(" ");
+						var haxepath = null;
+						for (s in array) {
+							if (s.indexOf(item.get("name")) != -1) {
+								haxepath = s;
+								break;
+							}
+						}
 						readXml(haxepath + "../include.xml", haxepath + "../");
 					}
 			}

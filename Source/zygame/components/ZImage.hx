@@ -56,25 +56,33 @@ class ZImage extends DataProviderComponent {
 			var data:Dynamic = super.dataProvider;
 			if (data != null) {
 				if (Std.isOfType(data, String)) {
-					var path:String = data;
-					if (cacheAssets != null) {
-						cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
-							display.bitmapData = bitmapData;
-							onBitmapDataUpdate();
-							this.shader = _shader;
-						});
+					// 新增ZBuilder缓存确认
+					var buildBitmapData = ZBuilder.getBaseBitmapData(data);
+					if (buildBitmapData != null) {
+						display.bitmapData = buildBitmapData;
+						onBitmapDataUpdate();
+						this.shader = _shader;
 					} else {
-						// 启动异步载入
-						isAysn = true;
-						Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
-							if (isDispose) {
-								ZGC.disposeBitmapData(bitmapData);
-								return;
-							}
-							display.bitmapData = bitmapData;
-							onBitmapDataUpdate();
-							this.shader = _shader;
-						});
+						var path:String = data;
+						if (cacheAssets != null) {
+							cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
+								display.bitmapData = bitmapData;
+								onBitmapDataUpdate();
+								this.shader = _shader;
+							});
+						} else {
+							// 启动异步载入
+							isAysn = true;
+							Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
+								if (isDispose) {
+									ZGC.disposeBitmapData(bitmapData);
+									return;
+								}
+								display.bitmapData = bitmapData;
+								onBitmapDataUpdate();
+								this.shader = _shader;
+							});
+						}
 					}
 				}
 				// else if(Std.isOfType(data,BitmapData) || Std.isOfType(data,Frame) || Std.isOfType(data,AsyncFrame))
@@ -237,6 +245,6 @@ class ZImage extends DataProviderComponent {
 		display.scale(scale);
 		display.x = (display.getStageWidth() - display.width) / 2;
 		display.y = (display.getStageHeight() - display.height) / 2;
-		trace("比例：",scale);
+		trace("比例：", scale);
 	}
 }

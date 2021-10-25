@@ -53,6 +53,7 @@ class Main extends Start {
     }
 
     override public function onInit():Void{
+        super.onInit();
         //请在这里编写游戏逻辑
     }
 

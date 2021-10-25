@@ -28,6 +28,7 @@
 - [新增] 新增连信H5游戏导出支持。
 - [新增] ZBuilderScene新增自适配分辨率支持。（可通过XML的hdwidth/hdheight属性设置适合当前页面的宽高）
 - [修复] 修复haxelib发生线程泄露的问题。
+- [改进] `ZImage`新增`ZBuilder`位图读取支持，可直接通过id赋值到ZImage中。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

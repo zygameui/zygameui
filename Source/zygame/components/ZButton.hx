@@ -78,7 +78,7 @@ class ZButton extends ToggleButton {
 	/**
 	 * 点击事件
 	 */
-	public var clickEvent(never, set):Void->Void;
+	public var clickEvent(get, set):Void->Void;
 
 	private var _clickEventCall:Void->Void;
 
@@ -91,6 +91,10 @@ class ZButton extends ToggleButton {
 		}
 		if (_clickEventCall != null)
 			_clickEventCall();
+	}
+
+	private function get_clickEvent():Void->Void {
+		return _clickEventCall;
 	}
 
 	private function set_clickEvent(call:Void->Void):Void->Void {

@@ -12,6 +12,8 @@ import haxe.macro.Expr;
  */
 class AutoBuilder {
 	#if macro
+	@:persistent static var firstProjectData:ZProjectData;
+
 	/**
 	 * 自动构造
 	 * @param xmlPath
@@ -20,7 +22,11 @@ class AutoBuilder {
 	 * @return Array<Field>
 	 */
 	macro public static function build(xmlPath:String, bindBuilder:String = null, embed:Bool = false):Array<Field> {
-		var project:ZProjectData = new ZProjectData();
+		if(firstProjectData == null){
+			firstProjectData = new ZProjectData();
+			trace("firstProjectData create by "+xmlPath);
+		}
+		var project:ZProjectData = firstProjectData;
 		var path = project.assetsPath.get(StringUtils.getName(xmlPath) + ".xml");
 		if (path == null) {
 			throw "Xml file '" + xmlPath + "' is not exists!";

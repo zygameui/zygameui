@@ -4,7 +4,7 @@
 
 ```haxe
 //在这里传入帧率，以及位图数据列表，请注意这里是支持精灵数据的。
-var animation = new ZAnimation(24,[assets.getBitmapData("an1"),assets.getBitmapData("GameUI:an1")]);
+var animation = ZAnimation.createAnimation(24,[assets.getBitmapData("an1"),assets.getBitmapData("GameUI:an1")]);
 ```
 
 当需要停止到某一帧，或者播放，可简单用到：

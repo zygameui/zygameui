@@ -43,19 +43,23 @@ pip3 install pandas
 pip3 install xlrd
 ```
 
-## 主要库依赖
-- Openfl8.9.3+
-- castle
-- differ
-- spine-hx
-- hscript
-- tweenxcore
-- openfl-spine
-- openfl-glsl
-- actuate
-- crypto
-- vector-math
-- swf
+## 主要库依赖安装
+```shell
+haxelib install openfl
+haxelib install lime
+haxelib setup openfl
+haxelib install openfl-glsl
+haxelib install openfl-gpu-particles
+haxelib install vector-math
+haxelib install openfl-spine
+haxelib install swf
+haxelib install hscript
+haxelib install spine-hx 3.6.0
+haxelib install tweenxcore
+haxelib install castle
+haxelib install crypto
+haxelib install differ
+```
 
 ## 平台支持
 

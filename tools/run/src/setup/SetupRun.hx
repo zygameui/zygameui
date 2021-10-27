@@ -30,6 +30,7 @@ class SetupRun {
 						Sys.command("haxelib install " + haxelibname);
 					}
 			}
+			
 		}
 	}
 

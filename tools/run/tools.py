@@ -5492,7 +5492,7 @@ class setup_SetupRun:
 
     @staticmethod
     def run():
-        haxe_Log.trace(Sys.getCwd(),_hx_AnonObject({'fileName': "src/setup/SetupRun.hx", 'lineNumber': 12, 'className': "setup.SetupRun", 'methodName': "run"}))
+        haxe_Log.trace(Sys.getCwd(),_hx_AnonObject({'fileName': "src/setup/SetupRun.hx", 'lineNumber': 13, 'className': "setup.SetupRun", 'methodName': "run"}))
         xml = Xml.parse(sys_io_File.getContent("include.xml"))
         item = xml.firstElement().elements()
         while item.hasNext():
@@ -5506,7 +5506,7 @@ class setup_SetupRun:
                     haxelibversion = ""
                 else:
                     haxelibname = (("null" if haxelibname is None else haxelibname) + HxOverrides.stringOrNull(((":" + ("null" if haxelibversion is None else haxelibversion)))))
-                haxe_Log.trace(("check haxelib " + ("null" if haxelibname is None else haxelibname)),_hx_AnonObject({'fileName': "src/setup/SetupRun.hx", 'lineNumber': 23, 'className': "setup.SetupRun", 'methodName': "run"}))
+                haxe_Log.trace(("check haxelib " + ("null" if haxelibname is None else haxelibname)),_hx_AnonObject({'fileName': "src/setup/SetupRun.hx", 'lineNumber': 24, 'className': "setup.SetupRun", 'methodName': "run"}))
                 if setup_SetupRun.exsitHaxelib(haxelibname):
                     haxe_Log.trace((("haxelib " + ("null" if haxelibname is None else haxelibname)) + " exist"),_hx_AnonObject({'fileName': "src/setup/SetupRun.hx", 'lineNumber': 26, 'className': "setup.SetupRun", 'methodName': "run"}))
                 else:

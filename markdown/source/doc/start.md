@@ -4,10 +4,8 @@
 
 ```shell
 haxelib install zygameui.zip
-haxelib run zygameui -updatelib
+haxelib run zygameui setup
 ```
-
-[注意] 请勿使用官方的OpenFL & Lime库，zygameui将使用兼容后的OpenFL & Lime库。
 
 ## 创建项目
 

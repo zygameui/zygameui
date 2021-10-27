@@ -1,3 +1,4 @@
+import setup.SetupRun;
 import pkg.PkgTools;
 import task.Tasks;
 import atlasxml.AtlasTools;
@@ -66,6 +67,9 @@ class Tools {
 
 		var command:String = args[0];
 		switch (command) {
+			case "setup":
+				// 库初始化
+				SetupRun.run();
 			case "-pkg":
 				// 创建一个项目包
 				PkgTools.build();

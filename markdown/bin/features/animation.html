@@ -249,7 +249,7 @@
 <h2 id="动画">动画</h2>
 <p>能够通过<code>zygame.components.ZAnimation</code>类实现简单的帧动画实现，一个简单的示例：</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//在这里传入帧率，以及位图数据列表，请注意这里是支持精灵数据的。</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> animation = <span class="kw">new</span> ZAnimation(<span class="dv">24</span>,[assets.getBitmapData(<span class="st">&quot;an1&quot;</span>),assets.getBitmapData(<span class="st">&quot;GameUI:an1&quot;</span>)]);</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> animation = ZAnimation.createAnimation(<span class="dv">24</span>,[assets.getBitmapData(<span class="st">&quot;an1&quot;</span>),assets.getBitmapData(<span class="st">&quot;GameUI:an1&quot;</span>)]);</span></code></pre></div>
 <p>当需要停止到某一帧，或者播放，可简单用到：</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">//持续播放22次</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>animation.play(<span class="dv">22</span>);</span>

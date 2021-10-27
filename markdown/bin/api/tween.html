@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>start</title>
+  <title>tween</title>
   <style type="text/css">
     html {
       line-height: 1.7;
@@ -246,44 +246,42 @@
   </style>
 </head>
 <body>
-<h2 id="开始">开始</h2>
-<p>需要下载所需依赖组件：</p>
-<pre class="shell"><code>haxelib install zygameui.zip
-haxelib run zygameui setup</code></pre>
-<h2 id="创建项目">创建项目</h2>
-<p>使用openfl命令创建项目：</p>
-<pre class="shel"><code>openfl create project 项目名</code></pre>
-<h2 id="编程">编程</h2>
-<p>使用Visual Studio Code打开工作区目录，指向当前项目目录。并需要为Visual Studio Code安装所需的插件：</p>
-<pre class="shell"><code>Haxe
-Lime</code></pre>
-<h2 id="添加库">添加库</h2>
-<p>在project.xml中新增：</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;haxelib</span><span class="ot"> name=</span><span class="st">&quot;zygameui&quot;</span><span class="kw">/&gt;</span></span></code></pre></div>
-<h2 id="添加平台编译命令">添加平台编译命令</h2>
-<p>前往当前项目目录下，可运行下面的命令，创建.vscode/tasks.json文件。</p>
-<pre class="shell"><code>haxelib run zygameui -inittask</code></pre>
-<h2 id="修改main类">修改Main类</h2>
-<p>请继承zygame.core.Start类：</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> zygame.core.Start;</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Main <span class="kw">extends</span> Start {</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="kw">function</span> <span class="kw">new</span>(){</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">super</span>(<span class="dv">1024</span>,<span class="dv">600</span>,<span class="kw">true</span>);</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">override</span> <span class="kw">public</span> <span class="kw">function</span> onInit():<span class="dt">Void</span>{</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">super</span>.onInit();</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">//请在这里编写游戏逻辑</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<h2 id="编译项目">编译项目</h2>
-<p>Mac环境下，请使用<kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>进行调用编译命令。 Window环境下，请使用<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>进行调用编译命令。</p>
-<h2 id="编译命令">编译命令</h2>
-<p>一般zygameui引擎正式项目会依赖zproject.xml配置，通过下述命令编译：</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>haxelib run zygameui -build html5</span></code></pre></div>
-<h2 id="测试项目">测试项目</h2>
-<pre class="shel"><code>openfl test html5 --port=自定义端口，不提供默认3000</code></pre>
+<h2 id="动画过渡">动画过渡</h2>
+<p>动画过渡使用<code>actuate</code>库的实现，由<code>openfl</code>的作者提供。</p>
+<h2 id="简单的例子">简单的例子</h2>
+<p>Actuate设计为易于使用，如果你希望修改某一个对象的某个值时：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>motion.Actuate.tween(MySprite,<span class="dv">1</span>,{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   alpha: <span class="fl">0.5</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}).onComplete(<span class="kw">function</span>(){</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">trace</span>(<span class="st">&quot;过渡动画结束&quot;</span>);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p>Actuate会自动处理你的多个过渡的关系，可以通过覆盖的参数，来决定是否存在多个过渡关系：</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Actuate.tween (MySprite, <span class="dv">1</span>, { alpha: <span class="dv">1</span> });</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Actuate.tween (MySprite, <span class="dv">1</span>, { alpha: <span class="dv">0</span> }, <span class="kw">false</span>).delay (<span class="dv">1</span>);</span></code></pre></div>
+<p>也可以很简单的控制过渡动画的停止与恢复：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 停止</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Actuate.stop (MySprite);</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Actuate.stop (MySprite, <span class="st">&quot;alpha&quot;</span>);</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">// 暂停所有</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Actuate.pauseAll ();</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">// 暂停</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>Actuate.pause (MySprite);</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Actuate.pause (MySprite, MyOtherSprite);</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">// 恢复所有</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>Actuate.resumeAll ();</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">// 恢复</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>Actuate.resume (MySprite);</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>Actuate.resume (MySprite, MyOtherSprite);</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">// 重置</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>Actuate.reset ();</span></code></pre></div>
+<p>同时它自身具备自带有一个计时器的过渡：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// 延迟一秒后触发</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Actuate.timer (<span class="dv">1</span>).onComplete (<span class="kw">trace</span>, <span class="st">&quot;Hello World!&quot;</span>);</span></code></pre></div>
+<p>使用<code>apply</code>来给对象清空所有动画效果，并将属性应用到对象身上：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Actuate.apply (MySprite, { alpha: <span class="dv">1</span> });</span></code></pre></div>
+<p>为动画定义自定义缓和方程式。Actuate包括许多标准和优化格式的常用缓解功能。默认值为Expo.easeOut，但您可以通过Actuate.defaultEase更改默认方程式：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haxe"><code class="sourceCode haxe"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Actuate.tween (MySprite, <span class="dv">1</span>, { alpha: <span class="dv">1</span> }).ease (Quad.easeOut);</span></code></pre></div>
+<h2 id="高级功能">高级功能</h2>
+<p>更多详情的使用方法，可以参阅：http://github.com/openfl/actuate</p>
 </body>
 </html>

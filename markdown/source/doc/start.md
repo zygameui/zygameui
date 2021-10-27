@@ -61,6 +61,15 @@ class Main extends Start {
 ## 编译项目
 
 Mac环境下，请使用<kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>进行调用编译命令。
+Window环境下，请使用<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>进行调用编译命令。
+
+## 编译命令
+
+一般zygameui引擎正式项目会依赖zproject.xml配置，通过下述命令编译：
+
+```haxe
+haxelib run zygameui -build html5
+```
 
 ## 测试项目
 

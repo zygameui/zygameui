@@ -75,7 +75,7 @@ this.addChild(spine);
 ## 事件侦听
 通过`SpineEvent`事件，侦听Spine发生的事情。
 ```haxe
-spine.addEventListener(SpineEvent.EVENT,function(e){
+spine.getNativeSpine().addEventListener(SpineEvent.EVENT,function(e){
     // 接收事件
 });
 ```

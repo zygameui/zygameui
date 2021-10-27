@@ -9,8 +9,7 @@
 - [入门](doc/start.md)
 - [引擎支持](doc/support.md)
 - [Haxe基础](https://haxemcn.top/#)
-- API
-- 使用说明
+- [API](http://static.zygameui.cn/games/api/index.html)
 
 ## Python3+
 zygameui命令行需要依赖python3，同时需要安装以下库：

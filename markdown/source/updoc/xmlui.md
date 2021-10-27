@@ -22,6 +22,7 @@
 - ZButton （按钮）
 - ZSpine （Spine骨骼动画）
 - ZStack （页面管理器）
+- ZParticles（粒子动画）
 
 批渲染组件：
 

@@ -33,6 +33,7 @@
       10. [输入文本](features/input.md)
       11. [页面管理器](features/zstack.md)
       12. [音频](features/zsound.md)
+      13. [粒子动画](features/particles.md)
    7. [批渲染组件](batch.md)
       1. [批渲染对象](batchs/imagebatchs.md)
       2. [图形显示](batchs/bimg.md)

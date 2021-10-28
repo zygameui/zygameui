@@ -21,4 +21,15 @@ class DateUtils {
 		var date = Date.fromString(string);
 		return date;
 	}
+
+	/**
+	 * 获取明天的时间的字符串格式2001-10-1 00:00:00
+	 * @param curDate 当前时间
+	 * @param time 明天的时间，格式为00:00:00
+	 * @return String
+	 */
+	public static function getTomorrowDateString(curDate:Date, time:String):String {
+		var newDate = Date.fromTime(curDate.getTime() + 24 * 60 * 60 * 1000);
+		return '${DateTools.format(newDate, "%Y-%m-%d")} ' + time;
+	}
 }

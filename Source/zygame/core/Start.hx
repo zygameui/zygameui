@@ -193,7 +193,7 @@ class Start extends ZScene {
 		this.isDebug = isDebug;
 		updates = new Vector<Refresher>();
 		Start.current = this;
-		log("[zygameui] build time:", ZMacroUtils.buildDateTime());
+		log('[zygameui] build time:${zygame.utils.System.buildTime}');
 		log("[zygameui] channel=" + Lib.getChannel() + " render=" + Lib.getRenderMode());
 
 		#if cmnt

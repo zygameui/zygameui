@@ -71,6 +71,12 @@ class ZBuilderScene extends ZScene {
 	override function onInit() {
 		super.onInit();
 
+		// 是否存在预加载模块，如果存在，则显示预加载显示对象
+		if (preloadClass != null) {
+			preloadDisplay = Type.createInstance(preloadClass, []);
+			this.addChild(preloadDisplay);
+		}
+
 		// 透明层，避免重复点击
 		bgDisplay = new ZQuad();
 		this.addChild(bgDisplay);
@@ -93,11 +99,7 @@ class ZBuilderScene extends ZScene {
 			}
 		}, onLoaded);
 
-		// 是否存在预加载模块，如果存在，则显示预加载显示对象
-		if (preloadClass != null) {
-			preloadDisplay = Type.createInstance(preloadClass, []);
-			this.addChild(preloadDisplay);
-		}
+		
 	}
 
 	/**

@@ -419,6 +419,17 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
+	 * 设置文本行距
+	 * @param lead 
+	 */
+	public function setFontLeading(lead:Int):Void{
+		_font.leading = lead;
+		_display.setTextFormat(_font);
+		updateComponents();
+
+	}
+
+	/**
 	 * 设置文本字体大小
 	 * @param font
 	 */

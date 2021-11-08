@@ -72,7 +72,6 @@ class ZImage extends DataProviderComponent {
 							});
 						} else {
 							// 启动异步载入
-							isAysn = true;
 							Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
 								if (isDispose) {
 									ZGC.disposeBitmapData(bitmapData);
@@ -81,6 +80,7 @@ class ZImage extends DataProviderComponent {
 								display.bitmapData = bitmapData;
 								onBitmapDataUpdate();
 								this.shader = _shader;
+								isAysn = true;
 							});
 						}
 					}
@@ -194,7 +194,11 @@ class ZImage extends DataProviderComponent {
 	override function destroy() {
 		super.destroy();
 		this.isDispose = true;
-		if (cacheAssets == null && this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
+		// 如果自身是使用URL载入的，则释放资源
+		if (cacheAssets == null
+			&& this.display.bitmapData != null
+			&& isAysn
+			&& Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
 		this.display.bitmapData = null;

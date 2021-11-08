@@ -16,15 +16,17 @@ class EffectUtils {
 	 * 给按钮添加呼吸效果
 	 * @param keyid 效果ID
 	 * @param sprite 按钮对象
+	 * @param time 持续时间，默认1秒
+	 * @param scale 缩放比例，默认1.06
 	 */
-	public static function breathe(display:Dynamic):Void {
+	public static function breathe(display:Dynamic,time:Float = 1,scale:Float = 1.06):Void {
 		// 呼吸效果
 		var map:Dynamic = Std.isOfType(display, Tile) ? batchmap : displaymap;
-		map.set(display, motion.Actuate.tween(display, 1, {
-			scaleX: 1.06,
-			scaleY: 1.06,
-			x: Reflect.getProperty(display, "x") - Reflect.getProperty(display, "width") * 0.03,
-			y: Reflect.getProperty(display, "y") - Reflect.getProperty(display, "height") * 0.03
+		map.set(display, motion.Actuate.tween(display, time, {
+			scaleX: scale,
+			scaleY: scale,
+			x: Reflect.getProperty(display, "x") - Reflect.getProperty(display, "width") * (scale - 1) * 0.25,
+			y: Reflect.getProperty(display, "y") - Reflect.getProperty(display, "height") * (scale - 1) * 0.25
 		}).reflect(true).repeat().ease(Back.easeIn));
 	}
 

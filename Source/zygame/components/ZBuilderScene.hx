@@ -16,6 +16,11 @@ import zygame.components.ZBuilder.AssetsBuilder;
  */
 class ZBuilderScene extends ZScene {
 	/**
+	 * 预载加载器实现，当添加ZBuilderScene时实现，会主动显示此载入加载器，当加载完成后，会直接移除
+	 */
+	public static var preloadClass:Class<Preload>;
+
+	/**
 	 * 自适配宽度
 	 */
 	private var _hdwidth:Null<Float> = null;
@@ -36,6 +41,8 @@ class ZBuilderScene extends ZScene {
 	public var loaded(get, never):Bool;
 
 	private var _loaded:Bool = false;
+
+	private var preloadDisplay:Preload;
 
 	public function new(xmlPath:String) {
 		super();
@@ -85,6 +92,12 @@ class ZBuilderScene extends ZScene {
 				}
 			}
 		}, onLoaded);
+
+		// 是否存在预加载模块，如果存在，则显示预加载显示对象
+		if (preloadClass != null) {
+			preloadDisplay = Type.createInstance(preloadClass, []);
+			this.addChild(preloadDisplay);
+		}
 	}
 
 	/**
@@ -92,6 +105,10 @@ class ZBuilderScene extends ZScene {
 	 */
 	private function postCompleteEvent() {
 		this.dispatchEvent(new Event(Event.COMPLETE));
+		// 当存在预加载模块，在资源已经加载完成时，需要进行移除处理
+		if (preloadDisplay != null && preloadDisplay.parent != null) {
+			preloadDisplay.parent.removeChild(preloadDisplay);
+		}
 	}
 
 	/**
@@ -134,4 +151,17 @@ class ZBuilderScene extends ZScene {
 	override function getStageHeight():Float {
 		return _hdheight != null ? _hdheight : super.getStageHeight();
 	}
+}
+
+/**
+ * 预加载器
+ */
+class Preload extends ZBox {
+	public function new() {
+		super();
+		this.width = getStageWidth();
+		this.height = getStageHeight();
+	}
+
+	public function onProgress(f:Float):Void {}
 }

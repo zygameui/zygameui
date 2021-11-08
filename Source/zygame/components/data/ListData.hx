@@ -9,8 +9,9 @@ class ListData {
 	 */
 	public var reverseOrder:Bool = false;
 
-	public var data(get,never):Array<Dynamic>;
-	private function get_data():Array<Dynamic>{
+	public var data(get, never):Array<Dynamic>;
+
+	private function get_data():Array<Dynamic> {
 		return _data;
 	}
 
@@ -43,5 +44,9 @@ class ListData {
 		if (_data.length == 0)
 			return null;
 		return _data.splice(index, 1)[0];
+	}
+
+	public function clear():Void {
+		_data = [];
 	}
 }

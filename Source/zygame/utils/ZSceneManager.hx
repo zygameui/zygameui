@@ -49,22 +49,38 @@ class ZSceneManager {
 		return _scenes[_scenes.length - 1];
 	}
 
+	private function updateParameter(scene:ZScene,parameter:Dynamic = null){
+		// 更新参数
+		if (parameter != null) {
+			var keys = Reflect.fields(parameter);
+			try {
+				for (index => value in keys) {
+					Reflect.setProperty(scene, value, Reflect.getProperty(parameter, value));
+				}
+			} catch (e:Exception) {
+				trace("无法赋值");
+			}
+		}
+	}
+
 	/**
 	 *  创建场景，如果重复创建会复用使用
 	 *  @param cName - 
 	 *  @return ZScene
 	 */
-	public function createScene<T:ZScene>(cName:Class<T>, added:Bool = false):T {
+	public function createScene<T:ZScene>(cName:Class<T>, added:Bool = false, parameter:Dynamic = null):T {
 		var key = Type.getClassName(cName);
 		var scene:ZScene = _sceneMaps.get(key);
 		if (scene == null) {
 			scene = Type.createInstance(cName, []);
+			updateParameter(scene,parameter);
 			_sceneMaps.set(key, scene);
 			if (added)
 				Start.current.addChild(scene);
 		} else {
 			if (added)
 				Start.current.addChild(scene);
+			updateParameter(scene,parameter);
 			scene.onSceneReset();
 		}
 		_scenes.push(scene);
@@ -139,18 +155,7 @@ class ZSceneManager {
 		if (isReleaseScene && Std.isOfType(zscene, ZBuilderScene)) {
 			ZBuilder.unbindAssets(cast(zscene, ZBuilderScene).assetsBuilder.assets);
 		}
-		var newscene = createScene(cName);
-		// 更新参数
-		if (parameter != null) {
-			var keys = Reflect.fields(parameter);
-			try {
-				for (index => value in keys) {
-					Reflect.setProperty(newscene, value, Reflect.getProperty(parameter, value));
-				}
-			} catch (e:Exception) {
-				trace("无法赋值");
-			}
-		}
+		var newscene = createScene(cName, false, parameter);
 		if (zscene != null) {
 			if (!Std.isOfType(newscene, ZBuilderScene) || cast(newscene, ZBuilderScene).loaded || forceReplace) {
 				// 如果是释放场景，那么就会主动释放场景。

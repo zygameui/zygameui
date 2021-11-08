@@ -92,6 +92,8 @@ class ZList extends ZScroll {
 	}
 
 	public function updateAll():Void {
+		if (layout == null || this.dataProvider == null)
+			return;
 		if (!cache) {
 			while (view.childs.length > 0) {
 				removeItemRender(cast view.childs[0], true);

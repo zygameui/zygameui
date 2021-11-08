@@ -98,6 +98,15 @@ class ToggleButton extends Component
     }
 
     /**
+     * 获取按钮显示对象
+     * @return ZImage
+     */
+    public function getDisplay():ZImage {
+		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);
+		return img;
+	}
+
+    /**
      *  发送选择状态
      *  @param state - 通过ToggleButton的静态常量状态处理
      */

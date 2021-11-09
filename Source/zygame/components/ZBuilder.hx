@@ -1091,43 +1091,63 @@ class ZBuilder {
 		if (Std.isOfType(centerY, String))
 			centerY = Std.parseInt(centerY);
 
-		// var bounds = obj.getBounds(obj.parent);
-		var objWidth:Float = getProperty(obj, "width");
-		var objHeight:Float = getProperty(obj, "height");
+		var objWidth:Float = 0;
+		var objHeight:Float = 0;
+		var parentWidth:Float = 0;
+		var parentHeight:Float = 0;
 
-		var parentWidth:Float = getProperty(parent, "width");
-		var parentHeight:Float = getProperty(parent, "height");
+		// var bounds = obj.getBounds(obj.parent);
+		// var objWidth:Float = getProperty(obj, "width");
+		// var objHeight:Float = getProperty(obj, "height");
+		// var parentWidth:Float = getProperty(parent, "width");
+		// var parentHeight:Float = getProperty(parent, "height");
 		if (leftPx != null && rightPx != null) {
+			parentWidth = getProperty(parent, "width");
 			setProperty(obj, "x", leftPx);
 			setProperty(obj, "width", parentWidth - rightPx - leftPx);
 		} else if (leftPx != null && centerX != null) {
+			parentWidth = getProperty(parent, "width");
 			setProperty(obj, "x", leftPx);
 			setProperty(obj, "width", parentWidth / 2 + centerX - leftPx);
 		} else if (rightPx != null && centerX != null) {
+			parentWidth = getProperty(parent, "width");
 			setProperty(obj, "x", parentWidth / 2 + centerX);
 			setProperty(obj, "width", parentWidth / 2 - centerX - rightPx);
 		} else if (leftPx != null)
 			setProperty(obj, "x", leftPx);
-		else if (rightPx != null)
+		else if (rightPx != null) {
+			objWidth = getProperty(obj, "width");
+			parentWidth = getProperty(parent, "width");
 			setProperty(obj, "x", parentWidth - rightPx - objWidth);
-		else if (centerX != null)
+		} else if (centerX != null) {
+			objWidth = getProperty(obj, "width");
+			parentWidth = getProperty(parent, "width");
 			setProperty(obj, "x", parentWidth / 2 + centerX - objWidth / 2);
+		}
 
 		if (topPx != null && bottomPx != null) {
+			parentHeight = getProperty(parent, "height");
 			setProperty(obj, "y", topPx);
 			setProperty(obj, "height", parentHeight - topPx - bottomPx);
 		} else if (topPx != null && centerY != null) {
+			parentHeight = getProperty(parent, "height");
 			setProperty(obj, "y", topPx);
 			setProperty(obj, "height", parentHeight / 2 + centerY - topPx);
 		} else if (bottomPx != null && centerY != null) {
+			parentHeight = getProperty(parent, "height");
 			setProperty(obj, "y", parentHeight / 2 + centerY);
 			setProperty(obj, "height", parentHeight / 2 - bottomPx - centerY);
 		} else if (topPx != null) {
 			setProperty(obj, "y", topPx);
-		} else if (bottomPx != null)
+		} else if (bottomPx != null) {
+			objHeight = getProperty(obj, "height");
+			parentHeight = getProperty(parent, "height");
 			setProperty(obj, "y", parentHeight - bottomPx - objHeight);
-		else if (centerY != null)
+		} else if (centerY != null) {
+			objHeight = getProperty(obj, "height");
+			parentHeight = getProperty(parent, "height");
 			setProperty(obj, "y", parentHeight / 2 + centerY - objHeight / 2);
+		}
 	}
 
 	private static function setProperty(data:Dynamic, key:String, value:Dynamic):Void {

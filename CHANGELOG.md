@@ -31,6 +31,7 @@
 - [改进] `ZImage`新增`ZBuilder`位图读取支持，可直接通过id赋值到ZImage中。
 - [改进] 改进`ZButton`的clickEvent改为可读。
 - [弃用] 不再支持OpenFL8，请直接使用OpenFL9。
+- [改进] 改进`ZBuilder.buildui`的align性能。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

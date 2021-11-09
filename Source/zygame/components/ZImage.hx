@@ -152,6 +152,7 @@ class ZImage extends DataProviderComponent {
 		}
 		if (this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
+			isAysn = false;
 		}
 		super.dataProvider = data;
 		this.updateComponents();

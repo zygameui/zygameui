@@ -26,6 +26,16 @@ class ZImage extends DataProviderComponent {
 
 	private var _fill:Bool = false;
 
+	/**
+	 * 设置缩放比例宽度，只要scaleWidth或者scaleHeight任意一个值设置了比例缩放值后，在更换图片的时候，会自动按正比缩放适配图片
+	 */
+	public var scaleWidth:Int = 0;
+
+	/**
+	 * 设置缩放比例高度，只要scaleWidth或者scaleHeight任意一个值设置了比例缩放值后，在更换图片的时候，会自动按正比缩放适配图片
+	 */
+	public var scaleHeight:Int = 0;
+
 	private function set_fill(value:Bool):Bool {
 		_fill = value;
 		this.updateComponents();
@@ -51,6 +61,17 @@ class ZImage extends DataProviderComponent {
 		this.updateComponents();
 	}
 
+	/**
+	 * 自动缩放比例
+	 */
+	private function updateImageScaleWidthAndHeight():Void {
+		if (scaleWidth == 0 && scaleHeight == 0)
+			return;
+		var w = (scaleWidth == 0 ? this.width : scaleWidth) / this.display.width;
+		var h = (scaleHeight == 0 ? this.height : scaleHeight) / this.display.height;
+		this.scale(Math.min(w, h));
+	}
+
 	override public function updateComponents():Void {
 		if (display != null) {
 			var data:Dynamic = super.dataProvider;
@@ -60,6 +81,7 @@ class ZImage extends DataProviderComponent {
 					var buildBitmapData = ZBuilder.getBaseBitmapData(data);
 					if (buildBitmapData != null) {
 						display.bitmapData = buildBitmapData;
+						updateImageScaleWidthAndHeight();
 						onBitmapDataUpdate();
 						this.shader = _shader;
 					} else {
@@ -67,6 +89,7 @@ class ZImage extends DataProviderComponent {
 						if (cacheAssets != null) {
 							cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
 								display.bitmapData = bitmapData;
+								updateImageScaleWidthAndHeight();
 								onBitmapDataUpdate();
 								this.shader = _shader;
 							});
@@ -78,6 +101,7 @@ class ZImage extends DataProviderComponent {
 									return;
 								}
 								display.bitmapData = bitmapData;
+								updateImageScaleWidthAndHeight();
 								onBitmapDataUpdate();
 								this.shader = _shader;
 								isAysn = true;
@@ -88,6 +112,7 @@ class ZImage extends DataProviderComponent {
 				// else if(Std.isOfType(data,BitmapData) || Std.isOfType(data,Frame) || Std.isOfType(data,AsyncFrame))
 				else if (Std.isOfType(data, BitmapData) || Std.isOfType(data, Frame)) {
 					display.bitmapData = cast data;
+					updateImageScaleWidthAndHeight();
 					onBitmapDataUpdate();
 					this.shader = _shader;
 				}
@@ -196,10 +221,7 @@ class ZImage extends DataProviderComponent {
 		super.destroy();
 		this.isDispose = true;
 		// 如果自身是使用URL载入的，则释放资源
-		if (cacheAssets == null
-			&& this.display.bitmapData != null
-			&& isAysn
-			&& Std.isOfType(this.display.bitmapData, BitmapData)) {
+		if (cacheAssets == null && this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
 		this.display.bitmapData = null;
@@ -250,6 +272,5 @@ class ZImage extends DataProviderComponent {
 		display.scale(scale);
 		display.x = (display.getStageWidth() - display.width) / 2;
 		display.y = (display.getStageHeight() - display.height) / 2;
-		trace("比例：", scale);
 	}
 }

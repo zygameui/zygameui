@@ -26,7 +26,7 @@ class FlowLayout extends BaseLayout {
 	/**
 	 * 左右的间隔
 	 */
-	public var gapX:Float = 0;	
+	public var gapX:Float = 0;
 
 	/**
 	 * 上下的间隔
@@ -60,6 +60,7 @@ class FlowLayout extends BaseLayout {
 		for (i in 0...box.childs.length) {
 			child = box.childs[i];
 			if (ix + child.width > targetWidth) {
+				// 超出界限，应该将当前对象进行换行处理
 				ix = 0;
 				iy += max + (gap + gapY);
 				max = 0;
@@ -68,10 +69,10 @@ class FlowLayout extends BaseLayout {
 			} else {
 				child.x = ix;
 				child.y = iy;
-				ix += child.width + (gap + gapX);
-				if (child.height > max)
-					max = child.height;
 			}
+			ix += child.width + (gap + gapX);
+			if (child.height > max)
+				max = child.height;
 		}
 	}
 
@@ -92,10 +93,10 @@ class FlowLayout extends BaseLayout {
 			} else {
 				child.x = ix;
 				child.y = iy;
-				iy += child.height + (gap + gapY);
-				if (child.width > max)
-					max = child.width;
 			}
+			iy += child.height + (gap + gapY);
+			if (child.width > max)
+				max = child.width;
 		}
 	}
 }

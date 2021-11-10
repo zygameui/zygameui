@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.Lib;
 import zygame.components.base.Component;
 import zygame.components.layout.BaseLayout;
 import openfl.display.DisplayObject;
@@ -14,6 +15,11 @@ class ZBox extends Component {
 	 *  添加到容器盒子里会记录所有的子项
 	 */
 	public var childs:Array<DisplayObject>;
+
+	/**
+	 * 性能优化：布局事件将延后计算
+	 */
+	private var updateComponentsCall = -1;
 
 	public function new() {
 		super();
@@ -30,6 +36,7 @@ class ZBox extends Component {
 			// 布局排版
 			layout.layout(this);
 		}
+		updateComponentsCall = -1;
 		// 可能对性能有影响
 		// for(i in 0...childs.length)
 		// {
@@ -49,7 +56,9 @@ class ZBox extends Component {
 	override public function addChildAt(display:DisplayObject, index:Int):DisplayObject {
 		childs.push(display);
 		var child:DisplayObject = super.addChildAt(display, index);
-		this.updateComponents();
+		if (updateComponentsCall == -1) {
+			updateComponentsCall = Lib.nextFrameCall(updateComponents);
+		}
 		return child;
 	}
 
@@ -65,7 +74,9 @@ class ZBox extends Component {
 
 	override public function removeChild(display:DisplayObject):DisplayObject {
 		childs.remove(display);
-		this.updateComponents();
+		if (updateComponentsCall == -1) {
+			updateComponentsCall = Lib.nextFrameCall(updateComponents);
+		}
 		return super.removeChild(display);
 	}
 

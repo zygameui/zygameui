@@ -33,6 +33,8 @@
 - [弃用] 不再支持OpenFL8，请直接使用OpenFL9。
 - [改进] 改进`ZBuilder.buildui`的align性能。
 - [新增] 新增`ZLabel.setFontLeading`设置文本的行距。
+- [改进] 改进`FlowLayout`流布局的算法。
+- [改进] 改进`ZBox`在addChild或者removeChild时调用updateComponents的流程优化。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

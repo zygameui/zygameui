@@ -35,6 +35,7 @@
 - [新增] 新增`ZLabel.setFontLeading`设置文本的行距。
 - [改进] 改进`FlowLayout`流布局的算法。
 - [改进] 改进`ZBox`在addChild或者removeChild时调用updateComponents的流程优化。
+- [新增] 新增`ZBox`的`fit`属性支持，设置为ture后，会自动适配全屏屏等特殊屏幕的基本适配。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

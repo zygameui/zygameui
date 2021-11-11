@@ -90,6 +90,7 @@ class ZBuilderScene extends ZScene {
 			if (bool) {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				_loaded = true;
+				this.onBuildedEvent();
 				onBuilded();
 				postCompleteEvent();
 			} else {
@@ -121,7 +122,6 @@ class ZBuilderScene extends ZScene {
 	public function onLoaded() {}
 
 	public function onBuilded() {
-		this.onBuildedEvent();
 	}
 
 	dynamic public function onBuildedEvent():Void {}

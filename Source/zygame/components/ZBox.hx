@@ -21,6 +21,26 @@ class ZBox extends Component {
 	 */
 	private var updateComponentsCall = -1;
 
+	/**
+	 * 全屏适配配置，如何设置为true，会根据刘海屏等屏幕进行特殊适配，当设置了fit为true后，会自动调整width/height的值
+	 */
+	public var fit(never, set):Bool;
+
+	private function set_fit(bool:Bool):Bool {
+		if (bool) {
+			if (getAspectRatio() < 0.47) {
+				// 刘海屏尺寸，上下各减少5%的高度
+				this.width = getStageWidth();
+				this.height = getStageHeight() * 0.9;
+				this.y = getStageHeight() * 0.05;
+			} else {
+				this.width = getStageWidth();
+				this.height = getStageHeight();
+			}
+		}
+		return bool;
+	}
+
 	public function new() {
 		super();
 		childs = [];

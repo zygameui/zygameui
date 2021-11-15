@@ -32,7 +32,7 @@ class Image extends DisplayObjectContainer {
 	/**
 	 * 位图渲染器
 	 */
-	private var _bitmap:Bitmap;
+	private var _bitmap:ImageBitmap;
 
 	private var _tilemap:Tilemap;
 	private var _curFrame:Frame;
@@ -49,6 +49,25 @@ class Image extends DisplayObjectContainer {
 	private var _scale9Grid:Rectangle;
 
 	public var bitmapData(get, set):Dynamic;
+
+	/**
+	 * 该功能不可靠，不能使用
+	 * 如果设置boundsEnabled为false时，则getBounds永远获得0，0，0，0的值，默认为true
+	 */
+	// public var boundsEnabled(get, set):Bool;
+
+	// private var _boundsEnabled:Bool = true;
+
+	// private function set_boundsEnabled(bool:Bool):Bool {
+		// _boundsEnabled = bool;
+		// if (_bitmap != null)
+			// _bitmap.boundsEnabled = bool;
+		// return _boundsEnabled;
+	// }
+
+	// private function get_boundsEnabled():Bool {
+		// return _boundsEnabled;
+	// }
 
 	/**
 	 * 设置图片是否平滑，当smoothing宏生效时，默认为true，否则为false
@@ -86,7 +105,8 @@ class Image extends DisplayObjectContainer {
 				_tilemap.visible = false;
 			// 位图渲染处理
 			if (_bitmap == null) {
-				_bitmap = new Bitmap(bitmapData, null, true);
+				_bitmap = new ImageBitmap(bitmapData, null, true);
+				// _bitmap.boundsEnabled = boundsEnabled;
 				this.addChild(_bitmap);
 			} else {
 				_bitmap.visible = true;

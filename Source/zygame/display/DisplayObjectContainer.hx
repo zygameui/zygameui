@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.utils.Lib;
 import openfl.geom.Point;
 import zygame.components.ZTween;
 import openfl.display.Bitmap;
@@ -14,6 +15,7 @@ import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
 class DisplayObjectContainer extends Sprite implements Refresher implements zygame.mini.MiniExtend {
+
 	/**
 	 * 自定义数据，默认为null，可以作为扩展数据使用
 	 */
@@ -48,7 +50,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		}
 		_tween = value;
 		if (_tween != null && this.parent != null) {
-			_tween.bindDisplayObject(this);
+			Lib.nextFrameCall(_tween.bindDisplayObject, [this]);
 		}
 		return _tween;
 	}
@@ -316,7 +318,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 * 从Start层转换最终坐标点
 	 * @return Point
 	 */
-	public function localToGlobalInParentStart(point:Point):Point{
+	public function localToGlobalInParentStart(point:Point):Point {
 		point = this.parent.localToGlobal(point);
 		point = Start.current.globalToLocal(point);
 		return point;

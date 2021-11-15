@@ -36,6 +36,9 @@
 - [改进] 改进`FlowLayout`流布局的算法。
 - [改进] 改进`ZBox`在addChild或者removeChild时调用updateComponents的流程优化。
 - [新增] 新增`ZBox`的`fit`属性支持，设置为ture后，会自动适配全屏屏等特殊屏幕的基本适配。
+- [新增] 新增`ZBuilder`的`parentBind`属性支持，设置true后，可以让父节点的宽高设置与当前UI一致。
+<!-- 实验性，不可靠 -->
+<!-- - [新增] 新增`Image`的`boundsEnabled`属性支持，设置false后，将不计算它的宽高值。 -->
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

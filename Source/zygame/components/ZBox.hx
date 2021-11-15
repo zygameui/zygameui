@@ -24,8 +24,10 @@ class ZBox extends Component {
 	/**
 	 * 全屏适配配置，如何设置为true，会根据刘海屏等屏幕进行特殊适配，当设置了fit为true后，会自动调整width/height的值
 	 */
+	@:keep
 	public var fit(never, set):Bool;
 
+	@:keep
 	private function set_fit(bool:Bool):Bool {
 		if (bool) {
 			if (getAspectRatio() < 0.47) {

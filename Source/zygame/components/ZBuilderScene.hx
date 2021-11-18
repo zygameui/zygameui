@@ -1,5 +1,6 @@
 package zygame.components;
 
+import haxe.Exception;
 import zygame.core.Start;
 import zygame.utils.ScaleUtils;
 import zygame.utils.StringUtils;
@@ -95,12 +96,13 @@ class ZBuilderScene extends ZScene {
 				postCompleteEvent();
 			} else {
 				if (onBuildError()) {
-					ZSceneManager.current.releaseScene(this);
+					// 当如果是加载失败的情况下，应该直接释放资源，而不是走onSceneRelease。
+					ZBuilder.unbindAssets(assetsBuilder.assets);
+					assetsBuilder.dispose();
+					ZSceneManager.current.releaseScene(this, false);
 				}
 			}
 		}, onLoaded);
-
-		
 	}
 
 	/**
@@ -121,8 +123,7 @@ class ZBuilderScene extends ZScene {
 
 	public function onLoaded() {}
 
-	public function onBuilded() {
-	}
+	public function onBuilded() {}
 
 	dynamic public function onBuildedEvent():Void {}
 

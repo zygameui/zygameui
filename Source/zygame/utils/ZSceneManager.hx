@@ -91,11 +91,12 @@ class ZSceneManager {
 	 *  主动释放场景
 	 *  @param zScene - 指定场景
 	 */
-	public function releaseScene(zScene:ZScene):Void {
+	public function releaseScene(zScene:ZScene,onSceneRelease:Bool = true):Void {
 		#if debug
 		trace("releaseScene:", zScene);
 		#end
-		zScene.onSceneRelease();
+		if(onSceneRelease)
+			zScene.onSceneRelease();
 		_sceneMaps.remove(Type.getClassName(Type.getClass(zScene)));
 		_scenes.remove(zScene);
 		if (zScene.parent != null) {
@@ -190,7 +191,6 @@ class ZSceneManager {
 		// 回退时，需要先将自已的场景移除掉
 		_history.pop();
 		var c = _history.pop();
-		trace("_history=", c);
 		if (c != null) {
 			return this.replaceScene(c, isReleaseScene, true);
 		}

@@ -493,12 +493,12 @@ class ZScroll extends DataProviderComponent {
 	}
 
 	override public function onAddToStage():Void {
-		this.setTouchEvent(true);
+		this.setTouchEvent(true, false, 0, true);
 		this.setFrameEvent(true);
 	}
 
 	override public function onRemoveToStage():Void {
-		this.setTouchEvent(false);
+		this.setTouchEvent(false, false, 0, true);
 		this.setFrameEvent(false);
 	}
 

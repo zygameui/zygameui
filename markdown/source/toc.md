@@ -18,6 +18,7 @@
       9. [音频管理](api/music.md)
       10. [重力感应](api/sensors.md)
       11. [动画过渡](api/tween.md)
+      11. [数据储存](api/save.md)
    5. [Haxe语法注意事项](api/haxe.md)
    6. [组件](features.md)
       1. [Spine骨骼动画](features/spine.md)

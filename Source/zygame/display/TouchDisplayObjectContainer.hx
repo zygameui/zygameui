@@ -25,21 +25,27 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 	 *  设置触摸事件
 	 *  @param listen - 是否侦听，false则清理所有事件
 	 */
-	public function setTouchEvent(listen:Bool, userCapture:Bool = false, priority:Int = 0):Void {
+	public function setTouchEvent(listen:Bool, userCapture:Bool = false, priority:Int = 0, stageMove:Bool = false):Void {
 		isTouch = listen;
 		Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 		if (listen) {
 			#if (mac || window || ios)
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, userCapture, priority);
 			zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
+			if (stageMove)
+				zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
+			else
+				this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 			this.addEventListener(MouseEvent.MOUSE_OUT, onTouchOut, userCapture, priority);
 			this.addEventListener(MouseEvent.MOUSE_OVER, onTouchOver, userCapture, priority);
 			#else
 			if (mouseEvent) {
 				this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, userCapture, priority);
 				zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
+				if (stageMove)
+					zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
+				else
+					this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 				this.addEventListener(MouseEvent.MOUSE_OUT, onTouchOut, userCapture, priority);
 				this.addEventListener(MouseEvent.MOUSE_OVER, onTouchOver, userCapture, priority);
 			} else {
@@ -52,14 +58,20 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 			#if (mac || window || ios)
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-			this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			if (stageMove)
+				zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			else
+				this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			this.removeEventListener(MouseEvent.MOUSE_OUT, onTouchOut);
 			this.removeEventListener(MouseEvent.MOUSE_OVER, onTouchOver);
 			#else
 			if (mouseEvent) {
 				this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 				zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+				if (stageMove)
+					zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+				else
+					this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				this.removeEventListener(MouseEvent.MOUSE_OUT, onTouchOut);
 				this.removeEventListener(MouseEvent.MOUSE_OVER, onTouchOver);
 			} else {

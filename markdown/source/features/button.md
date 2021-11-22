@@ -30,7 +30,9 @@ BButton以及ZButton对象类都是使用`zygame.commponents.skin.BaseSkin`类�
 
 ```haxe
 //更换upSkin对象
-button.skin.upSkin = assets.getBitmapData("button2");
+cast(button.skin,ButtonSkin).upSkin = assets.getBitmapData("button2");
+//或者直接使用setSkinValue
+button.skin.setSkinValue("up", assets.getBitmapData("button2"));
 ```
 
 #### 皮肤逻辑

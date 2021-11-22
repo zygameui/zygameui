@@ -18,7 +18,7 @@ class JSONData {
 	 */
 	public macro static function embed(jsonPath:String) {
 		var rootJsonPath = jsonPath;
-		var project:ZProjectData = new ZProjectData();
+		var project:ZProjectData = AutoBuilder.firstProjectData;
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
 		if (jsonPath == null)
 			jsonPath = rootJsonPath;
@@ -34,7 +34,7 @@ class JSONData {
 	 */
 	public macro static function create(jsonPath:String, indexNames:Array<String> = null, typeNames:Array<String> = null) {
 		var rootJsonPath = jsonPath;
-		var project:ZProjectData = new ZProjectData();
+		var project:ZProjectData = AutoBuilder.firstProjectData;
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
 		if (jsonPath == null)
 			jsonPath = rootJsonPath;

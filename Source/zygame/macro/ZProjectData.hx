@@ -40,10 +40,15 @@ class ZProjectData {
 					if (item.get("unparser") == "true") {
 						continue;
 					}
-					readDir(rootPath + item.get("path"), item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path")));
+					var dirPath = rootPath + item.get("path");
+					var renameDirPath = item.exists("rename") ? item.get("rename") : StringUtils.getName(item.get("path"));
+					readDir(dirPath, renameDirPath);
 				case "include":
 					if (item.get("bind") == "true") {
-						readXml(item.get("path"), rootPath);
+						var path = item.get("path");
+						var parentPath = rootPath + path;
+						parentPath = parentPath.substr(0, parentPath.lastIndexOf("/") + 1);
+						readXml(path, parentPath);
 					}
 				case "haxelib":
 					if (item.get("bind") == "true") {

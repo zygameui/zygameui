@@ -12,7 +12,16 @@ import haxe.macro.Expr;
  */
 class AutoBuilder {
 	#if macro
-	@:persistent static var firstProjectData:ZProjectData;
+	@:persistent public static var firstProjectData(get, never):ZProjectData;
+	@:persistent private static var _firstProjectData:ZProjectData;
+
+	static function get_firstProjectData():ZProjectData {
+		if (_firstProjectData == null) {
+			trace("first create project data.");
+			_firstProjectData = new ZProjectData();
+		}
+		return _firstProjectData;
+	}
 
 	/**
 	 * 自动构造
@@ -22,10 +31,6 @@ class AutoBuilder {
 	 * @return Array<Field>
 	 */
 	macro public static function build(xmlPath:String, bindBuilder:String = null, embed:Bool = false):Array<Field> {
-		if(firstProjectData == null){
-			firstProjectData = new ZProjectData();
-			trace("firstProjectData create by "+xmlPath);
-		}
 		var project:ZProjectData = firstProjectData;
 		var path = project.assetsPath.get(StringUtils.getName(xmlPath) + ".xml");
 		if (path == null) {
@@ -230,7 +235,7 @@ class AutoBuilder {
 	public static function createGetCall(fields:Array<Field>, id:String, type:String, buildAttr):Void {
 		var t = getType(type);
 		var myFunc:Function = {
-			expr: macro return zygame.components.ZBuilder.findById(this.$buildAttr,($v{id})),
+			expr: macro return zygame.components.ZBuilder.findById(this.$buildAttr, ($v{id})),
 			// expr: macro return (this.$buildAttr == null || this.$buildAttr.ids == null) ? null : this.$buildAttr.ids.get($v{id}), // actual value
 			ret: t, // ret = return type
 			args: [] // no arguments here

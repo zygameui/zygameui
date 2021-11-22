@@ -10,7 +10,7 @@ class Res {
 		}
 		var number:String = "0123456789.";
 		var ext:Array<String> = ["png", "jpg", "xml", "json"];
-		var project = new ZProjectData();
+		var project = AutoBuilder.firstProjectData;
 		var atlas:Map<String, {name:String, png:String, xml:String}> = [];
 		var maps:Map<String, Array<{name:String, rpath:String}>> = [];
 		for (key => value in project.assetsPath) {

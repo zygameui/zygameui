@@ -13,7 +13,7 @@ class ZAssetsUtils {
 	 * @return Dynamic
 	 */
 	macro public static function preload(assets:Dynamic, xmlid:String):Dynamic {
-		var project:ZProjectData = new ZProjectData();
+		var project:ZProjectData = AutoBuilder.firstProjectData;
 		var path = project.assetsPath.get(StringUtils.getName(xmlid) + ".xml");
 		if (path != null) {
 			// 是一个XML配置，进行读取

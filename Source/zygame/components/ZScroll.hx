@@ -287,7 +287,7 @@ class ZScroll extends DataProviderComponent {
 	override public function onTouchMove(touch:TouchEvent):Void {
 		if (touchBatch != null)
 			touchBatch.onTouchMove(touch);
-		if (_isMove && touch.touchPointID == 0 && getIsMoveing()) {
+		if (_isMove && touch.touchPointID == 0 && getIsMoveing() && (_lastMovePos.x != this.mouseX || _lastMovePos.y != this.mouseY)) {
 			if (hscrollState != OFF && _hMoveing)
 				_h = _boxPosBegin.x - (_movePosBegin.x - this.mouseX);
 			if (vscrollState != OFF && _vMoveing)
@@ -369,8 +369,9 @@ class ZScroll extends DataProviderComponent {
 				if (hscrollState != OFF && _hMoveing) {
 					_movePos.x -= (_movePos.x) * slowSpeed;
 					_h -= _movePos.x;
-				} else
+				} else {
 					_movePos.x = 0;
+				}
 				if (vscrollState != OFF && _vMoveing) {
 					_movePos.y -= (_movePos.y) * slowSpeed;
 					_v -= _movePos.y;

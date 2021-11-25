@@ -57,6 +57,20 @@ class KnifeLight extends #if !zygame openfl.display.Sprite #else TouchDisplayObj
 		stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
 		this.addEventListener(Event.ENTER_FRAME, onFrame);
 	}
+	#else
+	override function onAddToStage() {
+		super.onAddToStage();
+		stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
+		stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouch);
+		stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
+	}
+
+	override function onRemoveToStage() {
+		super.onRemoveToStage();
+		stage.removeEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
+		stage.removeEventListener(TouchEvent.TOUCH_MOVE, onTouch);
+		stage.removeEventListener(TouchEvent.TOUCH_END, onTouch);
+	}
 	#end
 
 	#if zygame
@@ -186,59 +200,60 @@ class KnifeLight extends #if !zygame openfl.display.Sprite #else TouchDisplayObj
 		gfx.drawTriangles(vertices, indices, uvtData);
 		gfx.endFill();
 	}
-		public function onTouch(e:TouchEvent) {
-			var touchId = e.touchPointID;
-			if (touched[touchId] == null) {
-				touched[touchId] = false;
-			}
-			if (e.type == TouchEvent.TOUCH_BEGIN) {
-				touched[touchId] = true;
-				return; // 手指接触屏幕会同时触发TOUCH_BEGIN和TOUCH_MOVE事件，因此这里返回即可
-			} else if (e.type == TouchEvent.TOUCH_END) {
-				touched[touchId] = false;
-			}
-			if (!touched[touchId])
-				return;
-			var track:List<VolatilePoint>;
-			if ((track = tracks[touchId]) == null) {
-				track = tracks[touchId] = new List<VolatilePoint>();
-			}
-			var last = track.last(), dx:Float, dy:Float;
-			if (last != null && (dx = e.localX - last.x) * dx + (dy = e.localY - last.y) * dy < 1)
-				return; // 防止两点距离过于接近，可能导致计算误差
-			track.add(new VolatilePoint(e.localX, e.localY)); // add to end
+	public function onTouch(e:TouchEvent) {
+		var touchId = e.touchPointID;
+		if (touched[touchId] == null) {
+			touched[touchId] = false;
 		}
+		if (e.type == TouchEvent.TOUCH_BEGIN) {
+			touched[touchId] = true;
+			return; // 手指接触屏幕会同时触发TOUCH_BEGIN和TOUCH_MOVE事件，因此这里返回即可
+		} else if (e.type == TouchEvent.TOUCH_END) {
+			touched[touchId] = false;
+		}
+		if (!touched[touchId])
+			return;
+		var track:List<VolatilePoint>;
+		if ((track = tracks[touchId]) == null) {
+			track = tracks[touchId] = new List<VolatilePoint>();
+		}
+		var last = track.last(), dx:Float, dy:Float;
+		if (last != null && (dx = e.localX - last.x) * dx + (dy = e.localY - last.y) * dy < 1)
+			return; // 防止两点距离过于接近，可能导致计算误差
+		track.add(new VolatilePoint(e.localX, e.localY)); // add to end
+	}
 
-		#if !flash
-		/**
-	 * 重构触摸事件，无法触发触摸的问题
-	 * @param x
-	 * @param y
-	 * @param shapeFlag
-	 * @param stack
-	 * @param interactiveOnly
-	 * @param hitObject
-	 * @return Bool
-	 */
-		override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-			// var bool:Bool = super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
-			// if (bool == true) {
-			// return true;
-			// }
-			if (this.mouseEnabled == false || this.visible == false)
-				return false;
-			if (this.getBounds(stage).contains(x, y)) {
-				if (stack != null)
-					stack.push(this);
-				return true;
-			}
+	#if !flash
+	/**
+ * 重构触摸事件，无法触发触摸的问题
+ * @param x
+ * @param y
+ * @param shapeFlag
+ * @param stack
+ * @param interactiveOnly
+ * @param hitObject
+ * @return Bool
+ */
+	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
+		// var bool:Bool = super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
+		// if (bool == true) {
+		// return true;
+		// }
+		if (this.mouseEnabled == false || this.visible == false)
 			return false;
+		if (this.getBounds(stage).contains(x, y)) {
+			if (stack != null)
+				stack.push(this);
+			return true;
 		}
-		#end
+		return false;
+	}
+	#end
 } /**
  * 触摸点
- */ class VolatilePoint {
+ */
 
+class VolatilePoint {
 	public var x:Float;
 	public var y:Float;
 	public var birth:Float;

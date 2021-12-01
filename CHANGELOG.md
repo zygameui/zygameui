@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 11.0.6
+
+
 ### 11.0.5
 - [修复] 修复ZList.cache的缓存错误的问题。
 - [新增] 新增`ZLabel.setFontSelectColor`方法可设置文本局部颜色或者大小等。
@@ -38,6 +41,7 @@
 - [新增] 新增`ZBox`的`fit`属性支持，设置为ture后，会自动适配全屏屏等特殊屏幕的基本适配。
 - [新增] 新增`ZBuilder`的`parentBind`属性支持，设置true后，可以让父节点的宽高设置与当前UI一致。
 - [改进] 改进`ZProjectData`依赖`AutoBuilder.firstProjectData`缓存宏构造性能。
+- [修复] 修复在Windows上无法正确解析python的UTF-8字符的问题。
 
 ### 11.0.4
 - [新增] 新增`disable_dynamic_fps`可用于禁用动态FPS，部分平台可能不支持，需要禁用（例如vivo小游戏）。

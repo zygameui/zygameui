@@ -1,12 +1,12 @@
 {
   "name": "zygameui",
-  "url": "",
+  "url": "http://github.com/rainyt/zygameui",
   "license": "MIT",
   "tags": [],
   "description": "",
-  "version": "11.0.4",
-  "releasenote": "",
-  "contributors": ["rainy","zygameui","zygameui"],
+  "version": "11.0.5",
+  "releasenote": "Enhanced game engine based on openfl",
+  "contributors": ["rainy"],
   "dependencies": {
       
   },

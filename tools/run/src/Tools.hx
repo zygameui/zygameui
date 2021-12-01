@@ -32,36 +32,39 @@ class Tools {
 			haxelib = haxelib.substr(0, haxelib.lastIndexOf("/zygameui"));
 		}
 		// 获取授权文件
-		var authorization:String = null;
-		if (FileSystem.exists(haxelib + "/zygameui/.dev")) {
-			authorization = File.getContent(haxelib + "/zygameui/.dev");
-		} else if (FileSystem.exists(haxelib + "/zygameui/.current")) {
-			authorization = File.getContent(haxelib + "/zygameui/.current");
-			authorization = StringTools.replace(authorization, ".", ",");
-			authorization = haxelib + "/zygameui/" + authorization;
-		}
-		if (FileSystem.exists(authorization + "/authorization")) {
-			authorization = File.getContent(authorization + "/authorization");
+		var authorization:String = '/Users/${GetPass.getUserName()}/.authorization';
+		// if (FileSystem.exists(haxelib + "/zygameui/.dev")) {
+		// 	authorization = File.getContent(haxelib + "/zygameui/.dev");
+		// } else if (FileSystem.exists(haxelib + "/zygameui/.current")) {
+		// 	authorization = File.getContent(haxelib + "/zygameui/.current");
+		// 	authorization = StringTools.replace(authorization, ".", ",");
+		// 	authorization = haxelib + "/zygameui/" + authorization;
+		// }
+		if (FileSystem.exists(authorization)) {
+			authorization = File.getContent(authorization);
 			var authorizationData = authorization.split("\n");
 			for (s in authorizationData) {
 				var arr = s.split("=");
 				authorizationMaps[arr[0]] = arr[1];
 			}
+		} else {
+			trace(".authorization文件不存在");
 		}
 		webPath = authorizationMaps["haxelib"];
 		trace("authorization=", authorization);
 		trace("haxelib:" + haxelib);
 		trace("args:" + Sys.args());
+		trace("authorization配置：", authorizationMaps);
 		var args:Array<String> = Sys.args();
 		if (args.length == 1) {
 			trace("version:" + version);
-			trace("帮助列表：
-            -inittask 初始化VSCODE的task.json文件
-            -build 用于生成不同平台命令（通用）
-            -upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）
-            -updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）
-            -updatelib :用于更新所有的自有开发库（需要得到授权才能够更新到自开发库）
-            -libs :显示所有库版本情况（需要得到授权）");
+			trace("帮助列表：");
+			trace("-inittask 初始化VSCODE的task.json文件");
+			trace("-build 用于生成不同平台命令（通用）");
+			trace("-upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）");
+			trace("-updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）");
+			trace("-updatelib :用于更新所有的自有开发库（需要得到授权才能够更新到自开发库）");
+			trace("-libs :显示所有库版本情况（需要得到授权）");
 			return;
 		}
 

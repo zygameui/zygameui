@@ -276,9 +276,11 @@ class Build {
 				case "include":
 					// 包含XML标签
 					var xmlPath = item.get("path");
-					var xml:Xml = Xml.parse(File.getContent(xmlPath));
-					trace("include xml parsing:" + xmlPath);
-					action(xml.firstElement(), args, dir, after);
+					if (FileSystem.exists(xmlPath)) {
+						var xml:Xml = Xml.parse(File.getContent(xmlPath));
+						trace("include xml parsing:" + xmlPath);
+						action(xml.firstElement(), args, dir, after);
+					}
 			}
 			action(item, args, dir, after);
 		}

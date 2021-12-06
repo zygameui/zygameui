@@ -30,6 +30,16 @@ class ZScroll extends DataProviderComponent {
 	 */
 	public var batch(get, never):TouchImageBatchsContainer;
 
+	/**
+	 * 增长高度
+	 */
+	public var viewPushHeight:Float = 0;
+
+	/**
+	 * 增长宽度
+	 */
+	public var viewPushWidth:Float = 0;
+
 	public function get_batch():TouchImageBatchsContainer {
 		return touchBatch;
 	}
@@ -255,6 +265,19 @@ class ZScroll extends DataProviderComponent {
 	private var _vMoveing:Bool = false;
 	private var _hMoveing:Bool = false;
 
+	/**
+	 * 是否触摸中
+	 */
+	public var touched(get, never):Bool;
+
+	function get_touched():Bool {
+		return _isMove;
+	}
+
+	public function stopMove():Void {
+		_moveMath = 0;
+	}
+
 	override public function onTouchBegin(touch:TouchEvent):Void {
 		super.onTouchBegin(touch);
 		if (this.mouseX < 0 || this.mouseY < 0 || this.mouseX > this.width || this.mouseY > this.height)
@@ -425,11 +448,11 @@ class ZScroll extends DataProviderComponent {
 	public var viewHeight(get, never):Float;
 
 	private function get_viewWidth():Float {
-		return _view.width;
+		return _view.width + viewPushWidth;
 	}
 
 	private function get_viewHeight():Float {
-		return _view.height;
+		return _view.height + viewPushHeight;
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package zygame.utils.load;
 
+import spine.openfl.SkeletonSprite;
+import openfl.display.Sprite;
 import zygame.utils.load.TextureLoader.TextureAtlas;
 import openfl.display.Tileset;
 import openfl.geom.Matrix;
@@ -50,8 +52,8 @@ class DynamicTextureLoader {
 	private function next():Void {
 		if (_curLoadCount == _allLoadCount) {
 			_call(textureAtlas);
-            textureAtlas = null;
-            this.updateProgress(_curLoadCount/_allLoadCount);
+			textureAtlas = null;
+			this.updateProgress(_curLoadCount / _allLoadCount);
 			return;
 		}
 		if (files.length == 0)
@@ -87,9 +89,46 @@ class DynamicTextureAtlas extends TextureAtlas {
 	private var pack:MaxRectsBinPack;
 
 	public function new() {
-		super(new BitmapData(2048, 2048, true, 0x0), null);
+		var glBitmapData = new BitmapData(2048, 2048, true, 0x0);
+		// 启动GL渲染位图
+		@:privateAccess glBitmapData.readable = false;
+		super(glBitmapData, null);
 		pack = new MaxRectsBinPack(2048, 2048, false);
 		_tileset = new Tileset(_rootBitmapData);
+	}
+
+	/**
+	 * 将精灵追加到精灵表
+	 * @param name 
+	 * @param spr 
+	 */
+	public function putSprite(name:String, spr:Sprite):Void {
+		var bounds = spr.getBounds(null);
+		var ma:Matrix = new Matrix();
+		var rect = pack.insert(Math.round(bounds.width), Math.round(bounds.height), FreeRectangleChoiceHeuristic.BestShortSideFit);
+		if (rect == null)
+			return;
+		rect = rect.clone();
+		ma.tx = rect.x - bounds.x;
+		ma.ty = rect.y - bounds.y;
+		_rootBitmapData.draw(spr, ma);
+		// ZGC.disposeBitmapData(bitmapData);
+		// 追加名字
+		_names.push(name);
+		// 生成可用的Frame
+		var frame = new Frame();
+		frame.x = rect.x;
+		frame.y = rect.y;
+		frame.frameWidth = bounds.width;
+		frame.frameHeight = bounds.height;
+		frame.frameX = bounds.x;
+		frame.frameY = bounds.y;
+		frame.width = rect.width;
+		frame.height = rect.height;
+		frame.parent = this;
+		frame.id = _names.length - 1;
+		_tileRects.set(name, frame);
+		_tileset.addRect(rect);
 	}
 
 	/**

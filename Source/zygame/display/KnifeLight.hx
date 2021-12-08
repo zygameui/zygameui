@@ -43,62 +43,18 @@ class KnifeLight extends #if !zygame openfl.display.Sprite #else TouchDisplayObj
 		tracks = [];
 		touched = [];
 
-		#if zygame
 		this.setFrameEvent(true);
-		#else
-		this.addEventListener(Event.ADDED_TO_STAGE, onInit);
-		#end
 	}
-
-	#if !zygame
-	private function onInit(e:Event):Void {
-		stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
-		stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouch);
-		stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
-		this.addEventListener(Event.ENTER_FRAME, onFrame);
-	}
-	#else
-	override function onAddToStage() {
-		super.onAddToStage();
-		stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
-		stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouch);
-		stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
-	}
-
-	override function onRemoveToStage() {
-		super.onRemoveToStage();
-		stage.removeEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
-		stage.removeEventListener(TouchEvent.TOUCH_MOVE, onTouch);
-		stage.removeEventListener(TouchEvent.TOUCH_END, onTouch);
-	}
-	#end
-
-	#if zygame
-	override function onTouchBegin(e:TouchEvent) {
-		super.onTouchBegin(e);
-		onTouch(e);
-	}
-
-	override function onTouchEnd(e:TouchEvent) {
-		super.onTouchEnd(e);
-		onTouch(e);
-	}
-
-	override function onTouchMove(e:TouchEvent) {
-		super.onTouchMove(e);
-		onTouch(e);
-	}
-	#end
 
 	private var tracks:Array<List<VolatilePoint>>;
 	private var touched:Array<Null<Bool>>;
 
-	#if zygame
-	override public function onFrame() {
-	#else
-	public function onFrame(e:Event) {
-	#end
+	override function onRemoveToStage() {
+		super.onRemoveToStage();
+		this.setFrameEvent(false);
+	}
 
+	override public function onFrame() {
 		var gfx = this.graphics;
 		gfx.clear();
 		var now = Timer.stamp();
@@ -200,40 +156,47 @@ class KnifeLight extends #if !zygame openfl.display.Sprite #else TouchDisplayObj
 		gfx.drawTriangles(vertices, indices, uvtData);
 		gfx.endFill();
 	}
-	public function onTouch(e:TouchEvent) {
-		var touchId = e.touchPointID;
-		if (touched[touchId] == null) {
-			touched[touchId] = false;
-		}
-		if (e.type == TouchEvent.TOUCH_BEGIN) {
-			touched[touchId] = true;
-			return; // 手指接触屏幕会同时触发TOUCH_BEGIN和TOUCH_MOVE事件，因此这里返回即可
-		} else if (e.type == TouchEvent.TOUCH_END) {
-			touched[touchId] = false;
-		}
-		if (!touched[touchId])
-			return;
+
+	/**
+	 * 触摸效果
+	 * @param touchId 
+	 * @param mouseX 
+	 * @param mouseY 
+	 */
+	public function onTouch(touchId:Int, mouseX:Float, mouseY:Float) {
+		// var touchId = e.touchPointID;
+		// if (touched[touchId] == null) {
+		// 	touched[touchId] = false;
+		// }
+		// if (e.type == TouchEvent.TOUCH_BEGIN) {
+		// 	touched[touchId] = true;
+		// 	return; // 手指接触屏幕会同时触发TOUCH_BEGIN和TOUCH_MOVE事件，因此这里返回即可
+		// } else if (e.type == TouchEvent.TOUCH_END) {
+		// 	touched[touchId] = false;
+		// }
+		// if (!touched[touchId])
+		// return;
 		var track:List<VolatilePoint>;
 		if ((track = tracks[touchId]) == null) {
 			track = tracks[touchId] = new List<VolatilePoint>();
 		}
 		var last = track.last(), dx:Float, dy:Float;
-		if (last != null && (dx = e.localX - last.x) * dx + (dy = e.localY - last.y) * dy < 1)
+		if (last != null && (dx = mouseX - last.x) * dx + (dy = mouseY - last.y) * dy < 1)
 			return; // 防止两点距离过于接近，可能导致计算误差
-		track.add(new VolatilePoint(e.localX, e.localY)); // add to end
+		track.add(new VolatilePoint(mouseX, mouseY)); // add to end
 	}
 
 	#if !flash
 	/**
- * 重构触摸事件，无法触发触摸的问题
- * @param x
- * @param y
- * @param shapeFlag
- * @param stack
- * @param interactiveOnly
- * @param hitObject
- * @return Bool
- */
+	 * 重构触摸事件，无法触发触摸的问题
+	 * @param x
+	 * @param y
+	 * @param shapeFlag
+	 * @param stack
+	 * @param interactiveOnly
+	 * @param hitObject
+	 * @return Bool
+	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
 		// var bool:Bool = super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
 		// if (bool == true) {
@@ -249,10 +212,11 @@ class KnifeLight extends #if !zygame openfl.display.Sprite #else TouchDisplayObj
 		return false;
 	}
 	#end
-} /**
+}
+
+/**
  * 触摸点
  */
-
 class VolatilePoint {
 	public var x:Float;
 	public var y:Float;

@@ -1,5 +1,6 @@
 package zygame.utils.load;
 
+import openfl.geom.Rectangle;
 import spine.openfl.SkeletonSprite;
 import openfl.display.Sprite;
 import zygame.utils.load.TextureLoader.TextureAtlas;
@@ -84,16 +85,34 @@ class DynamicTextureLoader {
  * 该接口未完全实现，暂不能正常使用。
  */
 class DynamicTextureAtlas extends TextureAtlas {
+
+	//8192 4096 2048 1024 
+	/**
+	 * 推荐使用4096，在GL渲染里，可以稳定支持4096
+	 */
+	public var size:Int = 4096;
+
+	/**
+	 * 纹理集名称 
+	 */
 	public var textureAtlasName:String;
 
+	/**
+	 * 图集打包器
+	 */
 	private var pack:MaxRectsBinPack;
 
+	/**
+	 * 缩放比例
+	 */
+	public var scale:Float = 1;
+
 	public function new() {
-		var glBitmapData = new BitmapData(2048, 2048, true, 0x0);
+		var glBitmapData = new BitmapData(size, size, true, 0x0);
 		// 启动GL渲染位图
 		@:privateAccess glBitmapData.readable = false;
 		super(glBitmapData, null);
-		pack = new MaxRectsBinPack(2048, 2048, false);
+		pack = new MaxRectsBinPack(size, size, false);
 		_tileset = new Tileset(_rootBitmapData);
 	}
 
@@ -105,30 +124,20 @@ class DynamicTextureAtlas extends TextureAtlas {
 	public function putSprite(name:String, spr:Sprite):Void {
 		var bounds = spr.getBounds(null);
 		var ma:Matrix = new Matrix();
-		var rect = pack.insert(Math.round(bounds.width), Math.round(bounds.height), FreeRectangleChoiceHeuristic.BestShortSideFit);
+		ma.scale(scale, scale);
+		var rect = pack.insert(Math.round(bounds.width * scale), Math.round(bounds.height * scale), FreeRectangleChoiceHeuristic.BestShortSideFit);
 		if (rect == null)
 			return;
 		rect = rect.clone();
-		ma.tx = rect.x - bounds.x;
-		ma.ty = rect.y - bounds.y;
+		ma.tx = rect.x - bounds.x * scale;
+		ma.ty = rect.y - bounds.y * scale;
 		_rootBitmapData.draw(spr, ma);
-		// ZGC.disposeBitmapData(bitmapData);
-		// 追加名字
-		_names.push(name);
 		// 生成可用的Frame
-		var frame = new Frame();
-		frame.x = rect.x;
-		frame.y = rect.y;
-		frame.frameWidth = bounds.width;
-		frame.frameHeight = bounds.height;
-		frame.frameX = bounds.x;
-		frame.frameY = bounds.y;
-		frame.width = rect.width;
-		frame.height = rect.height;
-		frame.parent = this;
-		frame.id = _names.length - 1;
-		_tileRects.set(name, frame);
-		_tileset.addRect(rect);
+		var frame = pushFrame(name, rect);
+		frame.frameWidth = bounds.width * scale;
+		frame.frameHeight = bounds.height * scale;
+		frame.frameX = bounds.x * scale;
+		frame.frameY = bounds.y * scale;
 	}
 
 	/**
@@ -146,6 +155,16 @@ class DynamicTextureAtlas extends TextureAtlas {
 		ma.ty = rect.y;
 		_rootBitmapData.draw(bitmapData, ma);
 		ZGC.disposeBitmapData(bitmapData);
+		pushFrame(name, rect);
+	}
+
+	/**
+	 * 统一补帧逻辑
+	 * @param name 
+	 * @param rect 
+	 * @return Frame
+	 */
+	private function pushFrame(name:String, rect:Rectangle):Frame {
 		// 追加名字
 		_names.push(name);
 		// 生成可用的Frame
@@ -158,5 +177,6 @@ class DynamicTextureAtlas extends TextureAtlas {
 		frame.id = _names.length - 1;
 		_tileRects.set(name, frame);
 		_tileset.addRect(rect);
+		return frame;
 	}
 }

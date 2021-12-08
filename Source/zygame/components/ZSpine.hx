@@ -33,6 +33,8 @@ class ZSpine extends ZBox {
 
 	private var _isCache = false;
 
+	public var tilemap:Bool = false;
+
 	function get_isCache():Bool {
 		return _isCache;
 	}
@@ -133,7 +135,20 @@ class ZSpine extends ZBox {
 
 	public function new(atlasName:String = null, skeletionName:String = null, tilemap:Bool = false, native:Bool = false, isLoop:Bool = true) {
 		super();
+		this.tilemap = tilemap;
 		this.isLoop = isLoop;
+		if (atlasName == null || skeletionName == null) {
+			return;
+		}
+		createSpine(atlasName, skeletionName);
+	}
+
+	/**
+	 * 创建Spine
+	 * @param atlasName 
+	 * @param skeletionName 
+	 */
+	public function createSpine(atlasName:String, skeletionName:String):Void {
 		if (tilemap) {
 			btilemap = new ImageBatchs(ZBuilder.getBaseTextureAtlas(atlasName));
 			this.addChild(btilemap);

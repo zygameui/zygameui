@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import zygame.media.SoundChannelManager;
 import zygame.shader.Slice9Shader;
 import zygame.shader.GeryShader;
 import openfl.display.Shader;
@@ -263,9 +264,11 @@ class BToggleButton extends BTouchSprite {
 					// batchs.dispatchEvent(new TileTouchEvent(touch.type+"Tile",this));
 					if (!disableSound) {
 						if (sound != null || ZButton.defaultSound != null) {
-							var playsound = ZBuilder.getBaseSound(sound == null ? ZButton.defaultSound : sound);
-							if (playsound != null) {
-								playsound.play(0, 1);
+							if (SoundChannelManager.current.isEffectAvailable()) {
+								var playsound = ZBuilder.getBaseSound(sound == null ? ZButton.defaultSound : sound);
+								if (playsound != null) {
+									playsound.play(0, 1);
+								}
 							}
 						}
 					}

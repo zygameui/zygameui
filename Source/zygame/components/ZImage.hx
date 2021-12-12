@@ -225,7 +225,7 @@ class ZImage extends DataProviderComponent {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
 		this.display.bitmapData = null;
-		this._shader = null;
+		// this._shader = null;
 	}
 
 	override function set_vAlign(value:String):String {

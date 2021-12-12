@@ -145,6 +145,10 @@ class ZBuilder {
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, zygame.components.ZParticles).dataProvider = value;
 		});
+		bindParsing(ZImage, "mouseEnabled", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, zygame.components.ZImage).display.mouseEnabled = value == "true";
+			cast(ui, zygame.components.ZImage).mouseEnabled = cast(ui, zygame.components.ZImage).display.mouseEnabled;
+		});
 		bindParsing(zygame.components.ZImage, "src", function(ui:Dynamic, name:String, value:String):Void {
 			var values = value.split(":");
 			if (values.length >= 3) {

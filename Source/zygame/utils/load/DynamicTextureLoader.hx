@@ -81,8 +81,8 @@ class DynamicTextureLoader {
 }
 
 /**
- * 微信小游戏无法正常使用
- * 该接口未完全实现，暂不能正常使用。
+ * 动态纹理图集，允许在该图集自动追加Sprite、BitmapData等对象。
+ * 注意事项：当如果纹理图集已经被使用的情况下，请不要再追加纹理对象，否则会发生异常，无法正常渲染。
  */
 class DynamicTextureAtlas extends TextureAtlas {
 

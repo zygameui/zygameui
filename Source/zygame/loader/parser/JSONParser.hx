@@ -16,12 +16,12 @@ class JSONParser extends ParserBase {
 			return;
 		}
 		AssetsUtils.loadText(getData()).onComplete(function(text) {
-			try{
+			try {
 				this.finalAssets(JSON, Json.parse(text), 1);
-			}
-			catch(e:Exception){
-				trace("错误内容：",text);
-				throw "无法正常解析"+getName()+".json";
+			} catch (e:Exception) {
+				trace("错误信息：", e.message);
+				trace("错误内容：", text);
+				throw "无法正常解析" + getName() + ".json";
 			}
 		}).onError(function(err) {
 			this.sendError("无法加载：" + getData());

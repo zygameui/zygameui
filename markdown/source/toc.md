@@ -22,6 +22,7 @@
    5. [Haxe语法注意事项](api/haxe.md)
    6. [组件](features.md)
       1. [Spine骨骼动画](features/spine.md)
+         2. [Spine位图缓存](features/spinebitmaps.md)
       2. [盒子容器](features/box.md)
       3. [按钮](features/button.md)
       4. [列表](features/list.md)

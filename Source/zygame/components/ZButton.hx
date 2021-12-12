@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.media.SoundChannelManager;
 import openfl.events.MouseEvent;
 import zygame.components.base.ToggleButton;
 import zygame.components.skin.BaseSkin;
@@ -85,8 +86,10 @@ class ZButton extends ToggleButton {
 	private function _clickCall(e:MouseEvent):Void {
 		if (sound != null || defaultSound != null) {
 			var playsound = ZBuilder.getBaseSound(sound == null ? defaultSound : sound);
-			if (playsound != null) {
-				playsound.play(0, 1);
+			if (SoundChannelManager.current.isEffectAvailable()) {
+				if (playsound != null) {
+					playsound.play(0, 1);
+				}
 			}
 		}
 		if (_clickEventCall != null)

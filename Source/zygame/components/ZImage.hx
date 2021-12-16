@@ -75,7 +75,7 @@ class ZImage extends DataProviderComponent {
 	override public function updateComponents():Void {
 		if (display != null) {
 			var data:Dynamic = super.dataProvider;
-			if (data != null) {
+			if (data != null && data != "") {
 				if (Std.isOfType(data, String)) {
 					// 新增ZBuilder缓存确认
 					var buildBitmapData = ZBuilder.getBaseBitmapData(data);
@@ -88,15 +88,17 @@ class ZImage extends DataProviderComponent {
 						var path:String = data;
 						if (cacheAssets != null) {
 							cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
-								display.bitmapData = bitmapData;
-								updateImageScaleWidthAndHeight();
-								onBitmapDataUpdate();
-								this.shader = _shader;
+								if (Std.isOfType(dataProvider, String)) {
+									display.bitmapData = bitmapData;
+									updateImageScaleWidthAndHeight();
+									onBitmapDataUpdate();
+									this.shader = _shader;
+								}
 							});
 						} else {
 							// 启动异步载入
 							Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
-								if (isDispose) {
+								if (isDispose || !Std.isOfType(dataProvider, String)) {
 									ZGC.disposeBitmapData(bitmapData);
 									return;
 								}
@@ -117,7 +119,7 @@ class ZImage extends DataProviderComponent {
 					this.shader = _shader;
 				}
 			}
-			display.visible = data != null;
+			display.visible = data != null && data != "";
 			if (@:privateAccess display._setWidth)
 				display.width = @:privateAccess display._width;
 			if (@:privateAccess display._setHeight)

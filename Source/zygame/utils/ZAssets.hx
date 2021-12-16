@@ -49,7 +49,6 @@ import haxe.macro.Compiler;
  */
 @:keep
 class ZAssets {
-
 	/**
 	 * 全局事件侦听器，如果文件加载失败的统一入口
 	 */
@@ -391,6 +390,14 @@ class ZAssets {
 	}
 
 	public var canError:Bool = false;
+
+	/**
+	 * 是否正在加载中
+	 * @return Bool
+	 */
+	public function isLoading():Bool {
+		return !_loadStop;
+	}
 
 	/**
 	 *  开始加载
@@ -1048,7 +1055,6 @@ class ZAssets {
 	public function playBGMusic(id:String):Void {
 		_bgid = id;
 		var sound:Music = getMusic(id);
-		trace("playBGMusic", sound);
 		@:privateAccess SoundChannelManager.current.playMusic(sound);
 	}
 

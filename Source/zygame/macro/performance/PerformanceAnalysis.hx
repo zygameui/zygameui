@@ -1,5 +1,6 @@
 package zygame.macro.performance;
 
+import lime.graphics.opengl.GLTexture;
 import haxe.Timer;
 
 /**
@@ -7,6 +8,13 @@ import haxe.Timer;
  */
 @:expose
 class PerformanceAnalysis {
+	/**
+	 * 每帧glBindTextureCounts的调用数量
+	 */
+	public static var glBindTextureCounts:Int = 0;
+
+	private static var _glBindTextureCounts:Int = 0;
+
 	/**
 	 * 耗时数据
 	 */
@@ -21,6 +29,14 @@ class PerformanceAnalysis {
 	 * 是否已经初始化完毕
 	 */
 	private static var inited:Bool = false;
+
+	/**
+	 * 统计glBindTexture的消耗
+	 * @param texture 
+	 */
+	public static function glBindTexture(texture:GLTexture):Void {
+		_glBindTextureCounts++;
+	}
 
 	/**
 	 * 输出分析数据
@@ -47,17 +63,26 @@ class PerformanceAnalysis {
 		trace("关于" + pkg + "的分析数据:\n" + array);
 	}
 
-	/**
-	 * 统计开始
-	 * @param name 
-	 */
-	public static function analysisStart(name:String):Void {
+	public static function init():Void {
 		#if js
 		if (inited == false) {
 			inited = true;
 			untyped window.PerformanceAnalysis = PerformanceAnalysis;
 		}
 		#end
+	}
+
+	public static function onFrame():Void {
+		if (_glBindTextureCounts != 0)
+			glBindTextureCounts = _glBindTextureCounts;
+		_glBindTextureCounts = 0;
+	}
+
+	/**
+	 * 统计开始
+	 * @param name 
+	 */
+	public static function analysisStart(name:String):Void {
 		analysisTimes.set(name, Timer.stamp());
 	}
 

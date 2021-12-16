@@ -64,7 +64,9 @@ class Lib {
 	 * @return Float
 	 */
 	public static function ceDecode(value:Dynamic):Float {
-		if (value == null || !Std.isOfType(value, String))
+		if (value == null)
+			return 0;
+		if (!Std.isOfType(value, String))
 			return value;
 		value = StringTools.replace(value, "CE#", "");
 		var bytes = Base64.decode(value);

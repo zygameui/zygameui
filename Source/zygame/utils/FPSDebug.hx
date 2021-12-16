@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.macro.performance.PerformanceAnalysis;
 import zygame.components.ZBox;
 import zygame.components.ZQuad;
 import zygame.core.Start;
@@ -49,7 +50,7 @@ class FPSDebug extends ZBox {
 			this.addChild(bg);
 			bg.width = _text.width;
 			bg.height = _text.height;
-			bg.alpha = 0.85;
+			bg.alpha = 0.6;
 			this.addChild(_text);
 
 			this.mouseChildren = true;
@@ -88,7 +89,7 @@ class FPSDebug extends ZBox {
 				var msg = "CPU:" + Std.int(_allcpu / _alltimes / 8 * 100) + "\nMODE:" + Lib.getRenderMode() + "\nMEM:" + mem + "MB\nMaxMEN:" + memPeak
 					+ "MB\nUPDATES:" + zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count() + "\nS_RUNING:"
 					+ SpineManager.playingCount + "\nFPS:" + Std.int(16 / fps * 60) + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale
-					+ "\nRETAIN:" + GC.getRetainCounts() + "\nGPU:" + GPUUtils.getGpuMemoryMB();
+					+ "\nRETAIN:" + GC.getRetainCounts() + "\nGPU:" + GPUUtils.getGpuMemoryMB() + "\nGL_BIND:" + PerformanceAnalysis.glBindTextureCounts;
 				_text.dataProvider = msg;
 				if (_alltimes > 60) {
 					_alldt = 0;

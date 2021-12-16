@@ -14,6 +14,9 @@ import zygame.utils.Log;
 import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
+#if test
+@:build(zygame.macro.performance.PerformanceUtils.build())
+#end
 class DisplayObjectContainer extends Sprite implements Refresher implements zygame.mini.MiniExtend {
 
 	/**

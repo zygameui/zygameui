@@ -1,5 +1,6 @@
 package zygame.core;
 
+import zygame.macro.performance.PerformanceAnalysis;
 import zygame.utils.ScaleUtils;
 import zygame.utils.CullingRenderUtils;
 import lime.graphics.RenderContext;
@@ -50,6 +51,7 @@ class Start extends ZScene {
 	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true
 	 */
 	public var dynamicFps:Bool = #if (disable_dynamic_fps || cpp) false #else true #end;
+	// public var dynamicFps:Bool = false;
 
 	/**
 	 * 低频模式
@@ -332,37 +334,39 @@ class Start extends ZScene {
 	private var _update:Int = 0;
 
 	private function onGameRender(context:RenderContext):Void {
+
+
 		var newTime = Timer.stamp();
 		_dt = Std.int((newTime - _lastTime) * 1000);
 		_lastTime = newTime;
 
-		#if !(disable_dynamic_fps || cpp)
 		var isCanRender = !dynamicFps || _dt < 20;
+		#if disable_dynamic_fps
+		lowFps = false;
+		isCanRender = true;
+		#else
 		if (lowFps)
 			isCanRender = false;
-		if (isCanRender || _update >= 2) {
-		#else
-		if (true) {
 		#end
+		if (isCanRender || _update >= 2) {
 			_update = 0;
-			// 剔除
-			// CullingRenderUtils.culling(stage);
 			@:privateAccess stage.__onLimeRender(context);
+		} else {
+			_update++;
+			@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
+			@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
+			@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));
 		}
-
-	else {
-		_update++;
-		@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
-		@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
-		@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));
-	}
 		var cpu = Timer.stamp();
-
 		_cpuDt = Std.int((cpu - newTime) * 1000);
+		PerformanceAnalysis.onFrame();
 	}
+
 	override public function onInit():Void {
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
+
+		PerformanceAnalysis.init();
 
 		stage.frameRate = 60;
 		SpineManager.init(stage);
@@ -505,33 +509,33 @@ class Start extends ZScene {
 	}
 
 	/**
- * 获取帧侦听数量
- * @return Int
- */
+	 * 获取帧侦听数量
+	 * @return Int
+	 */
 	public function getUpdateLength():Int {
 		return updates.length;
 	}
 
 	/**
- * 获取每帧间隔时间
- * @return Float
- */
+	 * 获取每帧间隔时间
+	 * @return Float
+	 */
 	public function getIntervalTime():Float {
 		return _dt;
 	}
 
 	/**
- * 获取CPU运行时间
- * @return Float
- */
+	 * 获取CPU运行时间
+	 * @return Float
+	 */
 	public function getCPUTime():Float {
 		return _cpuDt;
 	}
 
 	/**
- * 帧事件
- * @param e
- */
+	 * 帧事件
+	 * @param e
+	 */
 	private function onFrameEvent(e:Event):Void {
 		if (fps.visible)
 			topView.addChild(fps);
@@ -580,9 +584,9 @@ class Start extends ZScene {
 	}
 
 	/**
- *  添加对象到帧事件
- *  @param display -
- */
+	 *  添加对象到帧事件
+	 *  @param display -
+	 */
 	public function addToUpdate(display:Refresher):Void {
 		if (isFrameing)
 			this.updateStatsList.push(new UpdateStats(display, 0));
@@ -591,9 +595,9 @@ class Start extends ZScene {
 	}
 
 	/**
- *  将对象从帧事件移除
- *  @param display -
- */
+	 *  将对象从帧事件移除
+	 *  @param display -
+	 */
 	public function removeToUpdate(display:Refresher):Void {
 		if (isFrameing)
 			this.updateStatsList.push(new UpdateStats(display, 1));
@@ -605,11 +609,11 @@ class Start extends ZScene {
 	}
 
 	/**
- * 重写onFrame
- */
+	 * 重写onFrame
+	 */
 	override public function onFrame():Void {}
-} class UpdateStats {
-
+}
+class UpdateStats {
 	/**
 	 * 处理对象
 	 */

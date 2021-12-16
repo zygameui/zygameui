@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import spine.openfl.SkeletonSprite;
 import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.display.Stage;
@@ -54,6 +55,9 @@ class SpineManager {
 		stage = pstage;
 		_lastFpsTime = Date.now().getTime();
 		stage.addEventListener(Event.ENTER_FRAME, onFrame);
+		#if (test && js)
+		untyped window.spineDebugInfo = echoDebugInfo;
+		#end
 	}
 
 	public static function pause():Void {
@@ -72,6 +76,25 @@ class SpineManager {
 		}
 
 		stage.addEventListener(Event.ENTER_FRAME, onFrame);
+	}
+
+	/**
+	 * 输出调试信息
+	 */
+	public static function echoDebugInfo():Void {
+		var spineUpdateList:Array<Dynamic> = [];
+		for (display in spineOnFrames) {
+			if (!display.isHidden() && display.isPlay) {
+				if (Std.isOfType(display, SkeletonSprite)) {
+					var spine = cast(display, SkeletonSprite);
+					spineUpdateList.push({
+						action: spine.assetsId,
+						isCache: spine.isCache
+					});
+				}
+			}
+		}
+		trace(spineUpdateList.length, spineUpdateList);
 	}
 
 	private static function onFrame(event:Event):Void {

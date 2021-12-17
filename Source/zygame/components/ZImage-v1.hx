@@ -259,6 +259,10 @@ class ZImage extends DataProviderComponent {
 		return this.display.smoothing;
 	}
 
+	// override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
+	// 	super.__update(transformOnly, updateChildren);
+	// }
+
 	/**
 	 * 为舞台等比例铺满背景
 	 * @param display 

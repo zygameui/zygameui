@@ -51,8 +51,8 @@ class Start extends ZScene {
 	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true
 	 */
 	public var dynamicFps:Bool = #if (disable_dynamic_fps || cpp) false #else true #end;
-	// public var dynamicFps:Bool = false;
 
+	// public var dynamicFps:Bool = false;
 	/**
 	 * 低频模式
 	 */
@@ -117,6 +117,23 @@ class Start extends ZScene {
 	 * FPS60锁着计算
 	 */
 	private var fps60:FPSUtil = new FPSUtil(61);
+
+	/**
+	 * 渲染FPS
+	 */
+	private var __renderFps:FPSUtil;
+	public var renderFps(get, set):Int;
+
+	private function set_renderFps(value:Int):Int {
+		if (__renderFps == null)
+			__renderFps = new FPSUtil(value);
+		__renderFps.fps = value;
+		return value;
+	}
+
+	private function get_renderFps():Int {
+		return __renderFps == null ? 60 : __renderFps.fps;
+	}
 
 	/**
 	 * FPS以及内存显示器，请在super(0,0,true)第三个参数设置为true时设置为生效，否则fps将会为null。
@@ -334,25 +351,27 @@ class Start extends ZScene {
 	private var _update:Int = 0;
 
 	private function onGameRender(context:RenderContext):Void {
-
-
 		var newTime = Timer.stamp();
 		_dt = Std.int((newTime - _lastTime) * 1000);
 		_lastTime = newTime;
 
 		var isCanRender = !dynamicFps || _dt < 20;
+		if (__renderFps != null)
+			isCanRender = __renderFps.update();
 		#if disable_dynamic_fps
 		lowFps = false;
 		isCanRender = true;
 		#else
-		if (lowFps)
+		if (lowFps) {
 			isCanRender = false;
+			_update++;
+		} else if (__renderFps == null)
+			_update++;
 		#end
 		if (isCanRender || _update >= 2) {
 			_update = 0;
 			@:privateAccess stage.__onLimeRender(context);
 		} else {
-			_update++;
 			@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
 			@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
 			@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));

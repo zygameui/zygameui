@@ -150,11 +150,21 @@ class ZSpine extends ZBox {
 	 */
 	public function createSpine(atlasName:String, skeletionName:String):Void {
 		if (tilemap) {
-			btilemap = new ImageBatchs(ZBuilder.getBaseTextureAtlas(atlasName));
-			this.addChild(btilemap);
+			if (bspine != null && bspine.parent != null) {
+				bspine.parent.removeTile(bspine);
+				bspine.spine.destroy();
+			}
+			if (btilemap == null) {
+				btilemap = new ImageBatchs(ZBuilder.getBaseTextureAtlas(atlasName));
+				this.addChild(btilemap);
+			}
 			bspine = new BSpine(atlasName, skeletionName);
 			btilemap.addChild(bspine);
 		} else {
+			if (spine != null && spine.parent != null) {
+				spine.parent.removeChild(spine);
+				spine.destroy();
+			}
 			spine = ZBuilder.createSpineSpriteSkeleton(atlasName, skeletionName);
 			if (spine == null)
 				trace("Error:" + atlasName + ":" + skeletionName + " spine is not create");

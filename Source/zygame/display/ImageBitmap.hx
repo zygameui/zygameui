@@ -1,28 +1,70 @@
 package zygame.display;
 
+import zygame.utils.load.Frame;
+import openfl.display.BitmapData;
 import openfl.display.Bitmap;
 import openfl.geom.Rectangle;
 import openfl.geom.Matrix;
 
+/**
+ * 轻量化的ImageBitmap显示对象
+ */
 class ImageBitmap extends Bitmap {
-	/**
-	 * 当不允许使用getBounds时，则使用noBoundsRect
-	 */
-	// private static var noBoundsRect:Rectangle = new Rectangle();
+	public var mouseEnabled:Bool = false;
+
+	private var _data:Dynamic = null;
+
+	private var _rect:Rectangle;
 
 	/**
-	 * 如果设置boundsEnabled为false时，则getBounds永远获得0，0，0，0的值，默认为true
+	 * 为ImageBitmap设置位图或者精灵数据
 	 */
-	// public var boundsEnabled:Bool = true;
+	public var dataProvider(get, set):Dynamic;
 
-	// @:noCompletion private override function __getBounds(rect:Rectangle, matrix:Matrix):Void {
-	// 	if (!boundsEnabled) {
-	// 		var bounds = @:privateAccess Rectangle.__pool.get();
-	// 		bounds.setTo(0, 0, 0, 0);
-	// 		@:privateAccess bounds.__transform(bounds, matrix);
-	// 		@:privateAccess rect.__expand(bounds.x, bounds.y, bounds.width, bounds.height);
-	// 		@:privateAccess Rectangle.__pool.release(bounds);
-	// 	} else
-	// 		super.__getBounds(rect, matrix);
-	// }
+	function get_dataProvider():Dynamic {
+		return _data;
+	}
+
+	public function getTextureWidth():Float {
+		if (_data == null)
+			return 0;
+		if (Std.isOfType(dataProvider, BitmapData))
+			return cast(dataProvider, BitmapData).width;
+		else if (Std.isOfType(dataProvider, Frame))
+			return cast(dataProvider, Frame).width;
+		return 0;
+	}
+
+	public function getTextureHeight():Float {
+		if (_data == null)
+			return 0;
+		if (Std.isOfType(dataProvider, BitmapData))
+			return cast(dataProvider, BitmapData).height;
+		else if (Std.isOfType(dataProvider, Frame))
+			return cast(dataProvider, Frame).height;
+		return 0;
+	}
+
+	function set_dataProvider(value:Dynamic):Dynamic {
+		_data = value;
+		if (Std.isOfType(value, BitmapData)) {
+			this.bitmapData = value;
+		} else if (Std.isOfType(value, Frame)) {
+			var frame:Frame = cast value;
+			this.bitmapData = frame.parent.getRootBitmapData();
+			if (_rect == null)
+				_rect = new Rectangle();
+			_rect.x = frame.x;
+			_rect.y = frame.y;
+			_rect.width = frame.width;
+			_rect.height = frame.height;
+			this.scrollRect = _rect;
+			if (frame.scale9rect != null)
+				this.scale9Grid = frame.scale9rect;
+			// this.scaleX = this.bitmapData.width / frame.width;
+			// this.scaleY = this.bitmapData.height / frame.height;
+		}
+		return _data;
+	}
+	
 }

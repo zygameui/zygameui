@@ -442,4 +442,16 @@ class Lib {
 	public static function int(num:Float):Int {
 		return Std.int(num);
 	}
+
+	/**
+	 * 获取运行平台名称，如IOS、Android等，如果无法识别，则会返回null
+	 * @return String 
+	 */
+	public static function getPlatformName():String {
+		#if wechat
+		return untyped window.platform;
+		#else
+		return null;
+		#end
+	}
 }

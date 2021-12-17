@@ -1,5 +1,8 @@
 package zygame.components;
 
+import zygame.display.DisplayObjectContainer;
+import zygame.utils.Align;
+import zygame.display.ImageBitmap;
 import zygame.utils.CacheAssets;
 import zygame.utils.ZGC;
 import openfl.display.Shader;
@@ -12,6 +15,7 @@ import openfl.geom.Rectangle;
 
 /**
  *  支持使用图片路径、以及位图设置内容
+ * v2 2021.12。16版本，将Image升级为ImageBitmap轻量化显示对象
  */
 class ZImage extends DataProviderComponent {
 	private var isDispose:Bool = false;
@@ -20,7 +24,7 @@ class ZImage extends DataProviderComponent {
 
 	private var _shader:Shader;
 
-	public var display:Image;
+	public var display:ImageBitmap;
 
 	public var fill(get, set):Bool;
 
@@ -53,7 +57,7 @@ class ZImage extends DataProviderComponent {
 
 	public function new() {
 		super();
-		display = new Image(null);
+		display = new ImageBitmap();
 		this.addChild(display);
 	}
 
@@ -65,10 +69,27 @@ class ZImage extends DataProviderComponent {
 	 * 自动缩放比例
 	 */
 	private function updateImageScaleWidthAndHeight():Void {
+		// 居中计算
+		switch (vAlign) {
+			case Align.TOP:
+				display.y = 0;
+			case Align.BOTTOM:
+				display.y = -display.height;
+			case Align.CENTER:
+				display.y = -display.height / 2;
+		}
+		switch (hAlign) {
+			case Align.LEFT:
+				display.x = 0;
+			case Align.RIGHT:
+				display.x = -display.width;
+			case Align.CENTER:
+				display.x = -display.width / 2;
+		}
 		if (scaleWidth == 0 && scaleHeight == 0)
 			return;
-		var w = (scaleWidth == 0 ? this.width : scaleWidth) / this.display.width;
-		var h = (scaleHeight == 0 ? this.height : scaleHeight) / this.display.height;
+		var w = (scaleWidth == 0 ? this.width : scaleWidth) / this.display.getTextureWidth();
+		var h = (scaleHeight == 0 ? this.height : scaleHeight) / this.display.getTextureHeight();
 		this.scale(Math.min(w, h));
 	}
 
@@ -80,7 +101,7 @@ class ZImage extends DataProviderComponent {
 					// 新增ZBuilder缓存确认
 					var buildBitmapData = ZBuilder.getBaseBitmapData(data);
 					if (buildBitmapData != null) {
-						display.bitmapData = buildBitmapData;
+						display.dataProvider = buildBitmapData;
 						updateImageScaleWidthAndHeight();
 						onBitmapDataUpdate();
 						this.shader = _shader;
@@ -89,7 +110,7 @@ class ZImage extends DataProviderComponent {
 						if (cacheAssets != null) {
 							cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
 								if (Std.isOfType(dataProvider, String)) {
-									display.bitmapData = bitmapData;
+									display.dataProvider = bitmapData;
 									updateImageScaleWidthAndHeight();
 									onBitmapDataUpdate();
 									this.shader = _shader;
@@ -102,7 +123,7 @@ class ZImage extends DataProviderComponent {
 									ZGC.disposeBitmapData(bitmapData);
 									return;
 								}
-								display.bitmapData = bitmapData;
+								display.dataProvider = bitmapData;
 								updateImageScaleWidthAndHeight();
 								onBitmapDataUpdate();
 								this.shader = _shader;
@@ -113,17 +134,17 @@ class ZImage extends DataProviderComponent {
 				}
 				// else if(Std.isOfType(data,BitmapData) || Std.isOfType(data,Frame) || Std.isOfType(data,AsyncFrame))
 				else if (Std.isOfType(data, BitmapData) || Std.isOfType(data, Frame)) {
-					display.bitmapData = cast data;
+					display.dataProvider = cast data;
 					updateImageScaleWidthAndHeight();
 					onBitmapDataUpdate();
 					this.shader = _shader;
 				}
 			}
 			display.visible = data != null && data != "";
-			if (@:privateAccess display._setWidth)
-				display.width = @:privateAccess display._width;
-			if (@:privateAccess display._setHeight)
-				display.height = @:privateAccess display._height;
+			if (_setWidth != null)
+				display.width = _setWidth;
+			if (_setHeight != null)
+				display.height = _setHeight;
 		}
 		if (fill) {
 			this.scale(1);
@@ -131,47 +152,29 @@ class ZImage extends DataProviderComponent {
 		}
 	}
 
-	#if flash
-	@:setter(width)
-	public function set_width(value:Float) {
-		display.width = value;
-		return value;
-	}
+	private var _setWidth:Null<Float>;
 
-	@:getter(width)
-	public function get_width() {
-		return display.width;
-	}
+	private var _setHeight:Null<Float>;
 
-	@:setter(height)
-	public function set_height(value:Float) {
-		display.height = value;
-		return value;
-	}
-
-	@:getter(height)
-	public function get_height() {
-		return display.height;
-	}
-	#else
 	private override function set_width(value:Float):Float {
+		_setWidth = value;
 		display.width = value;
 		return value;
 	}
 
 	private override function set_height(value:Float):Float {
+		_setHeight = value;
 		display.height = value;
 		return value;
 	}
 
-	private override function get_width():Float {
-		return Math.abs(display.width * scaleX);
-	}
+	// private override function get_width():Float {
+	// 	return Math.abs(display.width * scaleX);
+	// }
 
-	private override function get_height():Float {
-		return Math.abs(display.height * scaleY);
-	}
-	#end
+	// private override function get_height():Float {
+	// 	return Math.abs(display.height * scaleY);
+	// }
 
 	private override function set_dataProvider(data:Dynamic):Dynamic {
 		if (super.dataProvider == data) {
@@ -195,7 +198,7 @@ class ZImage extends DataProviderComponent {
 	 * @param rect
 	 */
 	public function setScale9Grid(rect:Rectangle):Void {
-		display.setScale9Grid(rect);
+		// display.setScale9Grid(rect);
 	}
 
 	/**
@@ -226,23 +229,13 @@ class ZImage extends DataProviderComponent {
 		if (cacheAssets == null && this.display.bitmapData != null && isAysn && Std.isOfType(this.display.bitmapData, BitmapData)) {
 			ZGC.disposeBitmapData(this.display.bitmapData);
 		}
-		this.display.bitmapData = null;
+		this.display.dataProvider = null;
 		// this._shader = null;
 	}
 
 	override function set_vAlign(value:String):String {
-		this.display.vAlign = value;
+		// this.display.vAlign = value;
 		return super.set_vAlign(value);
-	}
-
-	override function set_hAlign(value:String):String {
-		this.display.hAlign = value;
-		return super.set_hAlign(value);
-	}
-
-	override function alignPivot(?v:String = null, ?h:String = null) {
-		super.alignPivot(v, h);
-		this.display.alignPivot(v, h);
 	}
 
 	/**
@@ -259,11 +252,15 @@ class ZImage extends DataProviderComponent {
 		return this.display.smoothing;
 	}
 
+	override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
+		super.__update(transformOnly, updateChildren);
+	}
+
 	/**
 	 * 为舞台等比例铺满背景
 	 * @param display 
 	 */
-	public static function fillStageImage(display:ZImage):Void {
+	public static function fillStageImage(display:DisplayObjectContainer):Void {
 		var scale1 = display.width / display.getStageWidth();
 		var scale2 = display.height / display.getStageHeight();
 		var scale = Math.max(scale1, scale2);

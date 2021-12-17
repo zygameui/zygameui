@@ -32,7 +32,7 @@ class Image extends DisplayObjectContainer {
 	/**
 	 * 位图渲染器
 	 */
-	private var _bitmap:ImageBitmap;
+	private var _bitmap:Bitmap;
 
 	private var _tilemap:Tilemap;
 	private var _curFrame:Frame;
@@ -105,7 +105,7 @@ class Image extends DisplayObjectContainer {
 				_tilemap.visible = false;
 			// 位图渲染处理
 			if (_bitmap == null) {
-				_bitmap = new ImageBitmap(bitmapData, null, true);
+				_bitmap = new Bitmap(bitmapData, null, true);
 				// _bitmap.boundsEnabled = boundsEnabled;
 				this.addChild(_bitmap);
 			} else {

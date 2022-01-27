@@ -21,7 +21,8 @@ class JSONParser extends ParserBase {
 			} catch (e:Exception) {
 				trace("错误信息：", e.message);
 				trace("错误内容：", text);
-				throw "无法正常解析" + getName() + ".json";
+				// throw "无法正常解析" + getName() + ".json";
+				this.sendError("无法正常解析" + getName() + ".json");
 			}
 		}).onError(function(err) {
 			this.sendError("无法加载：" + getData());

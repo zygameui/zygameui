@@ -93,6 +93,7 @@ class SpineManager {
 					});
 				}
 			}
+
 		}
 		trace(spineUpdateList.length, spineUpdateList);
 	}

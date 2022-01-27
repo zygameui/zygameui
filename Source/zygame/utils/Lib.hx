@@ -50,12 +50,23 @@ class Lib {
 	}
 
 	/**
+	 * 锁定CE2
+	 */
+	public static function lockCE2():Void{
+
+	}
+
+	/**
 	 * CE加密
 	 * @param data
 	 * @return String
 	 */
 	public static function ceEncode(data:Dynamic):String {
+		#if ce2
 		return "CE#" + Base64.encode(Bytes.ofString(Std.string(data)));
+		#else
+		return "CE#" + Base64.encode(Bytes.ofString(Std.string(data)));
+		#end
 	}
 
 	/**
@@ -68,10 +79,17 @@ class Lib {
 			return 0;
 		if (!Std.isOfType(value, String))
 			return value;
+		#if ce2
 		value = StringTools.replace(value, "CE#", "");
 		var bytes = Base64.decode(value);
 		value = Std.parseFloat(bytes.getString(0, bytes.length));
 		return value;
+		#else
+		value = StringTools.replace(value, "CE#", "");
+		var bytes = Base64.decode(value);
+		value = Std.parseFloat(bytes.getString(0, bytes.length));
+		return value;
+		#end
 	}
 
 	/**

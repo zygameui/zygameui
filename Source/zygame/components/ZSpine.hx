@@ -102,12 +102,16 @@ class ZSpine extends ZBox {
 	}
 
 	private function set_action(v:String):String {
-		if (bspine != null) {
-			bspine.action = v;
-			return v;
+		try {
+			if (bspine != null) {
+				bspine.action = v;
+				return v;
+			}
+			if (spine != null)
+				spine.playForce(v, isLoop);
+		} catch (e:Exception) {
+			trace("异常：动作" + v + "不存在");
 		}
-		if (spine != null)
-			spine.playForce(v, isLoop);
 		return v;
 	}
 

@@ -49,7 +49,7 @@ class ZSceneManager {
 		return _scenes[_scenes.length - 1];
 	}
 
-	private function updateParameter(scene:ZScene,parameter:Dynamic = null){
+	private function updateParameter(scene:ZScene, parameter:Dynamic = null) {
 		// 更新参数
 		if (parameter != null) {
 			var keys = Reflect.fields(parameter);
@@ -73,14 +73,14 @@ class ZSceneManager {
 		var scene:ZScene = _sceneMaps.get(key);
 		if (scene == null) {
 			scene = Type.createInstance(cName, []);
-			updateParameter(scene,parameter);
+			updateParameter(scene, parameter);
 			_sceneMaps.set(key, scene);
 			if (added)
 				Start.current.addChild(scene);
 		} else {
 			if (added)
 				Start.current.addChild(scene);
-			updateParameter(scene,parameter);
+			updateParameter(scene, parameter);
 			scene.onSceneReset();
 		}
 		_scenes.push(scene);
@@ -91,11 +91,11 @@ class ZSceneManager {
 	 *  主动释放场景
 	 *  @param zScene - 指定场景
 	 */
-	public function releaseScene(zScene:ZScene,onSceneRelease:Bool = true):Void {
+	public function releaseScene(zScene:ZScene, onSceneRelease:Bool = true):Void {
 		#if debug
 		trace("releaseScene:", zScene);
 		#end
-		if(onSceneRelease)
+		if (onSceneRelease)
 			zScene.onSceneRelease();
 		_sceneMaps.remove(Type.getClassName(Type.getClass(zScene)));
 		_scenes.remove(zScene);
@@ -162,15 +162,28 @@ class ZSceneManager {
 				// 如果是释放场景，那么就会主动释放场景。
 				if (isReleaseScene)
 					releaseScene(zscene);
-				else
-					zscene.parent.removeChild(zscene);
+				else {
+					switch (zscene.replaceMode) {
+						case REMOVE_TO_STAGE:
+							if (zscene.parent != null)
+								zscene.parent.removeChild(zscene);
+						case VISIBLE_SET_FALSE:
+							zscene.visible = false;
+					}
+				}
 			} else {
 				GC.retain(zscene);
 				newscene.addEventListener(Event.COMPLETE, function(_) {
 					if (isReleaseScene)
 						releaseScene(zscene);
 					else
-						zscene.parent.removeChild(zscene);
+						switch (zscene.replaceMode) {
+							case REMOVE_TO_STAGE:
+								if (zscene.parent != null)
+									zscene.parent.removeChild(zscene);
+							case VISIBLE_SET_FALSE:
+								zscene.visible = false;
+						}
 					GC.release(zscene);
 				});
 			}
@@ -178,7 +191,10 @@ class ZSceneManager {
 		#if debug
 		trace("replaceScene addChild:", cName);
 		#end
-		Start.current.addChild(newscene);
+		if (newscene.parent == null)
+			Start.current.addChild(newscene);
+		else
+			newscene.visible = true;
 		return newscene;
 	}
 

@@ -21,6 +21,24 @@ import zygame.utils.Lib;
 	}
 
 	/**
+	 * 判断两个加载资源是否一致
+	 * @param base 
+	 * @return Bool
+	 */
+	public function equal(base:ParserBase):Bool {
+		var isObj = !Std.isOfType(base._data, String);
+		var isObj2 = !Std.isOfType(this._data, String);
+		if (isObj && isObj2) {
+			// 如果都是Obj的情况下，进行判断
+			return base._data.path == this._data.path;
+		} else if (!isObj2 && !isObj2) {
+			// 如果都不是Obj的情况下，直接判断
+			return base._data == this._data;
+		}
+		return false;
+	}
+
+	/**
 	 * 获取当前资源管理器
 	 * @return Dynamic
 	 */
@@ -113,6 +131,9 @@ import zygame.utils.Lib;
 	 * @param pro 解析进度，如果当前解析已结束，请传递1，否则请传递少于1的值。
 	 */
 	public function finalAssets(type:AssetsType, assetsData:Dynamic, pro:Float = 0):Void {
+		#if debug
+		trace("finalAssets:", type, pro);
+		#end
 		this.progress = pro;
 		this.out(this, type, assetsData, pro);
 		if (pro == 1) {

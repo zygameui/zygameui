@@ -26,25 +26,25 @@ class ZTextField extends TextField
 
     // private static var compositionstart:Bool = false;
 
-    // @:noCompletion private override function __cleanup ():Void {
+    @:noCompletion private override function __cleanup ():Void {
         #if js
         //进行深度清理
-        // js.Syntax.code("
-        // if(this.__graphics != null && this.__graphics.__bitmap != null)
-        // {
-        //     if(this.__graphics.__bitmap.__texture != null)
-        //     {
-        //         this.__graphics.__bitmap.__texture.dispose();
-        //         this.__graphics.__bitmap.__texture = null;
-        //     }
-        //     this.__graphics.__bitmap.dispose();
-        // }
-        // if(this.__graphics != null && this.__graphics.__canvas != null && this.__graphics.__canvas.cleanup != null)
-        //     this.__graphics.__canvas.cleanup();");
+        js.Syntax.code("
+        if(this.__graphics != null && this.__graphics.__bitmap != null)
+        {
+            if(this.__graphics.__bitmap.__texture != null)
+            {
+                this.__graphics.__bitmap.__texture.dispose();
+                this.__graphics.__bitmap.__texture = null;
+            }
+            this.__graphics.__bitmap.dispose();
+        }
+        if(this.__graphics != null && this.__graphics.__canvas != null && this.__graphics.__canvas.cleanup != null)
+            this.__graphics.__canvas.cleanup();");
         #end
-		// super.__cleanup ();
+		super.__cleanup ();
 
-	// }
+	}
     
     // /**
     //  * 优化使用输入法时输入重叠的问题

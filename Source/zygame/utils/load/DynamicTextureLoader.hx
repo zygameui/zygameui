@@ -85,8 +85,8 @@ class DynamicTextureLoader {
  * 注意事项：当如果纹理图集已经被使用的情况下，请不要再追加纹理对象，否则会发生异常，无法正常渲染。
  */
 class DynamicTextureAtlas extends TextureAtlas {
+	// 8192 4096 2048 1024
 
-	//8192 4096 2048 1024 
 	/**
 	 * 推荐使用4096，在GL渲染里，可以稳定支持4096
 	 */

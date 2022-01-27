@@ -36,8 +36,9 @@ class ListLayout extends BaseLayout {
 				layoutListV(cast box.parent);
 			else if (direction == HORIZONTAL)
 				layoutListH(cast box.parent);
-		} else
-			throw "ListLayout布局只能在ZList中使用，如果需要竖向/横向布局，请使用VLayout或者HLayout。";
+		} 
+		// else
+			// throw "ListLayout布局只能在ZList中使用，如果需要竖向/横向布局，请使用VLayout或者HLayout。";
 	}
 
 	public function layoutListV(list:ZList):Void {

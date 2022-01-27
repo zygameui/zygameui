@@ -80,7 +80,7 @@ class ExtendDynamic {
 												name: "_" + item.name,
 												meta: [],
 												access: [APublic],
-												kind: FieldType.FVar(macro:Dynamic),
+												kind: FieldType.FVar(macro:Dynamic,macro 0),
 												pos: Context.currentPos()
 											}
 											array.push(privateValue);
@@ -131,7 +131,7 @@ class ExtendDynamic {
 												name: "_" + item.name,
 												meta: [],
 												access: [APublic],
-												kind: FieldType.FVar(macro:Dynamic),
+												kind: FieldType.FVar(macro:Dynamic,macro 0),
 												pos: Context.currentPos()
 											}
 											array.push(privateValue);

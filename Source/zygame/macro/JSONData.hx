@@ -31,8 +31,9 @@ class JSONData {
 	 * @param jsonPath json文件路径
 	 * @param indexNames 索引名，支持多索引名，可用于快速查找
 	 * @param typeNames 类型名，可用于索引分类，一般用于相同ID的类型使用
+	 * @param embed 数据是否嵌入，默认为true，如果为false，则data会为null，需要主动为data赋值
 	 */
-	public macro static function create(jsonPath:String, indexNames:Array<String> = null, typeNames:Array<String> = null) {
+	public macro static function create(jsonPath:String, indexNames:Array<String> = null, typeNames:Array<String> = null, embed:Bool = true) {
 		var rootJsonPath = jsonPath;
 		var project:ZProjectData = AutoBuilder.firstProjectData;
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
@@ -61,13 +62,14 @@ class JSONData {
 						break;
 					}
 				}
+				var bindData = embed ? keyValue : null;
 				if (!isDynamicArray) {
 					newField = {
 						name: value,
 						doc: null,
 						meta: [],
 						access: [APublic],
-						kind: FVar(macro:Array<String>, macro $v{keyValue}),
+						kind: FVar(macro:Array<String>, macro $v{bindData}),
 						pos: Context.currentPos()
 					};
 				} else {
@@ -79,7 +81,7 @@ class JSONData {
 						doc: null,
 						meta: [],
 						access: [APublic],
-						kind: FVar(macro:Array<$t>, macro $v{keyValue}),
+						kind: FVar(macro:Array<$t>, macro $v{bindData}),
 						pos: Context.currentPos()
 					};
 					// 新增get{value}At(index)的方法，进行获取

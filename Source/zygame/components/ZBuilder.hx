@@ -1194,16 +1194,28 @@ class ZBuilder {
  * 异步资源载入构造结果
  */
 class AssetsBuilder extends Builder {
-	public var assets:ZAssets = new ZAssets();
+
+	/**
+		AssetsBuilder请求超时设置，默认为不启动（-1）
+		如果需要超时处理，请设置`AssetsBuilder.defalutTimeout`，单位为秒。
+	**/
+	public static var defalutTimeout:Float = -1;
+
+	public var assets:ZAssets;
 
 	public var viewXmlPath:String = null;
 
 	private var _viewParent:Dynamic;
 
+	// public var timeout:Float = -1;
+
 	public function new(path:String, parent:Dynamic) {
 		super();
 		viewXmlPath = path;
 		_viewParent = parent;
+		// 默认超时为15秒
+		assets = new ZAssets();
+		assets.timeout = defalutTimeout;
 	}
 
 	public function loadFiles(files:Array<String>):AssetsBuilder {

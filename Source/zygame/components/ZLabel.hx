@@ -317,6 +317,7 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
+		
 		value = Std.isOfType(value, String) ? value : Std.string(value);
 
 		if (_restrictEreg != null) {
@@ -329,7 +330,7 @@ class ZLabel extends DataProviderComponent {
 				value = value.substr(0, _maxChars);
 			}
 		}
-		
+
 		if (getDisplay().wordWrap == false) {
 			value = StringTools.replace(value, "\n", "");
 			value = StringTools.replace(value, "\r", "");
@@ -422,11 +423,10 @@ class ZLabel extends DataProviderComponent {
 	 * 设置文本行距
 	 * @param lead 
 	 */
-	public function setFontLeading(lead:Int):Void{
+	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
 		_display.setTextFormat(_font);
 		updateComponents();
-
 	}
 
 	/**
@@ -463,6 +463,10 @@ class ZLabel extends DataProviderComponent {
 	 * @param color 
 	 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
+		// 当长度小于0，或者索引少于-1时则无效
+		if (len <= 0 || startIndex == -1) {
+			return;
+		}
 		var endIndex:Int = startIndex + len;
 		var rootColor = _font.color;
 		_font.color = color;

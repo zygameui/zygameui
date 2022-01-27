@@ -114,8 +114,8 @@ class ZBox extends Component {
 	}
 
 	private function set_layout(value:BaseLayout):BaseLayout {
-		if (stage == null)
-			throw "请在组件初始化完毕后调用。";
+		// if (stage == null)
+			// throw "请在组件初始化完毕后调用。";
 		_layout = value;
 		this.updateComponents();
 		return value;

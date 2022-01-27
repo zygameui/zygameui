@@ -1,5 +1,7 @@
 package zygame.utils;
 
+import openfl.events.TimerEvent;
+import haxe.Timer;
 import zygame.events.GlobalAssetsLoadEvent;
 import openfl.events.EventDispatcher;
 import zygame.loader.parser.AsepriteParser;
@@ -55,6 +57,11 @@ class ZAssets {
 	public static var globalListener:EventDispatcher = new EventDispatcher();
 
 	/**
+	 * 可设置ZAssets的请求超时处理，默认为-1，-1为使用网络请求反馈，如果需要，则给timeout设置时间，单位为秒。
+	**/
+	public var timeout:Float = -1;
+
+	/**
 	 * 最大可同时加载数量，改进默认最大载入数为10
 	 */
 	public var maxLoadNumber:Int = #if MAX_LOAD_COUNT Std.parseInt(Compiler.getDefine("MAX_LOAD_COUNT")) #elseif ios 10 #else 10 #end;
@@ -84,6 +91,11 @@ class ZAssets {
 	 * 解析器资源载入
 	 */
 	private var _parsers:Array<ParserBase> = [];
+
+	/**
+		最后响应时间
+	**/
+	private var _lastTime:Float = 0;
 
 	/**
 	 * 解析器载入中对象
@@ -132,6 +144,11 @@ class ZAssets {
 	 */
 	private var _bgid:String;
 
+	/**
+	 * 响应时间
+	 */
+	// private var _responseTime:Float = 0;
+
 	public function new() {
 		_sounds = new Dictionary<String, Sound>();
 		_bitmaps = new Dictionary<String, BitmapData>();
@@ -163,7 +180,7 @@ class ZAssets {
 	 * @param contextFiles 该3D文件关联的文件，如动画文件。
 	 */
 	public function load3DFile(path:String):Void {
-		_parsers.push(new Loader3DParser(path));
+		pushPasrers(new Loader3DParser(path));
 	}
 
 	/**
@@ -182,7 +199,7 @@ class ZAssets {
 	 */
 	public function loadFile(data:Dynamic):Void {
 		if (Std.isOfType(data, ParserBase)) {
-			_parsers.push(data);
+			pushPasrers(data);
 			return;
 		}
 		if (Std.isOfType(data, String) && _loadfilelist.indexOf(data) == -1) {
@@ -196,7 +213,7 @@ class ZAssets {
 				}
 				var bool = Reflect.callMethod(base, Reflect.field(base, "supportType"), [cheakpath]);
 				if (bool) {
-					_parsers.push(Type.createInstance(base, [data]));
+					pushPasrers(Type.createInstance(base, [data]));
 					_loadfilelist.push(data);
 					return;
 				}
@@ -214,7 +231,7 @@ class ZAssets {
 		#if (!openfl_swf)
 		throw "OpenFL9 not support SWF file.";
 		#else
-		_parsers.push(new SWFParser({
+		pushPasrers(new SWFParser({
 			path: path,
 			zip: isZip
 		}));
@@ -235,7 +252,7 @@ class ZAssets {
 		}
 		var atlasLoader = new DynamicTextureAtlasParser(atlasName);
 		atlasLoader.loader.loadFile(path);
-		_parsers.push(atlasLoader);
+		pushPasrers(atlasLoader);
 	}
 
 	/**
@@ -243,7 +260,7 @@ class ZAssets {
 	 * @param path
 	 */
 	public function loadAssetsZip(path:String):Void {
-		_parsers.push(new ZIPAssetsParser(path));
+		pushPasrers(new ZIPAssetsParser(path));
 		// if (ZIPAssetsParser.supportType(path)) {
 		// } else
 		// 	throw "提供的" + path + "是无效的zip扩展文件";
@@ -267,7 +284,7 @@ class ZAssets {
 	 */
 	public function loadTextures(img:String, xml:String = null, isAtf:Bool = false):Void {
 		var _xml = xml != xml ? xml : img.substr(0, img.lastIndexOf(".")) + ".xml";
-		_parsers.push(new TextureAtlasParser({
+		pushPasrers(new TextureAtlasParser({
 			imgpath: img,
 			xmlpath: _xml,
 			path: _xml,
@@ -283,7 +300,7 @@ class ZAssets {
 	 * @param isAtf
 	 */
 	public function loadBase64Textures(imgBase64:String, xmlString:String, filename:String, isAtf:Bool):Void {
-		_parsers.push(new TextureAtlasParser({
+		pushPasrers(new TextureAtlasParser({
 			imgpath: imgBase64,
 			xmlpath: xmlString,
 			path: filename,
@@ -297,7 +314,7 @@ class ZAssets {
 	 * @param texJsonPath 该参数可以传入数组，支持多纹理加载
 	 */
 	public function loadSpineTextAlats(texPaths:Array<String>, texJsonPath:String):Void {
-		_parsers.push(new SpineParser({
+		pushPasrers(new SpineParser({
 			imgs: texPaths,
 			atlas: texJsonPath,
 			path: texJsonPath,
@@ -311,7 +328,7 @@ class ZAssets {
 	 * @param jsonPath 
 	 */
 	public function loadAsepriteTextureAtlas(texPath:String, jsonPath:String):Void {
-		_parsers.push(new AsepriteParser({
+		pushPasrers(new AsepriteParser({
 			path: texPath,
 			json: jsonPath
 		}));
@@ -326,13 +343,28 @@ class ZAssets {
 	}
 
 	/**
+	 * 追加加载解析器，并在追加的时候，会检索是否已经存在过相同的资源，如果是则不会再次载入
+	 * @param parser 
+	 */
+	private function pushPasrers(parser:ParserBase):Void {
+		for (base in _parsers) {
+			if (base.equal(parser)) {
+				// 队列已存在
+				// trace("队列已存在相同的加载资源：", parser);
+				return;
+			}
+		}
+		_parsers.push(parser);
+	}
+
+	/**
 	 * 加载Base64Spine纹理集资源
 	 * @param texPaths 需要提供路径/base64数据，支持多纹理
 	 * @param jsonData 纹理json数据
 	 * @param texJsonPath 纹理json路径
 	 */
 	public function loadBase64SpineTextAlats(texPaths:Array<{path:String, base64data:String}>, jsonData:String, texJsonPath:String):Void {
-		_parsers.push(new SpineParser({
+		pushPasrers(new SpineParser({
 			imgs: texPaths,
 			atlas: jsonData,
 			path: texJsonPath,
@@ -359,7 +391,7 @@ class ZAssets {
 	 * @param xmlPath
 	 */
 	public function loadFnt(pngPath:String, xmlPath:String):Void {
-		_parsers.push(new FntParser({
+		pushPasrers(new FntParser({
 			imgpath: pngPath,
 			fntpath: xmlPath,
 			path: xmlPath
@@ -371,7 +403,7 @@ class ZAssets {
 	 * @param bundlePath
 	 */
 	public function loadMapliveData(bundlePath:String):Void {
-		_parsers.push(new MapliveParser(bundlePath));
+		pushPasrers(new MapliveParser(bundlePath));
 	}
 
 	/**
@@ -379,7 +411,7 @@ class ZAssets {
 	 * @param path
 	 */
 	public function loadMusic(path:String):Void {
-		_parsers.push(new MP3Parser({
+		pushPasrers(new MP3Parser({
 			type: "Music",
 			path: path
 		}));
@@ -400,6 +432,11 @@ class ZAssets {
 	}
 
 	/**
+	 * 计时器
+	**/
+	private var timer:openfl.utils.Timer;
+
+	/**
 	 *  开始加载
 	 *  @param func - 加载进度回调
 	 *  @param errorCall - 错误回调
@@ -409,6 +446,7 @@ class ZAssets {
 		if (!_loadStop) {
 			throw "ZAssets已经在载入资源中，不能再次调用start方法";
 		}
+		// _responseTime = Timer.stamp();
 		this.canError = canError;
 		_errorCallBack = errorCall;
 		_callBack = func;
@@ -420,13 +458,42 @@ class ZAssets {
 		#if debug
 		trace("PARSER LOAD START:", _parsers);
 		#end
+		if (timeout != -1) {
+			if (timer == null) {
+				timer = new openfl.utils.Timer(1000, 0);
+				timer.addEventListener(TimerEvent.TIMER, onTimeOutCheck);
+			}
+			timer.reset();
+			timer.start();
+		}
 		this.loadNext();
+	}
+
+	/**
+		检查是否超时
+	**/
+	private function onTimeOutCheck(e:TimerEvent):Void {
+		var time = Timer.stamp();
+		var outtime = time - this._lastTime;
+		if (outtime >= timeout) {
+			loadError("加载超时");
+		}
+	}
+
+	/**
+		重置加载
+	**/
+	public function reset():Void {
+		_parsers = [];
+		_loadingParsers = [];
+		_loadStop = true;
 	}
 
 	/**
 	 * 开始载入下一个资源
 	 */
 	private function loadNext():Void {
+		_lastTime = Timer.stamp();
 		if (_parsers.length <= currentLoadIndex || _loadStop) {
 			// 检查是否已载入完毕
 			var curprogress = getProgress();
@@ -440,6 +507,8 @@ class ZAssets {
 				if (_callBack != null) {
 					_callBack(curprogress);
 				}
+				if (timer != null)
+					timer.stop();
 			}
 			return;
 		}
@@ -470,6 +539,10 @@ class ZAssets {
 
 	private function loadError(msg:String):Void {
 		trace("载入发生异常，错误：" + msg);
+		if (_loadStop) {
+			trace("已经暂停");
+			return;
+		}
 		if (canError) {
 			loadDone();
 		} else {
@@ -486,6 +559,8 @@ class ZAssets {
 			}
 
 			_loadStop = true;
+			if (timer != null)
+				timer.stop();
 			_parsers = [];
 			_loadfilelist = [];
 			currentLoadNumber = 0;
@@ -620,6 +695,10 @@ class ZAssets {
 		#if debug
 		trace(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
 		#end
+		// 如果已经加载停止了，则直接释放已有的资源
+		if (_loadStop) {
+			this.unloadAllByName(parser.getName());
+		}
 	}
 
 	/**
@@ -1223,35 +1302,55 @@ class ZAssets {
 	}
 
 	/**
+	 * 根据名称卸载所有相关的资源
+	**/
+	public function unloadAllByName(name:String):Void {
+		__unloadAll(name);
+	}
+
+	/**
 	 * 卸载所有资源
 	 */
 	public function unloadAll():Void {
+		__unloadAll();
+	}
+
+	private function __unloadAll(name:String = null):Void {
 		for (s in _xmls) {
-			_xmls.remove(s);
+			if (name == null || name == s)
+				_xmls.remove(s);
 		}
 		for (key in _bitmaps) {
-			removeBitmapData(key);
+			if (name == null || name == key)
+				removeBitmapData(key);
 		}
 		for (key in _textures) {
-			removeTextureAtlas(key);
+			if (name == null || name == key)
+				removeTextureAtlas(key);
 		}
 		for (key in _spines) {
-			removeSpineTextureAtlas(key);
+			if (name == null || name == key)
+				removeSpineTextureAtlas(key);
 		}
 		for (key in _sounds) {
-			removeSound(key);
+			if (name == null || name == key)
+				removeSound(key);
 		}
 		for (key in _musics) {
-			removeMusic(key);
+			if (name == null || name == key)
+				removeMusic(key);
 		}
 		for (key in _textcache) {
-			removeTextCache(key);
+			if (name == null || name == key)
+				removeTextCache(key);
 		}
 		for (key in _zips) {
-			unloadAssetsZip(key);
+			if (name == null || name == key)
+				unloadAssetsZip(key);
 		}
 		for (key in _cdbs) {
-			removeCDBData(key);
+			if (name == null || name == key)
+				removeCDBData(key);
 		}
 	}
 

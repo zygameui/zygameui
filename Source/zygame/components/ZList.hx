@@ -42,15 +42,15 @@ class ZList extends ZScroll {
 
 	public function new() {
 		super();
+		var layout2:ListLayout = new ListLayout();
+		this.hscrollState = "off";
+		view.layout = layout2;
+		_itemRenders = [];
 	}
 
 	override public function initComponents():Void {
 		super.initComponents();
-		var layout2:ListLayout = new ListLayout();
-		this.hscrollState = "off";
-		view.layout = layout2;
 		this.updateComponents();
-		_itemRenders = [];
 	}
 
 	override public function onTouchEnd(touch:TouchEvent):Void {

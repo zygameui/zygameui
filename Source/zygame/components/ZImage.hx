@@ -86,8 +86,14 @@ class ZImage extends DataProviderComponent {
 						this.shader = _shader;
 					} else {
 						var path:String = data;
+						// 当为: ${}格式时，则不会进行加载
+						if ((path.indexOf("http") != 0 && path.indexOf(":") != -1) || path.indexOf("${") != -1) {
+							return;
+						}
 						if (cacheAssets != null) {
 							cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
+								if (dataProvider != path)
+									return;
 								if (Std.isOfType(dataProvider, String)) {
 									display.bitmapData = bitmapData;
 									updateImageScaleWidthAndHeight();
@@ -98,6 +104,8 @@ class ZImage extends DataProviderComponent {
 						} else {
 							// 启动异步载入
 							Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
+								if (dataProvider != path)
+									return;
 								if (isDispose || !Std.isOfType(dataProvider, String)) {
 									ZGC.disposeBitmapData(bitmapData);
 									return;

@@ -12,6 +12,11 @@ import openfl.display.BitmapData;
  *  场景，用于管理不同的场景使用
  */
 class ZScene extends ZBox {
+	/**
+		切换方式，一般的切换方式都是直接removeChild掉当前场景，可以更换为使用visible=false的方式切换场景
+	**/
+	public var replaceMode:SceneReplaceMode = REMOVE_TO_STAGE;
+
 	public function new() {
 		super();
 	}
@@ -94,6 +99,7 @@ class ZScene extends ZBox {
 	 * @param display 如果不传递时，在ZBuilderScene类下，会自动定位显示对象，其他类型需要传递
 	 */
 	public function lockScene(display:DisplayObject = null):Void {
+		#if !disable_bitmap_draw
 		if (_lockDisplay != null)
 			return;
 		if (display == null && Std.isOfType(this, ZBuilderScene)) {
@@ -109,12 +115,14 @@ class ZScene extends ZBox {
 		var childIndex = this.getChildIndex(display);
 		display.parent.removeChild(display);
 		this.addChildAt(_lockScene, childIndex);
+		#end
 	}
 
 	/**
 	 * 解除画布渲染锁定
 	 */
 	public function unlockScene():Void {
+		#if !disable_bitmap_draw
 		if (_lockDisplay != null) {
 			var childIndex = this.getChildIndex(_lockScene);
 			_lockScene.parent.removeChild(_lockScene);
@@ -123,5 +131,11 @@ class ZScene extends ZBox {
 			_lockDisplay = null;
 			_lockScene = null;
 		}
+		#end
 	}
+}
+
+enum SceneReplaceMode {
+	REMOVE_TO_STAGE;
+	VISIBLE_SET_FALSE;
 }

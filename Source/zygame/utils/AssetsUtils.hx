@@ -52,7 +52,7 @@ class AssetsUtils {
 	/**
 	 * 将ZAssets当前加载列表资源导出
 	 */
-	 public static function parserAssetsConfigToXml(assets:ZAssets):String {
+	public static function parserAssetsConfigToXml(assets:ZAssets):String {
 		var parserLog:Array<Dynamic> = [];
 		for (base in assets.getParsers()) {
 			parserLog.push(base.getData());
@@ -523,7 +523,7 @@ class TextLoader extends BaseLoader {
 				_onCompleteCall(data.data);
 			_onCompleteCall = null;
 		});
-		data.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
+		data.addEventListener(IOErrorEvent.IO_ERROR, function(e):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
 				trace("重载：" + path + "," + loadTimes);
@@ -560,7 +560,7 @@ class SoundLoader extends BaseLoader {
 				_onCompleteCall(sound);
 			_onCompleteCall = null;
 		});
-		sound.addEventListener(IOErrorEvent.IO_ERROR, function(_):Void {
+		sound.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
 				trace("重载：" + path + "," + loadTimes);
@@ -610,6 +610,4 @@ class BytesSoundLoader extends BaseLoader {
 		sound.loadCompressedDataFromByteArray(this.bytes, this.bytes.bytesAvailable);
 		return this;
 	}
-
-	
 }

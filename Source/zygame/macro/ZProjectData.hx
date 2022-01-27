@@ -14,6 +14,8 @@ import sys.FileSystem;
  */
 class ZProjectData {
 	#if macro
+	@:persistent public static var haxelibPath:Map<String, String> = [];
+
 	public var assetsPath:Map<String, String> = [];
 	public var assetsRenamePath:Map<String, String> = [];
 	public var nowCwd:String = "";
@@ -52,13 +54,13 @@ class ZProjectData {
 					}
 				case "haxelib":
 					if (item.get("bind") == "true") {
-						if (!FileSystem.exists(".macro")) {
-							FileSystem.createDirectory(".macro");
+						if (!haxelibPath.exists(item.get("name"))) {
+							var proess:Process = new Process("haxelib path " + item.get("name"));
+							var proessData = proess.stdout.readAll().toString();
+							haxelibPath.set(item.get("name"), StringTools.replace(proessData, "\n", " "));
+							proess.kill();
 						}
-						if (!FileSystem.exists(".macro/" + item.get("name") + "_path")) {
-							Sys.command("echo `haxelib path " + item.get("name") + "` > .macro/" + item.get("name") + "_path");
-						}
-						var array = File.getContent(".macro/" + item.get("name") + "_path").split(" ");
+						var array = haxelibPath.get(item.get("name")).split(" ");
 						var haxepath = null;
 						for (s in array) {
 							if (s.indexOf(item.get("name")) != -1) {
@@ -66,6 +68,7 @@ class ZProjectData {
 								break;
 							}
 						}
+						trace("读取路径：", haxepath + "../include.xml");
 						readXml(haxepath + "../include.xml", haxepath + "../");
 					}
 			}

@@ -1236,7 +1236,7 @@ class AssetsBuilder extends Builder {
 	/**
 	 * 当需要自适配时触发
 	 */
-	public var onSizeChange:Float->Float->Void;
+	public var onSizeChange:Dynamic;
 
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
 		if (!ZBuilder.existFile(viewXmlPath))

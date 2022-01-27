@@ -22,16 +22,6 @@ class ZBuilderScene extends ZScene {
 	public static var preloadClass:Class<Preload>;
 
 	/**
-	 * 自适配宽度
-	 */
-	private var _hdwidth:Null<Float> = null;
-
-	/**
-	 * 自适配高度
-	 */
-	private var _hdheight:Null<Float> = null;
-
-	/**
 	 * 资源管理对象
 	 */
 	public var assetsBuilder:AssetsBuilder;
@@ -61,13 +51,6 @@ class ZBuilderScene extends ZScene {
 	}
 
 	public var bgDisplay:ZQuad;
-
-	public function onSizeChange(width:Float, height:Float):Void {
-		var currentScale = ScaleUtils.mathScale(getStageWidth(), getStageHeight(), width, height, false, false);
-		this.scale(currentScale);
-		_hdwidth = Std.int(getStageWidth() / this.scaleX) + 1;
-		_hdheight = Std.int(getStageHeight() / this.scaleY) + 1;
-	}
 
 	override function onInit() {
 		super.onInit();
@@ -147,13 +130,6 @@ class ZBuilderScene extends ZScene {
 		return _loaded;
 	}
 
-	override function getStageWidth():Float {
-		return _hdwidth != null ? _hdwidth : super.getStageWidth();
-	}
-
-	override function getStageHeight():Float {
-		return _hdheight != null ? _hdheight : super.getStageHeight();
-	}
 }
 
 /**

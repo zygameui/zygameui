@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.utils.ScaleUtils;
 import zygame.utils.Lib;
 import openfl.geom.Point;
 import zygame.components.ZTween;
@@ -15,6 +16,15 @@ import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
 class DisplayObjectContainer extends Sprite implements Refresher implements zygame.mini.MiniExtend {
+	/**
+	 * 自适配宽度
+	 */
+	private var _hdwidth:Null<Float> = null;
+
+	/**
+	 * 自适配高度
+	 */
+	private var _hdheight:Null<Float> = null;
 
 	/**
 	 * 自定义数据，默认为null，可以作为扩展数据使用
@@ -167,11 +177,25 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
+	 * 舞台大小适配变化，为该容器设置设计尺寸，可以在不同的分辨率下，使用不同的设计尺寸；如果设置为null，则使用全局的设计尺寸。
+	 * @param width 设置hdwidth宽度
+	 * @param height 设置hdheight高度
+	 * @param scaleMath 是否需要实装缩放处理
+	 */
+	public function onSizeChange(width:Null<Float>, height:Null<Float>, scaleMath:Bool = true):Void {
+		var currentScale = ScaleUtils.mathScale(getStageWidth(), getStageHeight(), width, height, false, false);
+		if (scaleMath)
+			this.scale(currentScale);
+		_hdwidth = Std.int(getStageWidth() / currentScale) + 1;
+		_hdheight = Std.int(getStageHeight() / currentScale) + 1;
+	}
+
+	/**
 	 *  经过了缩放计算的舞台宽度
 	 *  @return Float
 	 */
 	public function getStageWidth():Float {
-		return zygame.core.Start.stageWidth;
+		return _hdwidth != null ? _hdwidth : zygame.core.Start.stageWidth;
 	}
 
 	/**
@@ -179,7 +203,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 *  @return Float
 	 */
 	public function getStageHeight():Float {
-		return zygame.core.Start.stageHeight - subtractionHeight;
+		return _hdheight != null ? _hdheight : zygame.core.Start.stageHeight - subtractionHeight;
 	}
 
 	/**

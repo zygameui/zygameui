@@ -1,3 +1,4 @@
+import project.ProjectUtils;
 import setup.SetupRun;
 import pkg.PkgTools;
 import task.Tasks;
@@ -70,6 +71,9 @@ class Tools {
 
 		var command:String = args[0];
 		switch (command) {
+			case "-create":
+				// 创建项目
+				ProjectUtils.create(args[1]);
 			case "setup":
 				// 库初始化
 				SetupRun.run();

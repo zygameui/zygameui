@@ -643,17 +643,17 @@ class Std:
             return False
         if (t is None):
             return False
-        if (t == Dynamic):
+        if ((type(t) == type) and (t == Dynamic)):
             return (v is not None)
         isBool = isinstance(v,bool)
-        if ((t == Bool) and isBool):
+        if (((type(t) == type) and (t == Bool)) and isBool):
             return True
-        if ((((not isBool) and (not (t == Bool))) and (t == Int)) and isinstance(v,int)):
+        if ((((not isBool) and (not ((type(t) == type) and (t == Bool)))) and ((type(t) == type) and (t == Int))) and isinstance(v,int)):
             return True
         vIsFloat = isinstance(v,float)
         tmp = None
         tmp1 = None
-        if (((not isBool) and vIsFloat) and (t == Int)):
+        if (((not isBool) and vIsFloat) and ((type(t) == type) and (t == Int))):
             f = v
             tmp1 = (((f != Math.POSITIVE_INFINITY) and ((f != Math.NEGATIVE_INFINITY))) and (not python_lib_Math.isnan(f)))
         else:
@@ -669,16 +669,16 @@ class Std:
             tmp = False
         if ((tmp and ((v <= 2147483647))) and ((v >= -2147483648))):
             return True
-        if (((not isBool) and (t == Float)) and isinstance(v,(float, int))):
+        if (((not isBool) and ((type(t) == type) and (t == Float))) and isinstance(v,(float, int))):
             return True
-        if (t == str):
+        if ((type(t) == type) and (t == str)):
             return isinstance(v,str)
-        isEnumType = (t == Enum)
+        isEnumType = ((type(t) == type) and (t == Enum))
         if ((isEnumType and python_lib_Inspect.isclass(v)) and hasattr(v,"_hx_constructs")):
             return True
         if isEnumType:
             return False
-        isClassType = (t == Class)
+        isClassType = ((type(t) == type) and (t == Class))
         if ((((isClassType and (not isinstance(v,Enum))) and python_lib_Inspect.isclass(v)) and hasattr(v,"_hx_class_name")) and (not hasattr(v,"_hx_constructs"))):
             return True
         if isClassType:
@@ -962,7 +962,7 @@ _hx_classes["sys.FileSystem"] = sys_FileSystem
 class Sys:
     _hx_class_name = "Sys"
     __slots__ = ()
-    _hx_statics = ["args", "getCwd", "setCwd", "systemName", "command"]
+    _hx_statics = ["args", "getCwd", "setCwd", "systemName", "command", "stdin"]
 
     @staticmethod
     def args():
@@ -1007,6 +1007,10 @@ class Sys:
             return python_lib_Subprocess.call(cmd,**python__KwArgs_KwArgs_Impl_.fromT(_hx_AnonObject({'shell': True})))
         else:
             return python_lib_Subprocess.call(([cmd] + args))
+
+    @staticmethod
+    def stdin():
+        return python_io_IoTools.createFileInputFromText(python_lib_Sys.stdin)
 Sys._hx_class = Sys
 _hx_classes["Sys"] = Sys
 
@@ -1049,22 +1053,22 @@ class Tools:
                 v = (arr[1] if 1 < len(arr) else None)
                 Tools.authorizationMaps.h[(arr[0] if 0 < len(arr) else None)] = v
         else:
-            haxe_Log.trace(".authorization文件不存在",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 51, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace(".authorization文件不存在",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 52, 'className': "Tools", 'methodName': "main"}))
         Tools.webPath = Tools.authorizationMaps.h.get("haxelib",None)
-        haxe_Log.trace("authorization=",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 54, 'className': "Tools", 'methodName': "main", 'customParams': [authorization]}))
-        haxe_Log.trace(("haxelib:" + HxOverrides.stringOrNull(Tools.haxelib)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 55, 'className': "Tools", 'methodName': "main"}))
-        haxe_Log.trace(("args:" + Std.string(Sys.args())),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 56, 'className': "Tools", 'methodName': "main"}))
-        haxe_Log.trace("authorization配置：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 57, 'className': "Tools", 'methodName': "main", 'customParams': [("null" if ((Tools.authorizationMaps is None)) else Tools.authorizationMaps.toString())]}))
+        haxe_Log.trace("authorization=",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 55, 'className': "Tools", 'methodName': "main", 'customParams': [authorization]}))
+        haxe_Log.trace(("haxelib:" + HxOverrides.stringOrNull(Tools.haxelib)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 56, 'className': "Tools", 'methodName': "main"}))
+        haxe_Log.trace(("args:" + Std.string(Sys.args())),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 57, 'className': "Tools", 'methodName': "main"}))
+        haxe_Log.trace("authorization配置：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 58, 'className': "Tools", 'methodName': "main", 'customParams': [("null" if ((Tools.authorizationMaps is None)) else Tools.authorizationMaps.toString())]}))
         args = Sys.args()
         if (len(args) == 1):
-            haxe_Log.trace(("version:" + HxOverrides.stringOrNull(Tools.version)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 60, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("帮助列表：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 61, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("-inittask 初始化VSCODE的task.json文件",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 62, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("-build 用于生成不同平台命令（通用）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 63, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("-upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 64, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("-updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 65, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("-updatelib :用于更新所有的自有开发库（需要得到授权才能够更新到自开发库）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 66, 'className': "Tools", 'methodName': "main"}))
-            haxe_Log.trace("-libs :显示所有库版本情况（需要得到授权）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 67, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace(("version:" + HxOverrides.stringOrNull(Tools.version)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 61, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("帮助列表：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 62, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("-inittask 初始化VSCODE的task.json文件",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 63, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("-build 用于生成不同平台命令（通用）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 64, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("-upload 库名 秘钥 :用于上传相关的库到自开发库中（需要得到授权才能够更新到自开发库）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 65, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("-updatedev 库名 :用于下载线上最新的版本到haxelib开发版本中（需要得到授权才能够更新到自开发库）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 66, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("-updatelib :用于更新所有的自有开发库（需要得到授权才能够更新到自开发库）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 67, 'className': "Tools", 'methodName': "main"}))
+            haxe_Log.trace("-libs :显示所有库版本情况（需要得到授权）",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 68, 'className': "Tools", 'methodName': "main"}))
             return
         command = (args[0] if 0 < len(args) else None)
         command1 = command
@@ -1086,7 +1090,7 @@ class Tools:
             if (command1 == "-atf"):
                 atf_AtfBuild.build((args[1] if 1 < len(args) else None),(args[2] if 2 < len(args) else None))
             elif (command1 == "-ogg"):
-                haxe_Log.trace("Mp3 to Ogg...",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 107, 'className': "Tools", 'methodName': "main", 'customParams': [Sys.getCwd()]}))
+                haxe_Log.trace("Mp3 to Ogg...",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 111, 'className': "Tools", 'methodName': "main", 'customParams': [Sys.getCwd()]}))
                 Sys.command("node",[(HxOverrides.stringOrNull(Sys.getCwd()) + "/tools/run/mp3toogg.js"), (args[1] if 1 < len(args) else None)])
             elif (command1 == "-pkg"):
                 pkg_PkgTools.build()
@@ -1098,7 +1102,9 @@ class Tools:
             elif (command1 == "setup"):
                 setup_SetupRun.run()
         elif (_hx_local_1 == 7):
-            if (command1 == "-upload"):
+            if (command1 == "-create"):
+                project_ProjectUtils.create((args[1] if 1 < len(args) else None))
+            elif (command1 == "-upload"):
                 Tools.uploadlib()
         elif (_hx_local_1 == 6):
             if (command1 == "-atlas"):
@@ -1115,7 +1121,7 @@ class Tools:
     @staticmethod
     def showLibs():
         onlineVersion = sys_Http.requestUrl(((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/version.json?") + Std.string(python_lib_Random.random())))
-        haxe_Log.trace("\n版本库：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 114, 'className': "Tools", 'methodName': "showLibs"}))
+        haxe_Log.trace("\n版本库：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 118, 'className': "Tools", 'methodName': "showLibs"}))
         arr = onlineVersion.split("\n")
         _g = 0
         while (_g < len(arr)):
@@ -1126,13 +1132,13 @@ class Tools:
                 projectName = (a[0] if 0 < len(a) else None)
                 if sys_FileSystem.exists(((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName))):
                     if sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.current")):
-                        haxe_Log.trace(((("null" if lib is None else lib) + "  now:") + HxOverrides.stringOrNull(sys_io_File.getContent((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.current")))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 122, 'className': "Tools", 'methodName': "showLibs"}))
+                        haxe_Log.trace(((("null" if lib is None else lib) + "  now:") + HxOverrides.stringOrNull(sys_io_File.getContent((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.current")))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 126, 'className': "Tools", 'methodName': "showLibs"}))
                     elif sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.dev")):
-                        haxe_Log.trace((("null" if lib is None else lib) + "  now:开发版本"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 124, 'className': "Tools", 'methodName': "showLibs"}))
+                        haxe_Log.trace((("null" if lib is None else lib) + "  now:开发版本"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 128, 'className': "Tools", 'methodName': "showLibs"}))
                     else:
-                        haxe_Log.trace((("null" if lib is None else lib) + "  now:库已损坏"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 126, 'className': "Tools", 'methodName': "showLibs"}))
+                        haxe_Log.trace((("null" if lib is None else lib) + "  now:库已损坏"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 130, 'className': "Tools", 'methodName': "showLibs"}))
                 else:
-                    haxe_Log.trace((("null" if lib is None else lib) + "  now:库不存在"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 129, 'className': "Tools", 'methodName': "showLibs"}))
+                    haxe_Log.trace((("null" if lib is None else lib) + "  now:库不存在"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 133, 'className': "Tools", 'methodName': "showLibs"}))
 
     @staticmethod
     def updateLib():
@@ -1144,18 +1150,18 @@ class Tools:
             None
             random = None
         downloadPath = Tools.webPath
-        haxe_Log.trace(((("开始更新库:" + ("null" if downloadPath is None else downloadPath)) + "haxelib/version.json?version=") + Std.string(random)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 141, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(((("开始更新库:" + ("null" if downloadPath is None else downloadPath)) + "haxelib/version.json?version=") + Std.string(random)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 145, 'className': "Tools", 'methodName': "updateLib"}))
         versionData = sys_Http.requestUrl(((("null" if downloadPath is None else downloadPath) + "haxelib/version.json?version=") + Std.string(random)))
         versoins = versionData.split("\n")
-        haxe_Log.trace(versoins,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 144, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(versoins,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 148, 'className': "Tools", 'methodName': "updateLib"}))
         userName = python_GetPass.getuser()
         haxelibConfigPath = (("/Users/" + ("null" if userName is None else userName)) + "/.haxelib")
-        haxe_Log.trace(("haxelibConfigPath=" + ("null" if haxelibConfigPath is None else haxelibConfigPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 149, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(("haxelibConfigPath=" + ("null" if haxelibConfigPath is None else haxelibConfigPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 153, 'className': "Tools", 'methodName': "updateLib"}))
         haxelibPath = Tools.haxelib
         if (Sys.systemName() == "Mac"):
             haxelibPath = sys_io_File.getContent(haxelibConfigPath)
         haxelibPath = StringTools.replace(haxelibPath," ","")
-        haxe_Log.trace(("haxelibPath=" + ("null" if haxelibPath is None else haxelibPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 154, 'className': "Tools", 'methodName': "updateLib"}))
+        haxe_Log.trace(("haxelibPath=" + ("null" if haxelibPath is None else haxelibPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 158, 'className': "Tools", 'methodName': "updateLib"}))
         _g = 0
         while (_g < len(versoins)):
             version = (versoins[_g] if _g >= 0 and _g < len(versoins) else None)
@@ -1164,13 +1170,13 @@ class Tools:
             arr = [version.split(":")]
             cheakVersionPath = (((("null" if haxelibPath is None else haxelibPath) + "/") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + "/.current")
             cheakDevPath = (((("null" if haxelibPath is None else haxelibPath) + "/") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + "/.dev")
-            haxe_Log.trace(("检查库：" + Std.string((arr[0] if 0 < len(arr) else None))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 160, 'className': "Tools", 'methodName': "updateLib"}))
+            haxe_Log.trace(("检查库：" + Std.string((arr[0] if 0 < len(arr) else None))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 164, 'className': "Tools", 'methodName': "updateLib"}))
             if (len((arr[0] if 0 < len(arr) else None)) != 2):
                 continue
             if sys_FileSystem.exists(cheakVersionPath):
                 curVersion = sys_io_File.getContent(cheakVersionPath)
-                haxe_Log.trace(("curVersion:" + ("null" if curVersion is None else curVersion)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 165, 'className': "Tools", 'methodName': "updateLib"}))
-                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 166, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace(("curVersion:" + ("null" if curVersion is None else curVersion)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 169, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 170, 'className': "Tools", 'methodName': "updateLib"}))
                 tmp = None
                 if (curVersion != python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1)):
                     _this = curVersion.split(".")
@@ -1181,18 +1187,18 @@ class Tools:
                 else:
                     tmp = False
                 if tmp:
-                    haxe_Log.trace("版本有更新，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 168, 'className': "Tools", 'methodName': "updateLib"}))
+                    haxe_Log.trace("版本有更新，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 172, 'className': "Tools", 'methodName': "updateLib"}))
                     isUpdate = True
                 else:
-                    haxe_Log.trace("已是最新无需更新",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 171, 'className': "Tools", 'methodName': "updateLib"}))
+                    haxe_Log.trace("已是最新无需更新",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 175, 'className': "Tools", 'methodName': "updateLib"}))
             elif sys_FileSystem.exists(cheakDevPath):
-                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 174, 'className': "Tools", 'methodName': "updateLib"}))
-                haxe_Log.trace("该库为开发库",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 175, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace(("newVersion:" + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 178, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace("该库为开发库",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 179, 'className': "Tools", 'methodName': "updateLib"}))
             else:
-                haxe_Log.trace("库不存在，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 177, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace("库不存在，开始下载",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 181, 'className': "Tools", 'methodName': "updateLib"}))
                 isUpdate = True
             if isUpdate:
-                haxe_Log.trace((((((((("null" if downloadPath is None else downloadPath) + "haxelib/") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))) + ".zip") + " -> ") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + ".zip"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 183, 'className': "Tools", 'methodName': "updateLib"}))
+                haxe_Log.trace((((((((("null" if downloadPath is None else downloadPath) + "haxelib/") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))) + ".zip") + " -> ") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + ".zip"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 187, 'className': "Tools", 'methodName': "updateLib"}))
                 downloadZip = ((((("null" if downloadPath is None else downloadPath) + "haxelib/") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0))) + HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 1))) + ".zip")
                 saveZip = [(HxOverrides.stringOrNull(python_internal_ArrayImpl._get((arr[0] if 0 < len(arr) else None), 0)) + ".zip")]
                 http = sys_Http(downloadZip)
@@ -1209,7 +1215,7 @@ class Tools:
     def updatedev():
         args = Sys.args()
         projectName = (args[1] if 1 < len(args) else None)
-        haxe_Log.trace(("正在更新库：" + ("null" if projectName is None else projectName)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 205, 'className': "Tools", 'methodName': "updatedev"}))
+        haxe_Log.trace(("正在更新库：" + ("null" if projectName is None else projectName)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 209, 'className': "Tools", 'methodName': "updatedev"}))
         if sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/.dev")):
             onlineVersion = sys_Http.requestUrl(((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/version.json?") + Std.string(python_lib_Random.random())))
             libs = onlineVersion.split("\n")
@@ -1222,25 +1228,25 @@ class Tools:
                 startIndex = None
                 if (((lib.find(projectName) if ((startIndex is None)) else HxString.indexOfImpl(lib,projectName,startIndex))) != -1):
                     downloadPath = ((((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/") + HxOverrides.stringOrNull(StringTools.replace(lib,":",""))) + ".zip?") + Std.string(python_lib_Random.random()))
-                    haxe_Log.trace(((("正在更新" + ("null" if lib is None else lib)) + ":") + ("null" if downloadPath is None else downloadPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 213, 'className': "Tools", 'methodName': "updatedev"}))
+                    haxe_Log.trace(((("正在更新" + ("null" if lib is None else lib)) + ":") + ("null" if downloadPath is None else downloadPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 217, 'className': "Tools", 'methodName': "updatedev"}))
                     if sys_FileSystem.exists((HxOverrides.stringOrNull(Tools.haxelib) + "/cache.zip")):
                         sys_FileSystem.deleteFile((HxOverrides.stringOrNull(Tools.haxelib) + "/cache.zip"))
                     python_HttpDownload.urlretrieve(downloadPath,(HxOverrides.stringOrNull(Tools.haxelib) + "/cache.zip"))
-                    haxe_Log.trace("同步版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 217, 'className': "Tools", 'methodName': "updatedev"}))
+                    haxe_Log.trace("同步版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 221, 'className': "Tools", 'methodName': "updatedev"}))
                     Sys.command((((("cd " + HxOverrides.stringOrNull(Tools.haxelib)) + "/") + ("null" if projectName is None else projectName)) + "\n                    unzip -o ../cache.zip"))
                     if sys_FileSystem.exists((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/__MACOSX")):
                         python_FileUtils.removeDic((((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName)) + "/__MACOSX"))
-                    haxe_Log.trace("更新结束！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 222, 'className': "Tools", 'methodName': "updatedev"}))
+                    haxe_Log.trace("更新结束！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 226, 'className': "Tools", 'methodName': "updatedev"}))
                     break
         else:
-            haxe_Log.trace((("null" if projectName is None else projectName) + "不是你的开发库，无法更新"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 227, 'className': "Tools", 'methodName': "updatedev"}))
+            haxe_Log.trace((("null" if projectName is None else projectName) + "不是你的开发库，无法更新"),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 231, 'className': "Tools", 'methodName': "updatedev"}))
 
     @staticmethod
     def uploadlib():
         args = Sys.args()
         projectName = (args[1] if 1 < len(args) else None)
         projectPath = ((HxOverrides.stringOrNull(Tools.haxelib) + "/") + ("null" if projectName is None else projectName))
-        haxe_Log.trace(("正在处理项目库：" + ("null" if projectPath is None else projectPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 235, 'className': "Tools", 'methodName': "uploadlib"}))
+        haxe_Log.trace(("正在处理项目库：" + ("null" if projectPath is None else projectPath)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 239, 'className': "Tools", 'methodName': "uploadlib"}))
         if sys_FileSystem.exists(projectPath):
             haxelibmsg = sys_io_File.getContent((("null" if projectPath is None else projectPath) + "/haxelib.json"))
             data = python_lib_Json.loads(haxelibmsg,**python__KwArgs_KwArgs_Impl_.fromT(_hx_AnonObject({'object_hook': python_Lib.dictToAnon})))
@@ -1253,7 +1259,7 @@ class Tools:
             array = list(v)
             _this = array[0:(len(array) - 2)]
             v = ((((HxOverrides.stringOrNull("".join([python_Boot.toString1(x1,'') for x1 in _this])) + ".") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get(array, (len(array) - 2)))) + ".") + HxOverrides.stringOrNull(python_internal_ArrayImpl._get(array, (len(array) - 1))))
-            haxe_Log.trace(("升级版本至：" + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 248, 'className': "Tools", 'methodName': "uploadlib"}))
+            haxe_Log.trace(("升级版本至：" + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 252, 'className': "Tools", 'methodName': "uploadlib"}))
             onlineVersion = sys_Http.requestUrl(((HxOverrides.stringOrNull(Tools.webPath) + "haxelib/version.json?") + Std.string(python_lib_Random.random())))
             startIndex = None
             if (((onlineVersion.find(projectName) if ((startIndex is None)) else HxString.indexOfImpl(onlineVersion,projectName,startIndex))) == -1):
@@ -1268,9 +1274,9 @@ class Tools:
                 startIndex = None
                 if (((lib.find(projectName) if ((startIndex is None)) else HxString.indexOfImpl(lib,projectName,startIndex))) != -1):
                     onlineV = HxOverrides.arrayGet(lib.split(":"), 1)
-                    haxe_Log.trace((((("线上版本：" + ("null" if onlineV is None else onlineV)) + "->") + " 当前新版本：") + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 260, 'className': "Tools", 'methodName': "uploadlib"}))
+                    haxe_Log.trace((((("线上版本：" + ("null" if onlineV is None else onlineV)) + "->") + " 当前新版本：") + ("null" if v is None else v)),_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 264, 'className': "Tools", 'methodName': "uploadlib"}))
                     if (Std.parseInt(StringTools.replace(onlineV,".","")) >= Std.parseInt(StringTools.replace(v,".",""))):
-                        haxe_Log.trace("你的本地版本需大于线上版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 263, 'className': "Tools", 'methodName': "uploadlib"}))
+                        haxe_Log.trace("你的本地版本需大于线上版本",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 267, 'className': "Tools", 'methodName': "uploadlib"}))
                         exit(1)
                     python_internal_ArrayImpl._set(libs, i, ((("null" if projectName is None else projectName) + ":") + ("null" if v is None else v)))
                     zipfiles = sys_FileSystem.readDirectory(projectPath)
@@ -1294,19 +1300,19 @@ class Tools:
                     projectName = (("null" if projectName is None else projectName) + ("null" if v is None else v))
                     Sys.command(((((("cd " + ("null" if projectPath is None else projectPath)) + "\n                    zip -r ../") + ("null" if projectName is None else projectName)) + ".zip ") + HxOverrides.stringOrNull(" ".join([python_Boot.toString1(x1,'') for x1 in zipfiles]))))
                     file = (((("null" if projectPath is None else projectPath) + "/../") + ("null" if projectName is None else projectName)) + ".zip")
-                    haxe_Log.trace("开始上传",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 298, 'className': "Tools", 'methodName': "uploadlib"}))
+                    haxe_Log.trace("开始上传",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 302, 'className': "Tools", 'methodName': "uploadlib"}))
                     Tools.uploadOSS(file,"kengsdk_tools_res:1001/haxelib")
                     Tools.uploadOSS((("null" if projectPath is None else projectPath) + "/../version.json"),"kengsdk_tools_res:1001/haxelib")
-                    haxe_Log.trace("上传成功：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 302, 'className': "Tools", 'methodName': "uploadlib", 'customParams': [projectName, v]}))
+                    haxe_Log.trace("上传成功：",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 306, 'className': "Tools", 'methodName': "uploadlib", 'customParams': [projectName, v]}))
                     sys_FileSystem.deleteFile((((("null" if projectPath is None else projectPath) + "/../") + ("null" if projectName is None else projectName)) + ".zip"))
                     break
         else:
-            haxe_Log.trace("库不存在！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 308, 'className': "Tools", 'methodName': "uploadlib"}))
+            haxe_Log.trace("库不存在！",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 312, 'className': "Tools", 'methodName': "uploadlib"}))
 
     @staticmethod
     def uploadOSS(file,saveName):
         command = ((("haxelib run aliyun-oss-upload " + ("null" if file is None else file)) + " ") + ("null" if saveName is None else saveName))
-        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 314, 'className': "Tools", 'methodName': "uploadOSS"}))
+        haxe_Log.trace(command,_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 318, 'className': "Tools", 'methodName': "uploadOSS"}))
         Sys.command(command)
 Tools._hx_class = Tools
 _hx_classes["Tools"] = Tools
@@ -2490,7 +2496,7 @@ class haxe_io_Input:
     _hx_class_name = "haxe.io.Input"
     __slots__ = ("bigEndian",)
     _hx_fields = ["bigEndian"]
-    _hx_methods = ["readByte", "readBytes", "set_bigEndian", "readAll"]
+    _hx_methods = ["readByte", "readBytes", "set_bigEndian", "readAll", "readLine"]
 
     def readByte(self):
         raise haxe_exceptions_NotImplementedException(None,None,_hx_AnonObject({'fileName': "haxe/io/Input.hx", 'lineNumber': 53, 'className': "haxe.io.Input", 'methodName': "readByte"}))
@@ -2531,6 +2537,30 @@ class haxe_io_Input:
             if (not Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof)):
                 raise _g
         return total.getBytes()
+
+    def readLine(self):
+        buf = haxe_io_BytesBuffer()
+        last = None
+        s = None
+        try:
+            while True:
+                last = self.readByte()
+                if (not ((last != 10))):
+                    break
+                buf.b.append(last)
+            s = buf.getBytes().toString()
+            if (HxString.charCodeAt(s,(len(s) - 1)) == 13):
+                s = HxString.substr(s,0,-1)
+        except BaseException as _g:
+            _g1 = haxe_Exception.caught(_g).unwrap()
+            if Std.isOfType(_g1,haxe_io_Eof):
+                e = _g1
+                s = buf.getBytes().toString()
+                if (len(s) == 0):
+                    raise haxe_Exception.thrown(e)
+            else:
+                raise _g
+        return s
 
 haxe_io_Input._hx_class = haxe_io_Input
 _hx_classes["haxe.io.Input"] = haxe_io_Input
@@ -4093,6 +4123,40 @@ platforms_Xiaomi._hx_class = platforms_Xiaomi
 _hx_classes["platforms.Xiaomi"] = platforms_Xiaomi
 
 
+class project_ProjectUtils:
+    _hx_class_name = "project.ProjectUtils"
+    __slots__ = ()
+    _hx_statics = ["mainCode", "create"]
+
+    @staticmethod
+    def create(projectName):
+        args = Sys.args()
+        Sys.setCwd(python_internal_ArrayImpl._get(args, (len(args) - 1)))
+        if (projectName is None):
+            raise haxe_Exception.thrown("需要提供projectName的参数：haxelib zygameui -create PROJECT_NAME")
+        if sys_FileSystem.exists(projectName):
+            haxe_Log.trace((((("发现存在相同目录：" + HxOverrides.stringOrNull(Sys.getCwd())) + "/") + ("null" if projectName is None else projectName)) + "，是否进行直接删除覆盖？（y/n）"),_hx_AnonObject({'fileName': "src/project/ProjectUtils.hx", 'lineNumber': 32, 'className': "project.ProjectUtils", 'methodName': "create"}))
+            line = Sys.stdin().readLine()
+            _g = line.lower()
+            if (_g == "n"):
+                haxe_Log.trace("拒绝，已退出",_hx_AnonObject({'fileName': "src/project/ProjectUtils.hx", 'lineNumber': 36, 'className': "project.ProjectUtils", 'methodName': "create"}))
+            elif (_g == "y"):
+                Sys.command(("rm -rf " + ("null" if projectName is None else projectName)))
+            else:
+                pass
+        Sys.command(("haxelib run openfl create project " + ("null" if projectName is None else projectName)))
+        Sys.setCwd(((HxOverrides.stringOrNull(Sys.getCwd()) + "/") + ("null" if projectName is None else projectName)))
+        xmlContent = sys_io_File.getContent("project.xml")
+        xmlContent = StringTools.replace(xmlContent,"openfl","zygameui")
+        sys_io_File.saveContent("project.xml",xmlContent)
+        sys_io_File.copy("project.xml","zproject.xml")
+        sys_io_File.saveContent("Source/Main.hx",project_ProjectUtils.mainCode)
+        Sys.command("haxelib run zygameui -inittask")
+        haxe_Log.trace("创建结束",_hx_AnonObject({'fileName': "src/project/ProjectUtils.hx", 'lineNumber': 51, 'className': "project.ProjectUtils", 'methodName': "create"}))
+project_ProjectUtils._hx_class = project_ProjectUtils
+_hx_classes["project.ProjectUtils"] = project_ProjectUtils
+
+
 class python_Boot:
     _hx_class_name = "python.Boot"
     __slots__ = ()
@@ -4207,9 +4271,9 @@ class python_Boot:
                     fieldsStr = _g
                     toStr = (((("#" + HxOverrides.stringOrNull(o._hx_class_name)) + "( ") + HxOverrides.stringOrNull(", ".join([x1 for x1 in fieldsStr]))) + " )")
                     return toStr
-            if (o == str):
+            if ((type(o) == type) and (o == str)):
                 return "#String"
-            if (o == list):
+            if ((type(o) == type) and (o == list)):
                 return "#Array"
             if callable(o):
                 return "function"
@@ -5278,7 +5342,7 @@ class python_io_IInput:
     _hx_class_name = "python.io.IInput"
     __slots__ = ("bigEndian",)
     _hx_fields = ["bigEndian"]
-    _hx_methods = ["set_bigEndian", "readByte", "readBytes", "readAll"]
+    _hx_methods = ["set_bigEndian", "readByte", "readBytes", "readAll", "readLine"]
 python_io_IInput._hx_class = python_io_IInput
 _hx_classes["python.io.IInput"] = python_io_IInput
 
@@ -6003,7 +6067,7 @@ class sys_io_FileInput(haxe_io_Input):
     _hx_class_name = "sys.io.FileInput"
     __slots__ = ("impl",)
     _hx_fields = ["impl"]
-    _hx_methods = ["set_bigEndian", "readByte", "readBytes", "readAll"]
+    _hx_methods = ["set_bigEndian", "readByte", "readBytes", "readAll", "readLine"]
     _hx_statics = []
     _hx_interfaces = []
     _hx_super = haxe_io_Input
@@ -6023,6 +6087,9 @@ class sys_io_FileInput(haxe_io_Input):
 
     def readAll(self,bufsize = None):
         return self.impl.readAll(bufsize)
+
+    def readLine(self):
+        return self.impl.readLine()
 
 sys_io_FileInput._hx_class = sys_io_FileInput
 _hx_classes["sys.io.FileInput"] = sys_io_FileInput
@@ -6237,8 +6304,10 @@ class task_Tasks:
         newdata = _hx_AnonObject({'version': "2.0.0", 'tasks': []})
         data = _hx_AnonObject({'version': "2.0.0", 'tasks': []})
         dir = python_internal_ArrayImpl._get(Sys.args(), (len(Sys.args()) - 1))
+        if (not sys_FileSystem.exists((("null" if dir is None else dir) + "/.vscode"))):
+            sys_FileSystem.createDirectory((("null" if dir is None else dir) + "/.vscode"))
         if sys_FileSystem.exists((("null" if dir is None else dir) + "/.vscode/tasks.json")):
-            haxe_Log.trace("tasks.json已存在，进行更新处理",_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 35, 'className': "task.Tasks", 'methodName': "initTask"}))
+            haxe_Log.trace("tasks.json已存在，进行更新处理",_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 40, 'className': "task.Tasks", 'methodName': "initTask"}))
             tasks = sys_io_File.getContent((("null" if dir is None else dir) + "/.vscode/tasks.json"))
             datas = tasks.split("\n")
             _g_current = 0
@@ -6255,7 +6324,7 @@ class task_Tasks:
             tasks = "\n".join([python_Boot.toString1(x1,'') for x1 in datas])
             data = python_lib_Json.loads(tasks,**python__KwArgs_KwArgs_Impl_.fromT(_hx_AnonObject({'object_hook': python_Lib.dictToAnon})))
         else:
-            haxe_Log.trace("tasks.json不存在，创建新的任务列表",_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 46, 'className': "task.Tasks", 'methodName': "initTask"}))
+            haxe_Log.trace("tasks.json不存在，创建新的任务列表",_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 51, 'className': "task.Tasks", 'methodName': "initTask"}))
         taskCommands = []
         _g = 0
         _g1 = task_Tasks.tasks.list
@@ -6340,9 +6409,9 @@ class task_Tasks:
                 _this4 = newdata.tasks
                 _this4.append(c3)
         sys_io_File.saveContent((("null" if dir is None else dir) + ".vscode/tasks.json"),haxe_format_JsonPrinter.print(newdata,None,None))
-        haxe_Log.trace(("支持平台列表：\n" + HxOverrides.stringOrNull("\n".join([python_Boot.toString1(x1,'') for x1 in arr]))),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 102, 'className': "task.Tasks", 'methodName': "initTask"}))
-        haxe_Log.trace((("tasks.json同步" + Std.string(len(task_Tasks.tasks.list))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 103, 'className': "task.Tasks", 'methodName': "initTask"}))
-        haxe_Log.trace((("一共" + Std.string(len(newdata.tasks))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 104, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace(("支持平台列表：\n" + HxOverrides.stringOrNull("\n".join([python_Boot.toString1(x1,'') for x1 in arr]))),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 107, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace((("tasks.json同步" + Std.string(len(task_Tasks.tasks.list))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 108, 'className': "task.Tasks", 'methodName': "initTask"}))
+        haxe_Log.trace((("一共" + Std.string(len(newdata.tasks))) + "条编译命令"),_hx_AnonObject({'fileName': "src/task/Tasks.hx", 'lineNumber': 109, 'className': "task.Tasks", 'methodName': "initTask"}))
 task_Tasks._hx_class = task_Tasks
 _hx_classes["task.Tasks"] = task_Tasks
 
@@ -6481,6 +6550,7 @@ def _hx_init_haxe_xml_Parser_escapes():
     return _hx_local_0()
 haxe_xml_Parser.escapes = _hx_init_haxe_xml_Parser_escapes()
 hxml_UpdateHxml.haxelibPath = ""
+project_ProjectUtils.mainCode = "package;\n\n    import zygame.core.Start;\n    \n    class Main extends Start {\n        public function new() {\n            super(1920 ,1080 ,false);\n        }\n    \n        override function onInit() {\n            super.onInit();\n            // 代码初始化入口\n        }\n    }\n    "
 python_Boot.keywords = set(["and", "del", "from", "not", "with", "as", "elif", "global", "or", "yield", "assert", "else", "if", "pass", "None", "break", "except", "import", "raise", "True", "class", "exec", "in", "return", "False", "continue", "finally", "is", "try", "def", "for", "lambda", "while"])
 python_Boot.prefixLength = len("_hx_")
 python_Lib.lineEnd = ("\r\n" if ((Sys.systemName() == "Windows")) else "\n")

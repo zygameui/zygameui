@@ -31,6 +31,11 @@ class Tasks {
 			tasks: []
 		};
 		var dir = Sys.args()[Sys.args().length - 1];
+
+		if (!FileSystem.exists(dir + "/.vscode")) {
+			FileSystem.createDirectory(dir + "/.vscode");
+		}
+
 		if (FileSystem.exists(dir + "/.vscode/tasks.json")) {
 			trace("tasks.json已存在，进行更新处理");
 			var tasks = File.getContent(dir + "/.vscode/tasks.json");

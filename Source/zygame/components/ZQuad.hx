@@ -17,10 +17,13 @@ class ZQuad extends ZBox {
 
 	private var display:Bitmap;
 
-	public function new() {
+	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
 		display = new Bitmap(quadBitmapData);
-		display.shader = new ColorShader(0x0);
+		display.shader = new ColorShader(color);
+		this.width = width;
+		this.height = height;
+		this.color = color;
 	}
 
 	override public function initComponents():Void {

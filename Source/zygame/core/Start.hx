@@ -340,7 +340,7 @@ class Start extends ZScene {
 		#if zygame3d
 		view3d = new away3d.containers.View3D();
 		var start:Start3D = cast Type.createInstance(pclass, [view3d]);
-		this.addChildAt(view3d, 0);
+		this.parent.addChildAt(view3d, 0);
 		view3d.scene = start;
 		start.onInit();
 		#else
@@ -497,8 +497,13 @@ class Start extends ZScene {
 		}
 		onSceneSizeChange();
 		if (view3d != null) {
-			view3d.width = Start.stageWidth;
-			view3d.height = Start.stageHeight;
+			view3d.width = stage.stageWidth;
+			view3d.height = stage.stageHeight;
+			if (HDHeight < HDWidth)
+				view3d.camera.z = -Start.stageHeight;
+			else
+				view3d.camera.z = -Start.stageWidth;
+			trace(view3d.camera.x, view3d.camera.y, view3d.camera.z);
 		}
 
 		log("适配" + HDHeight + "x" + HDWidth, stage.stageHeight + "x" + stage.stageWidth, currentScale);

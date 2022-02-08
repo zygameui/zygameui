@@ -1085,20 +1085,33 @@ class ZBuilder {
 		return ui;
 	}
 
+	/**
+	 * Align参数的百分比支持
+	 * @return Int
+	 */
+	private static function alignPercentage(#if (cpp || hl) parent:Dynamic #else parent:DisplayObject #end, key:String, value:String):Int {
+		if (value.indexOf("%") != -1) {
+			// 百分比计算
+			var parentValue:Float = cast getProperty(parent, key);
+			return Std.int(Std.parseInt(StringTools.replace(value, "%", "")) / 100 * parentValue);
+		}
+		return Std.parseInt(value);
+	}
+
 	private static function align(#if (cpp || hl) obj:Dynamic, parent:Dynamic #else obj:DisplayObject, parent:DisplayObject #end, leftPx:Dynamic = null,
 			rightPx:Dynamic = null, topPx:Dynamic = null, bottomPx:Dynamic = null, centerX:Dynamic = null, centerY:Dynamic = null):Void {
 		if (Std.isOfType(leftPx, String))
-			leftPx = Std.parseInt(leftPx);
+			leftPx = alignPercentage(parent, "width", leftPx);
 		if (Std.isOfType(rightPx, String))
-			rightPx = Std.parseInt(rightPx);
+			rightPx = alignPercentage(parent, "width", rightPx);
 		if (Std.isOfType(topPx, String))
-			topPx = Std.parseInt(topPx);
+			topPx = alignPercentage(parent, "height", topPx);
 		if (Std.isOfType(bottomPx, String))
-			bottomPx = Std.parseInt(bottomPx);
+			bottomPx = alignPercentage(parent, "height", bottomPx);
 		if (Std.isOfType(centerX, String))
-			centerX = Std.parseInt(centerX);
+			centerX = alignPercentage(parent, "width", centerX);
 		if (Std.isOfType(centerY, String))
-			centerY = Std.parseInt(centerY);
+			centerY = alignPercentage(parent, "height", centerY);
 
 		var objWidth:Float = 0;
 		var objHeight:Float = 0;
@@ -1194,7 +1207,6 @@ class ZBuilder {
  * 异步资源载入构造结果
  */
 class AssetsBuilder extends Builder {
-
 	/**
 		AssetsBuilder请求超时设置，默认为不启动（-1）
 		如果需要超时处理，请设置`AssetsBuilder.defalutTimeout`，单位为秒。

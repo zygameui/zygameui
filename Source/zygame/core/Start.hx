@@ -499,11 +499,9 @@ class Start extends ZScene {
 		if (view3d != null) {
 			view3d.width = stage.stageWidth;
 			view3d.height = stage.stageHeight;
-			if (HDHeight < HDWidth)
-				view3d.camera.z = -Start.stageHeight;
-			else
-				view3d.camera.z = -Start.stageWidth;
-			trace(view3d.camera.x, view3d.camera.y, view3d.camera.z);
+			#if zygame3d
+			cast(view3d.scene,zygame.core.Start3D).onCameraSizeReset();
+			#end
 		}
 
 		log("适配" + HDHeight + "x" + HDWidth, stage.stageHeight + "x" + stage.stageWidth, currentScale);

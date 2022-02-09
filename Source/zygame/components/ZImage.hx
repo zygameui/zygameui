@@ -272,8 +272,8 @@ class ZImage extends DataProviderComponent {
 	 * @param display 
 	 */
 	public static function fillStageImage(display:ZImage):Void {
-		var scale1 = display.width / display.getStageWidth();
-		var scale2 = display.height / display.getStageHeight();
+		var scale1 = display.getStageWidth() / display.width;
+		var scale2 = display.getStageHeight() / display.height;
 		var scale = Math.max(scale1, scale2);
 		display.scale(scale);
 		display.x = (display.getStageWidth() - display.width) / 2;

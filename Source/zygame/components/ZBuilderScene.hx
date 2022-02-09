@@ -89,6 +89,17 @@ class ZBuilderScene extends ZScene {
 	}
 
 	/**
+	 * 构造XML过程中，可通过该接口更改xml配置实现
+	 * @param xml 
+	 */
+	public var buildXmlContent(never, set):Xml->Void;
+
+	private function set_buildXmlContent(cb:Xml->Void):Xml->Void {
+		assetsBuilder.buildXmlContent = cb;
+		return cb;
+	}
+
+	/**
 	 * 发起加载完成的事件
 	 */
 	private function postCompleteEvent() {
@@ -129,7 +140,6 @@ class ZBuilderScene extends ZScene {
 	function get_loaded():Bool {
 		return _loaded;
 	}
-
 }
 
 /**

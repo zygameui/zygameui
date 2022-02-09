@@ -1219,6 +1219,8 @@ class AssetsBuilder extends Builder {
 
 	private var _viewParent:Dynamic;
 
+	public var buildXmlContent:Xml->Void;
+
 	// public var timeout:Float = -1;
 
 	public function new(path:String, parent:Dynamic) {
@@ -1250,9 +1252,33 @@ class AssetsBuilder extends Builder {
 	 */
 	public var onSizeChange:Dynamic;
 
+	/**
+	 * 是否停止构造XML上下文
+	 */
+	private var _stopBuildXmlContent:Bool = false;
+
+	/**
+	 * 停止构造XML上下文
+	 */
+	public function stopBuildXmlContent():Void {
+		_stopBuildXmlContent = true;
+	}
+
+	private function _buildXmlContent(xml:Xml):Void {
+		if (_stopBuildXmlContent)
+			return;
+		buildXmlContent(xml);
+		for (item in xml.elements()) {
+			_buildXmlContent(item);
+		}
+	}
+
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
-		if (!ZBuilder.existFile(viewXmlPath))
+		var isNewXmlPath = false;
+		if (!ZBuilder.existFile(viewXmlPath)) {
+			isNewXmlPath = true;
 			assets.loadFile(viewXmlPath);
+		}
 		assets.start((f) -> {
 			onProgress(f);
 			if (f == 1) {
@@ -1262,6 +1288,12 @@ class AssetsBuilder extends Builder {
 				var viewxml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath));
 				if (viewxml == null)
 					throw "无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。";
+				if (buildXmlContent != null) {
+					// 使用一个全新的xml进行处理
+					if (!isNewXmlPath)
+						viewxml = Xml.parse(viewxml.toString());
+					_buildXmlContent(viewxml.firstElement());
+				}
 				// 分辨率自适配
 				// 需要同时配置了hdwidth、hdheight值，会进行屏幕适配
 				if (onSizeChange != null && viewxml.firstElement().exists("hdwidth") && viewxml.firstElement().exists("hdheight")) {

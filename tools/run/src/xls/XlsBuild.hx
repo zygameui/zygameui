@@ -72,7 +72,7 @@ class XlsBuild {
 					File.saveContent(saveDir + "/" + saveName + ".json", haxe.Json.stringify(data));
 				}
 			} catch (err:Exception) {
-				trace("file "+path+" is not xls, skip!" + "\n" + err.message);
+				throw ("file "+path+" is not xls, skip!" + "\n" + err.message);
 			}
 		}
 	}

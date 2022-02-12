@@ -86,11 +86,10 @@ class DynamicTextureLoader {
  */
 class DynamicTextureAtlas extends TextureAtlas {
 	// 8192 4096 2048 1024
-
 	/**
 	 * 推荐使用4096，在GL渲染里，可以稳定支持4096
 	 */
-	public var size:Int = 4096;
+	// public var size:Int = 4096;
 
 	/**
 	 * 纹理集名称 
@@ -107,12 +106,12 @@ class DynamicTextureAtlas extends TextureAtlas {
 	 */
 	public var scale:Float = 1;
 
-	public function new() {
-		var glBitmapData = new BitmapData(size, size, true, 0x0);
+	public function new(width:Int = 2048, height:Int = 2048) {
+		var glBitmapData = new BitmapData(width, height, true, 0x0);
 		// 启动GL渲染位图
 		@:privateAccess glBitmapData.readable = false;
 		super(glBitmapData, null);
-		pack = new MaxRectsBinPack(size, size, false);
+		pack = new MaxRectsBinPack(width, height, false);
 		_tileset = new Tileset(_rootBitmapData);
 	}
 

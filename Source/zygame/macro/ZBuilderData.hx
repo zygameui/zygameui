@@ -26,18 +26,22 @@ class ZBuilderData {
 		parserXml(xml.firstElement());
 	}
 
-	private function parserXml(xml:Xml, parentId:String = null, isClassed:Bool = false):Void {
-		parserItem(xml, parentId, isClassed);
+	private function parserXml(xml:Xml, parentId:String = null, isClassed:Bool = false, noParseId:Bool = false):Void {
+		if (xml.get("load") == "true") {
+			// 预加载模块，不解析id
+			noParseId = true;
+		}
+		parserItem(xml, parentId, isClassed, noParseId);
 		for (item in xml.elements()) {
-			parserXml(item, parentId, isClassed);
+			parserXml(item, parentId, isClassed, noParseId);
 		}
 	}
 
-	private function parserItem(item:Xml, parentId:String = null, isClassed:Bool = false) {
+	private function parserItem(item:Xml, parentId:String = null, isClassed:Bool = false, noParseId:Bool = false) {
 		var idname = null;
 		if (item.exists("id")) {
 			idname = (parentId != null ? parentId + "_" : "") + item.get("id");
-			if (!item.exists("classed") && !isClassed) {
+			if (!item.exists("classed") && !isClassed && !noParseId) {
 				ids.set(idname, item.nodeName);
 			}
 		}
@@ -77,10 +81,11 @@ class ZBuilderData {
 				item.set("classed", childxml.firstElement().get("classed"));
 				if (idname == null)
 					throw item.nodeName + "XML配置中使用了" + item.get("classed") + "，需要定义id。";
-				ids.set(idname, item.get("classed"));
-				parserXml(childxml.firstElement(), item.get("id"), true);
+				if (!noParseId)
+					ids.set(idname, item.get("classed"));
+				parserXml(childxml.firstElement(), item.get("id"), true, noParseId);
 			} else {
-				parserXml(childxml.firstElement(), item.get("id"), false);
+				parserXml(childxml.firstElement(), item.get("id"), false, noParseId);
 			}
 		}
 	}

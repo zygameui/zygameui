@@ -6516,7 +6516,7 @@ class xls_XlsBuild:
                     sys_io_File.saveContent((((("null" if saveDir is None else saveDir) + "/") + ("null" if saveName is None else saveName)) + ".json"),haxe_format_JsonPrinter.print(data,None,None))
             except BaseException as _g:
                 err = haxe_Exception.caught(_g)
-                haxe_Log.trace((((("file " + ("null" if path is None else path)) + " is not xls, skip!") + "\n") + HxOverrides.stringOrNull(err.get_message())),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 75, 'className': "xls.XlsBuild", 'methodName': "build"}))
+                raise haxe_Exception.thrown((((("file " + ("null" if path is None else path)) + " is not xls, skip!") + "\n") + HxOverrides.stringOrNull(err.get_message())))
 xls_XlsBuild._hx_class = xls_XlsBuild
 _hx_classes["xls.XlsBuild"] = xls_XlsBuild
 

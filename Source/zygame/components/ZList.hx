@@ -12,7 +12,14 @@ import openfl.events.TouchEvent;
  * 经过优化的列表
  * 每个item组件高度或者宽度都是固定的，但是你可以存放100000+的数据也不会感觉到卡顿。
  * 使用该组件，你需要配合ItemRender得到自定义渲染结构。然后将你的渲染对象赋值到itemRenderType中，使全局都使用该渲染对象。
- * 可以修改ListLayout布局的方向实现，得到横向的List。
+ * 可以修改ListLayout布局的方向实现，得到横向的List；默认允许XML中使用。
+ * ```xml
+ * <ZList id="list" width="300" height="300"/>
+ * ```
+ * 然后需要通过访问对象进行数据传输：
+ * ```haxe
+ * list.dataProvider = new ListData([1,2,3]);
+ * ```
  */
 class ZList extends ZScroll {
 	/**
@@ -40,6 +47,9 @@ class ZList extends ZScroll {
 	 */
 	public var cache:Bool = false;
 
+	/**
+	 * 构造一个列表渲染对象
+	 */
 	public function new() {
 		super();
 		var layout2:ListLayout = new ListLayout();
@@ -69,6 +79,9 @@ class ZList extends ZScroll {
 
 	private var _selectIndex:Int = -1;
 
+	/**
+	 * 当前选择的Item索引
+	 */
 	public var selectIndex(get, set):Int;
 
 	private function get_selectIndex():Int {
@@ -91,6 +104,9 @@ class ZList extends ZScroll {
 		return data;
 	}
 
+	/**
+	 * 重新刷新所有数据
+	 */
 	public function updateAll():Void {
 		if (layout == null || this.dataProvider == null)
 			return;
@@ -167,8 +183,9 @@ class ZList extends ZScroll {
 	}
 
 	/**
-	 *  安全移除ItemRender并放入垃圾池
-	 *  @param item
+	 * 安全移除ItemRender并放入垃圾池
+	 * @param item 渲染对象
+	 * @param clearData 是否清楚data数据
 	 */
 	public function removeItemRender(item:ItemRender, clearData:Bool = false):Void {
 		if (item != null && item.parent != null) {
@@ -191,6 +208,10 @@ class ZList extends ZScroll {
 			view.updateComponents();
 	}
 
+	/**
+	 * 底层调用添加对象方法
+	 * @param item 渲染对象
+	 */
 	public function addChildSuper(item:ItemRender):Void {
 		super.addChild(item);
 		if (item.tileDisplayObject != null) {

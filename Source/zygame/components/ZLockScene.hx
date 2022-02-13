@@ -17,6 +17,10 @@ class ZLockScene extends ZScene {
 		super.onInit();
 	}
 
+	/**
+	 * 锁定BitmapData渲染，锁定后会只产生1drawcall的效果
+	 * @param display 
+	 */
 	public function lockBitmapScene(display:DisplayObject):Void {
 		if (_lockBitmap == null) {
 			_lockBitmap = new Bitmap();
@@ -46,7 +50,7 @@ class ZLockScene extends ZScene {
 		}
 		_scene = null;
 	}
-
+	
 	override function lockScene(display:DisplayObject = null) {}
 
 	override function unlockScene() {}

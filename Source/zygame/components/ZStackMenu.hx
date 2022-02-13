@@ -6,38 +6,38 @@ import zygame.components.base.DataProviderBox;
 import zygame.components.data.ListData;
 
 /**
-	创建一个Stack菜单，样式是横向并排选择样式：|1|2|3|4|5|
+ * 创建一个Stack菜单，样式是横向并排选择样式：|1|2|3|4|5|
 **/
 class ZStackMenu extends DataProviderBox {
 	/**
-		默认未选中状态
+	 * 默认未选中状态
 	**/
 	public var defaultBgImage:Dynamic;
 
 	/**
-		默认选中状态
+	 * 默认选中状态
 	**/
 	public var selectedBgImage:Dynamic;
 
 	/**
-		线条渲染
+	 * 线条渲染
 	**/
 	public var lineImage:Dynamic;
 
 	/**
-		当前选中渲染
+	 * 当前选中渲染
 	**/
 	private var _selectedItem:ZImage;
 
 	private var _bg:ZImage;
 
 	/**
-		当前选中的菜单
+	 * 当前选中的菜单
 	**/
 	public var selectIndex:Int = 0;
 
 	/**
-		获取当前选中的数据
+	 * 获取当前选中的数据
 	**/
 	public var selectItem(get, never):Dynamic;
 
@@ -54,9 +54,11 @@ class ZStackMenu extends DataProviderBox {
 	private var icons:Array<ZImage>;
 
 	/**
-		创建一个Stack菜单，注意需要为`defaultBgImage`和`selectedBgImage`提供默认未选中的图片以及选中图片数据
-		`lineImage`是放在选项之间的渲染条数
-	**/
+	 * 创建一个Stack菜单，注意需要为`defaultBgImage`和`selectedBgImage`提供默认未选中的图片以及选中图片数据
+	 * @param defaultBgImage 默认背景图片
+	 * @param selectedBgImage 选中背景图片
+	 * @param lineImage 选项之间的渲染条图片
+	 */
 	public function new(defaultBgImage:Dynamic, selectedBgImage:Dynamic, lineImage:Dynamic = null) {
 		super();
 		this.defaultBgImage = defaultBgImage;
@@ -115,6 +117,10 @@ class ZStackMenu extends DataProviderBox {
 		super.updateComponents();
 	}
 
+	/**
+	 * 切换当前选中的索引
+	 * @param i 索引
+	 */
 	public function changeSelectIndex(i:Int):Void {
 		selectIndex = i;
 		var leftLine = lines[i];
@@ -125,14 +131,16 @@ class ZStackMenu extends DataProviderBox {
 	}
 
 	/**
-		获取ICON显示对象
+	 * 获取ICON显示对象
+	 * @param index 索引
 	**/
 	public function getIconAt(index:Int):ZImage {
 		return icons[index];
 	}
 
 	/**
-		使用ZStackMenuListData来绑定数据
+	 * 使用ZStackMenuListData来绑定数据
+	 * @param data `ZStackMenuListData`数据类型
 	**/
 	override function set_dataProvider(data:Dynamic):Dynamic {
 		if (data != null && Std.isOfType(data, ListData)) {
@@ -187,15 +195,29 @@ class ZStackMenu extends DataProviderBox {
 }
 
 /**
-	适用于ZStackMenu的列表数据
+ * 适用于ZStackMenu的列表数据
 **/
 class ZStackMenuListData extends ListData {
+	/**
+	 * 构造一个适用于ZStack渲染数据
+	 * @param arr 
+	 */
 	public function new(arr:Array<ZStackMenuListDataItem> = null) {
 		super(arr);
 	}
 }
 
+/**
+ * ZStack单独使用的渲染数据
+ */
 typedef ZStackMenuListDataItem = {
+	/**
+	 * 图标图片名称
+	 */
 	icon:String,
+
+	/**
+	 * 扩展数据
+	 */
 	?data:Dynamic
 }

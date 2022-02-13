@@ -9,21 +9,30 @@ import openfl.events.Event;
 import openfl.geom.Rectangle;
 
 /**
- *  实现单张图片时，会有点击缩放效果
+ * 实现单张图片时，会有点击缩放效果，或者是点击切换的按钮效果，默认允许XML中使用。
+ * ```xml
+ * <ZButton id="btn" src="img_name" text="按钮文本"/>
+ * ```
  */
 class ZButton extends ToggleButton {
 	/**
-	 * 默认音频
+	 * 默认音频，设置该参数可以获得全局的音频
+	 * ```haxe
+	 * ZButton.defaultSound = "playSoundName";
+	 * ```
 	 */
 	public static var defaultSound:String;
 
 	private var _text:ZLabel;
 
+	/**
+	 * 当前按钮的文本对象
+	 */
 	public var label(get, never):ZLabel;
 
 	/**
 	 * 创建模态按钮（zygame框架中的按钮样式）
-	 * @param txt
+	 * @param txt 按钮文本
 	 * @return ZButton
 	 */
 	public static function createModelButton(txt:String):ZButton {
@@ -37,10 +46,10 @@ class ZButton extends ToggleButton {
 
 	/**
 	 * 快捷创建按钮
-	 * @param up
-	 * @param down
-	 * @param over
-	 * @param out
+	 * @param up 默认松开的按钮图片；如果只提供up图片，按钮会呈缩放效果，如果包含有down图片，按钮会呈切换效果
+	 * @param down 默认按下的按钮图片
+	 * @param over 当鼠标滑过按钮时显示的图片
+	 * @param out 当鼠标滑出的时显示的图片
 	 * @return ZButton
 	 */
 	public static function createButton(up:Dynamic, down:Dynamic = null, over:Dynamic = null, out:Dynamic = null):ZButton {
@@ -51,10 +60,10 @@ class ZButton extends ToggleButton {
 
 	/**
 	 * 快捷创建皮肤
-	 * @param up
-	 * @param down
-	 * @param over
-	 * @param out
+	 * @param up 默认松开的按钮图片；如果只提供up图片，按钮会呈缩放效果，如果包含有down图片，按钮会呈切换效果
+	 * @param down 默认按下的按钮图片
+	 * @param over 当鼠标滑过按钮时显示的图片
+	 * @param out 当鼠标滑出的时显示的图片
 	 * @return ButtonSkin
 	 */
 	public static function createSkin(up:Dynamic, down:Dynamic = null, over:Dynamic = null, out:Dynamic = null):ButtonSkin {
@@ -66,18 +75,26 @@ class ZButton extends ToggleButton {
 		return s;
 	}
 
+	/**
+	 * 构造一个按钮
+	 */
 	public function new() {
 		super();
 		this.addEventListener("click", _clickCall);
 	}
 
 	/**
-	 * 点击音效ID名
+	 * 点击音效ID名，该点击音效优先级高于`ZButton.defaultSound`
 	 */
 	public var sound:String;
 
 	/**
-	 * 点击事件
+	 * 点击事件，通过简易的方法对它侦听点击事件：
+	 * ```haxe
+	 * btn.clickEvent = function(){
+	 * 	trace("点击成功");
+	 * }
+	 * ```
 	 */
 	public var clickEvent(get, set):Void->Void;
 
@@ -185,27 +202,48 @@ class ZButton extends ToggleButton {
 		}
 	}
 
+	/**
+	 * 设置文本颜色，XML配置可通过color设置
+	 * @param color 文本颜色
+	 */
 	public function setTextColor(color:UInt):Void {
 		initText();
 		_text.setFontColor(color);
 	}
 
+	/**
+	 * 设置文本大小，XML配置可通过size设置
+	 * @param size 文本大小
+	 */
 	public function setTextSize(size:Int):Void {
 		initText();
 		_text.setFontSize(size);
 	}
 
+	/**
+	 * 获取文本内容
+	 * @return String
+	 */
 	public function getText():String {
 		if (_text == null)
 			return "";
 		return _text.dataProvider;
 	}
 
+	/**
+	 * 设置文本内容
+	 * @param text 
+	 */
 	public function setText(text:String):Void {
 		initText();
 		_text.dataProvider = text;
 	}
 
+	/**
+	 * 设置文本的坐标位置偏移
+	 * @param xz X轴偏移
+	 * @param yz Y轴偏移
+	 */
 	public function setTextPos(xz:Float, yz:Float):Void {
 		_text.x = xz;
 		_text.y = yz;
@@ -213,7 +251,7 @@ class ZButton extends ToggleButton {
 
 	/**
 	 * 设置九宫格格式
-	 * @param rect
+	 * @param rect 九宫格参数
 	 */
 	public function setScale9Grid(rect:Rectangle):Void {
 		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);

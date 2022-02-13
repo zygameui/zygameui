@@ -10,6 +10,9 @@ import openfl.display.BitmapData;
  */
 class ZModel extends ZImage {
 
+    /**
+     * 字体默认的大小
+     */
     public static var fontSize:Int = 32;
 
     private static var currentModel:ZModel;
@@ -82,6 +85,11 @@ class ZModel extends ZImage {
     
     private static var _ccs:Rectangle;
 
+	/**
+	 * 构造一个模态层对象
+	 * @param width 
+	 * @param height 
+	 */
 	public function new(width:Int, height:Int) {
 		super();
 		this.width = width;

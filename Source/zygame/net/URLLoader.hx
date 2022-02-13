@@ -20,7 +20,6 @@ class URLLoader extends openfl.net.URLLoader {
 
 	public function new(url:URLRequest = null) {
 		super(url);
-		_timer = new Timer();
 		_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeOut);
 	}
 

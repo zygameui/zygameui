@@ -10,13 +10,25 @@ import zygame.shader.ColorShader;
 import openfl.filters.ShaderFilter;
 
 /**
- * 生成一个矩形可更改颜色的色块
+ * 生成一个矩形可更改颜色的色块，默认允许XML中使用。
+ * ```xml
+ * <ZQuad width="300" height="300" color="0xff0000"/>
+ * ```
  */
 class ZQuad extends ZBox {
+	/**
+	 * 图块的渲染纹理对象
+	 */
 	public static var quadBitmapData:BitmapData;
 
 	private var display:Bitmap;
 
+	/**
+	 * 构造一个色块渲染对象
+	 * @param width 宽度
+	 * @param height 高度
+	 * @param color 颜色
+	 */
 	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
 		display = new Bitmap(quadBitmapData);
@@ -95,6 +107,9 @@ class ZQuad extends ZBox {
 	}
 	#end
 
+	/**
+	 * 是否自动铺面
+	 */
 	@:keep
 	public var fill(never, set):Bool;
 
@@ -106,7 +121,3 @@ class ZQuad extends ZBox {
 		return value;
 	}
 }
-
-#if !api
-// @:bitmap("Export/html5/bin/1px.png") class PxBackgroundBMPD extends BitmapData {}
-#end

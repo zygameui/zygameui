@@ -54,6 +54,9 @@ class ZGraphics extends DisplayObjectContainer {
 	 */
 	public var maxDrawHeight:Int = 0;
 
+	/**
+	 * 构造一个自定义绘制对象
+	 */
 	public function new() {
 		super();
 		draw = this;
@@ -143,12 +146,12 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 绘制三角形
-	 * @param x1 
-	 * @param y1 
-	 * @param x2 
-	 * @param y2 
-	 * @param x3 
-	 * @param y 
+	 * @param x1 第一个点X
+	 * @param y1 第一个点Y
+	 * @param x2 第二个点X
+	 * @param y2 第二个点Y
+	 * @param x3 第三个点X
+	 * @param y3 第三个点Y
 	 */
 	public function drawTriangles(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float):Void {
 		this.pushFrameUVs();
@@ -161,10 +164,10 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 绘制矩形
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param x 坐标X
+	 * @param y 坐标Y
+	 * @param width 宽度
+	 * @param height 高度
 	 */
 	public function drawRect(x:Float, y:Float, width:Float, height:Float):Void {
 		this.pushFrameUVs();
@@ -178,9 +181,9 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 判断此处是否有绘制过的内容
-	 * @param x 
-	 * @param y 
-	 * @param size 
+	 * @param x 检测X轴
+	 * @param y 检测Y轴
+	 * @param size 检测比例
 	 */
 	public function checkIn(x:Float, y:Float, size:Int = 5):Bool {
 		var i:Int = 0;
@@ -199,6 +202,9 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 擦除指定区域的绘制内容，该擦除功能会自动呈现，不需要调用fillEnd接口
+	 * @param x 擦除X轴
+	 * @param y 擦除Y轴
+	 * @param size 擦除检测区域
 	 */
 	public function erase(x:Float, y:Float, size:Int = 5):Void {
 		var i:Int = 0;
@@ -245,9 +251,9 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 计算点与线之间的距离
-	 * @param p1
-	 * @param p2
-	 * @param p3
+	 * @param p1 线坐标A
+	 * @param p2 线坐标B
+	 * @param p3 检测点
 	 * @return Float
 	 */
 	private function pointToLineDistance(p1:Point, p2:Point, p3:Point):Float {
@@ -295,8 +301,8 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 移动初始绘制点
-	 * @param x
-	 * @param y
+	 * @param x x轴
+	 * @param y y轴
 	 */
 	public function moveTo(x:Float, y:Float):Void {
 		isLineTo = false;
@@ -311,8 +317,8 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 线绘制到某个位置
-	 * @param x
-	 * @param y
+	 * @param x x轴
+	 * @param y y轴
 	 */
 	public function lineTo(x:Float, y:Float):Void {
 		drawLine(moveToPos.x, moveToPos.y, x, y, 0, 0);
@@ -331,11 +337,12 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 绘制线，请注意不与上个线连接，这是个单独的线条
-	 * @param startX
-	 * @param startY
-	 * @param endX
-	 * @param endY
-	 * @param size
+	 * @param startX 开始x轴
+	 * @param startY 开始y轴
+	 * @param endX 结束x轴
+	 * @param endY 结束y轴
+	 * @param offectX 偏移x轴
+	 * @param offectY 偏移y轴
 	 */
 	public function drawLine(startX:Float, startY:Float, endX:Float, endY:Float, offectX:Float = 0, offectY:Float = 0):Void {
 		var pointA:Point = new Point();
@@ -457,7 +464,10 @@ class ZGraphics extends DisplayObjectContainer {
 	}
 
 	/**
-	 * 导出为Base64格式，会经过BytesArray压缩
+	 * 导出为Base64格式，会经过BytesArray压缩，后续需要还原画面时，可以使用`formBase64`方法进行恢复：
+	 * ```haxe
+	 * ZGraphics.formBase64(atlas,base64data);
+	 * ```
 	 * @return String
 	 */
 	public function toBase64():String {
@@ -472,7 +482,8 @@ class ZGraphics extends DisplayObjectContainer {
 
 	/**
 	 * 转换Base64格式为绘图
-	 * @param base64
+	 * @param atlas 渲染纹理
+	 * @param base64 base64绘制数据
 	 * @return ZGraphics
 	 */
 	public static function formBase64(atlas:TextureAtlas, base64:String):ZGraphics {

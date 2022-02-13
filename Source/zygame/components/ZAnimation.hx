@@ -10,8 +10,8 @@ import openfl.events.Event;
 class ZAnimation extends ZImage {
 	/**
 	 * 快捷创建一个动画
-	 * @param fps
-	 * @param bitmaps
+	 * @param fps 动画频率
+	 * @param bitmaps 动画帧动画列表
 	 * @return ZAnimation
 	 */
 	public static function createAnimation(fps:Int, bitmaps:Array<Dynamic>):ZAnimation {
@@ -42,6 +42,9 @@ class ZAnimation extends ZImage {
 	 */
 	private var _delayFrame:Int;
 
+	/**
+	 * 动画数据
+	 */
 	private var _animation:AnimationData;
 
 	/**

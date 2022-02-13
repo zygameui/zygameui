@@ -7,7 +7,8 @@ import zygame.particles.ParticleSystem;
 import zygame.components.base.DataProviderComponent;
 
 /**
- * CPU粒子效果组件
+ * CPU粒子效果组件，一般可以直接使用`ZParticles`类构造。
+ * 当设置`gpu_particles`定义时，则会使用`ZGPUParticles`进行构造，否则就会使用`ZCPUParticles`构造。
  */
 class ZCPUParticles extends DataProviderComponent {
 	private var _x:Float = 0;
@@ -24,6 +25,9 @@ class ZCPUParticles extends DataProviderComponent {
 	 */
 	private var render:ParticleSystemRenderer;
 
+	/**
+	 * 构造CPU计算的粒子系统渲染器
+	 */
 	public function new() {
 		super();
 		render = DefaultParticleRenderer.createInstance();

@@ -11,7 +11,10 @@ import zygame.utils.load.Frame;
 import openfl.geom.Rectangle;
 
 /**
- *  支持使用图片路径、以及位图设置内容
+ * 支持使用图片路径、以及位图设置内容，默认允许XML中使用。
+ * ```xml
+ * <ZImage src="img_png"/>
+ * ```
  */
 class ZImage extends DataProviderComponent {
 	private var isDispose:Bool = false;
@@ -20,8 +23,14 @@ class ZImage extends DataProviderComponent {
 
 	private var _shader:Shader;
 
+	/**
+	 * ZImage的显示所使用的显示基类对象
+	 */
 	public var display:Image;
 
+	/**
+	 * 当该参数为true时，会自动铺满背景，默认为false
+	 */
 	public var fill(get, set):Bool;
 
 	private var _fill:Bool = false;
@@ -51,6 +60,9 @@ class ZImage extends DataProviderComponent {
 	 */
 	public var cacheAssets:CacheAssets;
 
+	/**
+	 * 构造一个图像显示对象，允许使用图片、精灵图对象进行设置
+	 */
 	public function new() {
 		super();
 		display = new Image(null);
@@ -200,15 +212,15 @@ class ZImage extends DataProviderComponent {
 
 	/**
 	 * 设置九宫格格式
-	 * @param rect
+	 * @param rect 九宫格rect配置
 	 */
 	public function setScale9Grid(rect:Rectangle):Void {
 		display.setScale9Grid(rect);
 	}
 
 	/**
-	 * 设置着色器
-	 * @param value
+	 * 设置着色器对象
+	 * @param value 着色器对象
 	 * @return Shader
 	 */
 	override function set_shader(value:Shader):Shader {
@@ -223,7 +235,7 @@ class ZImage extends DataProviderComponent {
 	}
 
 	/**
-	 * 当图片异步载入更新后发生
+	 * 当图片更新时发生的事件
 	 */
 	dynamic public function onBitmapDataUpdate():Void {}
 
@@ -268,8 +280,8 @@ class ZImage extends DataProviderComponent {
 	}
 
 	/**
-	 * 为舞台等比例铺满背景
-	 * @param display 
+	 * 为舞台等比例铺满背景，当对ZImage.fill设置为true时，会自动使用此方法的运算处理。
+	 * @param display 需要铺满的显示对象
 	 */
 	public static function fillStageImage(display:ZImage):Void {
 		var scale1 = display.getStageWidth() / display.width;

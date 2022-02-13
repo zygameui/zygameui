@@ -35,6 +35,14 @@ class ZBuilderScene extends ZScene {
 
 	private var preloadDisplay:Preload;
 
+	/**
+	 * 构造一个通过XML配置加载的场景对象，该对象可以直接使用AutoBuilder进行自动构造
+	 * ```haxe
+	 * @:build(zygame.macro.AutoBuilder.build("MyScene"))
+	 * class MyScene extends ZBuilderScene {}
+	 * ```
+	 * @param xmlPath 页面XML配置路径
+	 */
 	public function new(xmlPath:String) {
 		super();
 		assetsBuilder = ZBuilder.createAssetsBuilder(xmlPath, this);
@@ -42,14 +50,17 @@ class ZBuilderScene extends ZScene {
 
 	/**
 	 * 根据类型获取对象
-	 * @param id
-	 * @param type
+	 * @param id 对象ID
+	 * @param type 对象类型
 	 * @return T
 	 */
 	public function get<T:Dynamic>(id:String, type:Class<T>):Null<T> {
 		return assetsBuilder.get(id, type);
 	}
 
+	/**
+	 * 默认构造时都会有一个透明层在后面作为遮挡，如果需要隐藏，穿透点击的话可以将这个对象进行隐藏。
+	 */
 	public var bgDisplay:ZQuad;
 
 	override function onInit() {
@@ -89,8 +100,15 @@ class ZBuilderScene extends ZScene {
 	}
 
 	/**
-	 * 构造XML过程中，可通过该接口更改xml配置实现
-	 * @param xml 
+	 * 预备构造xml时的处理，当设置此方法，允许在完成`ZBuilder.buildui`之前对XML配置进行修改，此方法会逐个将XML子对象返回：
+	 * ```haxe
+	 * this.buildXmlContent = function(xml){
+	 * 	switch(xml.get("id")){
+	 * 		case "a":
+	 * 			xml.set("src","b");
+	 *  }
+	 * }
+	 * ```
 	 */
 	public var buildXmlContent(never, set):Xml->Void;
 
@@ -115,10 +133,19 @@ class ZBuilderScene extends ZScene {
 	 */
 	public function onLoad() {}
 
+	/**
+	 * 加载完成事件，当前没有完成`onBuilded`事件
+	 */
 	public function onLoaded() {}
 
+	/**
+	 * 当页面对象构造完成，在这个时刻可以正常访问对象
+	 */
 	public function onBuilded() {}
 
+	/**
+	 * 对象构造成功的额外回调
+	 */
 	dynamic public function onBuildedEvent():Void {}
 
 	/**
@@ -143,14 +170,25 @@ class ZBuilderScene extends ZScene {
 }
 
 /**
- * 预加载器
+ * 预加载器，需要通用的加载页面时，可给ZBuilderScene进行设置
+ * ```haxe
+ * ZBuilderScene.preloadClass = MyPreload;
+ * ```
  */
 class Preload extends ZBox {
+
+	/**
+	 * 构造一个预加载器，一般不需要自行构造
+	 */
 	public function new() {
 		super();
 		this.width = getStageWidth();
 		this.height = getStageHeight();
 	}
 
+	/**
+	 * 加载进度回调
+	 * @param f 加载进度
+	 */
 	public function onProgress(f:Float):Void {}
 }

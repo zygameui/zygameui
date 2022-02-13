@@ -40,14 +40,13 @@ class ZBitmapLabel extends DataProviderComponent {
 	private var __height:Float = 0;
 
 	/**
-	 * 位图文本渲染器
+	 * 构造一个位图文本渲染器
 	 * @param fnt 位图纹理数据
 	 */
 	public function new(fnt:Atlas) {
 		_fnt = fnt;
 		super();
 		_textmap = new Tilemap(0, 0, _fnt != null ? _fnt.getTileset() : null);
-
 		// _textmap.tileAlphaEnabled = false;
 		// _textmap.tileBlendModeEnabled = false;
 		// _textmap.tileColorTransformEnabled = false;
@@ -113,24 +112,24 @@ class ZBitmapLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 设置字体
-	 * @param str 
+	 * 设置字体，在XML配置中，你可以使用fontName进行设置
+	 * @param str 字体名称
 	 */
 	public function setFontName(str:String):Void {
 		_node.fontName = str;
 	}
 
 	/**
-	 * 设置文本颜色
-	 * @param color 
+	 * 设置文本颜色，在XML配置中，你可以使用color进行设置
+	 * @param color 字体颜色
 	 */
 	public function setFontColor(color:Int):Void {
 		_node.setFontColor(color);
 	}
 
 	/**
-	 * 设置文字大小
-	 * @param font 
+	 * 设置文字大小，在XML配置中，你可以使用size进行设置
+	 * @param font 字体大小
 	 */
 	public function setFontSize(size:Int):Void {
 		_node.setFontSize(size);
@@ -154,10 +153,18 @@ class ZBitmapLabel extends DataProviderComponent {
 		}
 	}
 
+	/**
+	 * 获取文本的高度
+	 * @return Float
+	 */
 	public function getTextHeight():Float {
 		return _node.getTextHeight();
 	}
 
+	/**
+	 * 获取文本的宽度
+	 * @return Float
+	 */
 	public function getTextWidth():Float {
 		return _node.getTextWidth();
 	}
@@ -225,7 +232,7 @@ class ZBitmapLabel extends DataProviderComponent {
 
 	/**
 	 * 获取字符的坐标宽度
-	 * @param charIndex 
+	 * @param charIndex 从0开始计算的第几个字符
 	 * @return Rectangle
 	 */
 	public function getCharBounds(charIndex:Int):Rectangle {

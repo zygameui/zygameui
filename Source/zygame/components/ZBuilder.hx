@@ -1208,21 +1208,41 @@ class ZBuilder {
  */
 class AssetsBuilder extends Builder {
 	/**
-		AssetsBuilder请求超时设置，默认为不启动（-1）
-		如果需要超时处理，请设置`AssetsBuilder.defalutTimeout`，单位为秒。
-	**/
+	 * AssetsBuilder请求超时设置，默认为不启动（-1）
+	 * 如果需要超时处理，请设置`AssetsBuilder.defalutTimeout`，单位为秒。
+	 */
 	public static var defalutTimeout:Float = -1;
 
+	/**
+	 * 资源管理对象
+	 */
 	public var assets:ZAssets;
 
+	/**
+	 * 当前页面构造的路径
+	 */
 	public var viewXmlPath:String = null;
 
 	private var _viewParent:Dynamic;
 
+	/**
+	 * 预备构造xml时的处理，当设置此方法，允许在完成`ZBuilder.buildui`之前对XML配置进行修改，此方法会逐个将XML子对象返回：
+	 * ```haxe
+	 * this.buildXmlContent = function(xml){
+	 * 	switch(xml.get("id")){
+	 * 		case "a":
+	 * 			xml.set("src","b");
+	 *  }
+	 * }
+	 * ```
+	 */
 	public var buildXmlContent:Xml->Void;
 
-	// public var timeout:Float = -1;
-
+	/**
+	 * 该对象一般由ZBuilderScene自动构造，无需自已创建
+	 * @param path 页面XML配置路径
+	 * @param parent 绑定的构造对象
+	 */
 	public function new(path:String, parent:Dynamic) {
 		super();
 		viewXmlPath = path;
@@ -1232,23 +1252,41 @@ class AssetsBuilder extends Builder {
 		assets.timeout = defalutTimeout;
 	}
 
+	/**
+	 * 加载资源列表，可以在ZBuilderScene.onLoad时机进行载入
+	 * @param files 文件列表：png/json/xml/mp3等
+	 * @return AssetsBuilder
+	 */
 	public function loadFiles(files:Array<String>):AssetsBuilder {
 		assets.loadFiles(files);
 		return this;
 	}
 
+	/**
+	 * 加载精灵图，可以在ZBuilderScene.onLoad时机进行载入
+	 * @param img 纹理图路径
+	 * @param xml 纹理配置路径
+	 * @param isAtf 是否为ATF纹理
+	 * @return AssetsBuilder
+	 */
 	public function loadTextures(img:String, xml:String, isAtf:Bool = false):AssetsBuilder {
 		assets.loadTextures(img, xml, isAtf);
 		return this;
 	}
 
+	/**
+	 * 加载Spine，可以在ZBuilderScene.onLoad时机进行载入
+	 * @param pngs Spine图片路径列表
+	 * @param atlas Spine纹理配置路径
+	 * @return AssetsBuilder
+	 */
 	public function loadSpine(pngs:Array<String>, atlas:String):AssetsBuilder {
 		assets.loadSpineTextAlats(pngs, atlas);
 		return this;
 	}
 
 	/**
-	 * 当需要自适配时触发
+	 * 当需要尺寸自适配时触发
 	 */
 	public var onSizeChange:Dynamic;
 
@@ -1258,7 +1296,7 @@ class AssetsBuilder extends Builder {
 	private var _stopBuildXmlContent:Bool = false;
 
 	/**
-	 * 停止构造XML上下文
+	 * 停止构造XML上下文，当触发了这个方法后，`buildXmlContent`将停止工作。
 	 */
 	public function stopBuildXmlContent():Void {
 		_stopBuildXmlContent = true;
@@ -1273,6 +1311,11 @@ class AssetsBuilder extends Builder {
 		}
 	}
 
+	/**
+	 * 开始构造当前页面内容
+	 * @param cb 构造完成回调，其中布尔值会告知成功与失败
+	 * @param onloaded 当资源加载完成提前回调，该时机在完成构造之前
+	 */
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
 		var isNewXmlPath = false;
 		if (!ZBuilder.existFile(viewXmlPath)) {
@@ -1311,6 +1354,17 @@ class AssetsBuilder extends Builder {
 		return this;
 	}
 
+	/**
+	 * 加载进度回调
+	 * ```haxe
+	 * builder.onProgress = function(f){
+	 * 	if(f == 1){
+	 * 		// ok
+	 *  }
+	 * }
+	 * ```
+	 * @param f 
+	 */
 	dynamic public function onProgress(f:Float):Void {}
 
 	/**
@@ -1329,18 +1383,28 @@ class AssetsBuilder extends Builder {
  * 构造结果，可以在这里找到所有定义了id的角色对象
  */
 class Builder {
+
+	/**
+	 * 构造成功的渲染对象
+	 */
 	public var display:Dynamic = null;
 
+	/**
+	 * 构造配置中的允许访问的id映射
+	 */
 	public var ids:Map<String, Dynamic>;
 
+	/**
+	 * 构造一个建造显示对象
+	 */
 	public function new() {
 		ids = new Map();
 	}
 
 	/**
 	 * 根据类型获取对象
-	 * @param id
-	 * @param type
+	 * @param id 对象id
+	 * @param type 对象类型
 	 * @return T
 	 */
 	public function get<T:Dynamic>(id:String, type:Class<T>):Null<T> {
@@ -1349,7 +1413,7 @@ class Builder {
 
 	/**
 	 * 可根据ID获取方法，如ZHaxe.call以及ZTween.play方法
-	 * @param id
+	 * @param id 方法id
 	 * @return Dynamic
 	 */
 	public function getFunction(id:String):Dynamic {
@@ -1374,8 +1438,8 @@ class Builder {
 
 	/**
 	 * 绑定Haxe方法映射
-	 * @param key
-	 * @param data
+	 * @param func 方法名称
+	 * @param data 方法调用
 	 */
 	public function variablesAllHaxe(func:String, data:Dynamic):Void {
 		if (ids == null)
@@ -1391,7 +1455,7 @@ class Builder {
 
 	/**
 	 * 绑定Haxe方法中使用的miniAssets资源对象
-	 * @param miniAssets
+	 * @param miniAssets 内置mini引擎对象
 	 */
 	public function variablesAllHaxeBindMiniAssets(miniAssets:MiniEngineAssets):Void {
 		if (ids == null)
@@ -1405,6 +1469,9 @@ class Builder {
 		}
 	}
 
+	/**
+	 * 释放当前建造对象
+	 */
 	public function dispose():Void {
 		if (ids != null) {
 			for (key => value in ids) {
@@ -1421,6 +1488,9 @@ class Builder {
 		}
 	}
 
+	/**
+	 * 释放当前建造对象的页面
+	 */
 	public function disposeView():Void {
 		if (this.display != null && Std.isOfType(this.display, DisplayObject) && cast(this.display, DisplayObject).parent != null) {
 			cast(this.display, DisplayObject).parent.removeChild(cast(this.display, DisplayObject));

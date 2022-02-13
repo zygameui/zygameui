@@ -8,7 +8,12 @@ import openfl.geom.Rectangle;
 import openfl.geom.Point;
 
 /**
- * 容器盒子，用于实现布局排版功能
+ * 容器盒子，用于实现布局排版功能，默认允许XML中使用。
+ * ```xml
+ * <ZBox>
+ * <!-- 可以在这里放置显示对象内容 -->
+ * </ZBox>
+ * ```
  */
 class ZBox extends Component {
 	/**
@@ -43,6 +48,9 @@ class ZBox extends Component {
 		return bool;
 	}
 
+	/**
+	 * 构造一个基础容器对象
+	 */
 	public function new() {
 		super();
 		childs = [];
@@ -84,11 +92,21 @@ class ZBox extends Component {
 		return child;
 	}
 
+	/**
+	 * 调用底层的添加方法
+	 * @param display 
+	 * @return DisplayObject
+	 */
 	public function addChildSuper(display:DisplayObject):DisplayObject {
 		childs.push(display);
 		return super.addChildAt(display, this.numChildren);
 	}
 
+	/**
+	 * 调用底层的移除方法
+	 * @param display 
+	 * @return DisplayObject
+	 */
 	public function removeChildSuper(display:DisplayObject):DisplayObject {
 		childs.remove(display);
 		return super.removeChild(display);
@@ -115,7 +133,7 @@ class ZBox extends Component {
 
 	private function set_layout(value:BaseLayout):BaseLayout {
 		// if (stage == null)
-			// throw "请在组件初始化完毕后调用。";
+		// throw "请在组件初始化完毕后调用。";
 		_layout = value;
 		this.updateComponents();
 		return value;
@@ -153,10 +171,18 @@ class ZBox extends Component {
 			return Math.abs(super.height);
 	}
 
+	/**
+	 * 是否自动计算宽度
+	 * @return Bool
+	 */
 	public function isAutoWidth():Bool {
 		return !_setWidth;
 	}
 
+	/**
+	 * 是否自动计算高度
+	 * @return Bool
+	 */
 	public function isAutoHeight():Bool {
 		return !_setHeight;
 	}
@@ -214,6 +240,9 @@ class ZBox extends Component {
 	}
 }
 
+/**
+ * 容器布局对象
+ */
 class ZLayoutBox extends zygame.display.DisplayObjectContainer {
 	/**
 	 * 更新布局，以及宽度高度
@@ -247,6 +276,15 @@ class ZLayoutBox extends zygame.display.DisplayObjectContainer {
 	}
 }
 
+/**
+ * 竖向排序容器显示对象，默认允许XML中使用。
+ * ```haxe
+ * <VBox>
+ * <ZImage/>
+ * <ZImage/>
+ * </VBox>
+ * ```
+ */
 class VBox extends ZLayoutBox {
 	/**
 	 * 间隔
@@ -266,6 +304,15 @@ class VBox extends ZLayoutBox {
 	}
 }
 
+/**
+ * 横向排序容器显示对象，默认允许XML中使用。
+ * ```xml
+ * <HBox>
+ * <ZImage/>
+ * <ZImage/>
+ * </HBox>
+ * ```
+ */
 class HBox extends ZLayoutBox {
 	/**
 	 * 间隔

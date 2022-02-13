@@ -10,7 +10,10 @@ import spine.openfl.SkeletonAnimation;
 import spine.tilemap.SkeletonAnimation in TilemapAnimation;
 
 /**
- * 可通过ZBuilder创建的骨骼动画(可点击、触摸)
+ * 可通过ZBuilder创建的骨骼动画(可点击、触摸)，默认允许XML中使用。
+ * ```xml
+ * <ZSpine src="spine:spine"/>
+ * ```
  */
 class ZSpine extends ZBox {
 	private var spine:SkeletonAnimation;
@@ -18,21 +21,36 @@ class ZSpine extends ZBox {
 	private var btilemap:ImageBatchs;
 	private var bspine:BSpine;
 
+	/**
+	 * 是否循环播放，默认为true
+	 */
 	public var isLoop:Bool = true;
 
+	/**
+	 * 播放动作
+	 */
 	public var action(get, set):String;
 
+	/**
+	 * 皮肤ID
+	 */
 	public var spineSkin(get, set):String;
 
+	/**
+	 * 是否独立播放，如果独立播放，则不会受到`SpineManager`的控制影响。
+	 */
 	public var independent(get, set):Bool;
 
 	/**
-	 * 仅在spine的情况下才能够缓存
+	 * 是否缓存模式，对三角形数据进行缓存处理，仅在spine的情况下才能够缓存
 	 */
 	public var isCache(get, set):Bool;
 
 	private var _isCache = false;
 
+	/**
+	 * 是否使用tilemap渲染，默认为false
+	 */
 	public var tilemap:Bool = false;
 
 	function get_isCache():Bool {
@@ -46,10 +64,18 @@ class ZSpine extends ZBox {
 		return _isCache;
 	}
 
+	/**
+	 * 获取`Sprite`渲染的Spine对象
+	 * @return SkeletonAnimation
+	 */
 	public function getNativeSpine():SkeletonAnimation {
 		return spine;
 	}
 
+	/**
+	 * 获取`Tilemap`渲染的Spine对象
+	 * @return TilemapAnimation
+	 */
 	public function getTilemapSpine():TilemapAnimation {
 		return bspine != null ? bspine.spine : null;
 	}
@@ -82,6 +108,9 @@ class ZSpine extends ZBox {
 		return bspine.spine.skeleton.getSkin().name;
 	}
 
+	/**
+	 * 动画状态
+	 */
 	public var state(get, never):AnimationState;
 
 	private function get_state():AnimationState {
@@ -137,6 +166,14 @@ class ZSpine extends ZBox {
 		return super.set_height(value);
 	}
 
+	/**
+	 * 构造一个Spine对象
+	 * @param atlasName 纹理名称
+	 * @param skeletionName 骨骼名称
+	 * @param tilemap 是否tilemap渲染
+	 * @param native 此参数已弃用
+	 * @param isLoop 是否循环播放
+	 */
 	public function new(atlasName:String = null, skeletionName:String = null, tilemap:Bool = false, native:Bool = false, isLoop:Bool = true) {
 		super();
 		this.tilemap = tilemap;
@@ -149,8 +186,8 @@ class ZSpine extends ZBox {
 
 	/**
 	 * 创建Spine
-	 * @param atlasName 
-	 * @param skeletionName 
+	 * @param atlasName 纹理名称
+	 * @param skeletionName 骨骼名称
 	 */
 	public function createSpine(atlasName:String, skeletionName:String):Void {
 		if (tilemap) {

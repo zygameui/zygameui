@@ -8,6 +8,9 @@ import zygame.components.base.ZCacheTextField;
 class ZCacheBitmapLabel extends ZBitmapLabel {
 	public var cacheAtlas:ZCacheTextField;
 
+	/**
+	 * 构造一个缓存文本渲染器
+	 */
 	public function new() {
 		cacheAtlas = new ZCacheTextField("cache", null, 12, 0x0);
 		cacheAtlas.text = "";

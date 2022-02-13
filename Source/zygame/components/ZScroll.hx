@@ -7,17 +7,19 @@ import openfl.events.TouchEvent;
 import zygame.utils.Rect;
 import openfl.events.Event;
 import openfl.geom.Point;
-import openfl.display.Shape;
 import zygame.components.ZQuad;
 import openfl.geom.Rectangle;
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
 import zygame.components.layout.BaseLayout;
 import zygame.utils.load.TextureLoader;
 import zygame.display.batch.TouchImageBatchsContainer;
 
 /**
- * 滚动窗口，装载的对象要以0,0作为原点，否则会产生坐标错位的问题。
+ * 滚动窗口，装载的对象要以0,0作为原点，否则会产生坐标错位的问题，默认允许XML中使用。
+ * ```xml
+ * <ZScroll width="300" height="300">
+ * <ZImage src="img_png"/>
+ * </ZScroll>
+ * ```
  */
 class ZScroll extends DataProviderComponent {
 	/**
@@ -40,13 +42,13 @@ class ZScroll extends DataProviderComponent {
 	 */
 	public var viewPushWidth:Float = 0;
 
-	public function get_batch():TouchImageBatchsContainer {
+	private function get_batch():TouchImageBatchsContainer {
 		return touchBatch;
 	}
 
 	/**
 	 * 创建批渲染对象
-	 * @param textures
+	 * @param textures 纹理对象
 	 */
 	public function createImageBatch(textures:TextureAtlas):Void {
 		touchBatch = new TouchImageBatchsContainer(textures);
@@ -101,6 +103,9 @@ class ZScroll extends DataProviderComponent {
 	 */
 	public var disableSuperscreenEasing:Bool = false;
 
+	/**
+	 * 构造一个可滚动的剪辑渲染对象
+	 */
 	public function new() {
 		super();
 		_view = new ZBox();
@@ -138,22 +143,22 @@ class ZScroll extends DataProviderComponent {
 
 	/**
 	 * 设置背景颜色
-	 * @param u -
+	 * @param color 背景颜色
 	 */
-	public function setBackgroundColor(u:UInt):Void {
-		_bgColor = u;
+	public function setBackgroundColor(color:UInt):Void {
+		_bgColor = color;
 		_bgDisplay.alpha = 1;
-		_bgDisplay.color = u;
+		_bgDisplay.color = color;
 		_bgDisplay.width = this.width;
 		_bgDisplay.height = this.height;
 	}
 
 	/**
 	 * 设置背景的透明度
-	 * @param f -
+	 * @param alpha 透明度
 	 */
-	public function setBackgroundAlpha(f:Float):Void {
-		_bgDisplay.alpha = f;
+	public function setBackgroundAlpha(alpha:Float):Void {
+		_bgDisplay.alpha = alpha;
 	}
 
 	override public function updateComponents():Void {
@@ -180,6 +185,9 @@ class ZScroll extends DataProviderComponent {
 	private var _cutRect2:Rectangle = new Rectangle();
 
 	// private var _cutSpr:ZQuad;
+	/**
+	 * 获取裁剪区域
+	 */
 	public var cutRect(get, set):Rect;
 
 	private function get_cutRect():Rect {
@@ -274,6 +282,9 @@ class ZScroll extends DataProviderComponent {
 		return _isMove;
 	}
 
+	/**
+	 * 立即停止移动
+	 */
 	public function stopMove():Void {
 		_moveMath = 0;
 	}
@@ -435,6 +446,11 @@ class ZScroll extends DataProviderComponent {
 		}
 	}
 
+	/**
+	 * 当窗口发生滚动时会触发此事件
+	 * @param v 
+	 * @param h 
+	 */
 	dynamic public function onScrolling(v:Float, h:Float):Void {}
 
 	/**

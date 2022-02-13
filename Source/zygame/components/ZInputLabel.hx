@@ -5,7 +5,10 @@ import openfl.display.DisplayObject;
 import zygame.components.ZLabel;
 
 /**
- * 输入组件
+ * 输入文本组件，该组件适用于小游戏平台，默认允许XML中使用。
+ * ```xml
+ * <ZInputLabel id="text" width="300" height="60" size="54"/>
+ * ```
  */
 class ZInputLabel extends ZLabel {
 	/**

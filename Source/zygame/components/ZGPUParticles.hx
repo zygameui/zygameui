@@ -4,7 +4,8 @@ import openfl.particle.GPUParticleSprite;
 import zygame.components.base.DataProviderComponent;
 
 /**
- * GPU粒子效果组件
+ * GPU粒子效果组件，该粒子系统使用`openfl-gpu-particles`库实现，一般可以直接使用`ZParticles`类构造。
+ * 当设置`gpu_particles`定义时，则会使用`ZGPUParticles`进行构造，否则就会使用`ZCPUParticles`构造。
  */
 class ZGPUParticles extends DataProviderComponent {
 	/**
@@ -12,6 +13,9 @@ class ZGPUParticles extends DataProviderComponent {
 	 */
 	public var gpuSystem:GPUParticleSprite;
 
+	/**
+	 * 构造一个GPU计算的粒子系统
+	 */
 	public function new() {
 		super();
 	}

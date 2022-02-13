@@ -8,14 +8,19 @@ import zygame.utils.DisplayObjectUtils;
 import zygame.components.ZLabel;
 
 /**
- * Maplive2数据渲染场景
+ * **已弃用，勿使用**，Maplive2数据渲染场景
  */
+@:deprecated("该API已弃用，不再支持旧版本的Maplive编辑更新")
 class ZMapliveScene extends ZScene{
 
     private var _data:MapliveSceneData;
 
     private var _node:DisplayObjectContainer;
 
+    /**
+     * 构造一个ZMapliveScene对象
+     * @param data 
+     */
     public function new(data:MapliveSceneData):Void
     {
         super();

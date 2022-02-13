@@ -8,9 +8,18 @@ import openfl.display.DisplayObject;
 using tweenxcore.Tools;
 
 /**
- * 切换器
+ * 页面切换器，可默认在XML配置中使用。
+ * ```xml
+ * <ZStack id="stack" currentId="page1">
+ * <ZBox id="page1"/>
+ * <ZBox id="page2"/>
+ * </ZStack>
+ * ```
  */
 class ZStack extends ZBox {
+	/**
+	 * 页面管理列表
+	 */
 	public var stacks:Array<DisplayObject> = [];
 
 	override function addChildAt(display:DisplayObject, index:Int):DisplayObject {
@@ -153,6 +162,9 @@ class ZStackAnimateStyle extends ZBox {
 	}
 }
 
+/**
+ * 默认的ZStatck动画样式，渐变消失显示
+ */
 class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
 	private var _quad:ZQuad = new ZQuad();
 
@@ -187,8 +199,22 @@ class DefalutZStackAnimateStyle extends ZStackAnimateStyle {
 	}
 }
 
+/**
+ * 页面切换事件
+ */
 class ZStackEvent extends Event {
+	/**
+	 * 进入结束时触发
+	 */
 	public static var EXITED:String = "exited";
+
+	/**
+	 * 进入时触发
+	 */
 	public static var ENTER:String = "enter";
+
+	/**
+	 * 开始时触发
+	 */
 	public static var START:String = "start";
 }

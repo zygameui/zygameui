@@ -23,7 +23,10 @@ enum ZLabelRenderType {
 }
 
 /**
- * 文本类，用于显示文本内容使用的显示对象，可设置文本的一些基础属性，通过dataProvider进行赋值文本内容。
+ * 文本类，用于显示文本内容使用的显示对象，可设置文本的一些基础属性，通过dataProvider进行赋值文本内容，默认允许XML中使用。
+ * ```xml
+ * <ZLabel text="文案"/>
+ * ```
  */
 @:keep
 class ZLabel extends DataProviderComponent {
@@ -50,6 +53,9 @@ class ZLabel extends DataProviderComponent {
 
 	private var __height:Float = 0;
 
+	/**
+	 * 忽略字符段，在赋值时存在符合条件的字符，会自动忽略
+	 */
 	public var igoneChars:Array<String> = [];
 
 	private var __point:Point = new Point();
@@ -112,6 +118,9 @@ class ZLabel extends DataProviderComponent {
 
 	private var _maxChars:Int = 0;
 
+	/**
+	 * 最大的字符长度
+	 */
 	public var maxChars(get, set):UInt;
 
 	private function set_maxChars(value:Int):Int {
@@ -163,6 +172,9 @@ class ZLabel extends DataProviderComponent {
 		return _defaultDisplay == null ? 0 : _defaultDisplay.textColor;
 	}
 
+	/**
+	 * 构造一个文本渲染对象
+	 */
 	public function new() {
 		super();
 		_clickquad = new ZQuad();
@@ -385,6 +397,11 @@ class ZLabel extends DataProviderComponent {
 		return value;
 	}
 
+	/**
+	 * 选中文本效果实现
+	 * @param start 选中最开始的位置
+	 * @param len 选中结束的位置
+	 */
 	public function selectText(start:Int = 0, len:Int = -1):Void {
 		if (_display.selectable && _display.type == TextFieldType.INPUT)
 			_display.setSelection(start, len == -1 ? _display.text.length : len);
@@ -411,17 +428,25 @@ class ZLabel extends DataProviderComponent {
 		return Math.abs(_height #if quickgame_scale / _getCurrentScale() #end * this.scaleY);
 	}
 
+	/**
+	 * 获取文本高度
+	 * @return Float
+	 */
 	public function getTextHeight():Float {
 		return _display.textHeight / _scale;
 	}
 
+	/**
+	 * 获取文本宽度
+	 * @return Float
+	 */
 	public function getTextWidth():Float {
 		return _display.textWidth / _scale;
 	}
 
 	/**
 	 * 设置文本行距
-	 * @param lead 
+	 * @param lead 行距
 	 */
 	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
@@ -431,7 +456,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置文本字体大小
-	 * @param font
+	 * @param font 文本大小
 	 */
 	public function setFontSize(font:Int):Void {
 		#if (quickgame_scale)
@@ -447,7 +472,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置文本的颜色
-	 * @param color
+	 * @param color 文本颜色
 	 */
 	public function setFontColor(color:UInt):Void {
 		_font.color = color;
@@ -458,9 +483,9 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置颜色
-	 * @param start 
-	 * @param end 
-	 * @param color 
+	 * @param start 开始位置
+	 * @param end 结束位置
+	 * @param color 颜色值
 	 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
@@ -476,7 +501,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置HTML标签文本，但在部分设备上渲染可能会存在问题，建议使用简易格式的渲染。
-	 * @param bool
+	 * @param bool 是否开启html渲染
 	 */
 	public function setHtml(bool:Bool):Void {
 		_isHtml = bool;
@@ -485,7 +510,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置文本是否可选择
-	 * @param bool
+	 * @param bool 是否可选
 	 */
 	public function setSelectable(bool:Bool):Void {
 		_display.selectable = bool;
@@ -493,7 +518,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置是否可换行
-	 * @param bool
+	 * @param bool 是否可换行
 	 */
 	public function setWordWrap(bool:Bool):Void {
 		_display.wordWrap = bool;
@@ -501,7 +526,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 设置是否可以输入
-	 * @param bool
+	 * @param bool 是否可输入
 	 */
 	public function setIsInput(bool:Bool):Void {
 		#if (minigame || ios || android || html5)
@@ -572,6 +597,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 加粗字体
+	 * @param blur 加粗大小
 	 */
 	public function bold(blur:Float = 1):Void {
 		this.getDisplay().shader = new zygame.shader.StrokeShader(blur, _font.color);
@@ -618,6 +644,10 @@ class ZLabel extends DataProviderComponent {
 		setFrameEvent(false);
 	}
 
+	/**
+	 * 获取文本基础渲染对象
+	 * @return ZTextField
+	 */
 	public function getDisplay():ZTextField {
 		return _display;
 	}
@@ -663,7 +693,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 获取字符的坐标宽度
-	 * @param charIndex 
+	 * @param charIndex 位置字符索引
 	 * @return Rectangle
 	 */
 	public function getCharBounds(charIndex:Int):Rectangle {

@@ -14,6 +14,7 @@ import haxe.macro.Expr;
  * 性能分析工具
  */
 class PerformanceUtils {
+	#if macro
 	/**
 	 * 分析性能，使用build方法可以对当前类的每个方法进行耗时平均统计
 	 */
@@ -85,4 +86,5 @@ class PerformanceUtils {
 		}
 		return isReturn;
 	}
+	#end
 }

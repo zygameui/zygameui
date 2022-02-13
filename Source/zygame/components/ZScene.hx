@@ -13,10 +13,13 @@ import openfl.display.BitmapData;
  */
 class ZScene extends ZBox {
 	/**
-		切换方式，一般的切换方式都是直接removeChild掉当前场景，可以更换为使用visible=false的方式切换场景
-	**/
+	 * 	切换方式，一般的切换方式都是直接removeChild掉当前场景，可以更换为`VISIBLE_SET_FALSE`使用visible=false的方式切换场景
+	 */
 	public var replaceMode:SceneReplaceMode = REMOVE_TO_STAGE;
 
+	/**
+	 * 构造一个场景对象
+	 */
 	public function new() {
 		super();
 	}
@@ -135,7 +138,17 @@ class ZScene extends ZBox {
 	}
 }
 
+/**
+ * 场景替换模式
+ */
 enum SceneReplaceMode {
+	/**
+	 * 从舞台移除
+	 */
 	REMOVE_TO_STAGE;
+
+	/**
+	 * 不会从舞台移除，会直接visible=false处理
+	 */
 	VISIBLE_SET_FALSE;
 }

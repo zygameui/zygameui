@@ -6,10 +6,17 @@ import zygame.loader.parser.AsepriteParser.AsepriteTextureAtlas;
  * 可用于播放Aseprite精灵图的动画对象
  */
 class ZAsepriteAnimation extends ZAnimation {
+	/**
+	 * 当前正在播放的tag
+	 */
 	public var tag:String;
 
 	private var _atlas:AsepriteTextureAtlas;
 
+	/**
+	 * 构造一个Aseprite的动画
+	 * @param atlas AsepriteTextureAtlas对象
+	 */
 	public function new(atlas:AsepriteTextureAtlas) {
 		super();
 		_atlas = atlas;
@@ -33,7 +40,6 @@ class ZAsepriteAnimation extends ZAnimation {
 
 	override function onFrame() {
 		// 动画逻辑判断
-
 		super.onFrame();
 	}
 }

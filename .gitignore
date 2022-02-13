@@ -4,3 +4,4 @@ Export
 .vscode
 .dev
 dump
+tools/doc-build/bin/build

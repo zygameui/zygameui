@@ -4,6 +4,12 @@ import zygame.core.Start;
 import zygame.media.base.Sound;
 import zygame.media.base.SoundChannel;
 
+/**
+ * 音频对象，默认允许XML中使用。
+ * ```xml
+ * <ZSound id="soundName" src="soundName"/>
+ * ```
+ */
 class ZSound implements zygame.core.Refresher {
 	private static var _soundlist:Array<ZSound> = [];
 
@@ -21,8 +27,14 @@ class ZSound implements zygame.core.Refresher {
 		}
 	}
 
+	/**
+	 * 设置播放源
+	 */
 	public var src:String;
 
+	/**
+	 * 是否为背景音乐
+	 */
 	public var isBgMusic:Bool = false;
 
 	private var _channels:Array<SoundChannel> = [];
@@ -62,6 +74,9 @@ class ZSound implements zygame.core.Refresher {
 		this.src = src;
 	}
 
+	/**
+	 * 帧事件处理
+	 */
 	public function onFrame():Void {
 		if (_soundPlayTimes[_soundIndex] == _currentFrame) {
 			__playSound(1);
@@ -101,6 +116,7 @@ class ZSound implements zygame.core.Refresher {
 
 	/**
 	 * 开始播放
+	 * @param loop 是否循环，默认为1次
 	 */
 	public function play(loop:Int = 1):Void {
 		this.stop();

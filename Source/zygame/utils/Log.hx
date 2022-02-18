@@ -28,7 +28,7 @@ class Log {
 
     /**
      *  本地log处理
-     *  @param str - 
+     * @param str - 
      */
     public static function log(str:String):Void
     {

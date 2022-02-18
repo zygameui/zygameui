@@ -145,8 +145,8 @@ class ListLayout extends BaseLayout {
 
 	/**
 	 *  更新data资源，相同的data不重复更新
-	 *  @param item - 
-	 *  @param data - 
+	 * @param item - 
+	 * @param data - 
 	 */
 	public function updateData(item:ItemRender, index:Int, data:Dynamic, selected:Bool):Void {
 		if (selected != item.selected)

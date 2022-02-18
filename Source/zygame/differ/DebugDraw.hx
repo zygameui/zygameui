@@ -5,6 +5,9 @@ import zygame.components.ZQuad;
 import zygame.components.ZGraphics;
 import differ.ShapeDrawer;
 
+/**
+ * 用于渲染Shapes的碰撞结果的调试渲染
+ */
 class DebugDraw extends ShapeDrawer {
 
     /**

@@ -20,8 +20,8 @@ class BaseSkin extends EventDispatcher {
 
 	/**
 	 *  设置皮肤
-	 *  @param key - 键值
-	 *  @param skin - 可使用图片路径、可使用位图对象
+	 * @param key - 键值
+	 * @param skin - 可使用图片路径、可使用位图对象
 	 */
 	public function setSkinValue(key:String, skin:Dynamic):Void {
 		if (Std.isOfType(skin, String))

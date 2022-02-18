@@ -19,9 +19,9 @@ class Align {
 
     /**
      *  对齐算法
-     *  @param display - 
-     *  @param v - 
-     *  @param h - 
+     * @param display - 
+     * @param v - 
+     * @param h - 
      */
     public static function alignDisplay(display:openfl.display.DisplayObject, v:String,h:String):Void
     {

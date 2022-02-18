@@ -379,6 +379,7 @@ class ZLabel extends DataProviderComponent {
 				newText.selectable = false;
 				newText.maxChars = _display.maxChars;
 				newText.displayAsPassword = _display.displayAsPassword;
+				newText.shader = _display.shader;
 				this.removeChild(_display);
 				_display = newText;
 				this.addChild(_display);
@@ -693,7 +694,7 @@ class ZLabel extends DataProviderComponent {
 
 	/**
 	 * 获取字符的坐标宽度
-	 * @param charIndex 位置字符索引
+	 * @param charIndex 位置字符
 	 * @return Rectangle
 	 */
 	public function getCharBounds(charIndex:Int):Rectangle {

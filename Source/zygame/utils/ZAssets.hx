@@ -1,5 +1,8 @@
 package zygame.utils;
 
+#if away3d
+import away3d.textures.BitmapTexture;
+#end
 import openfl.events.TimerEvent;
 import haxe.Timer;
 import zygame.events.GlobalAssetsLoadEvent;
@@ -185,7 +188,7 @@ class ZAssets {
 
 	/**
 	 *  载入资源列表
-	 *  @param arr -
+	 * @param arr -
 	 */
 	public function loadFiles(arr:Array<String>):Void {
 		for (i in 0...arr.length) {
@@ -195,7 +198,7 @@ class ZAssets {
 
 	/**
 	 *  载入单个文件
-	 *  @param path -
+	 * @param path -
 	 */
 	public function loadFile(data:Dynamic):Void {
 		if (Std.isOfType(data, ParserBase)) {
@@ -279,8 +282,8 @@ class ZAssets {
 
 	/**
 	 *  载入纹理资源
-	 *  @param img 如果只传递图片，xml会直接识别图片资源
-	 *  @param xml -
+	 * @param img 如果只传递图片，xml会直接识别图片资源
+	 * @param xml -
 	 */
 	public function loadTextures(img:String, xml:String = null, isAtf:Bool = false):Void {
 		var _xml = xml != xml ? xml : img.substr(0, img.lastIndexOf(".")) + ".xml";
@@ -438,9 +441,9 @@ class ZAssets {
 
 	/**
 	 *  开始加载
-	 *  @param func - 加载进度回调
-	 *  @param errorCall - 错误回调
-	 *  @param canError - 是否允许容错加载，如果设置为true，则永远不会触发errorCall
+	 * @param func - 加载进度回调
+	 * @param errorCall - 错误回调
+	 * @param canError - 是否允许容错加载，如果设置为true，则永远不会触发errorCall
 	 */
 	public function start(func:Float->Void, errorCall:String->Void = null, canError:Bool = false):Void {
 		if (!_loadStop) {
@@ -858,7 +861,7 @@ class ZAssets {
 
 	/**
 	 *  获取纹理集合
-	 *  @param id -
+	 * @param id -
 	 *  @return TextureAtlas
 	 */
 	public function getTextureAtlas(id:String):TextureAtlas {
@@ -867,8 +870,8 @@ class ZAssets {
 
 	/**
 	 *  追加纹理集合
-	 *  @param id -
-	 *  @param textureAtlas -
+	 * @param id -
+	 * @param textureAtlas -
 	 */
 	public function putTextureAtlas(id:String, textureAtlas:TextureAtlas):Void {
 		var textures:TextureAtlas = getTextureAtlas(id);
@@ -877,9 +880,33 @@ class ZAssets {
 		_textures.set(id, textureAtlas);
 	}
 
+	#if away3d
+	public var bitmapDataTexture3D:Map<String, BitmapTexture> = [];
+	#end
+
+	/**
+	 * 获取away3d可用的纹理
+	 * @param id 
+	 * @return Dynamic
+	 */
+	public function getTexture3D(id:String):#if away3d BitmapTexture #else Dynamic #end {
+		#if away3d
+		if (bitmapDataTexture3D.exists(id))
+			return bitmapDataTexture3D.get(id);
+		var bitmapData = getBitmapData(id);
+		if (bitmapData == null)
+			return null;
+		var texture = away3d.utils.Cast.bitmapTexture(bitmapData);
+		bitmapDataTexture3D.set(id, texture);
+		return texture;
+		#else
+		return null;
+		#end
+	}
+
 	/**
 	 *  获取位图数据
-	 *  @param id -
+	 * @param id -
 	 *  @return BitmapData 这里获取的精灵表中的位图数据，将会是BitmapDataFrame对象。
 	 */
 	public function getBitmapData(id:String, foundAtlas:Bool = false):Dynamic {
@@ -1156,7 +1183,7 @@ class ZAssets {
 
 	/**
 	 *  获取Xml格式
-	 *  @param id -
+	 * @param id -
 	 *  @return Xml
 	 */
 	public function getXml(id:String):Xml {
@@ -1203,7 +1230,7 @@ class ZAssets {
 
 	/**
 	 *  获取JSON对象
-	 *  @param id -
+	 * @param id -
 	 *  @return Dynamic
 	 */
 	public function getObject(id:String):Dynamic {

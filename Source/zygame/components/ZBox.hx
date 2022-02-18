@@ -197,13 +197,13 @@ class ZBox extends Component {
 
 	/**
 	 *  对齐功能
-	 *  @param obj - 对齐对象
-	 *  @param leftPx - 左对齐
-	 *  @param rightPx - 右对齐
-	 *  @param topPx - 顶部对齐
-	 *  @param bottomPx - 底部对齐
-	 *  @param centerX - 居中对齐
-	 *  @param centerY - 垂直对齐
+	 * @param obj - 对齐对象
+	 * @param leftPx - 左对齐
+	 * @param rightPx - 右对齐
+	 * @param topPx - 顶部对齐
+	 * @param bottomPx - 底部对齐
+	 * @param centerX - 居中对齐
+	 * @param centerY - 垂直对齐
 	 */
 	public function align(obj:DisplayObject, leftPx:Dynamic = null, rightPx:Dynamic = null, topPx:Dynamic = null, bottomPx:Dynamic = null,
 			centerX:Dynamic = 0, centerY:Dynamic = 0):Void {

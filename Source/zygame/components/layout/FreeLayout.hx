@@ -11,7 +11,7 @@ class FreeLayout extends BaseLayout {
 
     /**
      *  实施布局
-     *  @param component - 将要布局的对象，必须是ZBox对象
+     * @param component - 将要布局的对象，必须是ZBox对象
      */
     override public function layout(box:ZBox):Void
     {

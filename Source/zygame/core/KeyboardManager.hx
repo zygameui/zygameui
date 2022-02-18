@@ -5,6 +5,9 @@ import js.base.KeyboardInput;
 #end
 import openfl.display.DisplayObject;
 
+/**
+ * 小游戏键盘输入管理器
+ */
 class KeyboardManager {
 
     #if html5

@@ -32,7 +32,7 @@ class TextureLoader {
 
 	/**
 	 *  开始载入
-	 *  @param func -
+	 * @param func -
 	 */
 	public function load(func:TextureAtlas->Void, errorCall:String->Void):Void {
 		Assets.loadBitmapData(imgPath, false, isAtf).onComplete(function(bitmapdata:BitmapData):Void {
@@ -68,7 +68,7 @@ class Base64TextureLoader extends TextureLoader {
 
 	/**
 	 *  开始载入
-	 *  @param func -
+	 * @param func -
 	 */
 	override public function load(func:TextureAtlas->Void, errorCall:String->Void):Void {
 		BitmapData.loadFromBase64(_base64, "image/png").onComplete(function(bitmapData:BitmapData):Void {
@@ -234,7 +234,7 @@ class TextureAtlas extends Atlas {
 
 	/**
 	 *  根据名字含有进行筛选位图
-	 *  @param id -
+	 * @param id -
 	 *  @return Array<BitmapData>
 	 */
 	public function getBitmapDataFrames(id:String):Array<Frame> {

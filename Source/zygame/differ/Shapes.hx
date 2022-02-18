@@ -7,7 +7,7 @@ import differ.shapes.Shape;
 import differ.data.ShapeCollision;
 
 /**
- * 图形计算合集
+ * 创建一个图形碰撞的管理器，可管理多个不规则碰撞图形
  */
 class Shapes {
 	/**
@@ -37,8 +37,8 @@ class Shapes {
 
 	/**
 	 * 添加互动图形
-	 * @param shape
-	 * @param type
+	 * @param shape 图形
+	 * @param type 碰撞分类，同类只与同类碰撞
 	 */
 	public function add(shape:Shape, type:String = null):Void {
 		if (list.indexOf(shape) != -1)
@@ -57,7 +57,7 @@ class Shapes {
 
 	/**
 	 * 删除互动图形
-	 * @param shape 
+	 * @param shape 图形
 	 */
 	public function remove(shape:Shape):Void {
 		var type = typeMaps.get(shape);
@@ -68,7 +68,7 @@ class Shapes {
 
 	/**
 	 * 测试图形碰撞
-	 * @param shape
+	 * @param shape 图形
 	 * @param into 用于接收碰撞结果
 	 * @param type 与什么类型进行碰撞
 	 * @param into 碰撞图形结果预设对象，使用该角色，可以减少垃圾回收
@@ -94,7 +94,7 @@ class Shapes {
 
 	/**
 	 * 测试射线碰撞
-	 * @param shape
+	 * @param shape 图形
 	 * @param into 用于接收碰撞结果
 	 * @param type 与什么类型进行碰撞
 	 * @param into 碰撞图形结果预设对象，使用该角色，可以减少垃圾回收

@@ -52,9 +52,7 @@ class Lib {
 	/**
 	 * 锁定CE2
 	 */
-	public static function lockCE2():Void{
-
-	}
+	public static function lockCE2():Void {}
 
 	/**
 	 * CE加密
@@ -422,16 +420,28 @@ class Lib {
 	}
 
 	/**
-	 * 根据两点坐标获取角度
+	 * 根据两点坐标获取弧度
 	 * @param x1
 	 * @param y1
 	 * @param x2
 	 * @param y2
 	 * @return Float
 	 */
+	public static function getRadianByPos(x1:Float, y1:Float, x2:Float, y2:Float):Float {
+		var radian:Float = Math.atan2((y2 - y1), (x2 - x1)); // 弧度
+		return radian;
+	}
+
+	/**
+	 * 获取角度
+	 * @param x1 
+	 * @param y1 
+	 * @param x2 
+	 * @param y2 
+	 * @return Float
+	 */
 	public static function getAngleByPos(x1:Float, y1:Float, x2:Float, y2:Float):Float {
-		var angle:Float = Math.atan2((y2 - y1), (x2 - x1)); // 弧度
-		return angle;
+		return radianToAngle(getRadianByPos(x1, y1, x2, y2));
 	}
 
 	/**

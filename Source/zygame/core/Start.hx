@@ -8,9 +8,6 @@ import haxe.Timer;
 import openfl.display.OpenGLRenderer;
 import openfl.events.RenderEvent;
 import openfl.events.UncaughtErrorEvent;
-#if cmnt
-import zygame.cmnt.GameUtils;
-#end
 import zygame.display.Image;
 import zygame.utils.FPSUtil;
 import zygame.media.SoundChannelManager;
@@ -31,14 +28,20 @@ import zygame.components.ZBuilder;
 import zygame.macro.ZMacroUtils;
 import openfl.events.MouseEvent;
 import zygame.components.ZLabel;
-#if (builddoc || vscode)
-import zygame.core.ImportAll;
-#end
 
 /**
  * 引擎核心类，请继承这个作为启动类
+ * ```haxe
+ * class Main extends Start {
+ *     public function new(){
+ * 		super(1920,1080,false);
+ *     }
+ * }
+ * ```
  */
+#if lime
 @:access(lime.ui.Window)
+#end
 #if !disable_res
 @:build(zygame.macro.Res.init())
 #end
@@ -52,7 +55,6 @@ class Start extends ZScene {
 	 */
 	public var dynamicFps:Bool = #if (disable_dynamic_fps || cpp) false #else true #end;
 
-	// public var dynamicFps:Bool = false;
 	/**
 	 * 低频模式
 	 */
@@ -156,7 +158,7 @@ class Start extends ZScene {
 
 	/**
 	 * 添加一层顶层显示
-	 * @param screen 
+	 * @param screen 新的顶层显示对象
 	 */
 	public function addScreen(screen:Screen):Void {
 		screens.push(screen);
@@ -195,10 +197,10 @@ class Start extends ZScene {
 
 	/**
 	 * 启动一个启动器，用于启动进入游戏入口。
-	 *  @param HDWidth - 以宽适配时使用的宽度像素
-	 *  @param HDHeight - 以高适配时使用的高度像素
-	 *  @param isDebug - 是否显示debug数据，当该值为true时，FPSDebug对象将会建立，一般在发布正式版时，该值应该被设置为false。
-	 *  @param scalePower - 测试性功能，使缩放永远为0.5作为间隔缩放。
+	 * @param HDWidth - 以宽适配时使用的宽度像素
+	 * @param HDHeight - 以高适配时使用的高度像素
+	 * @param isDebug - 是否显示debug数据，当该值为true时，FPSDebug对象将会建立，一般在发布正式版时，该值应该被设置为false。
+	 * @param scalePower - 测试性功能，使缩放永远为0.5作为间隔缩放。
 	 */
 	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
 		super();
@@ -293,7 +295,7 @@ class Start extends ZScene {
 
 	/**
 	 * 渲染事件
-	 * @param e
+	 * @param e 渲染事件
 	 */
 	public function onRender(e:RenderEvent):Void {
 		Lib.onRender();
@@ -331,14 +333,15 @@ class Start extends ZScene {
 	/**
 	 * 3D渲染对象，它永远会比我们的2D画面要置低。
 	 */
-	public var view3d:#if zygame3d away3d.containers.View3D #else Dynamic #end;
+	public var view3d:#if zygame3d zygame.core.ZView3D #else Dynamic #end;
 
 	/**
 	 * 启动3D引擎渲染
+	 * @param pclass 继承`Start3D`的基础类，需要使用`zygameui-3d`库
 	 */
 	public function super3d(pclass:Class<Dynamic>):Void {
 		#if zygame3d
-		view3d = new away3d.containers.View3D();
+		view3d = new zygame.core.ZView3D();
 		var start:Start3D = cast Type.createInstance(pclass, [view3d]);
 		this.parent.addChildAt(view3d, 0);
 		view3d.scene = start;
@@ -429,6 +432,10 @@ class Start extends ZScene {
 		// });
 	}
 
+	/**
+	 * 舞台点击事件
+	 * @param e 
+	 */
 	public function onStageMouseClick(e:MouseEvent):Void {
 		var oldfocus = focus;
 		focus = cast e.target;
@@ -441,12 +448,20 @@ class Start extends ZScene {
 		}
 	}
 
+	/**
+	 * 当页面失去焦点触发
+	 * @param e 
+	 */
 	public function onDeActivate(e:Event):Void {
 		isActivate = false;
 		trace("返回至后台");
 		SoundChannelManager.current.stopAllEffectAndMusic(true);
 	}
 
+	/**
+	 * 当页面恢复焦点触发
+	 * @param e 
+	 */
 	public function onActivate(e:Event):Void {
 		isActivate = true;
 		trace("返回至前台");
@@ -458,6 +473,9 @@ class Start extends ZScene {
 		#end
 	}
 
+	/**
+	 * 当舞台的尺寸发生变化时触发
+	 */
 	public function onStageSizeChange():Void {
 		if (HDWidth == 0 && HDHeight == 0) {
 			Start.stageWidth = Std.int(stage.stageWidth / this.scaleX) + 1;
@@ -500,13 +518,16 @@ class Start extends ZScene {
 			view3d.width = stage.stageWidth;
 			view3d.height = stage.stageHeight;
 			#if zygame3d
-			cast(view3d.scene,zygame.core.Start3D).onCameraSizeReset();
+			cast(view3d.scene, zygame.core.Start3D).onCameraSizeReset();
 			#end
 		}
 
 		log("适配" + HDHeight + "x" + HDWidth, stage.stageHeight + "x" + stage.stageWidth, currentScale);
 	}
 
+	/**
+	 * 当舞台的尺寸发生变化时触发
+	 */
 	public function onSceneSizeChange():Void {
 		for (i in 0...this.numChildren) {
 			if (Std.isOfType(this.getChildAt(i), ZScene)) {
@@ -555,8 +576,8 @@ class Start extends ZScene {
 	}
 
 	/**
-	 * 帧事件
-	 * @param e
+	 * 按照每1秒60次调用频次的事件
+	 * @param e 事件
 	 */
 	private function onFrameEvent(e:Event):Void {
 		if (fps.visible)
@@ -606,8 +627,8 @@ class Start extends ZScene {
 	}
 
 	/**
-	 *  添加对象到帧事件
-	 *  @param display -
+	 * 添加对象到帧事件
+	 * @param display 继承`Refresher`的显示对象
 	 */
 	public function addToUpdate(display:Refresher):Void {
 		if (isFrameing)
@@ -617,8 +638,8 @@ class Start extends ZScene {
 	}
 
 	/**
-	 *  将对象从帧事件移除
-	 *  @param display -
+	 * 将对象从帧事件移除
+	 * @param display 继承`Refresher`的显示对象
 	 */
 	public function removeToUpdate(display:Refresher):Void {
 		if (isFrameing)
@@ -631,10 +652,14 @@ class Start extends ZScene {
 	}
 
 	/**
-	 * 重写onFrame
+	 * 按每秒运行60次的帧事件回调入口
 	 */
 	override public function onFrame():Void {}
 }
+
+/**
+ * 更新状态
+ */
 class UpdateStats {
 	/**
 	 * 处理对象
@@ -646,6 +671,11 @@ class UpdateStats {
 	 */
 	public var action:Int = 0;
 
+	/**
+	 * 构造一个更新状态机，一般不需要自主构造
+	 * @param display 
+	 * @param action 
+	 */
 	public function new(display:Refresher, action:Int) {
 		this.display = display;
 		this.action = action;

@@ -240,7 +240,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	/**
 	 *  设置帧事件使用
-	 *  @param listen - 是否侦听
+	 * @param listen - 是否侦听
 	 */
 	public function setFrameEvent(listen:Bool):Void {
 		if (listen)
@@ -251,7 +251,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	/**
 	 *  移除事件
-	 *  @param e -
+	 * @param e -
 	 */
 	private function onRemoveEvent(e:Event):Void {
 		onRemoveToStage();
@@ -259,7 +259,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	/**
 	 *  缩放处理
-	 *  @param f -
+	 * @param f -
 	 *  @return DisplayObjectContainer
 	 */
 	public function scale(f:Float):DisplayObjectContainer {

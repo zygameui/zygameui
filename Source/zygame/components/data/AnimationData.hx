@@ -36,7 +36,7 @@ class AnimationData {
 
     /**
      *  获取当前帧数据
-     *  @param frame - 
+     * @param frame - 
      *  @return FrameData
      */
     public function getFrame(frame:Int):FrameData
@@ -48,8 +48,8 @@ class AnimationData {
 
     /**
      *  添加帧动画
-     *  @param bitmapData - 位图
-     *  @param delayFrame - 延迟多少帧
+     * @param bitmapData - 位图
+     * @param delayFrame - 延迟多少帧
      */
     public function addFrame(bitmapData:Dynamic,delayFrame:Int = 0,call:Void->Void = null):Void
     {
@@ -61,7 +61,7 @@ class AnimationData {
 
     /**
      *  批量添加帧动画
-     *  @param arr - 
+     * @param arr - 
      */
     public function addFrames(arr:Array<Dynamic>):Void
     {
@@ -71,8 +71,8 @@ class AnimationData {
 
     /**
      *  设置指定帧的间隔时长
-     *  @param frame - 
-     *  @param delayFrame - 
+     * @param frame - 
+     * @param delayFrame - 
      */
     public function setFrameDelay(frame:Int,delayFrame:Int):Void
     {
@@ -81,8 +81,8 @@ class AnimationData {
 
     /**
      *  设置回调处理
-     *  @param frame - 
-     *  @param call - 
+     * @param frame - 
+     * @param call - 
      */
     public function setFrameCall(frame:Int,call:Void->Void):Void
     {

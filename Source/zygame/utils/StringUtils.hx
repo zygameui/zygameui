@@ -7,7 +7,7 @@ class StringUtils {
 
     /**
      *  获取字符串的扩展名，如果不存在扩展名，则会返回null
-     *  @param data - 
+     * @param data - 
      *  @return String
      */
     public static function getExtType(data:String):String
@@ -20,7 +20,7 @@ class StringUtils {
 
     /**
      *  获取字符串的名字，不带路径、扩展名
-     *  @param data - 
+     * @param data - 
      *  @return String
      */
     public static function getName(source:String):String

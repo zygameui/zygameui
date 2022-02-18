@@ -8,7 +8,6 @@ import openfl.display.Tileset;
 
 @:keep
 class Frame extends Slice9Frame {
-
 	public var name:String = null;
 
 	public var frameX:Float = 0;
@@ -32,7 +31,7 @@ class Frame extends Slice9Frame {
 	 */
 	private var _texture3d:#if zygame3d away3d.textures.BitmapTexture #else Dynamic #end;
 
-	public function copy():Frame{
+	public function copy():Frame {
 		var frame = new Frame();
 		frame.name = name;
 		frame.frameX = frameX;
@@ -77,17 +76,16 @@ class Frame extends Slice9Frame {
 	/**
 	 * 获取图片的矩形
 	 */
-	public function getRect():Rectangle
-	{
-		return new Rectangle(x,y,width,height);
+	public function getRect():Rectangle {
+		return new Rectangle(x, y, width, height);
 	}
 
-	public function getUv():Array<Float> {
+	public function getUv(offest:Int = 1):Array<Float> {
 		if (uvs == null) {
-			var x1 = this.x + 1;
-			var y1 = this.y + 1;
-			var w1 = this.width - 2;
-			var h1 = this.height - 2;
+			var x1 = this.x + offest;
+			var y1 = this.y + offest;
+			var w1 = this.width - offest * 2;
+			var h1 = this.height - offest * 2;
 			uvs = [];
 			uvs.push(x1 / parent.getRootBitmapData().width);
 			uvs.push(y1 / parent.getRootBitmapData().height);
@@ -105,7 +103,7 @@ class Frame extends Slice9Frame {
 	 * 获取Away3D使用的纹理
 	 * @return Dynamic
 	 */
-	public function getTexture3D():Dynamic{
+	public function getTexture3D():Dynamic {
 		#if zygame3d
 		return away3d.utils.Cast.bitmapTexture(this.parent.getRootBitmapData());
 		#else

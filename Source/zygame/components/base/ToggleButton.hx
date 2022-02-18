@@ -108,7 +108,7 @@ class ToggleButton extends Component
 
     /**
      *  发送选择状态
-     *  @param state - 通过ToggleButton的静态常量状态处理
+     * @param state - 通过ToggleButton的静态常量状态处理
      */
     public function sendToggleState(state:String):Void
     {

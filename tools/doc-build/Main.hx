@@ -26,7 +26,7 @@ class Main {
         var code = Sys.command("lime build html5");
         if(code == 0){
             // 构造完成
-            Sys.command("haxelib run dox -i bin -o ../../../../docs -in zygame -in KengSDK -in UMengSDK -in qq -in wx");
+            Sys.command("haxelib run dox -i bin -o ../../../../docs -in zygame -in KengSDK -in UMengSDK -in qq -in wx --toplevel-package zygame");
         }
         else{
             trace("doc.xml创建失败");

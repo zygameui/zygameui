@@ -10,7 +10,7 @@ import openfl.geom.Rectangle;
 class Utils {
 	/**
 	 * 计算Shape的宽高Rect
-	 * @param shape
+	 * @param shape 图形
 	 * @return Rectangle
 	 */
 	public static function getRect(shape:Shape):Rectangle {

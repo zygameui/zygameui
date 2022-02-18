@@ -137,7 +137,7 @@ class ZList extends ZScroll {
 
 	/**
 	 *  ZList中禁用addChild方法
-	 *  @param display - 
+	 * @param display - 
 	 *  @return DisplayObject
 	 */
 	override public function addChild(display:DisplayObject):DisplayObject {
@@ -146,8 +146,8 @@ class ZList extends ZScroll {
 
 	/**
 	 *  ZList中禁用addChild方法
-	 *  @param display - 
-	 *  @param index - 
+	 * @param display - 
+	 * @param index - 
 	 *  @return DisplayObject
 	 */
 	override public function addChildAt(display:DisplayObject, index:Int):DisplayObject {
@@ -157,7 +157,7 @@ class ZList extends ZScroll {
 
 	/**
 	 *  创建ItemRender对象，这里会做垃圾池循环利用
-	 *  @param value 创建的对象
+	 * @param value 创建的对象
 	 *  @return ItemRender
 	 */
 	public function createItemRender(value:Dynamic):ItemRender {

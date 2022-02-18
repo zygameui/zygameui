@@ -41,7 +41,7 @@ class DynamicTextureLoader {
 
 	/**
 	 *  开始载入
-	 *  @param func -
+	 * @param func -
 	 */
 	public function load(func:DynamicTextureAtlas->Void, errorCall:String->Void, canError:Bool = false):Void {
 		_call = func;

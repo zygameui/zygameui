@@ -49,9 +49,17 @@
 	<haxedef name="debugnetwork" if="debug cpp !ios" />
 
 	<!-- HXCPP-RELEASE-DEBUG 测试性功能 -->
-	<haxedef name="HXCPP_STACK_TRACE" if="debug" />
+	<!-- <haxedef name="HXCPP_STACK_TRACE" if="debug" />
 	<haxedef name="HXCPP_STACK_LINE" if="debug" />
-	<haxedef name="HXCPP_CHECK_POINTER" if="debug" />
+	<haxedef name="HXCPP_CHECK_POINTER" if="debug" /> -->
+
+	<!-- 即使在发布模式下，也要在最终二进制文件中添加符号。 -->
+    <define name="HXCPP_DEBUG_LINK"/>
+    <!-- 即使在发布模式下，也具有有效的功能级堆栈跟踪。 -->
+    <define name="HXCPP_STACK_TRACE"/>
+    <!-- 即使在发布模式下，也将行信息包括在堆栈跟踪中。 -->
+    <define name="HXCPP_STACK_LINE"/>
+    <define name="HXCPP_CHECK_POINTER"/>
 
 	<window allow-high-dpi="true" antialiasing="4" vsync="true" if="cpp || hl" />
 

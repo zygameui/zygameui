@@ -23,7 +23,7 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 
 	/**
 	 *  设置触摸事件
-	 *  @param listen - 是否侦听，false则清理所有事件
+	 * @param listen - 是否侦听，false则清理所有事件
 	 */
 	public function setTouchEvent(listen:Bool, userCapture:Bool = false, priority:Int = 0, stageMove:Bool = false):Void {
 		isTouch = listen;

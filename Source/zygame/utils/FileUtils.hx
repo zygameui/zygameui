@@ -11,8 +11,8 @@ class FileUtils {
 
     /**
      *  选择文件夹
-     *  @param title - 
-     *  @param call - 
+     * @param title - 
+     * @param call - 
      */
     public static function browseDirectory(title:String,call:String->Void):Void
     {

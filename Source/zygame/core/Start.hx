@@ -206,7 +206,7 @@ class Start extends ZScene {
 		super();
 		this.scalePower = scalePower;
 		// RES资源绑定
-		zygame.net.UDP.init();
+		// zygame.net.UDP.init();
 		ZBuilder.init();
 		Log.clear();
 		this.HDHeight = HDHeight;

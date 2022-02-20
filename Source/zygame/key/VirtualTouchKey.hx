@@ -35,6 +35,17 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	 */
 	public var isTouchVirtualKey(get, never):Bool;
 
+	private var _isAutoListener:Bool = false;
+
+	/**
+	 * 构造一个虚拟按键计算模块
+	 * @param isAutoListener 是否自动侦听触摸，默认为true
+	 */
+	public function new(isAutoListener:Bool = true) {
+		super();
+		_isAutoListener = isAutoListener;
+	}
+
 	private function get_isTouchVirtualKey():Bool {
 		return _down;
 	}
@@ -51,16 +62,20 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	#if !jsapi
 	override function onAddToStage() {
 		super.onAddToStage();
-		stage.addEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
-		stage.addEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+		if (_isAutoListener) {
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+		}
 	}
 
 	override function onRemoveToStage() {
 		super.onRemoveToStage();
-		stage.removeEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
-		stage.removeEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
-		stage.removeEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+		if (_isAutoListener) {
+			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
+			stage.removeEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+		}
 	}
 	#end
 
@@ -132,14 +147,34 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	 */
 	private var _orignPos:Point = new Point();
 
-	#if jsapi
-	public var mouseX:Float;
-	public var mouseY:Float;
-	#end
+	private var _mouseX:Float;
+	private var _mouseY:Float;
+
+	public function onVirtualTouchDown(mouseX:Float, mouseY:Float):Void {
+		_mouseX = mouseX;
+		_mouseY = mouseY;
+		onKeyMouseDown(null);
+	}
+
+	public function onVirtualTouchEnd(mouseX:Float, mouseY:Float):Void {
+		_mouseX = mouseX;
+		_mouseY = mouseY;
+		onKeyMouseUp(null);
+	}
+
+	public function onVirtualTouchMove(mouseX:Float, mouseY:Float):Void {
+		_mouseX = mouseX;
+		_mouseY = mouseY;
+		onKeyMouseMove(null);
+	}
 
 	private function onKeyMouseDown(e:#if jsapi Dynamic #else MouseEvent #end):Void {
-		_beginPos.x = this.mouseX;
-		_beginPos.y = this.mouseY;
+		if (e != null) {
+			_mouseX = this.mouseX;
+			_mouseY = this.mouseY;
+		}
+		_beginPos.x = _mouseX;
+		_beginPos.y = _mouseX;
 		_touchPos.x = _beginPos.x;
 		_touchPos.y = _beginPos.y;
 		_orignPos.x = 0;
@@ -151,14 +186,22 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	}
 
 	private function onKeyMouseMove(e:#if jsapi Dynamic #else MouseEvent #end):Void {
+		if (e != null) {
+			_mouseX = this.mouseX;
+			_mouseY = this.mouseY;
+		}
 		if (_down) {
-			_touchPos.x = this.mouseX;
-			_touchPos.y = this.mouseY;
+			_touchPos.x = this._mouseX;
+			_touchPos.y = this._mouseY;
 			resetVirtualTouchDisplay();
 		}
 	}
 
 	private function onKeyMouseUp(e:#if jsapi Dynamic #else MouseEvent #end):Void {
+		if (e != null) {
+			_mouseX = this.mouseX;
+			_mouseY = this.mouseY;
+		}
 		_down = false;
 		resetVirtualTouchDisplay();
 	}

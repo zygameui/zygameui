@@ -89,7 +89,7 @@ class Build:
     __slots__ = ("isBuilded", "buildPlatform")
     _hx_fields = ["isBuilded", "buildPlatform"]
     _hx_methods = ["buildPlatformAssets", "buildHtml5", "action", "clearDir"]
-    _hx_statics = ["currentBuild", "platforms", "run", "mainFileName", "clear", "buildIos", "buildAndroid", "buildHashlink", "buildElectron"]
+    _hx_statics = ["currentBuild", "platforms", "run", "mainFileName", "clear", "buildIos", "buildAndroid", "buildMac", "buildHashlink", "buildElectron"]
 
     def __init__(self,args):
         self.buildPlatform = None
@@ -120,15 +120,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex = None
+            startIndex1 = None
             _hx_len = None
-            if (startIndex is None):
+            if (startIndex1 is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex + 1))
-                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex1 + 1))
+                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -143,6 +143,9 @@ class Build:
             if (c1 == "ios"):
                 self.buildPlatform = "ios"
                 Build.buildIos()
+            elif (c1 == "mac"):
+                self.buildPlatform = "mac"
+                Build.buildMac()
             else:
                 self.buildPlatform = "html5"
                 self.buildHtml5()
@@ -169,12 +172,12 @@ class Build:
         if (Build.currentBuild is not None):
             Build.currentBuild.buildAfter()
         Build.clear(dir)
-        haxe_Log.trace("\n\n -- 编译结束 --",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 98, 'className': "Build", 'methodName': "new"}))
+        haxe_Log.trace("\n\n -- 编译结束 --",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 101, 'className': "Build", 'methodName': "new"}))
 
     def buildPlatformAssets(self,args,dir):
         if ((args[1] if 1 < len(args) else None) == "html5"):
             return
-        haxe_Log.trace("开始编译平台资源",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 119, 'className': "Build", 'methodName': "buildPlatformAssets"}))
+        haxe_Log.trace("开始编译平台资源",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 122, 'className': "Build", 'methodName': "buildPlatformAssets"}))
         if (not sys_FileSystem.exists(dir)):
             sys_FileSystem.createDirectory(dir)
         if (Build.mainFileName is None):
@@ -185,20 +188,20 @@ class Build:
         platformName = (HxOverrides.stringOrNull(HxString.substr(platformName,0,1).upper()) + HxOverrides.stringOrNull(HxString.substr(platformName,1,None).lower()))
         cls = Type.resolveClass(("platforms." + ("null" if platformName is None else platformName)))
         if (cls is not None):
-            haxe_Log.trace((("RUN " + ("null" if platformName is None else platformName)) + " ACTION"),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 132, 'className': "Build", 'methodName': "buildPlatformAssets"}))
+            haxe_Log.trace((("RUN " + ("null" if platformName is None else platformName)) + " ACTION"),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 135, 'className': "Build", 'methodName': "buildPlatformAssets"}))
             Build.currentBuild = cls(*[args, dir])
         else:
-            haxe_Log.trace((("RUN " + ("null" if platformName is None else platformName)) + " FAIL"),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 135, 'className': "Build", 'methodName': "buildPlatformAssets"}))
+            haxe_Log.trace((("RUN " + ("null" if platformName is None else platformName)) + " FAIL"),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 138, 'className': "Build", 'methodName': "buildPlatformAssets"}))
 
     def buildHtml5(self):
-        haxe_Log.trace("开始编译HTML5",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 209, 'className': "Build", 'methodName': "buildHtml5"}))
+        haxe_Log.trace("开始编译HTML5",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 226, 'className': "Build", 'methodName': "buildHtml5"}))
         args = Sys.args()
         code = 0
         if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
             code = Sys.command("lime build html5 -final")
         else:
             code = Sys.command("lime build html5")
-        haxe_Log.trace(("BUILDED " + Std.string(code)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 216, 'className': "Build", 'methodName': "buildHtml5"}))
+        haxe_Log.trace(("BUILDED " + Std.string(code)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 233, 'className': "Build", 'methodName': "buildHtml5"}))
         if (code != 0):
             raise haxe_Exception.thrown("编译发生了错误！")
 
@@ -239,7 +242,7 @@ class Build:
                     if after:
                         path2 = ((("null" if dir is None else dir) + "/") + HxOverrides.stringOrNull(item1.get("rename")))
                         srcPath = item1.get("path")
-                        haxe_Log.trace(((("copy " + ("null" if srcPath is None else srcPath)) + " to ") + ("null" if path2 is None else path2)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 231, 'className': "Build", 'methodName': "action"}))
+                        haxe_Log.trace(((("copy " + ("null" if srcPath is None else srcPath)) + " to ") + ("null" if path2 is None else path2)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 248, 'className': "Build", 'methodName': "action"}))
                         if sys_FileSystem.isDirectory(srcPath):
                             python_FileUtils.copyDic(srcPath,path2)
                         else:
@@ -253,7 +256,7 @@ class Build:
                     xmlPath = item1.get("path")
                     if sys_FileSystem.exists(xmlPath):
                         xml = Xml.parse(sys_io_File.getContent(xmlPath))
-                        haxe_Log.trace(("include xml parsing:" + ("null" if xmlPath is None else xmlPath)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 281, 'className': "Build", 'methodName': "action"}))
+                        haxe_Log.trace(("include xml parsing:" + ("null" if xmlPath is None else xmlPath)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 298, 'className': "Build", 'methodName': "action"}))
                         self.action(xml.firstElement(),args,dir,after)
             elif (_hx_local_0 == 6):
                 if (_g == "assets"):
@@ -267,7 +270,7 @@ class Build:
                         if ((python_internal_ArrayImpl.indexOf(cp,(args[1] if 1 < len(args) else None),None) != -1) or ((python_internal_ArrayImpl.indexOf(cp,"all",None) != -1))):
                             filepath = (item1.get("rename") if (item1.exists("rename")) else item1.get("path"))
                             path = ((HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "Export/html5/bin/") + ("null" if filepath is None else filepath))
-                            haxe_Log.trace(("CP " + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 268, 'className': "Build", 'methodName': "action", 'customParams': ["root=", Build.currentBuild.root]}))
+                            haxe_Log.trace(("CP " + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 285, 'className': "Build", 'methodName': "action", 'customParams': ["root=", Build.currentBuild.root]}))
                             if sys_FileSystem.isDirectory(path):
                                 python_FileUtils.copyDic(path,(((("null" if dir is None else dir) + "/") + HxOverrides.stringOrNull(Build.currentBuild.root)) if ((Build.currentBuild.root is not None)) else dir))
                             else:
@@ -324,12 +327,12 @@ class Build:
         else:
             startIndex = None
             if (((dir.find("._") if ((startIndex is None)) else HxString.indexOfImpl(dir,"._",startIndex))) != -1):
-                haxe_Log.trace("删除",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 108, 'className': "Build", 'methodName': "clear", 'customParams': [dir]}))
+                haxe_Log.trace("删除",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 111, 'className': "Build", 'methodName': "clear", 'customParams': [dir]}))
                 sys_FileSystem.deleteFile(dir)
 
     @staticmethod
     def buildIos():
-        haxe_Log.trace("开始编译IOS",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 143, 'className': "Build", 'methodName': "buildIos"}))
+        haxe_Log.trace("开始编译IOS",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 146, 'className': "Build", 'methodName': "buildIos"}))
         if sys_FileSystem.exists("Export/ios"):
             sys_FileSystem.rename("Export/ios","Export/ios_temp")
         args = Sys.args()
@@ -347,7 +350,7 @@ class Build:
 
     @staticmethod
     def buildAndroid():
-        haxe_Log.trace("开始编译ANDROID",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 171, 'className': "Build", 'methodName': "buildAndroid"}))
+        haxe_Log.trace("开始编译ANDROID",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 174, 'className': "Build", 'methodName': "buildAndroid"}))
         args = Sys.args()
         if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
             Sys.command("lime build android -final")
@@ -357,8 +360,19 @@ class Build:
             Sys.command("lime build android")
 
     @staticmethod
+    def buildMac():
+        haxe_Log.trace("开始编译MAC",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 188, 'className': "Build", 'methodName': "buildMac"}))
+        args = Sys.args()
+        if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
+            Sys.command("lime build mac -final")
+        elif (python_internal_ArrayImpl.indexOf(args,"-debug",None) != -1):
+            Sys.command("lime build mac -debug")
+        else:
+            Sys.command("lime build mac")
+
+    @staticmethod
     def buildHashlink():
-        haxe_Log.trace("开始编译HashLink",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 185, 'className': "Build", 'methodName': "buildHashlink"}))
+        haxe_Log.trace("开始编译HashLink",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 202, 'className': "Build", 'methodName': "buildHashlink"}))
         args = Sys.args()
         if (python_internal_ArrayImpl.indexOf(args,"-debug",None) != -1):
             Sys.command("lime build hl -debug")
@@ -367,7 +381,7 @@ class Build:
 
     @staticmethod
     def buildElectron():
-        haxe_Log.trace("开始编译Electron",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 197, 'className': "Build", 'methodName': "buildElectron"}))
+        haxe_Log.trace("开始编译Electron",_hx_AnonObject({'fileName': "src/Build.hx", 'lineNumber': 214, 'className': "Build", 'methodName': "buildElectron"}))
         args = Sys.args()
         if (python_internal_ArrayImpl.indexOf(args,"-final",None) != -1):
             Sys.command("lime build electron -final")
@@ -6525,7 +6539,7 @@ Math.POSITIVE_INFINITY = float("inf")
 Math.NaN = float("nan")
 Math.PI = python_lib_Math.pi
 
-Build.platforms = ["android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", "g4399", "xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc", "wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin"]
+Build.platforms = ["android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", "g4399", "xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc", "wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin", "mac"]
 Build.mainFileName = None
 Defines.defineMaps = haxe_ds_StringMap()
 Tools.authorizationMaps = haxe_ds_StringMap()

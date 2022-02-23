@@ -42,9 +42,9 @@ import zygame.components.ZLabel;
 #if lime
 @:access(lime.ui.Window)
 #end
-#if !disable_res
-@:build(zygame.macro.Res.init())
-#end
+// #if !disable_res
+// @:build(zygame.macro.Res.init())
+// #end
 class Start extends ZScene {
 	#if vscode
 	public static function main() {};

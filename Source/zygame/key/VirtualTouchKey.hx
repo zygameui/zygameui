@@ -181,11 +181,13 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		_orignPos.y = 0;
 		if (Point.distance(_mathPos, _beginPos) < virtualTouchMaxRadius) {
 			_down = true;
-			resetVirtualTouchDisplay();
+			onKeyMouseMove(e);
 		}
 	}
 
 	private function onKeyMouseMove(e:#if jsapi Dynamic #else MouseEvent #end):Void {
+		if (!_down)
+			return;
 		if (e != null) {
 			_mouseX = this.mouseX;
 			_mouseY = this.mouseY;

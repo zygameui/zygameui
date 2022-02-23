@@ -18,7 +18,7 @@ class Build {
 		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin"
+		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin", "mac"
 	];
 
 	/**
@@ -83,6 +83,9 @@ class Build {
 			case "android":
 				buildPlatform = "android";
 				buildAndroid();
+			case "mac":
+				buildPlatform = "mac";
+				buildMac();
 			default:
 				// 默认编译HTML5
 				buildPlatform = "html5";
@@ -176,6 +179,20 @@ class Build {
 			Sys.command("lime build android -debug");
 		else
 			Sys.command("lime build android");
+	}
+
+	/**
+	 * 编译成Android
+	 */
+	public static function buildMac():Void {
+		trace("开始编译MAC");
+		var args:Array<String> = Sys.args();
+		if (args.indexOf("-final") != -1)
+			Sys.command("lime build mac -final");
+		else if (args.indexOf("-debug") != -1)
+			Sys.command("lime build mac -debug");
+		else
+			Sys.command("lime build mac");
 	}
 
 	/**

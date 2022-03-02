@@ -102,14 +102,14 @@ class AssetsUtils {
 		}
 		#end
 		#if (html5)
-		if (untyped window.webPath == null) {
-			untyped window.webPath = nativePath;
+		if (nativePath == null && untyped window.webPath != null) {
+			nativePath = untyped window.webPath;
 		}
 		var assetsVersion:Dynamic = Assets.cache.version;
-		if (untyped window.webPath != null) {
+		if (nativePath != null) {
 			if (path.indexOf("http") == -1) {
 				// 生成远程地址
-				path = untyped window.webPath + "/" + path;
+				path = nativePath + "/" + path;
 				if (path.indexOf('?') > -1) {
 					path += '&' + assetsVersion;
 				} else {

@@ -1341,7 +1341,10 @@ class AssetsBuilder extends Builder {
 				// 需要同时配置了hdwidth、hdheight值，会进行屏幕适配
 				if (onSizeChange != null && viewxml.firstElement().exists("hdwidth") && viewxml.firstElement().exists("hdheight")) {
 					// todo 是否需要兼容强制横幅、缩放取整支持
-					onSizeChange(Std.parseFloat(viewxml.firstElement().get("hdwidth")), Std.parseFloat(viewxml.firstElement().get("hdheight")));
+					#if hl
+					trace("onSizeChange=", onSizeChange);
+					#end
+					onSizeChange(Std.parseFloat(viewxml.firstElement().get("hdwidth")), Std.parseFloat(viewxml.firstElement().get("hdheight")), true);
 				}
 				@:privateAccess ZBuilder.buildui(viewxml.firstElement(), _viewParent, this);
 				_viewParent = null;
@@ -1383,7 +1386,6 @@ class AssetsBuilder extends Builder {
  * 构造结果，可以在这里找到所有定义了id的角色对象
  */
 class Builder {
-
 	/**
 	 * 构造成功的渲染对象
 	 */

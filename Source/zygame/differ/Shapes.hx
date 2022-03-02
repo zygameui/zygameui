@@ -41,8 +41,9 @@ class Shapes {
 	 * @param type 碰撞分类，同类只与同类碰撞
 	 */
 	public function add(shape:Shape, type:String = null):Void {
-		if (list.indexOf(shape) != -1)
-			return;
+		if (list.indexOf(shape) != -1) {
+			remove(shape);
+		}
 		list.push(shape);
 		if (type != null) {
 			var list2 = typeList.get(type);

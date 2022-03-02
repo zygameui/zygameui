@@ -456,11 +456,19 @@ class ZAssets {
 		_loadStop = false;
 		this.currentLoadedCount = 0;
 		this.currentLoadIndex = 0;
+		this.currentLoadNumber = 0;
 		// 加载循序排序，优先加载zip资源
 		_parsers.sort((a, b) -> Std.isOfType(a, ZIPAssetsParser) ? -1 : 0);
 		#if debug
 		trace("PARSER LOAD START:", _parsers);
 		#end
+		if (_parsers.length == 0) {
+			// 没有任何加载资源，直接成功
+			_loadStop = true;
+			if (func != null)
+				func(1);
+			return;
+		}
 		if (timeout != -1) {
 			if (timer == null) {
 				timer = new openfl.utils.Timer(1000, 0);
@@ -579,7 +587,7 @@ class ZAssets {
 	 * 当加载完毕后统一处理
 	 */
 	private function loadDone():Void {
-		this.currentLoadNumber--;
+		// this.currentLoadNumber--;
 		this.currentLoadedCount++;
 		loadNext();
 	}
@@ -589,17 +597,19 @@ class ZAssets {
 	 * @return Float
 	 */
 	public function getProgress():Float {
-		if (_parsers.length == 0)
-			return 1;
-		var progress:Float = 0;
-		for (base in _loadingParsers) {
-			progress += base.progress;
-		}
-		if (progress > 0 && _loadingParsers.length > 0) {
-			progress /= _loadingParsers.length;
-			progress = _loadingParsers.length / getNowLoadCount() * progress;
-		}
-		return this.currentLoadedCount / getNowLoadCount() + progress;
+		// if (_parsers.length == 0)
+		// return 1;
+		// trace("currentLoadNumber=", currentLoadNumber, currentLoadedCount);
+		// var progress:Float = 0;
+		// for (base in _loadingParsers) {
+		// 	progress += base.progress;
+		// }
+		// if (progress > 0 && _loadingParsers.length > 0) {
+		// 	progress /= _loadingParsers.length;
+		// 	progress = _loadingParsers.length / getNowLoadCount() * progress;
+		// }
+		// return this.currentLoadedCount / getNowLoadCount() + progress;
+		return currentLoadedCount / currentLoadNumber;
 	}
 
 	/**

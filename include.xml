@@ -61,7 +61,8 @@
     <define name="HXCPP_STACK_LINE"/>
     <define name="HXCPP_CHECK_POINTER"/>
 
-	<window allow-high-dpi="true" antialiasing="4" vsync="true" if="cpp || hl" />
+	<!-- <window allow-high-dpi="true" antialiasing="4" vsync="true" if="cpp || hl" /> -->
+	<window allow-high-dpi="true" vsync="true" if="cpp || hl" />
 
 	<!-- 默认平滑 -->
 	<haxedef name="smoothing" if="cpp" unless="unsmoothing" />
@@ -72,7 +73,7 @@
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf"/>
 
-	<haxedef name="invalidate" if="android" />
+	<haxedef name="invalidate" if="android || hl" />
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->

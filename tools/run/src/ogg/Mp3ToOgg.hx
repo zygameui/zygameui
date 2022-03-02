@@ -17,7 +17,7 @@ class Mp3ToOgg {
 	}
 
 	public static function toOgg(dir:String):Void {
-		trace("开始处理：", dir);
+		// trace("开始处理：", dir);
 		var files = FileSystem.readDirectory(dir);
 		for (index => value in files) {
 			var path = dir + "/" + value;
@@ -32,18 +32,21 @@ class Mp3ToOgg {
 	public static function ffmpeg(path:String):Void {
 		if (thridCounts >= maxThridCounts) {
 			cache.push(path);
-			trace("列入缓存：", path);
+			// trace("列入缓存：", path);
 			return;
 		}
 		thridCounts++;
-		var command = "ffmpeg " + " -y -i " + path + " -c:a libvorbis -q:a 2 " + StringTools.replace(path, ".mp3", ".ogg");
+		trace(Sys.programPath(),Sys.getCwd());
+		var command = "./tools/run/ffmpeg " + " -y -i \"" + path + "\" -c:a libvorbis -q:a 2 \"" + StringTools.replace(path, ".mp3", ".ogg") + "\"";
 		ChildProcess.exec(command, function(e, i, o) {
 			okCounts++;
+			if(e != null)
+				throw e;
 			trace("已完成" + path + "(" + okCounts + ")");
 			thridCounts--;
 			var path = cache.shift();
 			if (path != null) {
-				trace("开始缓存任务：", path);
+				// trace("开始缓存任务：", path);
 				ffmpeg(path);
 			}
 		});

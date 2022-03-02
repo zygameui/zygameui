@@ -324,7 +324,6 @@ ogg_Mp3ToOgg.main = function() {
 	ogg_Mp3ToOgg.toOgg(process.argv.slice(2)[0]);
 };
 ogg_Mp3ToOgg.toOgg = function(dir) {
-	haxe_Log.trace("开始处理：",{ fileName : "src/ogg/Mp3ToOgg.hx", lineNumber : 20, className : "ogg.Mp3ToOgg", methodName : "toOgg", customParams : [dir]});
 	var files = js_node_Fs.readdirSync(dir);
 	var _g_current = 0;
 	var _g_array = files;
@@ -344,18 +343,20 @@ ogg_Mp3ToOgg.toOgg = function(dir) {
 ogg_Mp3ToOgg.ffmpeg = function(path) {
 	if(ogg_Mp3ToOgg.thridCounts >= ogg_Mp3ToOgg.maxThridCounts) {
 		ogg_Mp3ToOgg.cache.push(path);
-		haxe_Log.trace("列入缓存：",{ fileName : "src/ogg/Mp3ToOgg.hx", lineNumber : 35, className : "ogg.Mp3ToOgg", methodName : "ffmpeg", customParams : [path]});
 		return;
 	}
 	ogg_Mp3ToOgg.thridCounts++;
-	var command = "ffmpeg " + " -y -i " + path + " -c:a libvorbis -q:a 2 " + StringTools.replace(path,".mp3",".ogg");
+	haxe_Log.trace(__filename,{ fileName : "src/ogg/Mp3ToOgg.hx", lineNumber : 39, className : "ogg.Mp3ToOgg", methodName : "ffmpeg", customParams : [process.cwd()]});
+	var command = "./tools/run/ffmpeg " + " -y -i \"" + path + "\" -c:a libvorbis -q:a 2 \"" + StringTools.replace(path,".mp3",".ogg") + "\"";
 	js_node_ChildProcess.exec(command,function(e,i,o) {
 		ogg_Mp3ToOgg.okCounts++;
-		haxe_Log.trace("已完成" + path + "(" + ogg_Mp3ToOgg.okCounts + ")",{ fileName : "src/ogg/Mp3ToOgg.hx", lineNumber : 42, className : "ogg.Mp3ToOgg", methodName : "ffmpeg"});
+		if(e != null) {
+			throw e;
+		}
+		haxe_Log.trace("已完成" + path + "(" + ogg_Mp3ToOgg.okCounts + ")",{ fileName : "src/ogg/Mp3ToOgg.hx", lineNumber : 45, className : "ogg.Mp3ToOgg", methodName : "ffmpeg"});
 		ogg_Mp3ToOgg.thridCounts--;
 		var path1 = ogg_Mp3ToOgg.cache.shift();
 		if(path1 != null) {
-			haxe_Log.trace("开始缓存任务：",{ fileName : "src/ogg/Mp3ToOgg.hx", lineNumber : 46, className : "ogg.Mp3ToOgg", methodName : "ffmpeg", customParams : [path1]});
 			ogg_Mp3ToOgg.ffmpeg(path1);
 		}
 	});

@@ -1,5 +1,6 @@
 package zygame.utils.load;
 
+import spine.tilemap.BitmapDataTextureLoader;
 import openfl.display.Tileset;
 import openfl.display.BitmapData;
 // import openfl.Assets;
@@ -10,6 +11,7 @@ import spine.support.graphics.TextureAtlas;
 import spine.SkeletonData;
 import spine.SkeletonDataFileHandle;
 import zygame.utils.StringUtils;
+import spine.support.graphics.TextureLoader;
 
 /**
  * SpineTextureAtalsLoader加载器
@@ -67,7 +69,7 @@ class SpineTextureAtalsLoader {
  * SpineTextureAtalsLoader加载器
  */
 class Base64SpineTextureAtalsLoader extends SpineTextureAtalsLoader {
-    private var _base64texpath:Array<{path:String, base64data:String}>;
+	private var _base64texpath:Array<{path:String, base64data:String}>;
 
 	/**
 	 * Spine的资源管理器
@@ -75,8 +77,8 @@ class Base64SpineTextureAtalsLoader extends SpineTextureAtalsLoader {
 	 * @param texpath
 	 */
 	public function new(textjson:String, texpath:Array<{path:String, base64data:String}>, path:String) {
-        super(path, []);
-        this._texJson = textjson;
+		super(path, []);
+		this._texJson = textjson;
 		this._base64texpath = texpath;
 	}
 
@@ -112,7 +114,7 @@ class SpineTextureAtals extends Atlas {
 
 	public var id:String = null;
 
-	public var loader:spine.tilemap.BitmapDataTextureLoader;
+	public var loader:TextureLoader;
 
 	public function new(maps:Map<String, BitmapData>, data:String):Void {
 		_bitmapDatas = maps;
@@ -139,7 +141,7 @@ class SpineTextureAtals extends Atlas {
 	 */
 	public function getSpriteSkeletonManager():SkeletonJson {
 		if (_spriteSkeletonManager == null) {
-			var loader:spine.openfl.BitmapDataTextureLoader = new spine.openfl.BitmapDataTextureLoader(_bitmapDatas);
+			loader = new spine.openfl.BitmapDataTextureLoader(_bitmapDatas);
 			var atlas:TextureAtlas = new TextureAtlas(_data, loader);
 			_spriteSkeletonManager = new SkeletonJson(new AtlasAttachmentLoader(atlas));
 		}
@@ -238,12 +240,12 @@ class SpineTextureAtals extends Atlas {
 	public function getBitmapDataFrame(name:String):Frame {
 		if (loader == null)
 			getTilemapSkeletonManager();
-		return loader.frameMaps.get(name);
+		return cast(loader, BitmapDataTextureLoader).frameMaps.get(name);
 	}
 
 	override function getTileset():Tileset {
 		if (loader == null)
 			getTilemapSkeletonManager();
-		return loader.getTileset();
+		return cast(loader, BitmapDataTextureLoader).getTileset();
 	}
 }

@@ -77,6 +77,16 @@ class Shapes {
 	 */
 	public function test(shape:Shape, type:String = null, into:Results<ShapeCollision> = null):Results<ShapeCollision> {
 		var list:Array<Shape> = type != null ? typeList.get(type) : list;
+		return testList(shape, list, into);
+	}
+
+	/**
+	 * 测试指定列表
+	 * @param shape 
+	 * @param into 
+	 * @return Results<ShapeCollision>
+	 */
+	public function testList(shape:Shape, list:Array<Shape>, into:Results<ShapeCollision> = null):Results<ShapeCollision> {
 		if (list == null)
 			return null;
 		for (shapeB in list) {

@@ -15,6 +15,7 @@ import openfl.geom.Point;
  */
 @:keep
 class VirtualTouchKey #if !jsapi extends ZBox #end {
+
 	/**
 	 * 虚拟按键可点击的操作有效区域半径
 	 */

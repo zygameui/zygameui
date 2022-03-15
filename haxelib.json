@@ -4,11 +4,11 @@
   "license": "MIT",
   "tags": [],
   "description": "",
-  "version": "11.0.7",
+  "version": "12.0.0",
   "releasenote": "Enhanced game engine based on openfl",
-  "contributors": ["rainy"],
-  "dependencies": {
-      
-  },
+  "contributors": [
+    "rainy"
+  ],
+  "dependencies": {},
   "classPath": "Source"
 }

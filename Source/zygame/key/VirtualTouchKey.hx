@@ -1,5 +1,7 @@
 package zygame.key;
 
+import openfl.events.Event;
+import openfl.events.TouchEvent;
 #if !jsapi
 import zygame.utils.Lib;
 import openfl.display.DisplayObject;
@@ -15,7 +17,6 @@ import openfl.geom.Point;
  */
 @:keep
 class VirtualTouchKey #if !jsapi extends ZBox #end {
-
 	/**
 	 * 虚拟按键可点击的操作有效区域半径
 	 */
@@ -38,13 +39,16 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 
 	private var _isAutoListener:Bool = false;
 
+	private var _touchEvent:Bool = false;
+
 	/**
 	 * 构造一个虚拟按键计算模块
 	 * @param isAutoListener 是否自动侦听触摸，默认为true
 	 */
-	public function new(isAutoListener:Bool = true) {
+	public function new(isAutoListener:Bool = true, touchEvent:Bool = false) {
 		super();
 		_isAutoListener = isAutoListener;
+		_touchEvent = touchEvent;
 	}
 
 	private function get_isTouchVirtualKey():Bool {
@@ -64,18 +68,30 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	override function onAddToStage() {
 		super.onAddToStage();
 		if (_isAutoListener) {
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+			if (_touchEvent) {
+				stage.addEventListener(TouchEvent.TOUCH_BEGIN, onKeyMouseDown);
+				stage.addEventListener(TouchEvent.TOUCH_MOVE, onKeyMouseMove);
+				stage.addEventListener(TouchEvent.TOUCH_END, onKeyMouseUp);
+			} else {
+				stage.addEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
+				stage.addEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
+				stage.addEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+			}
 		}
 	}
 
 	override function onRemoveToStage() {
 		super.onRemoveToStage();
 		if (_isAutoListener) {
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
-			stage.removeEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
-			stage.removeEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+			if (_touchEvent) {
+				stage.removeEventListener(TouchEvent.TOUCH_BEGIN, onKeyMouseDown);
+				stage.removeEventListener(TouchEvent.TOUCH_MOVE, onKeyMouseMove);
+				stage.removeEventListener(TouchEvent.TOUCH_END, onKeyMouseUp);
+			} else {
+				stage.removeEventListener(MouseEvent.MOUSE_DOWN, onKeyMouseDown);
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, onKeyMouseMove);
+				stage.removeEventListener(MouseEvent.MOUSE_UP, onKeyMouseUp);
+			}
 		}
 	}
 	#end
@@ -169,10 +185,17 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		onKeyMouseMove(null);
 	}
 
-	private function onKeyMouseDown(e:#if jsapi Dynamic #else MouseEvent #end):Void {
+	private var _touchEventId:Int = -1;
+
+	private function onKeyMouseDown(e:#if jsapi Dynamic #else Event #end):Void {
+		if (_touchEvent && _touchEventId != -1)
+			return;
 		if (e != null) {
 			_mouseX = this.mouseX;
 			_mouseY = this.mouseY;
+			if (_touchEvent) {
+				_touchEventId = cast(e, TouchEvent).touchPointID;
+			}
 		}
 		_beginPos.x = _mouseX;
 		_beginPos.y = _mouseX;
@@ -186,9 +209,13 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		}
 	}
 
-	private function onKeyMouseMove(e:#if jsapi Dynamic #else MouseEvent #end):Void {
+	private function onKeyMouseMove(e:#if jsapi Dynamic #else Event #end):Void {
 		if (!_down)
 			return;
+		if (_touchEvent) {
+			if (_touchEventId != cast(e, TouchEvent).touchPointID)
+				return;
+		}
 		if (e != null) {
 			_mouseX = this.mouseX;
 			_mouseY = this.mouseY;
@@ -200,11 +227,16 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		}
 	}
 
-	private function onKeyMouseUp(e:#if jsapi Dynamic #else MouseEvent #end):Void {
+	private function onKeyMouseUp(e:#if jsapi Dynamic #else Event #end):Void {
 		if (e != null) {
 			_mouseX = this.mouseX;
 			_mouseY = this.mouseY;
 		}
+		if (_touchEvent) {
+			if (_touchEventId != cast(e, TouchEvent).touchPointID)
+				return;
+		}
+		_touchEventId = -1;
 		_down = false;
 		resetVirtualTouchDisplay();
 	}

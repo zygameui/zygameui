@@ -199,6 +199,11 @@ class AutoBuilder {
 				case "HBox":
 					return macro:zygame.components.ZBox.HBox;
 			}
+		} else if (typeName.indexOf("F") == 0) {
+			return TPath({
+				pack: ["zygame", "feathersui"],
+				name: typeName
+			});
 		} else if (typeName.indexOf("Z") != -1) {
 			if (typeName == "ZHaxe") {
 				return TPath({

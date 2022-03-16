@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.display.BitmapData;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import zygame.components.base.DataProviderBox;
@@ -110,6 +111,8 @@ class ZStackMenu extends DataProviderBox {
 			rightLine.x -= (rightLine.x - (rightLine.customData + itemWidth * 0.2)) * 0.2;
 			_selectedItem.x = leftLine.x;
 			_selectedItem.width = rightLine.x - leftLine.x;
+
+			
 		}
 	}
 

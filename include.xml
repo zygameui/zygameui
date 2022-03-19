@@ -17,6 +17,7 @@
 	<haxedef name="spine38" if="spine3.8" />
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
+	<!-- <haxelib name="feathersui"/> -->
 	<!-- 静态数据类 -->
 	<haxelib name="castle" />
 	<!-- 编码库 -->

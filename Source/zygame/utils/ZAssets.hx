@@ -629,6 +629,10 @@ class ZAssets {
 		_musics.set(id, data);
 	}
 
+	public function putSpineTextureAtlas(name:String, spineAtlas:SpineTextureAtals):Void {
+		_spines.set(name, spineAtlas);
+	}
+
 	/**
 	 * 资源输出
 	 * @param assets

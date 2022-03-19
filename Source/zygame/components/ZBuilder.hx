@@ -1,6 +1,8 @@
 package zygame.components;
 
+#if feathersui
 import zygame.feathersui.FListView;
+#end
 import zygame.display.batch.BStack;
 import zygame.media.base.Sound;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
@@ -96,7 +98,9 @@ class ZBuilder {
 		endMaps = new Map();
 		defineMaps = new Map();
 		// fetherui组件支持
+		#if feathersui
 		bind(FListView);
+		#end
 		//
 		bind(VBBox);
 		bind(HBBox);

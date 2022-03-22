@@ -42,6 +42,11 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	private var _touchEvent:Bool = false;
 
 	/**
+	 * 是否一开始点击的位置为圆心
+	 */
+	public var beginOrginTouch:Bool = false;
+
+	/**
 	 * 构造一个虚拟按键计算模块
 	 * @param isAutoListener 是否自动侦听触摸，默认为true
 	 */
@@ -198,11 +203,11 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 			}
 		}
 		_beginPos.x = _mouseX;
-		_beginPos.y = _mouseX;
+		_beginPos.y = _mouseY;
 		_touchPos.x = _beginPos.x;
 		_touchPos.y = _beginPos.y;
-		_orignPos.x = 0;
-		_orignPos.y = 0;
+		_orignPos.x = beginOrginTouch ? _beginPos.x : 0;
+		_orignPos.y = beginOrginTouch ? _beginPos.y : 0;
 		if (Point.distance(_mathPos, _beginPos) < virtualTouchMaxRadius) {
 			_down = true;
 			onKeyMouseMove(e);

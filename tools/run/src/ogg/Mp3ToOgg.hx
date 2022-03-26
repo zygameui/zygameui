@@ -36,11 +36,16 @@ class Mp3ToOgg {
 			return;
 		}
 		thridCounts++;
-		trace(Sys.programPath(),Sys.getCwd());
-		var command = "./tools/run/ffmpeg " + " -y -i \"" + path + "\" -c:a libvorbis -q:a 2 \"" + StringTools.replace(path, ".mp3", ".ogg") + "\"";
+		trace(Sys.programPath(), Sys.getCwd());
+		var command = "./tools/run/ffmpeg "
+			+ " -y -i \""
+			+ path
+			+ "\" -c:a libvorbis -q:a 2 \""
+			+ StringTools.replace(path, ".mp3", ".ogg")
+			+ "\"";
 		ChildProcess.exec(command, function(e, i, o) {
 			okCounts++;
-			if(e != null)
+			if (e != null)
 				throw e;
 			trace("已完成" + path + "(" + okCounts + ")");
 			thridCounts--;

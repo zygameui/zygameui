@@ -103,7 +103,10 @@ class Tools {
 			case "-libs":
 				showLibs();
 			case "-xls":
-				XlsBuild.build(args[3] + args[1], args[3] + args[2]);
+				var isRoot = args[1].charAt(0) == "/";
+				var isRoot2 = args[2].charAt(0) == "/";
+				trace("isRoot", isRoot, "isRoot2", isRoot2);
+				XlsBuild.build((isRoot ? "" : args[3]) + args[1], (isRoot2 ? "" : args[3]) + args[2]);
 			case "-atlas":
 				AtlasTools.removeXmlItem(args[1]);
 			case "-ogg":

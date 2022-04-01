@@ -72,8 +72,7 @@ class BSprite extends BDisplayObjectContainer {
 				if (img.mouseEnabled && tile.visible && rect != null && rect.contains(posx, posy)) {
 					return mouseChildren ? tile : this;
 				}
-			}
-			else if (Std.isOfType(tile, Tile)) {
+			} else if (Std.isOfType(tile, Tile)) {
 				var img:Tile = cast tile;
 				var rect:Rectangle = img.getBounds(this);
 				if (tile.visible && rect != null && rect.contains(posx, posy)) {

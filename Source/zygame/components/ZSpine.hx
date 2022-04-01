@@ -270,4 +270,18 @@ class ZSpine extends ZBox {
 			getTilemapSpine().independent = value;
 		return value;
 	}
+
+	public function setMixByName(fromName:String, toName:String, duration:Float):Void {
+		if (fromName == null || toName == null)
+			return;
+		if (this.getNativeSpine() != null) {
+			if (this.getNativeSpine().state.getData().skeletonData.findAnimation(fromName) != null
+				&& this.getNativeSpine().state.getData().skeletonData.findAnimation(toName) != null)
+				getNativeSpine().state.getData().setMixByName(fromName, toName, duration);
+		} else if (this.getTilemapSpine() != null) {
+			if (this.getTilemapSpine().state.getData().skeletonData.findAnimation(fromName) != null
+				&& this.getTilemapSpine().state.getData().skeletonData.findAnimation(toName) != null)
+				getTilemapSpine().state.getData().setMixByName(fromName, toName, duration);
+		}
+	}
 }

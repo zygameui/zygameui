@@ -5,7 +5,7 @@ import glsl.GLSL;
 import VectorMath;
 
 /**
- * 图层透明着色器
+ * 颜色修改着色器
  */
 class ColorShader extends OpenFLShader {
 	/**

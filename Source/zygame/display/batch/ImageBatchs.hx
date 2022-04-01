@@ -107,7 +107,8 @@ class ImageBatchs extends Tilemap {
 		if (!Std.isOfType(this.parent, TouchImageBatchsContainer))
 			return super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
 		var touchContainer:TouchImageBatchsContainer = cast this.parent;
-		if (touchContainer.getTilePosAt(touchContainer.mouseX, touchContainer.mouseY) != null)
+		var tile = touchContainer.getTilePosAt(touchContainer.mouseX, touchContainer.mouseY);
+		if (tile != null)
 			return true;
 		return false;
 	}

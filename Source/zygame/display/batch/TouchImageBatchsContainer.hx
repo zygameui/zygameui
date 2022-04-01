@@ -23,6 +23,11 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 	public var tileColorTransformEnabled(never, set):Bool;
 
 	/**
+	 * 当前点击命中的瓦片，可以在MouseEvent事件中获取到
+	 */
+	public var currentTouchTile:Tile;
+
+	/**
 	 * 设置为性能模式
 	 */
 	public var performanceMode(never, set):Bool;
@@ -145,13 +150,16 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 	 * @return Tile
 	 */
 	public function getTilePosAt(posx:Float, posy:Float):Tile {
+		currentTouchTile = null;
 		var tile:Tile = null;
 		var id:Int = this.numChildren - 1;
 		while (id >= 0) {
 			var batch:ImageBatchs = getBatchs(id);
 			tile = batch.getBSprite().getTileAtPos(posx - batch.x, posy - batch.y);
-			if (tile != null)
+			if (tile != null) {
+				currentTouchTile = tile;
 				break;
+			}
 			id--;
 		}
 		return tile;

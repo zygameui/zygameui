@@ -1,5 +1,6 @@
 package zygame.feathersui;
 
+import feathers.layout.VerticalListLayout;
 import feathers.skins.RectangleSkin;
 import zygame.components.base.ZConfig;
 import feathers.text.TextFormat;
@@ -19,7 +20,7 @@ class FUITheme extends ClassVariantTheme {
 	}
 
 	public function setFListView(listView:ListView):Void {
-		listView.layout = new VerticalLayout();
+		listView.layout = new VerticalListLayout();
 		listView.showScrollBars = false;
 	}
 

@@ -219,9 +219,9 @@ class ZSpine extends ZBox {
 	override function onInit() {
 		super.onInit();
 		if (bspine != null)
-			bspine.mouseEnabled = true;
+			bspine.mouseEnabled = this.mouseEnabled;
 		else if (spine != null)
-			spine.mouseEnabled = true;
+			spine.mouseEnabled = this.mouseEnabled;
 	}
 
 	override function onRemoveToStage() {

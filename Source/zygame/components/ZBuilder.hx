@@ -821,6 +821,8 @@ class ZBuilder {
 	}
 
 	private static function __getParentDefineValue(xml:Xml, value:String):String {
+		if (value == null)
+			return null;
 		if (value.indexOf("::") == 0 && value.lastIndexOf("::") == value.length - 2) {
 			var defineKey = StringTools.replace(value, "::", "");
 			if (defineMaps.exists(defineKey))

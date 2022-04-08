@@ -104,6 +104,27 @@ class Shapes {
 	}
 
 	/**
+	 * 使用射线测试指定列表
+	 * @param shape 
+	 * @param into 
+	 * @return Results<ShapeCollision>
+	 */
+	public function testListByRay(shape:Ray, list:Array<Shape>, into:Results<RayCollision> = null):Results<RayCollision> {
+		if (list == null)
+			return null;
+		for (shapeB in list) {
+			var ret = Collision.rayWithShape(shape, shapeB);
+			if (ret != null) {
+				if (into == null) {
+					into = new Results<RayCollision>(0);
+				}
+				into.push(ret);
+			}
+		}
+		return into;
+	}
+
+	/**
 	 * 测试射线碰撞
 	 * @param shape 图形
 	 * @param into 用于接收碰撞结果

@@ -764,6 +764,8 @@ class ZAssets {
 	 * @return spine.SkeletonData
 	 */
 	public function getSpineSpriteSkeletonData(atlasAndJson:String):spine.SkeletonData {
+		if (atlasAndJson.indexOf(":") == -1)
+			atlasAndJson = atlasAndJson + ":" + atlasAndJson;
 		var names:Array<String> = atlasAndJson.split(":");
 		if (getSpineTextureAlats(names[0]) == null)
 			return null;
@@ -776,6 +778,8 @@ class ZAssets {
 	 * @return spine.SkeletonData
 	 */
 	public function getSpineTilemapSkeletonData(atlasAndJson:String):spine.SkeletonData {
+		if (atlasAndJson.indexOf(":") == -1)
+			atlasAndJson = atlasAndJson + ":" + atlasAndJson;
 		var names:Array<String> = atlasAndJson.split(":");
 		return getSpineTextureAlats(names[0]).buildTilemapSkeletonData(names[1], haxe.Json.stringify(getObject(names[1])));
 	}

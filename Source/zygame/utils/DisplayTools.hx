@@ -1,0 +1,29 @@
+package zygame.utils;
+
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+
+/**
+ * 显示对象工具
+ */
+class DisplayTools {
+	/**
+	 * 遍历容器里的所有对象
+	 * @param display 
+	 * @param cb 
+	 */
+	public static function map(display:DisplayObjectContainer, cb:DisplayObject->Bool):Bool {
+		for (i in 0...display.numChildren) {
+			var d = display.getChildAt(i);
+			var b = cb(d);
+			if (!b)
+				return false;
+			if (d is DisplayObjectContainer) {
+				var b = map(cast d, cb);
+				if (!b)
+					break;
+			}
+		}
+		return true;
+	}
+}

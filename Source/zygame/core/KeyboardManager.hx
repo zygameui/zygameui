@@ -47,18 +47,19 @@ class KeyboardManager {
 
     public static function focus(display:DisplayObject):Void
     {
-        var current:Start = Start.current;
-        if(display == null)
-        {
-            current.y = 0;
-            return;
-        }
-        //只有竖版状态时需要调整位置
-        if(current.getStageWidth() < current.getStageHeight())
-        {
-            var moveY:Float = current.stage.stageHeight/2;
-            current.y += moveY - moveY/2;
-        }
+        // 没有也没有关系
+        // var current:Start = Start.current;
+        // if(display == null)
+        // {
+        //     current.y = 0;
+        //     return;
+        // }
+        // //只有竖版状态时需要调整位置
+        // if(current.getStageWidth() < current.getStageHeight())
+        // {
+        //     var moveY:Float = current.stage.stageHeight/2;
+        //     current.y += moveY - moveY/2;
+        // }
     }
 
 }

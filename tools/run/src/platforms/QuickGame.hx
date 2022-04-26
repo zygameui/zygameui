@@ -55,14 +55,18 @@ class Oppo extends BuildSuper {
 		FileUtils.copyFile(args[2] + "Export/html5/bin/lib/pako.min", dir + "/lib");
 		FileUtils.copyDic(args[2] + "Export/html5/bin/release", dir + "/sign");
 		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir);
-        FileUtils.copyDic(args[2] + "Export/html5/bin/sdk", dir);
+		FileUtils.copyDic(args[2] + "Export/html5/bin/sdk", dir);
 	}
 
 	override function buildAfter() {
 		super.buildAfter();
-		Sys.command("cd Export/oppo
-            source ~/.bash_profile
-            quickgame pack release");
+		// source ~/.bash_profile
+		// source ~/.zprofile
+		trace("开始oppo构造");
+		var code = Sys.command("cd Export/oppo
+            /Users/rainy/Documents/haxelib/oppo-rpk-core/tools/pkgtools/lib/bin/quickgame pack release");
+		if (code != 0)
+			throw "Build error:" + code;
 	}
 }
 

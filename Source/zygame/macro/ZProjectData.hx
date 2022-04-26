@@ -61,6 +61,7 @@ class ZProjectData {
 							proess.kill();
 						}
 						var array = haxelibPath.get(item.get("name")).split(" ");
+						trace("array", item.get("name"), array);
 						var haxepath = null;
 						for (s in array) {
 							if (s.indexOf(item.get("name")) != -1) {

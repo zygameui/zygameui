@@ -7,6 +7,7 @@ import openfl.display.DisplayObjectContainer;
 /**
  * 显示对象工具
  */
+@:deprecated("DisplayObjectUtils is deprecated.")
 class DisplayObjectUtils {
 
     public static function setDisplayObject(display:DisplayObject,data:Dynamic,sceneData:MapliveSceneData):Void

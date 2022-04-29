@@ -114,12 +114,19 @@ class SoundChannelManager extends EventDispatcher {
 	 * @param force 是否强制恢复
 	 */
 	public function resumeMusic(force:Bool = false):Void {
-		trace("[背景音乐]resumeMusic:force="+force);
+		trace("[背景音乐]resumeMusic:force=" + force);
 		if (force) {
 			stopMusic(true);
 		}
 		if (_music != null) {
+			#if weixin
+			// 微信需要延迟一下
+			zygame.utils.Lib.setTimeout(() -> {
+				this.playMusic(_music);
+			}, 1000);
+			#else
 			this.playMusic(_music);
+			#end
 		}
 		this.dispatchEvent(new SoundChannelManagerEvent(SoundChannelManagerEvent.RESUME_MUSIC));
 	}

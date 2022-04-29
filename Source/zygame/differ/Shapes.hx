@@ -80,6 +80,18 @@ class Shapes {
 		return testList(shape, list, into);
 	}
 
+	public function testPoint(x:Float, y:Float, type:String = null, into:Results<ShapeCollision> = null):Bool {
+		if (list == null)
+			return null;
+		for (shapeB in list) {
+			var ret = Collision.pointInPoly(x, y,cast shapeB);
+			if (ret) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * 测试指定列表
 	 * @param shape 

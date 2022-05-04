@@ -35,6 +35,8 @@ class FPSDebug extends ZBox {
 	private var _alldt:Float = 0;
 	private var _allcpu:Float = 0;
 
+	private var bg:ZQuad;
+
 	public function new(inX:Float = 0.0, inY:Float = 0.0, inCol:Int = 0xffffff) {
 		super();
 
@@ -46,7 +48,7 @@ class FPSDebug extends ZBox {
 			_text.width = 120;
 			_text.height = 200;
 			_text.vAlign = "top";
-			var bg = new ZQuad();
+			bg = new ZQuad();
 			this.addChild(bg);
 			bg.width = _text.width;
 			bg.height = _text.height;
@@ -98,6 +100,7 @@ class FPSDebug extends ZBox {
 					_alltimes = 0;
 				}
 			}
+			this.bg.height = _text.getTextHeight();
 		}
 	}
 

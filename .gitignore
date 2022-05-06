@@ -6,3 +6,8 @@ Export
 dump
 tools/doc-build/bin/build
 Old-Source
+docs/zygame/particles/.DS_Store
+docs/zygame/components/.DS_Store
+docs/zygame/.DS_Store
+docs/bootstrap/.DS_Store
+docs/.DS_Store

@@ -33,7 +33,7 @@ Lime引擎库：https://github.com/haxelime/lime
 
 ## 教程
 
-请参考http://static.zygameui.cn/games/doc/index.html
+请参考：https://zygameui.cn
 
 ## Python3+
 zygameui命令行需要依赖python3，同时需要安装以下库：

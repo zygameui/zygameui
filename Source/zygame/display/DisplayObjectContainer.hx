@@ -326,17 +326,26 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		return rect;
 	}
 
-	/**
-	 * 优化__update性能
-	 * @param transformOnly 
-	 * @param updateChildren 
-	 */
-	override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
-		var renderParent = __renderParent != null ? __renderParent : parent;
-		var renderable = (__visible && __scaleX != 0 && __scaleY != 0 && !__isMask && (renderParent == null || !renderParent.__isMask));
-		if (this.visible || __renderable != renderable)
-			super.__update(transformOnly, updateChildren);
-	}
+	// @:noCompletion override private function __setParentRenderDirty():Void {
+	// 	super.__setParentRenderDirty();
+	// }
+
+	// /**
+	//  * 优化__update性能
+	//  * @param transformOnly
+	//  * @param updateChildren
+	//  */
+	// override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
+	// 	if (!this.__renderDirty) {
+	// 		super.__update(false, updateChildren);
+	// 	} else {
+	// 		super.__update(transformOnly, updateChildren);
+	// 	}
+	// var renderParent = __renderParent != null ? __renderParent : parent;
+	// var renderable = (__visible && __scaleX != 0 && __scaleY != 0 && !__isMask && (renderParent == null || !renderParent.__isMask));
+	// if (this.visible || __renderable != renderable)
+	// 	super.__update(transformOnly, updateChildren);
+	// }
 
 	/**
 	 * 从Start层转换最终坐标点

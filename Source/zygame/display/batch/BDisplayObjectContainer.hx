@@ -159,4 +159,9 @@ class BDisplayObjectContainer extends TileContainer implements ITileDisplayObjec
 	public function getParent():BDisplayObjectContainer {
 		return cast this.parent;
 	}
+
+	public function scale(v:Float):Void {
+		this.scaleX = v;
+		this.scaleY = v;
+	}
 }

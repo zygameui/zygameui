@@ -98,4 +98,9 @@ class BDisplayObject extends Tile implements ITileDisplayObject implements Refre
 	public function getStageHeight():Float {
 		return zygame.core.Start.stageHeight;
 	}
+
+	public function scale(v:Float):Void {
+		this.scaleX = v;
+		this.scaleY = v;
+	}
 }

@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.utils.Align;
 import zygame.shader.engine.ZShader;
 import openfl.filters.ShaderFilter;
 import zygame.shader.ColorShader;
@@ -326,11 +327,11 @@ class Image extends DisplayObjectContainer {
 		return get_pivotY();
 	}
 
-	override public function alignPivot(v:String = null, h:String = null):Void {
+	override public function alignPivot(v:Align = null, h:Align = null):Void {
 		super.alignPivot(v, h);
 		if (_bitmap == null && _tilemap == null)
 			return;
-		zygame.utils.Align.alignDisplay(isBitmapDataDraw ? _bitmap : _tilemap, v, h);
+		zygame.utils.Align.AlignTools.alignDisplay(isBitmapDataDraw ? _bitmap : _tilemap, v, h);
 	}
 
 	private var _animation:Array<Dynamic>;

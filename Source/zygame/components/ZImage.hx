@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.Align;
 import zygame.utils.CacheAssets;
 import zygame.utils.ZGC;
 import openfl.display.Shader;
@@ -260,7 +261,7 @@ class ZImage extends DataProviderComponent {
 		return super.set_hAlign(value);
 	}
 
-	override function alignPivot(?v:String = null, ?h:String = null) {
+	override function alignPivot(?v:Align = null, ?h:Align = null) {
 		super.alignPivot(v, h);
 		this.display.alignPivot(v, h);
 	}

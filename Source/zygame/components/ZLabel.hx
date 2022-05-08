@@ -257,6 +257,7 @@ class ZLabel extends DataProviderComponent {
 				#if quickgame_scale
 				txt.x -= (_width - _width / _getCurrentScale()) / 2;
 				#end
+			default:
 		}
 		switch (vAlign) {
 			case Align.TOP:
@@ -268,6 +269,7 @@ class ZLabel extends DataProviderComponent {
 				#if quickgame_scale
 				txt.y -= (_height - _height / _getCurrentScale()) / 2;
 				#end
+			default:
 		}
 	}
 
@@ -329,7 +331,6 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
-		
 		value = Std.isOfType(value, String) ? value : Std.string(value);
 
 		if (_restrictEreg != null) {

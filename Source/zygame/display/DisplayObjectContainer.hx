@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.utils.Align;
 import zygame.utils.ScaleUtils;
 import zygame.utils.Lib;
 import openfl.geom.Point;
@@ -100,15 +101,15 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	/**
 	 * 横向对齐实现
 	 */
-	public var hAlign(get, set):String;
+	public var hAlign(get, set):Align;
 
-	private var _hAlign:String = "left";
+	private var _hAlign:Align = "left";
 
-	private function get_hAlign():String {
+	private function get_hAlign():Align {
 		return _hAlign;
 	}
 
-	private function set_hAlign(value:String):String {
+	private function set_hAlign(value:Align):Align {
 		_hAlign = value;
 		alignPivot(_vAlign, _hAlign);
 		return value;
@@ -117,15 +118,15 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	/**
 	 * 竖向对齐实现
 	 */
-	public var vAlign(get, set):String;
+	public var vAlign(get, set):Align;
 
-	private var _vAlign:String = "top";
+	private var _vAlign:Align = "top";
 
-	private function get_vAlign():String {
+	private function get_vAlign():Align {
 		return _vAlign;
 	}
 
-	private function set_vAlign(value:String):String {
+	private function set_vAlign(value:Align):Align {
 		_vAlign = value;
 		alignPivot(_vAlign, _hAlign);
 		return value;
@@ -233,7 +234,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	/**
 	 *  锚点对齐，不能直接对齐调用，容器不直接支持该功能。
 	 */
-	public function alignPivot(v:String = null, h:String = null):Void {
+	public function alignPivot(v:Align = null, h:Align = null):Void {
 		_vAlign = v;
 		_hAlign = h;
 	}

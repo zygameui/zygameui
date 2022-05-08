@@ -131,7 +131,7 @@ class EraseImage extends Image{
         return get_pivotY();
     }
 
-    override public function alignPivot(v:String = null,h:String = null):Void
+    override public function alignPivot(v:Align = null,h:Align = null):Void
     {
         super.alignPivot(v,h);
         if(_cloneBitmap != null)

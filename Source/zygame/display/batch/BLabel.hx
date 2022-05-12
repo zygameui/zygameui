@@ -71,6 +71,17 @@ class BLabel extends BSprite{
         return _font;
     }
 
+    public var dataProvider(get, set):Dynamic;
+    
+    private function get_dataProvider():Dynamic {
+        return this.getText();
+    }
+    
+    private function set_dataProvider(dataProvider:Dynamic):Dynamic {
+        this.updateText(dataProvider);
+        return dataProvider;
+    }
+
     /**
      * 设置字体结尾
      */

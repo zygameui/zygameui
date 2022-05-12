@@ -14,8 +14,8 @@ import sys.FileSystem;
  */
 class ImportAllClasses {
 	#if macro
-	macro public static function build(path:String):Array<Field> {
-		if(!FileSystem.exists(path))
+	macro public static function build(path:String, packageName:String = "game.levels"):Array<Field> {
+		if (!FileSystem.exists(path))
 			path = "../../../../" + path;
 		var files = FileSystem.readDirectory(path);
 		var array = Context.getBuildFields();
@@ -23,7 +23,7 @@ class ImportAllClasses {
 			if (hxfile.indexOf(".") == 0)
 				continue;
 			hxfile = StringTools.replace(hxfile, ".hx", "");
-			var t = Context.toComplexType(Context.getType("game.levels." + hxfile));
+			var t = Context.toComplexType(Context.getType(packageName + "." + hxfile));
 			array.push({
 				name: "_" + hxfile,
 				access: [Access.APrivate, Access.AStatic],

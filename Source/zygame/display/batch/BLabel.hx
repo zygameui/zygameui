@@ -120,34 +120,34 @@ class BLabel extends BSprite{
         return _height;
     }
 
-    private var _vAlign:String = Align.TOP;
+    private var _vAlign:Align = Align.TOP;
     /**
      * 设置文本的竖向对齐情况
      */
-    public var vAlign(get,set):String;
-    private function set_vAlign(value:String):String
+    public var vAlign(get,set):Align;
+    private function set_vAlign(value:Align):Align
     {
         _vAlign = value;
         updateLayout();
         return _vAlign;
     }
-    private function get_vAlign():String
+    private function get_vAlign():Align
     {
         return _vAlign;
     }
 
-    private var _hAlign:String = Align.LEFT;
+    private var _hAlign:Align = Align.LEFT;
     /**
      * 设置文本的横向对齐情况
      */
-    public var hAlign(get,set):String;
-    private function set_hAlign(value:String):String
+    public var hAlign(get,set):Align;
+    private function set_hAlign(value:Align):Align
     {
         _hAlign = value;
         updateLayout();
         return _hAlign;
     }
-    private function get_hAlign():String
+    private function get_hAlign():Align
     {
         return _hAlign;
     }
@@ -166,6 +166,7 @@ class BLabel extends BSprite{
                     _node.x = this._width - getTextWidth();
                 case Align.CENTER:
                     _node.x = this._width/2 - getTextWidth()/2;
+                default:
             }
         if(height > 0)
             switch(vAlign)
@@ -176,6 +177,7 @@ class BLabel extends BSprite{
                     _node.y = this._height - getTextHeight();
                 case Align.CENTER:
                     _node.y = this._height/2 - getTextHeight()/2;
+                    default:
             }
         // #if vivo
         // _node.y += 3;

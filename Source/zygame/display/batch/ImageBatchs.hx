@@ -22,6 +22,14 @@ class ImageBatchs extends Tilemap {
 	public var hitTestEnbled:Bool = true;
 
 	/**
+	 * 获取精灵图
+	 * @return Atlas
+	 */
+	public function getAtlas():Atlas {
+		return _batchSprites;
+	}
+
+	/**
 	 * 使用精灵表进行批处理实现
 	 * @param batchSprites 
 	 * @return 

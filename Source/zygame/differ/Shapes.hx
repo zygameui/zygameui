@@ -80,9 +80,17 @@ class Shapes {
 		return testList(shape, list, into);
 	}
 
+	/**
+	 * 使用坐标测试图形，这个方法支持凹边形
+	 * @param x 
+	 * @param y 
+	 * @param type 
+	 * @param into 
+	 * @return Bool
+	 */
 	public function testPoint(x:Float, y:Float, type:String = null, into:Results<ShapeCollision> = null):Bool {
 		if (list == null)
-			return null;
+			return false;
 		for (shapeB in list) {
 			var ret = Collision.pointInPoly(x, y,cast shapeB);
 			if (ret) {

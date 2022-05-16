@@ -2,7 +2,6 @@ package zygame.core;
 
 import zygame.macro.performance.PerformanceAnalysis;
 import zygame.utils.ScaleUtils;
-import zygame.utils.CullingRenderUtils;
 import lime.graphics.RenderContext;
 import haxe.Timer;
 import openfl.display.OpenGLRenderer;
@@ -22,7 +21,6 @@ import openfl.Vector;
 import openfl.events.Event;
 import zygame.components.ZScene;
 import zygame.utils.Log;
-import zygame.utils.SoundUtils;
 import zygame.components.ZQuad;
 import zygame.components.ZBuilder;
 import zygame.macro.ZMacroUtils;

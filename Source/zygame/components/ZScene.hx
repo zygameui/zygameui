@@ -69,6 +69,8 @@ class ZScene extends ZBox {
 		ZSceneManager.current.releaseScene(this);
 	}
 
+	dynamic public function onSceneReleaseEvent():Void {}
+
 	/**
 	 * 返回上一个场景，仅记录5个场景记录
 	 * @param isReleaseScene 

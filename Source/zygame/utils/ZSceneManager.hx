@@ -97,8 +97,10 @@ class ZSceneManager {
 		#end
 		if (zScene == null)
 			return;
-		if (onSceneRelease)
+		if (onSceneRelease){
 			zScene.onSceneRelease();
+			zScene.onSceneReleaseEvent();
+		}
 		_sceneMaps.remove(Type.getClassName(Type.getClass(zScene)));
 		_scenes.remove(zScene);
 		if (zScene.parent != null) {

@@ -11,6 +11,8 @@
 - [新增] 新增`FUITheme`UI组件库。
 - [新增] 新增`FListView`列表渲染组件。
 - [改进] 改进Spine的`:`分隔符智能识别。
+- [删除] 删除已弃用的实现`SoundUtils`、`SocketIOServer`、`CullingRenderUtils`。
+- [兼容] 对BLabel、ZLabel的Align规范处理。
 
 ### 11.0.6
 - [改进] 改进自定义适配分辨率的实现。

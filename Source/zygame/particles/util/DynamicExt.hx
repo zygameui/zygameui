@@ -1,5 +1,14 @@
 package zygame.particles.util;
 
+/**
+ * 使用方法
+ * ```haxe
+ * var data:DynamicExt = {
+ *  a:"data"
+ * };
+ * trace(data["a"]);
+ * ```
+ */
 abstract DynamicExt(Dynamic) from Dynamic to Dynamic {
     public inline function new() {
         this = {};

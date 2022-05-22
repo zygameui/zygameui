@@ -1,5 +1,7 @@
 package zygame.display;
 
+import zygame.utils.ZSceneManager;
+import zygame.components.ZScene;
 import zygame.utils.Align;
 import zygame.utils.ScaleUtils;
 import zygame.utils.Lib;
@@ -216,6 +218,14 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
+	 * 获取当前显示的场景
+	 * @return ZScene
+	 */
+	public function getCurrentScene():ZScene {
+		return ZSceneManager.current.getCurrentScene();
+	}
+
+	/**
 	 * 获取高度削减高度
 	 * @return Float
 	 */
@@ -330,7 +340,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	// @:noCompletion override private function __setParentRenderDirty():Void {
 	// 	super.__setParentRenderDirty();
 	// }
-
 	// /**
 	//  * 优化__update性能
 	//  * @param transformOnly

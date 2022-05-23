@@ -366,4 +366,13 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		point = Start.current.globalToLocal(point);
 		return point;
 	}
+
+	/**
+	 * 获取当前onFrame的延迟值
+	 */
+	public var delay(get, never):Float;
+
+	function get_delay():Float {
+		return @:privateAccess Start.current._frameDt;
+	}
 }

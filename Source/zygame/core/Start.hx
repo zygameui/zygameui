@@ -122,6 +122,7 @@ class Start extends ZScene {
 	 * 渲染FPS
 	 */
 	private var __renderFps:FPSUtil;
+
 	public var renderFps(get, set):Int;
 
 	private function set_renderFps(value:Int):Int {
@@ -169,6 +170,7 @@ class Start extends ZScene {
 	 */
 	public var iosRender:ZQuad;
 	#end
+
 	/**
 	 * 更新状态队列
 	 */
@@ -190,15 +192,28 @@ class Start extends ZScene {
 	 * 时间戳
 	 */
 	private var _lastTime:Float = 0;
+
 	private var _dt:Float = 0;
+	private var _frameTime:Float = 0;
+	private var _frameDt:Float = 0;
+	private var _frameDtScale:Float = 0;
 	private var _cpuDt:Float = 0;
+
+	/**
+	 * 每帧的DT
+	 */
+	public var frameDtScale(get, never):Float;
+
+	function get_frameDtScale():Float {
+		return _frameDtScale;
+	}
 
 	/**
 	 * 启动一个启动器，用于启动进入游戏入口。
 	 * @param HDWidth - 以宽适配时使用的宽度像素
 	 * @param HDHeight - 以高适配时使用的高度像素
 	 * @param isDebug - 是否显示debug数据，当该值为true时，FPSDebug对象将会建立，一般在发布正式版时，该值应该被设置为false。
-	 * @param scalePower - 测试性功能，使缩放永远为0.5作为间隔缩放。
+	 * @param scalePower - 测试性功能，使缩放永远为0.x5作为间隔缩放。
 	 */
 	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
 		super();
@@ -303,7 +318,8 @@ class Start extends ZScene {
 	 * 初始化时机控制，确保ZQuad可用
 	 * @param e
 	 */
-	override public function onInitEvent(e:Event):Void {
+	override
+	public function onInitEvent(e:Event):Void {
 		#if !api
 		if (ZQuad.quadBitmapData == null) {
 			#if (mgc || base64quad)
@@ -382,7 +398,8 @@ class Start extends ZScene {
 		PerformanceAnalysis.onFrame();
 	}
 
-	override public function onInit():Void {
+	override
+	public function onInit():Void {
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
 
@@ -598,6 +615,10 @@ class Start extends ZScene {
 		}
 		#end
 		if (fps.getFps() < 61 || fps60.update()) {
+			var newTime = Timer.stamp();
+			_frameDt = newTime - _frameTime;
+			_frameDtScale = Math.min(2, _frameDt / 0.016);
+			_frameTime = newTime;
 			this.onFrame();
 			isFrameing = true;
 			for (i in 0...updates.length) {
@@ -652,7 +673,8 @@ class Start extends ZScene {
 	/**
 	 * 按每秒运行60次的帧事件回调入口
 	 */
-	override public function onFrame():Void {}
+	override
+	public function onFrame():Void {}
 }
 
 /**

@@ -1,5 +1,7 @@
 package zygame.utils;
 
+import haxe.Timer;
+import zygame.core.Start;
 import spine.openfl.SkeletonSprite;
 import openfl.display.DisplayObject;
 import openfl.events.Event;
@@ -15,13 +17,6 @@ class SpineManager {
 	private static var spineOnFramesOut:Array<SpineBaseDisplay> = [];
 
 	private static var stage:Stage;
-
-	/**
-	 * 当前延迟FPS的间隔时间
-	 */
-	private static var _lastFpsTime:Float;
-
-	private static var _newFpsTime:Float;
 
 	/**
 	 * 设置龙骨的播放频率
@@ -43,6 +38,9 @@ class SpineManager {
 	 */
 	public static var playingCount:Int = 0;
 
+	private static var _dt:Float;
+	private static var _nowTime:Float;
+
 	/**
 	 * 初始化更新器
 	 * @param stage
@@ -53,7 +51,7 @@ class SpineManager {
 			return;
 		fps = new FPSUtil(60);
 		stage = pstage;
-		_lastFpsTime = Date.now().getTime();
+		_nowTime = Timer.stamp();
 		stage.addEventListener(Event.ENTER_FRAME, onFrame);
 		#if (test && js)
 		untyped window.spineDebugInfo = echoDebugInfo;
@@ -70,10 +68,6 @@ class SpineManager {
 	public static function resume():Void {
 		if (stage == null)
 			return;
-
-		if (!isLockFrameFps) {
-			_lastFpsTime = Date.now().getTime();
-		}
 
 		stage.addEventListener(Event.ENTER_FRAME, onFrame);
 	}
@@ -93,7 +87,6 @@ class SpineManager {
 					});
 				}
 			}
-
 		}
 		trace(spineUpdateList.length, spineUpdateList);
 	}
@@ -101,41 +94,32 @@ class SpineManager {
 	private static function onFrame(event:Event):Void {
 		if (!enbed)
 			return;
-		_newFpsTime = Date.now().getTime();
-		var currentFpsTime = _newFpsTime - _lastFpsTime;
-		currentFpsTime = currentFpsTime / 1000;
-		_lastFpsTime = _newFpsTime;
 		playingCount = 0;
 		for (display in spineOnFrames) {
 			if (display.independent) {
-				display.onSpineUpdate(currentFpsTime);
+				display.onSpineUpdate(Start.current.frameDt);
 			}
 		}
 		if (!isLockFrameFps) {
-			for (display in spineOnFrames) {
-				if (!display.isHidden() && display.isPlay && !display.independent) {
-					playingCount++;
-					display.onSpineUpdate(currentFpsTime);
+			if (fps.fps == 60 || fps.update()) {
+				var nTime = Timer.stamp();
+				var dt = nTime - _nowTime;
+				_nowTime = nTime;
+				for (display in spineOnFrames) {
+					if (!display.isHidden() && display.isPlay && !display.independent) {
+						playingCount++;
+						display.onSpineUpdate(dt);
+					}
+				}
+				for (display in spineOnFramesOut) {
+					display.onSpineUpdate(0);
 				}
 			}
-			for (display in spineOnFramesOut) {
-				display.onSpineUpdate(0);
-			}
-		} else if (fps.fps == 60) {
+		} else if (fps.fps == 60 || fps.update()) {
 			for (display in spineOnFrames) {
 				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
 					display.onSpineUpdate(1 / stage.frameRate);
-				}
-			}
-			for (display in spineOnFramesOut) {
-				display.onSpineUpdate(0);
-			}
-		} else if (fps.update()) {
-			for (display in spineOnFrames) {
-				if (!display.isHidden() && display.isPlay && !display.independent) {
-					playingCount++;
-					display.onSpineUpdate(1 / fps.fps);
 				}
 			}
 			for (display in spineOnFramesOut) {

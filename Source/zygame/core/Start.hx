@@ -199,6 +199,12 @@ class Start extends ZScene {
 	private var _frameDtScale:Float = 0;
 	private var _cpuDt:Float = 0;
 
+	public var frameDt(get, never):Float;
+
+	function get_frameDt():Float {
+		return _frameDt;
+	}
+
 	/**
 	 * 每帧的DT
 	 */

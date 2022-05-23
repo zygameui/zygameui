@@ -452,7 +452,7 @@ class Start extends ZScene {
 	 */
 	public function onDeActivate(e:Event):Void {
 		isActivate = false;
-		trace("返回至后台");
+		// trace("返回至后台");
 		SoundChannelManager.current.stopAllEffectAndMusic(true);
 	}
 
@@ -462,7 +462,7 @@ class Start extends ZScene {
 	 */
 	public function onActivate(e:Event):Void {
 		isActivate = true;
-		trace("返回至前台");
+		// trace("返回至前台");
 		zygame.utils.Lib.onResume();
 		#if qqquick
 		#else

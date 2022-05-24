@@ -623,7 +623,7 @@ class Start extends ZScene {
 		if (fps.getFps() < 61 || fps60.update()) {
 			var newTime = Timer.stamp();
 			_frameDt = newTime - _frameTime;
-			_frameDtScale = Math.min(2, _frameDt / 0.016);
+			_frameDtScale = Math.min(3, _frameDt / 0.016);
 			_frameTime = newTime;
 			this.onFrame();
 			isFrameing = true;

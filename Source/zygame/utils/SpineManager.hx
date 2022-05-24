@@ -119,7 +119,7 @@ class SpineManager {
 			for (display in spineOnFrames) {
 				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
-					display.onSpineUpdate(1 / stage.frameRate);
+					display.onSpineUpdate(1 / fps.fps);
 				}
 			}
 			for (display in spineOnFramesOut) {

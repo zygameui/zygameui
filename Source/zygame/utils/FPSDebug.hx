@@ -70,7 +70,11 @@ class FPSDebug extends ZBox {
 	}
 
 	private function onEnter(_) {
-		_qqfps--;
+		_qqfps++;
+		if (_qqfps % 2 == 0) {
+			_qqfps = 0;
+			return;
+		}
 
 		var mem:Float = Math.round(System.totalMemory / 1024 / 1024 * 100) / 100;
 		if (mem > memPeak)

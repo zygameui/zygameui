@@ -20,7 +20,6 @@
 -D zygame
 -D api
 -D openfl_swf
--lib KengSDK
 -cp src
 -cp test
 -cp openfl9-source

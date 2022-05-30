@@ -223,6 +223,7 @@ class Start extends ZScene {
 	 */
 	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
 		super();
+		Start.current = this;
 		this.scalePower = scalePower;
 		// RES资源绑定
 		// zygame.net.UDP.init();
@@ -232,7 +233,6 @@ class Start extends ZScene {
 		this.HDWidth = HDWidth;
 		this.isDebug = isDebug;
 		updates = new Vector<Refresher>();
-		Start.current = this;
 		log('[zygameui] build time:${zygame.utils.System.buildTime}');
 		log("[zygameui] channel=" + Lib.getChannel() + " render=" + Lib.getRenderMode());
 

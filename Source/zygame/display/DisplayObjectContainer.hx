@@ -1,5 +1,7 @@
 package zygame.display;
 
+import zygame.components.ZBox;
+import openfl.display.Stage;
 import zygame.utils.ZSceneManager;
 import zygame.components.ZScene;
 import zygame.utils.Align;
@@ -18,6 +20,7 @@ import zygame.utils.Log;
 import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
+@:access(openfl.display.DisplayObject)
 class DisplayObjectContainer extends Sprite implements Refresher implements zygame.mini.MiniExtend {
 	/**
 	 * 自适配宽度
@@ -137,7 +140,8 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	public function new() {
 		super();
 		this.addEventListener(Event.ADDED_TO_STAGE, onInitEvent);
-		this.addEventListener(Event.REMOVED, onSelftRemove);
+		// this.addEventListener(Event.ADDED, onInitEvent);
+		this.addEventListener(Event.REMOVED, onSelfRemove);
 		this.addEventListener(Event.REMOVED_FROM_STAGE, onRemoveEvent);
 	}
 
@@ -145,7 +149,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 * 当真实自已被删掉时
 	 * @param e
 	 */
-	private function onSelftRemove(e:Event):Void {
+	private function onSelfRemove(e:Event):Void {
 		onRemove();
 	}
 
@@ -154,11 +158,13 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 * @param e 
 	 */
 	public function onInitEvent(e:Event):Void {
+		var add_to_state:Bool = e.type == Event.ADDED_TO_STAGE;
 		if (!isInit) {
 			isInit = true;
 			this.onInit();
 		}
-		onAddToStage();
+		if (add_to_state)
+			onAddToStage();
 	}
 
 	/**
@@ -265,8 +271,22 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
-	 *  移除事件
-	 * @param e -
+	 * 触发事件
+	 * @param event 
+	 * @return Bool
+	 */
+	@:noCompletion override private function __dispatchWithCapture(event:Event):Bool {
+		if (event.type == Event.ADDED) {
+			if (this.hasEventListener(Event.ADDED_TO_STAGE)) {
+				onInitEvent(event);
+			}
+		}
+		return super.__dispatchWithCapture(event);
+	}
+
+	/**
+		*移除事件
+		* @param e -
 	 */
 	private function onRemoveEvent(e:Event):Void {
 		onRemoveToStage();

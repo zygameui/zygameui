@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 12.0.1
+- [改进] 改进onInit触发会在addChild之后发生。
+
 ### 12.0.0
 - [里程碑] 新增`featherui`UI组件库支持。
 - [新增] 新增`FUITheme`UI组件库。

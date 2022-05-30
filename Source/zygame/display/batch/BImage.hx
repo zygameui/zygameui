@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import zygame.components.ZBuilder;
 import openfl.display.Tile;
 import zygame.utils.load.Frame;
 import zygame.utils.load.TextureLoader;
@@ -66,10 +67,15 @@ class BImage extends BDisplayObject {
 	}
 
 	/**
-	 * 设置新帧
-	 * @param frame 
+	 *  设置新的帧，可以通过精灵图名字设置，或者`Frame`数据直接设置
+	 * @param frame 可以是String以及`Frame`对象
 	 */
-	public function setFrame(frame:Frame):Void {
+	public function setFrame(data:Dynamic):Void {
+		if (data is String) {
+			setFrame(ZBuilder.getBaseBitmapData(data));
+			return;
+		}
+		var frame:Frame = data;
 		if (frame == null) {
 			super.set_id(-1);
 			return;

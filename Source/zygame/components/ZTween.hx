@@ -3,8 +3,6 @@ package zygame.components;
 import zygame.display.DisplayObjectContainer;
 import zygame.core.Start;
 import zygame.core.Refresher;
-import zygame.script.ZHaxe;
-import zygame.utils.Lib;
 import zygame.components.ZBuilder;
 
 using tweenxcore.Tools;
@@ -16,6 +14,8 @@ class ZTween implements Refresher {
 	private var _baseXml:Xml;
 
 	private var _baseFrames:Array<TweenFrame>;
+
+	private var _dt:Float = 0;
 
 	private var _crrentFrame:Int = 0;
 
@@ -183,7 +183,11 @@ class ZTween implements Refresher {
 	public function onFrame():Void {
 		if (!_isPlay)
 			return;
-		_crrentFrame++;
+		_dt += Start.current.frameDt;
+		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
+		trace("add_frame = ", add_frame);
+		_dt -= add_frame * Start.FRAME_DT_STEP;
+		_crrentFrame += add_frame;
 		if (_crrentFrame > _maxFrame) {
 			if (_isPlay) {
 				_crrentFrame--;

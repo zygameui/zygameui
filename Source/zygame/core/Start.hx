@@ -39,6 +39,10 @@ import zygame.components.ZLabel;
 @:access(lime.ui.Window)
 #end
 class Start extends ZScene {
+	/**
+	 * 1//60每帧的DT
+	 */
+	public inline static var FRAME_DT_STEP:Float = 0.016;
 
 	/**
 	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true
@@ -316,8 +320,7 @@ class Start extends ZScene {
 	 * 初始化时机控制，确保ZQuad可用
 	 * @param e
 	 */
-	override
-	public function onInitEvent(e:Event):Void {
+	override public function onInitEvent(e:Event):Void {
 		#if !api
 		if (ZQuad.quadBitmapData == null) {
 			#if (mgc || base64quad)
@@ -396,8 +399,7 @@ class Start extends ZScene {
 		PerformanceAnalysis.onFrame();
 	}
 
-	override
-	public function onInit():Void {
+	override public function onInit():Void {
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
 
@@ -615,7 +617,7 @@ class Start extends ZScene {
 		if (fps.getFps() < 61 || fps60.update()) {
 			var newTime = Timer.stamp();
 			_frameDt = newTime - _frameTime;
-			_frameDtScale = Math.min(3, _frameDt / 0.016);
+			_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
 			_frameTime = newTime;
 			this.onFrame();
 			isFrameing = true;
@@ -671,8 +673,7 @@ class Start extends ZScene {
 	/**
 	 * 按每秒运行60次的帧事件回调入口
 	 */
-	override
-	public function onFrame():Void {}
+	override public function onFrame():Void {}
 }
 
 /**

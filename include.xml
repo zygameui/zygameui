@@ -7,17 +7,23 @@
 	<haxelib name="swf" if="${openfl >= 9.0.0}"/>
 	<!-- OpenFL9兼容8.9.0的代码 -->
 	<source path="openfl9-source" if="${openfl >= 9.0.0}"/>
-	<haxelib name="hscript" />
+	<section if="embed_optional">
+		<!-- HScript脚本 -->
+		<haxelib name="hscript" />
+		<!-- 静态数据类 -->
+		<haxelib name="castle" />
+		<!-- 编码库 -->
+		<haxelib name="crypto"/>
+		<!-- SWF -->
+		<haxelib name="swf"/>
+	</section>
 	<!-- Spine锁定版本3.8.1 -->
 	<haxelib name="spine-hx" version="3.8.1" if="spine3.8" />
 	<haxelib name="spine-hx" version="3.6.0" unless="spine3.8" />
 	<haxedef name="spine38" if="spine3.8" />
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
-	<!-- 静态数据类 -->
-	<!-- <haxelib name="castle" /> -->
-	<!-- 编码库 -->
-	<haxelib name="crypto"/>
+	
 	<!-- 无物理系统碰撞类 -->
 	<haxelib name="differ" />
 	<haxelib name="zygameui-nape" if="nape" />

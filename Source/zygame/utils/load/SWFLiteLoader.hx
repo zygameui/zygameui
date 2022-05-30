@@ -1,5 +1,7 @@
 package zygame.utils.load;
 
+#if (openfl_swf && swf)
+
 import zygame.utils.load.SWFLiteLibrary;
 import openfl.utils.AssetLibrary;
 import openfl.net.URLLoader;
@@ -24,7 +26,6 @@ import lime.app.Promise;
 import lime.system.ThreadPool;
 #end
 
-#if (openfl_swf)
 
 #if (openfl >= '9.0.0')
 typedef SWFLiteLoader = SWFLiteLoaderOpenFL9;

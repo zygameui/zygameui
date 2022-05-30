@@ -38,7 +38,7 @@ import zygame.media.base.SoundChannel;
 import zygame.utils.load.Music;
 import zygame.utils.load.CDBLoader;
 import zygame.utils.load.SpineTextureAtalsLoader;
-#if openfl_swf
+#if (openfl_swf && swf)
 import swf.exporters.animate.AnimateLibrary;
 #end
 import openfl.display.MovieClip;
@@ -124,7 +124,7 @@ class ZAssets {
 	private var _musics:Dictionary<String, Music>;
 	private var _fnts:Dictionary<String, FntData>;
 	private var _spines:Dictionary<String, SpineTextureAtals>;
-	#if (openfl_swf)
+	#if (openfl_swf && swf)
 	private var _swflites:Dictionary<String, AnimateLibrary>;
 	#end
 	private var _zips:Dictionary<String, Zip>;
@@ -160,7 +160,7 @@ class ZAssets {
 		_musics = new Dictionary<String, Music>();
 		_fnts = new Dictionary<String, FntData>();
 		_spines = new Dictionary<String, SpineTextureAtals>();
-		#if (openfl_swf)
+		#if (openfl_swf && swf)
 		_swflites = new Dictionary<String, AnimateLibrary>();
 		#end
 		_zips = new Dictionary<String, Zip>();
@@ -231,7 +231,7 @@ class ZAssets {
 	 * @param isZip 是否为压缩包，默认为压缩包
 	 */
 	public function loadSwfliteFile(path:String, isZip:Bool = true):Void {
-		#if (!openfl_swf)
+		#if (!openfl_swf || !swf)
 		throw "OpenFL9 not support SWF file.";
 		#else
 		pushPasrers(new SWFParser({
@@ -654,7 +654,7 @@ class ZAssets {
 			case DYNAMICTEXTUREATLAS:
 				this._dynamicAtlas.set(parser.getName(), data);
 			case SWF:
-				#if (openfl_swf)
+				#if (openfl_swf && swf)
 				#if debug
 				trace("Swf set ", parser.getName(), data);
 				#end
@@ -808,7 +808,7 @@ class ZAssets {
 	 * @return MovieClip
 	 */
 	public function getMovieClip(id:String):MovieClip {
-		#if (!openfl_swf)
+		#if (!openfl_swf || !swf)
 		return null;
 		#else
 		var arr:Array<String> = id.split(":");
@@ -822,7 +822,7 @@ class ZAssets {
 	 * @param id
 	 */
 	public function unloadSwfliteFile(id:String):Void {
-		#if (openfl_swf)
+		#if (openfl_swf && swf)
 		if (this._swflites.exists(id)) {
 			this._swflites.get(id).unload();
 			this._swflites.remove(id);

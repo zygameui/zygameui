@@ -1,6 +1,6 @@
 package zygame.utils.load;
 
-#if (openfl_swf)
+#if (openfl_swf && swf)
 
 import lime.app.Future;
 import lime.app.Promise;

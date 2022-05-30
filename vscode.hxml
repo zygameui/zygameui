@@ -5,12 +5,12 @@
 --library lime
 --library spine-hx
 # --library castle
---library hscript
+# --library hscript
 --library tweenxcore
---library crypto
---library KengSDK
---library feathersui
---library swf
+# --library crypto
+# --library KengSDK
+# --library feathersui
+# --library swf
 --library differ
 --library vector-math
 --library openfl-glsl

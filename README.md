@@ -62,8 +62,15 @@ haxelib install differ
 ```
 
 ## 可选库(zygameui12.0.1开始，新增可选库)
-可选库不是必须引入，根据项目自行引入。
+可选库不是必须引入，根据项目自行引入。如果你需要全部引入：
+```xml
+<!-- 放在zygameui库之前 -->
+<define name="embed_optional"/>
+```
 - castle 引入后可以加载CDB的数据
+- KengSDK 负责广告、支付的SDK模块
+- feathersui UI扩展支持
+- swf SWF资源载入支持
 
 ## 平台支持
 

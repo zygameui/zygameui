@@ -1,12 +1,13 @@
 package zygame.utils.load;
 
+#if (openfl_swf && swf)
+
 import lime.utils.AssetLibrary;
 import swf.exporters.animate.AnimateLibrary;
 import lime.utils.AssetBundle;
 import openfl.Assets;
 import swf.exporters.swflite.SWFLiteLibrary;
 
-#if (openfl_swf)
 
 /**
  * SWFLite加载器，用于加载zip压缩格式的SWF资源

@@ -185,7 +185,6 @@ class ZTween implements Refresher {
 			return;
 		_dt += Start.current.frameDt;
 		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
-		trace("add_frame = ", add_frame);
 		_dt -= add_frame * Start.FRAME_DT_STEP;
 		_crrentFrame += add_frame;
 		if (_crrentFrame > _maxFrame) {

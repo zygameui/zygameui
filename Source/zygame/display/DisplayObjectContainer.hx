@@ -149,6 +149,10 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		onRemove();
 	}
 
+	/**
+	 * 初始化事件
+	 * @param e 
+	 */
 	public function onInitEvent(e:Event):Void {
 		if (!isInit) {
 			isInit = true;

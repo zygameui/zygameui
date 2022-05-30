@@ -1,6 +1,5 @@
 package zygame.display;
 
-import zygame.components.ZBox;
 import openfl.display.Stage;
 import zygame.utils.ZSceneManager;
 import zygame.components.ZScene;
@@ -9,17 +8,21 @@ import zygame.utils.ScaleUtils;
 import zygame.utils.Lib;
 import openfl.geom.Point;
 import zygame.components.ZTween;
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
 import zygame.core.Start;
 import zygame.components.ZBuilder.Builder;
 import zygame.core.Refresher;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import zygame.utils.Log;
 import openfl.display.DisplayObject;
 import openfl.geom.Rectangle;
 
+/**
+ * 引擎中的基础容器，它实现了基础的生命周期的方法：
+ * `onInit`会在addChild之后触发
+ * `onRemove`当发生移除时触发
+ * `onAddToStage`当添加到舞台时发生
+ * `onRemoveToStage`当从舞台移除时发生
+ */
 @:access(openfl.display.DisplayObject)
 class DisplayObjectContainer extends Sprite implements Refresher implements zygame.mini.MiniExtend {
 	/**
@@ -140,7 +143,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	public function new() {
 		super();
 		this.addEventListener(Event.ADDED_TO_STAGE, onInitEvent);
-		// this.addEventListener(Event.ADDED, onInitEvent);
 		this.addEventListener(Event.REMOVED, onSelfRemove);
 		this.addEventListener(Event.REMOVED_FROM_STAGE, onRemoveEvent);
 	}
@@ -228,6 +230,14 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
+	 * 直接获得舞台对象
+	 * @return Stage
+	 */
+	public function getStage():Stage {
+		return zygame.core.Start.current.stage;
+	}
+
+	/**
 	 * 获取当前显示的场景
 	 * @return ZScene
 	 */
@@ -271,7 +281,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
-	 * 触发事件
+	 * 重写该方法触发addChild之后的onInit事件
 	 * @param event 
 	 * @return Bool
 	 */
@@ -361,26 +371,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		return rect;
 	}
 
-	// @:noCompletion override private function __setParentRenderDirty():Void {
-	// 	super.__setParentRenderDirty();
-	// }
-	// /**
-	//  * 优化__update性能
-	//  * @param transformOnly
-	//  * @param updateChildren
-	//  */
-	// override private function __update(transformOnly:Bool, updateChildren:Bool):Void {
-	// 	if (!this.__renderDirty) {
-	// 		super.__update(false, updateChildren);
-	// 	} else {
-	// 		super.__update(transformOnly, updateChildren);
-	// 	}
-	// var renderParent = __renderParent != null ? __renderParent : parent;
-	// var renderable = (__visible && __scaleX != 0 && __scaleY != 0 && !__isMask && (renderParent == null || !renderParent.__isMask));
-	// if (this.visible || __renderable != renderable)
-	// 	super.__update(transformOnly, updateChildren);
-	// }
-
 	/**
 	 * 从Start层转换最终坐标点
 	 * @return Point
@@ -397,6 +387,15 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	public var delay(get, never):Float;
 
 	function get_delay():Float {
-		return @:privateAccess Start.current._frameDt;
+		return Start.current.frameDt;
+	}
+
+	/**
+	 * 获取当前onFrame的延迟缩放值，可用于加速计算
+	 */
+	public var delayScale(get, never):Float;
+
+	function get_delayScale():Float {
+		return Start.current.frameDtScale;
 	}
 }

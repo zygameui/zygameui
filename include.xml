@@ -15,7 +15,7 @@
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
 	<!-- 静态数据类 -->
-	<haxelib name="castle" />
+	<!-- <haxelib name="castle" /> -->
 	<!-- 编码库 -->
 	<haxelib name="crypto"/>
 	<!-- 无物理系统碰撞类 -->

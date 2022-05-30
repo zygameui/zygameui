@@ -4,7 +4,7 @@
 --library openfl
 --library lime
 --library spine-hx
---library castle
+# --library castle
 --library hscript
 --library tweenxcore
 --library crypto

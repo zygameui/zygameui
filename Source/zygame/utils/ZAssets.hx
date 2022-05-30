@@ -128,7 +128,9 @@ class ZAssets {
 	private var _swflites:Dictionary<String, AnimateLibrary>;
 	#end
 	private var _zips:Dictionary<String, Zip>;
+	#if castle
 	private var _cdbs:Dictionary<String, CDBData>;
+	#end
 	private var _textcache:Dictionary<String, ZCacheTextField>;
 	private var _strings:Dictionary<String, String>;
 	private var _3ds:Dictionary<String, #if zygame3d zygame.utils.load.Loader3DData.ZLoader3D #else Dynamic #end>;
@@ -162,7 +164,9 @@ class ZAssets {
 		_swflites = new Dictionary<String, AnimateLibrary>();
 		#end
 		_zips = new Dictionary<String, Zip>();
+		#if castle
 		_cdbs = new Dictionary<String, CDBData>();
+		#end
 		_strings = new Dictionary<String, String>();
 		_textcache = new Dictionary();
 		_3ds = new Dictionary();
@@ -674,8 +678,10 @@ class ZAssets {
 				_xmls.set(parser.getName(), data);
 			case JSON:
 				_jsons.set(parser.getName(), data);
+			#if castle
 			case CDB:
 				_cdbs.set(parser.getName(), data);
+			#end
 			case OBJ3D:
 				#if zygame3d
 				var pname:String = parser.getName();
@@ -1206,6 +1212,7 @@ class ZAssets {
 		return _strings.get(id);
 	}
 
+	#if castle
 	/**
 	 * 获取CDB的数据
 	 * @param id
@@ -1222,6 +1229,7 @@ class ZAssets {
 	public function removeCDBData(id:String):Void {
 		_cdbs.remove(id);
 	}
+	#end
 
 	/**
 	 *  获取JSON对象
@@ -1358,10 +1366,12 @@ class ZAssets {
 			if (name == null || name == key)
 				unloadAssetsZip(key);
 		}
+		#if castle
 		for (key in _cdbs) {
 			if (name == null || name == key)
 				removeCDBData(key);
 		}
+		#end
 	}
 
 	/**

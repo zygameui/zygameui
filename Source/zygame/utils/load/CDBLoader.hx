@@ -1,5 +1,6 @@
 package zygame.utils.load;
 
+#if castle
 import haxe.crypto.Base64;
 import cdb.Data;
 import cdb.Parser;
@@ -81,3 +82,4 @@ class CDBData {
 		return findData(getSheetByName(name), key, ifvalue);
 	}
 }
+#end

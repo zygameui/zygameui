@@ -23,7 +23,9 @@ class LoaderAssets {
 		SparticleParser,
 		MP3Parser,
 		TextParser,
+		#if castle
 		CDBParser,
+		#end
 		XMLParser,
 		JSONParser,
 		BitmapDataParser

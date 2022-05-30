@@ -135,7 +135,7 @@ class ZHaxe {
 @:keep
 class ZInt {
 	public function new(v2:Int) {
-		trace("ZInt",v2);
+		trace("ZInt", v2);
 		this.value = v2;
 	}
 

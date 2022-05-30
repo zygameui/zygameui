@@ -4,24 +4,22 @@ import zygame.macro.performance.PerformanceAnalysis;
 import zygame.utils.ScaleUtils;
 import lime.graphics.RenderContext;
 import haxe.Timer;
-import openfl.display.OpenGLRenderer;
 import openfl.events.RenderEvent;
-import openfl.events.UncaughtErrorEvent;
-import zygame.display.Image;
 import zygame.utils.FPSUtil;
 import zygame.media.SoundChannelManager;
 import zygame.utils.Lib;
 import haxe.Json;
 import zygame.utils.SpineManager;
 import openfl.display.DisplayObject;
+#if !api
 import openfl.display.BitmapData;
-import zygame.display.DisplayObjectContainer;
+import zygame.components.ZQuad;
+#end
 import zygame.utils.FPSDebug;
 import openfl.Vector;
 import openfl.events.Event;
 import zygame.components.ZScene;
 import zygame.utils.Log;
-import zygame.components.ZQuad;
 import zygame.components.ZBuilder;
 import zygame.macro.ZMacroUtils;
 import openfl.events.MouseEvent;
@@ -40,13 +38,7 @@ import zygame.components.ZLabel;
 #if lime
 @:access(lime.ui.Window)
 #end
-// #if !disable_res
-// @:build(zygame.macro.Res.init())
-// #end
 class Start extends ZScene {
-	#if vscode
-	public static function main() {};
-	#end
 
 	/**
 	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true

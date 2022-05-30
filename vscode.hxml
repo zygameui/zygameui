@@ -1,4 +1,4 @@
--main zygame.core.Start
+-main Test
 --library zygameui
 --library zygameui-api
 --library openfl
@@ -22,6 +22,7 @@
 -D openfl_swf
 -lib KengSDK
 -cp src
+-cp test
 -cp openfl9-source
 --js bin/main.js
 --no-output

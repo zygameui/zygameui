@@ -3,6 +3,7 @@ package zygame.macro;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 
+@:deprecated("zygame.macro.Res将弃用")
 class Res {
 	macro public static function init():Array<Field> {
 		var c = macro class R {

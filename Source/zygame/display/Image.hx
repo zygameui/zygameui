@@ -21,7 +21,7 @@ import zygame.display.batch.BScale9Image;
 
 class Image extends DisplayObjectContainer {
 	/**
-	 * MapliveScene创建时可用
+	 * 资源ID
 	 */
 	public var assetsId:String = null;
 

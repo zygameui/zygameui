@@ -14,7 +14,6 @@ enum abstract AssetsType (Int) to Int from Int {
     public var SWF = 10; // SWFLITE：zip/bundle
     public var TEXT = 11; // 字符串数据：txt
     public var FNT = 12; // 纹理文本：png/fnt
-    public var MAPLIVE = 13; // MapliveData：bundle
     public var PROGRESS = 14; // 不是资源，一般只用来传递进度
     public var SPINE = 15; // Spine纹理资源
     public var OBJ3D = 16; // 3DLoader资源

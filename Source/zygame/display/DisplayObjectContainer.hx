@@ -102,11 +102,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
-	 * 绑定类型，Maplive可用
-	 */
-	public var bindType:String = null;
-
-	/**
 	 * 横向对齐实现
 	 */
 	public var hAlign(get, set):Align;

@@ -14,7 +14,6 @@ import zygame.utils.load.Loader3DData.ZLoader3D;
 import zygame.loader.parser.Loader3DParser;
 import zygame.loader.parser.AssetsType;
 import zygame.loader.parser.MP3Parser;
-import zygame.loader.parser.MapliveParser;
 import zygame.loader.parser.FntParser;
 import zygame.loader.parser.SpineParser;
 import zygame.loader.parser.TextureAtlasParser;
@@ -33,7 +32,6 @@ import zygame.utils.StringUtils;
 import openfl.utils.Dictionary;
 import openfl.display.BitmapData;
 import zygame.utils.load.Frame;
-import zygame.utils.load.MapliveLoader;
 import zygame.components.base.ZConfig;
 import zygame.media.base.Sound;
 import zygame.media.base.SoundChannel;
@@ -125,7 +123,6 @@ class ZAssets {
 	private var _sounds:Dictionary<String, Sound>;
 	private var _musics:Dictionary<String, Music>;
 	private var _fnts:Dictionary<String, FntData>;
-	private var _maps:Dictionary<String, MapliveData>;
 	private var _spines:Dictionary<String, SpineTextureAtals>;
 	#if (openfl_swf)
 	private var _swflites:Dictionary<String, AnimateLibrary>;
@@ -160,7 +157,6 @@ class ZAssets {
 		_textures = new Dictionary<String, TextureAtlas>();
 		_musics = new Dictionary<String, Music>();
 		_fnts = new Dictionary<String, FntData>();
-		_maps = new Dictionary<String, MapliveData>();
 		_spines = new Dictionary<String, SpineTextureAtals>();
 		#if (openfl_swf)
 		_swflites = new Dictionary<String, AnimateLibrary>();
@@ -399,14 +395,6 @@ class ZAssets {
 			fntpath: xmlPath,
 			path: xmlPath
 		}));
-	}
-
-	/**
-	 * 载入Maplive2格式数据资源
-	 * @param bundlePath
-	 */
-	public function loadMapliveData(bundlePath:String):Void {
-		pushPasrers(new MapliveParser(bundlePath));
 	}
 
 	/**
@@ -668,8 +656,6 @@ class ZAssets {
 				#end
 				this._swflites.set(parser.getName(), data);
 				#end
-			case MAPLIVE:
-				_maps.set(parser.getName(), data);
 			case FNT:
 				_fnts.set(parser.getName(), data);
 			case MUSIC:
@@ -1156,15 +1142,6 @@ class ZAssets {
 	}
 
 	/**
-	 * 获取MapliveData数据
-	 * @param id
-	 * @return MapliveData
-	 */
-	public function getMapliveData(id:String):MapliveData {
-		return _maps.get(id);
-	}
-
-	/**
 	 * 获取当前播放的ID
 	 * @return String
 	 */
@@ -1262,18 +1239,6 @@ class ZAssets {
 	 */
 	public function setObject(id:String, data:Dynamic):Void {
 		_jsons.set(id, data);
-	}
-
-	/**
-	 * 卸载MapliveData的数据
-	 * @param id
-	 */
-	public function removeMapliveData(id:String):Void {
-		var mapliveData:MapliveData = getMapliveData(id);
-		if (mapliveData != null) {
-			mapliveData.unloadAll();
-			_maps.remove(id);
-		}
 	}
 
 	/**
@@ -1436,9 +1401,6 @@ class ZAssets {
 			load += key + "\n";
 		}
 		for (key in _musics) {
-			load += key + "\n";
-		}
-		for (key in _maps) {
 			load += key + "\n";
 		}
 		return load;

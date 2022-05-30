@@ -61,6 +61,10 @@ haxelib install crypto
 haxelib install differ
 ```
 
+## 可选库(zygameui12.0.1开始，新增可选库)
+可选库不是必须引入，根据项目自行引入。
+- castle 引入后可以加载CDB的数据
+
 ## 平台支持
 
 引擎目前支持Android/IOS/Window/Mac/HTML5等主流平台，但唯一已不再支持Flash输出。

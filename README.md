@@ -83,6 +83,8 @@ haxelib git openfl-console https://github.com/barisyild/openfl-console
 ```
 3. 启动后，可以使用快捷键D展示调试面板。
 
+4. 内置一个内存泄漏检测支持(MemoryTracker)，侦听内存释放的情况。
+
 ## 平台支持
 
 引擎目前支持Android/IOS/Window/Mac/HTML5等主流平台，但唯一已不再支持Flash输出。

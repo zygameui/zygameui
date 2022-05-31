@@ -10,6 +10,7 @@
 - [改进] 改进onInit触发会在addChild之后发生。
 - [新增] 新增`getStage`方法直接获得舞台对象。
 - [删除] 删除`MapliveLoader`加载器的支持。
+- [新增] 新增`openfl-console`的支持，在xml中新增`<define name="openfl-console"/>`可开启。
 
 ### 12.0.0
 - [里程碑] 新增`featherui`UI组件库支持。

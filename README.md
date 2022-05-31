@@ -72,6 +72,16 @@ haxelib install differ
 - feathersui UI扩展支持
 - swf SWF资源载入支持
 
+## 内置Console支持
+1. 如果需要使用`openfl-console`，则在zygameui库之前设置：
+```xml
+<define name="openfl-console"/>
+```
+2. 请使用openfl-console的git版本：[https://github.com/barisyild/openfl-console](https://github.com/barisyild/openfl-console)
+```shell
+haxelib git openfl-console https://github.com/barisyild/openfl-console
+```
+
 ## 平台支持
 
 引擎目前支持Android/IOS/Window/Mac/HTML5等主流平台，但唯一已不再支持Flash输出。

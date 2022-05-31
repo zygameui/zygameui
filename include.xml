@@ -2,20 +2,25 @@
 <project>
 	<!-- 原始实现 -->
 	<source path="Source" />
-	<haxelib name="openfl" unless="openfl8"/>
+	<haxelib name="openfl" unless="openfl8" />
 	<!-- <haxelib name="openfl-dev-8.9.6" if="openfl8"/> -->
-	<haxelib name="swf" if="${openfl >= 9.0.0}"/>
+	<haxelib name="swf" if="${openfl >= 9.0.0}" />
 	<!-- OpenFL9兼容8.9.0的代码 -->
-	<source path="openfl9-source" if="${openfl >= 9.0.0}"/>
+	<source path="openfl9-source" if="${openfl >= 9.0.0}" />
+	<!-- 新增openfl-console支持 -->
+	<section if="openfl-console">
+		<haxelib name="openfl-console" />
+		<haxeflag name="--macro" value="addGlobalMetadata('', '@:rtti')" />
+	</section>
 	<section if="embed_optional">
 		<!-- HScript脚本 -->
 		<haxelib name="hscript" />
 		<!-- 静态数据类 -->
 		<haxelib name="castle" />
 		<!-- 编码库 -->
-		<haxelib name="crypto"/>
+		<haxelib name="crypto" />
 		<!-- SWF -->
-		<haxelib name="swf"/>
+		<haxelib name="swf" />
 	</section>
 	<!-- Spine锁定版本3.8.1 -->
 	<haxelib name="spine-hx" version="3.8.1" if="spine3.8" />
@@ -23,41 +28,41 @@
 	<haxedef name="spine38" if="spine3.8" />
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
-	
+
 	<!-- 无物理系统碰撞类 -->
 	<haxelib name="differ" />
 	<haxelib name="zygameui-nape" if="nape" />
 	<!-- GLSL -->
-	<haxelib name="vector-math"/>
-	<haxelib name="openfl-glsl"/>
+	<haxelib name="vector-math" />
+	<haxelib name="openfl-glsl" />
 	<!-- GPU粒子库 -->
-	<haxelib name="openfl-gpu-particles"/>
+	<haxelib name="openfl-gpu-particles" />
 
 	<!-- 禁止字体缩放 -->
-	<haxedef name="un_scale_label" unless="high_label"/>
+	<haxedef name="un_scale_label" unless="high_label" />
 
 	<!-- zygameui框架标示 -->
 	<haxedef name="zygame" />
 	<define name="zygame" />
-	<haxelib name="openfl-spine"/>
+	<haxelib name="openfl-spine" />
 
 	<!-- 编译平台的自动引入处理 -->
 	<include path="platforms.xml" />
 
 	<!-- IOS的一些修复 -->
-	<haxedef name="ios_render_fix" if="ios || ks"/>
+	<haxedef name="ios_render_fix" if="ios || ks" />
 
 	<!-- C++测试模块 -->
 	<haxedef name="debuginput" if="debug cpp !ios" />
 	<haxedef name="debugnetwork" if="debug cpp !ios" />
 
 	<!-- 即使在发布模式下，也要在最终二进制文件中添加符号。 -->
-    <define name="HXCPP_DEBUG_LINK"/>
-    <!-- 即使在发布模式下，也具有有效的功能级堆栈跟踪。 -->
-    <define name="HXCPP_STACK_TRACE"/>
-    <!-- 即使在发布模式下，也将行信息包括在堆栈跟踪中。 -->
-    <define name="HXCPP_STACK_LINE"/>
-    <define name="HXCPP_CHECK_POINTER"/>
+	<define name="HXCPP_DEBUG_LINK" />
+	<!-- 即使在发布模式下，也具有有效的功能级堆栈跟踪。 -->
+	<define name="HXCPP_STACK_TRACE" />
+	<!-- 即使在发布模式下，也将行信息包括在堆栈跟踪中。 -->
+	<define name="HXCPP_STACK_LINE" />
+	<define name="HXCPP_CHECK_POINTER" />
 
 	<!-- HTML5 CPP 默认开始高清模式 -->
 	<window allow-high-dpi="true" vsync="true" if="cpp || hl || html5" />
@@ -69,7 +74,7 @@
 	<!-- <define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios" /> -->
 
 	<!-- 新增对openflswf的支持 -->
-	<define name="openfl_swf"/>
+	<define name="openfl_swf" />
 
 	<haxedef name="invalidate" if="android || hl" />
 
@@ -79,7 +84,7 @@
 
 	<!-- IOS以及Android进行64位支持 -->
 	<architecture name="arm64" exclude="armv7" if="ios" />
-	<architecture name="armv7" exclude="arm64" if="android" unless="final"/>
+	<architecture name="armv7" exclude="arm64" if="android" unless="final" />
 	<!-- <architecture name="armv7" exclude="arm64" if="android" unless="final"/> -->
 	<!-- <architecture name="arm64" if="android final" /> -->
 	<!-- 安卓只要v7 -->
@@ -129,5 +134,6 @@
 	<haxeflag name="-D" value="hl-check" if="hl" />
 
 	<!-- 默认启动GPU粒子 -->
-	<haxedef name="gpu_particles" unless="cpu_particles"/>
+	<haxedef name="gpu_particles" unless="cpu_particles" />
+
 </project>

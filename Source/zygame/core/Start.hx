@@ -1,5 +1,9 @@
 package zygame.core;
 
+#if openfl_console
+import com.junkbyte.console.Cc;
+import com.junkbyte.console.addons.memorytracker.MemoryTrackerAddon;
+#end
 import zygame.macro.performance.PerformanceAnalysis;
 import zygame.utils.ScaleUtils;
 import lime.graphics.RenderContext;
@@ -220,6 +224,17 @@ class Start extends ZScene {
 	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
 		super();
 		Start.current = this;
+		#if openfl_console
+		haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
+			Cc.log(v);
+		}
+		Cc.config.commandLineAllowed = true;
+		Cc.startOnStage(this, "d");
+		Cc.instance.scaleX = 2.5;
+		Cc.instance.scaleY = 2.5;
+		MemoryTrackerAddon.addToMenu();
+		Cc.log("openfl-console start");
+		#end
 		this.scalePower = scalePower;
 		// RES资源绑定
 		// zygame.net.UDP.init();

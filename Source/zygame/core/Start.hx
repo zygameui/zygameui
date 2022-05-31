@@ -233,10 +233,9 @@ class Start extends ZScene {
 				Cc.log(msg, v, infos.customParams);
 		}
 		Cc.config.commandLineAllowed = true;
-		Cc.start(this, "d");
-		Cc.instance.scaleX = 2.5;
-		Cc.instance.scaleY = 2.5;
+		Cc.start(this.stage, "d");
 		MemoryTrackerAddon.addToMenu();
+		Cc.listenUncaughtErrors(this.loaderInfo);
 		Cc.log("openfl-console start");
 		#end
 		this.scalePower = scalePower;
@@ -555,6 +554,13 @@ class Start extends ZScene {
 			cast(view3d.scene, zygame.core.Start3D).onCameraSizeReset();
 			#end
 		}
+
+		#if openfl_console
+		Cc.instance.scaleX = currentScale * 3;
+		Cc.instance.scaleY = currentScale * 3;
+		Cc.instance.width = Start.stageWidth / 3;
+		Cc.instance.height = Start.stageHeight / 3 - 50;
+		#end
 
 		log("适配" + HDHeight + "x" + HDWidth, stage.stageHeight + "x" + stage.stageWidth, currentScale);
 	}

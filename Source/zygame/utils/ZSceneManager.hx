@@ -1,5 +1,8 @@
 package zygame.utils;
 
+#if openfl_console
+import com.junkbyte.console.Cc;
+#end
 import haxe.Exception;
 import zygame.components.ZBuilder;
 import openfl.events.Event;
@@ -73,6 +76,9 @@ class ZSceneManager {
 		var scene:ZScene = _sceneMaps.get(key);
 		if (scene == null) {
 			scene = Type.createInstance(cName, []);
+			#if openfl_console
+			Cc.watch(scene);
+			#end
 			updateParameter(scene, parameter);
 			_sceneMaps.set(key, scene);
 			if (added)

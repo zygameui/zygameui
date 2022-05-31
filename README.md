@@ -81,6 +81,7 @@ haxelib install differ
 ```shell
 haxelib git openfl-console https://github.com/barisyild/openfl-console
 ```
+3. 启动后，可以使用快捷键D展示调试面板。
 
 ## 平台支持
 

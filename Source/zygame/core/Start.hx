@@ -231,6 +231,12 @@ class Start extends ZScene {
 				Cc.log(msg, v);
 			else
 				Cc.log(msg, v, infos.customParams);
+			#if html5
+			if (infos.customParams == null)
+				untyped console.log(msg, v);
+			else
+				untyped console.log(msg, v, infos.customParams);
+			#end
 		}
 		Cc.config.commandLineAllowed = true;
 		Cc.start(this.stage, "d");

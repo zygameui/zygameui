@@ -3,6 +3,9 @@ package zygame.components;
 #if feathersui
 import zygame.feathersui.FListView;
 #end
+#if openfl_console
+import com.junkbyte.console.Cc;
+#end
 import zygame.display.batch.BStack;
 import zygame.media.base.Sound;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
@@ -753,7 +756,11 @@ class ZBuilder {
 	 * @return AssetsBuilder
 	 */
 	public static function createAssetsBuilder(xmlPath:String, parent:Dynamic):AssetsBuilder {
-		return new AssetsBuilder(xmlPath, parent);
+		var a = new AssetsBuilder(xmlPath, parent);
+		#if openfl_console
+		Cc.watch(a, xmlPath);
+		#end
+		return a;
 	}
 
 	/**
@@ -767,6 +774,9 @@ class ZBuilder {
 		if (xml == null)
 			throw xmlfileName + "配置不存在";
 		var builder:Builder = new Builder();
+		#if openfl_console
+		Cc.watch(builder, xmlfileName);
+		#end
 		buildui(xml.firstElement(), parent, builder);
 		builder.bindBuilder();
 		if (Std.isOfType(builder.display, BuilderRootDisplay)) {

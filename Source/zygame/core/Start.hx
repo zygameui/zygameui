@@ -226,10 +226,14 @@ class Start extends ZScene {
 		Start.current = this;
 		#if openfl_console
 		haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
-			Cc.log(v);
+			var msg = infos.className + ":" + infos.lineNumber + ":";
+			if (infos.customParams == null)
+				Cc.log(msg, v);
+			else
+				Cc.log(msg, v, infos.customParams);
 		}
 		Cc.config.commandLineAllowed = true;
-		Cc.startOnStage(this, "d");
+		Cc.start(this, "d");
 		Cc.instance.scaleX = 2.5;
 		Cc.instance.scaleY = 2.5;
 		MemoryTrackerAddon.addToMenu();

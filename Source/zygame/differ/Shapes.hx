@@ -92,7 +92,7 @@ class Shapes {
 		if (list == null)
 			return false;
 		for (shapeB in list) {
-			var ret = Collision.pointInPoly(x, y,cast shapeB);
+			var ret = Collision.pointInPoly(x, y, cast shapeB);
 			if (ret) {
 				return true;
 			}

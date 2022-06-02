@@ -85,6 +85,10 @@ haxelib git openfl-console https://github.com/barisyild/openfl-console
 
 4. 内置一个内存泄漏检测支持(MemoryTracker)，侦听内存释放的情况。
 
+## 新功能
+部分新功能对旧项目会产生一定的影响，如需开启新功能，请定义`<haxedef name="zygameui13"/>`进行开启。
+- addChild后不需要stage舞台上响应onInit
+
 ## 平台支持
 
 引擎目前支持Android/IOS/Window/Mac/HTML5等主流平台，但唯一已不再支持Flash输出。

@@ -275,6 +275,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 			zygame.core.Start.current.removeToUpdate(this);
 	}
 
+	#if zygameui13
 	/**
 	 * 重写该方法触发addChild之后的onInit事件
 	 * @param event 
@@ -288,6 +289,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 		}
 		return super.__dispatchWithCapture(event);
 	}
+	#end
 
 	/**
 		*移除事件

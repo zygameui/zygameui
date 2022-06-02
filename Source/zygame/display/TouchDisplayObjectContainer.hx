@@ -31,9 +31,9 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 		if (listen) {
 			#if (mac || window || ios)
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, userCapture, priority);
-			zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			if (stageMove)
-				zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
+				openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 			else
 				this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 			this.addEventListener(MouseEvent.MOUSE_OUT, onTouchOut, userCapture, priority);
@@ -41,25 +41,25 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 			#else
 			if (mouseEvent) {
 				this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, userCapture, priority);
-				zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				if (stageMove)
-					zygame.core.Start.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
+					openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 				else
 					this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 				this.addEventListener(MouseEvent.MOUSE_OUT, onTouchOut, userCapture, priority);
 				this.addEventListener(MouseEvent.MOUSE_OVER, onTouchOver, userCapture, priority);
 			} else {
 				this.addEventListener(TouchEvent.TOUCH_BEGIN, onTouchBegin);
-				zygame.core.Start.current.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
+				openfl.Lib.current.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
 				this.addEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
 			}
 			#end
 		} else {
 			#if (mac || window || ios)
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			if (stageMove)
-				zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+				openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			else
 				this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			this.removeEventListener(MouseEvent.MOUSE_OUT, onTouchOut);
@@ -67,16 +67,16 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 			#else
 			if (mouseEvent) {
 				this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-				zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				if (stageMove)
-					zygame.core.Start.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+					openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				else
 					this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				this.removeEventListener(MouseEvent.MOUSE_OUT, onTouchOut);
 				this.removeEventListener(MouseEvent.MOUSE_OVER, onTouchOver);
 			} else {
 				this.removeEventListener(TouchEvent.TOUCH_BEGIN, onTouchBegin);
-				zygame.core.Start.current.stage.removeEventListener(TouchEvent.TOUCH_END, onTouchEnd);
+				openfl.Lib.current.stage.removeEventListener(TouchEvent.TOUCH_END, onTouchEnd);
 				this.removeEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
 			}
 			#end

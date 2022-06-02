@@ -87,7 +87,8 @@ haxelib git openfl-console https://github.com/barisyild/openfl-console
 
 ## 新功能
 部分新功能对旧项目会产生一定的影响，如需开启新功能，请定义`<haxedef name="zygameui13"/>`进行开启。
-- addChild后不需要stage舞台上响应onInit
+1. addChild后不需要stage舞台上响应onInit
+2. ZTween根据dt渲染
 
 ## 平台支持
 

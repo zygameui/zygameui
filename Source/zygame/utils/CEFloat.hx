@@ -59,8 +59,8 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @param value 
 	 * @return Float
 	 */
-	@:commutative @:op(A + B) @:commutative @:op(B + A) public function add(value:Float):Float {
-		return this.value += value;
+	@:commutative @:op(A + B) public function add(value:Float):Float {
+		return this.value + value;
 	}
 
 	/**
@@ -69,7 +69,7 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Float
 	 */
 	@:commutative @:op(A - B) public function jian(value:Float):Float {
-		return this.value -= value;
+		return this.value - value;
 	}
 
 	/**
@@ -77,8 +77,8 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @param value 
 	 * @return Float
 	 */
-	@:commutative @:op(A * B) @:commutative @:op(B * A) public function mul(value:Float):Float {
-		return this.value *= value;
+	@:commutative @:op(A * B) public function mul(value:Float):Float {
+		return this.value * value;
 	}
 
 	/**
@@ -87,7 +87,7 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Float
 	 */
 	@:commutative @:op(A / B) public function div(value:Float):Float {
-		return this.value /= value;
+		return this.value / value;
 	}
 }
 

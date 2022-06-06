@@ -233,7 +233,7 @@ class Call {
 		_dt += Start.current.frameDt;
 		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
 		_dt -= add_frame * Start.FRAME_DT_STEP;
-		frame += add_frame;
+		frame -= add_frame;
 		#else
 		frame--;
 		#end

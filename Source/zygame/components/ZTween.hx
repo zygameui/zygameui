@@ -15,7 +15,9 @@ class ZTween implements Refresher {
 
 	private var _baseFrames:Array<TweenFrame>;
 
+	#if zygameui13
 	private var _dt:Float = 0;
+	#end
 
 	private var _crrentFrame:Int = 0;
 
@@ -183,18 +185,31 @@ class ZTween implements Refresher {
 	public function onFrame():Void {
 		if (!_isPlay)
 			return;
-		// #if zygameui13
-		// _dt += Start.current.frameDt;
-		// var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
-		// _dt -= add_frame * Start.FRAME_DT_STEP;
-		// // 过渡兼容
-		// if (_crrentFrame + add_frame > _maxFrame) {
-		// 	_crrentFrame++;
-		// } else
-		// 	_crrentFrame += add_frame;
-		// #else
+		#if zygameui13
+		_dt += Start.current.frameDt;
+		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
+		_dt -= add_frame * Start.FRAME_DT_STEP;
+		// 过渡兼容
+		for (i in 0...add_frame) {
+			_crrentFrame++;
+			if (_crrentFrame > _maxFrame) {
+				if (_isPlay) {
+					_crrentFrame = _maxFrame;
+					if (loop < 0) {
+						// 无限循环
+					} else if (loop == 0) {
+						stop();
+						return;
+					} else {
+						loop--;
+					}
+				}
+				_crrentFrame = 0;
+			}
+			update();
+		}
+		#else
 		_crrentFrame++;
-		// #end
 		if (_crrentFrame > _maxFrame) {
 			if (_isPlay) {
 				_crrentFrame = _maxFrame;
@@ -210,6 +225,7 @@ class ZTween implements Refresher {
 			_crrentFrame = 0;
 		}
 		update();
+		#end
 	}
 
 	public function update():Void {

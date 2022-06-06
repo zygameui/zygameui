@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.core.Start;
 import openfl.utils.Function;
 
 /**
@@ -205,6 +206,10 @@ class Call {
 
 	public var id:Int = 0;
 
+	#if zygameui13
+	private var _dt:Float = 0;
+	#end
+
 	/**
 	 *
 	 * @param time 毫秒
@@ -224,7 +229,14 @@ class Call {
 	 * @return Bool
 	 */
 	public function call(isInterval:Bool = false):Bool {
+		#if zygameui13
+		_dt += Start.current.frameDt;
+		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
+		_dt -= add_frame * Start.FRAME_DT_STEP;
+		frame += add_frame;
+		#else
 		frame--;
+		#end
 		if (frame <= 0) {
 			Reflect.callMethod(closure, closure, args == null ? [] : args);
 			if (!isInterval)

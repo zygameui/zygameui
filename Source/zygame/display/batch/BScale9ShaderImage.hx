@@ -22,7 +22,7 @@ class BScale9ShaderImage extends BImage {
 		setFrame(frame);
 	}
 
-	override function setFrame(frame:Frame) {
+	override function setFrame(frame:Dynamic):Void {
 		super.setFrame(frame);
 		if (frame != null) {
 			cast(this.shader, Slice9Shader).updateFrame(frame);

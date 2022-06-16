@@ -5,6 +5,9 @@ import haxe.macro.Expr.FieldType;
 import haxe.macro.Context;
 import haxe.macro.Expr.Field;
 
+/**
+ * 可以在变量之前添加`@:lazy`来使变量变成异步调用。
+ */
 class Lazy {
 	macro public static function build():Array<Field> {
 		var fields = Context.getBuildFields();

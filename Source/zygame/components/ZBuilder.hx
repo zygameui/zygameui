@@ -962,8 +962,8 @@ class ZBuilder {
 			if (idname != null) {
 				builder.ids.set((idpush != null ? idpush + "_" : "") + idname, ui);
 				if (Std.isOfType(ui, ZHaxe)) {
+					cast(ui, ZHaxe).bindBuilder(builder);
 					if (idname == "super") {
-						cast(ui, ZHaxe).bindBuilder(builder);
 						cast(ui, ZHaxe).call();
 					} else if (xml.exists("args"))
 						cast(ui, ZHaxe).argsName = xml.get("args").split(",");

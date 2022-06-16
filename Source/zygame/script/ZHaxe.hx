@@ -97,9 +97,7 @@ class ZHaxe {
 		interp.variables.set("this", builder.display);
 		// 绑定全局对象
 		for (key => value in ZBuilder.builderDefine) {
-			#if hscript
 			interp.variables.set(key, value);
-			#end
 		}
 		#end
 	}

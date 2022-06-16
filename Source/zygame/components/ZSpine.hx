@@ -15,6 +15,7 @@ import spine.tilemap.SkeletonAnimation in TilemapAnimation;
  * <ZSpine src="spine:spine"/>
  * ```
  */
+@:keep
 class ZSpine extends ZBox {
 	private var spine:SkeletonAnimation;
 

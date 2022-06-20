@@ -68,8 +68,12 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @param value 
 	 * @return Float
 	 */
-	@:commutative @:op(A - B) public function jian(value:Float):Float {
+	@:op(A - B) public function jian(value:Float):Float {
 		return this.value - value;
+	}
+
+	@:commutative @:op(B - A) public function jian2(value:Float):Float {
+		return value - this.value;
 	}
 
 	/**
@@ -86,9 +90,49 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @param value 
 	 * @return Float
 	 */
-	@:commutative @:op(A / B) public function div(value:Float):Float {
+	@:op(A / B) public function div(value:Float):Float {
 		return this.value / value;
 	}
+
+	@:commutative @:op(B / A) public function div2(value:Float):Float {
+		return value / this.value;
+	}
+
+	@:op(++A) public function pre() {
+		return this.value++;
+	}
+
+	@:op(A++) public function post() {
+		return this.value++;
+	}
+
+	@:op(--A) public function pre2() {
+		return this.value--;
+	}
+
+	@:op(A--) public function post2() {
+		return this.value--;
+	}
+
+	@:op(A > B) static function dy(a:CEFloat, b:CEFloat):Bool {
+		return a.toFloat() > b.toFloat();
+	};
+
+	@:op(A < B) static function xy(a:CEFloat, b:CEFloat):Bool {
+		return a.toFloat() < b.toFloat();
+	};
+
+	@:op(A >= B) static function dydy(a:CEFloat, b:CEFloat):Bool {
+		return a.toFloat() >= b.toFloat();
+	};
+
+	@:op(A <= B) static function xydy(a:CEFloat, b:CEFloat):Bool {
+		return a.toFloat() <= b.toFloat();
+	};
+
+	@:op(A == B) static function xd(a:CEFloat, b:CEFloat):Bool {
+		return a.toFloat() == b.toFloat();
+	};
 }
 
 /**

@@ -232,8 +232,13 @@ class Call {
 		#if zygameui13
 		_dt += Start.current.frameDt;
 		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
-		_dt -= add_frame * Start.FRAME_DT_STEP;
-		frame -= add_frame;
+		if (add_frame < 0) {
+			_dt = 0;
+			add_frame = 0;
+		} else {
+			_dt -= add_frame * Start.FRAME_DT_STEP;
+			frame -= add_frame;
+		}
 		#else
 		frame--;
 		#end

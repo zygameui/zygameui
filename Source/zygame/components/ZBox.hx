@@ -19,7 +19,11 @@ class ZBox extends Component {
 	/**
 	 *  添加到容器盒子里会记录所有的子项
 	 */
-	public var childs:Array<DisplayObject>;
+	public var childs(get, never):Array<DisplayObject>;
+
+	private function get_childs():Array<DisplayObject> {
+		return @:privateAccess this.__children;
+	}
 
 	/**
 	 * 性能优化：布局事件将延后计算
@@ -53,7 +57,6 @@ class ZBox extends Component {
 	 */
 	public function new() {
 		super();
-		childs = [];
 	}
 
 	override public function initComponents():Void {}
@@ -84,7 +87,6 @@ class ZBox extends Component {
 	}
 
 	override public function addChildAt(display:DisplayObject, index:Int):DisplayObject {
-		childs.push(display);
 		var child:DisplayObject = super.addChildAt(display, index);
 		if (updateComponentsCall == -1) {
 			updateComponentsCall = Lib.nextFrameCall(updateComponents);
@@ -98,7 +100,6 @@ class ZBox extends Component {
 	 * @return DisplayObject
 	 */
 	public function addChildSuper(display:DisplayObject):DisplayObject {
-		childs.push(display);
 		return super.addChildAt(display, this.numChildren);
 	}
 
@@ -108,12 +109,10 @@ class ZBox extends Component {
 	 * @return DisplayObject
 	 */
 	public function removeChildSuper(display:DisplayObject):DisplayObject {
-		childs.remove(display);
 		return super.removeChild(display);
 	}
 
 	override public function removeChild(display:DisplayObject):DisplayObject {
-		childs.remove(display);
 		if (updateComponentsCall == -1) {
 			updateComponentsCall = Lib.nextFrameCall(updateComponents);
 		}

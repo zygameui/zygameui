@@ -12,6 +12,18 @@ import spine.base.SpineBaseDisplay;
  * 用于管理Spine的动画统一播放处理
  */
 class SpineManager {
+	/**
+	 * Bate 节约模式，当设置了节约模式后，仅提供给Spine渲染10%的CPU，当渲染的时候，超过10%的CPU时，没有来得及渲染的Spine不进行渲染，等待到下一帧重新渲染。
+	 */
+	public static var savingMode:Bool = false;
+
+	/**
+	 * CPU，默认为10%的使用率
+	 */
+	public static var cpu = 0.016 * 0.1;
+
+	private static var _curcpu:Float = 0;
+
 	private static var spineOnFrames:Array<SpineBaseDisplay> = [];
 
 	private static var spineOnFramesOut:Array<SpineBaseDisplay> = [];
@@ -91,15 +103,48 @@ class SpineManager {
 		trace(spineUpdateList.length, spineUpdateList);
 	}
 
+	private static function onSpineUpdate(spine:SpineBaseDisplay, dt:Float):Void {
+		if (!savingMode) {
+			spine.onSpineUpdate(dt);
+			return;
+		}
+		// 节能模式，节能模式所有渲染都是24FPS
+		var cur = Timer.stamp();
+		if (_curcpu > cpu || cur - spine.lastDrawTime < 1 / 12)
+			return;
+		spine.onSpineUpdate(spine.lastDrawTime == 0 ? dt : cur - spine.lastDrawTime);
+		var newcur = Timer.stamp();
+		spine.lastDrawTime = newcur;
+		_curcpu += (newcur - cur);
+	}
+
 	private static function onFrame(event:Event):Void {
 		if (!enbed)
 			return;
+		_curcpu = 0;
 		playingCount = 0;
+
 		for (display in spineOnFrames) {
 			if (display.independent) {
-				display.onSpineUpdate(Start.current.frameDt);
+				onSpineUpdate(display, Start.current.frameDt);
 			}
 		}
+
+		if (savingMode) {
+			// 将时间少的往前面放
+			spineOnFrames.sort((a, b) -> a.lastDrawTime > b.lastDrawTime ? 1 : -1);
+			for (display in spineOnFrames) {
+				if (!display.isHidden() && display.isPlay && !display.independent) {
+					playingCount++;
+					onSpineUpdate(display, Start.current.frameDt);
+				}
+			}
+			for (display in spineOnFramesOut) {
+				onSpineUpdate(display, 0);
+			}
+			return;
+		}
+
 		if (!isLockFrameFps) {
 			if (fps.fps == 60 || fps.update()) {
 				var nTime = Timer.stamp();
@@ -108,22 +153,22 @@ class SpineManager {
 				for (display in spineOnFrames) {
 					if (!display.isHidden() && display.isPlay && !display.independent) {
 						playingCount++;
-						display.onSpineUpdate(dt);
+						onSpineUpdate(display, dt);
 					}
 				}
 				for (display in spineOnFramesOut) {
-					display.onSpineUpdate(0);
+					onSpineUpdate(display, 0);
 				}
 			}
 		} else if (fps.fps == 60 || fps.update()) {
 			for (display in spineOnFrames) {
 				if (!display.isHidden() && display.isPlay && !display.independent) {
 					playingCount++;
-					display.onSpineUpdate(1 / fps.fps);
+					onSpineUpdate(display, 1 / fps.fps);
 				}
 			}
 			for (display in spineOnFramesOut) {
-				display.onSpineUpdate(0);
+				onSpineUpdate(display, 0);
 			}
 		}
 	}

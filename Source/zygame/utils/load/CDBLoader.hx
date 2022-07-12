@@ -39,7 +39,7 @@ class CDBData {
 			// 可能被base64编码处理
 			data = Base64.decode(data).toString();
 		}
-		this.data = Parser.parse(data);
+		this.data = Parser.parse(data, false);
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package zygame.macro;
 
-import haxe.Timer;
-import haxe.Json;
 #if macro
 import sys.io.Process;
 import sys.io.File;

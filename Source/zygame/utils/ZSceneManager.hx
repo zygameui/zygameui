@@ -103,11 +103,14 @@ class ZSceneManager {
 		#end
 		if (zScene == null)
 			return;
-		if (onSceneRelease){
+		if (onSceneRelease) {
 			zScene.onSceneRelease();
 			zScene.onSceneReleaseEvent();
 		}
-		_sceneMaps.remove(Type.getClassName(Type.getClass(zScene)));
+		// 如果释放了，则进行历史清理
+		var c = Type.getClass(zScene);
+		_history.remove(c);
+		_sceneMaps.remove(Type.getClassName(c));
 		_scenes.remove(zScene);
 		if (zScene.parent != null) {
 			zScene.parent.removeChild(zScene);

@@ -176,7 +176,6 @@ class ZBuilderScene extends ZScene {
  * ```
  */
 class Preload extends ZBox {
-
 	/**
 	 * 构造一个预加载器，一般不需要自行构造
 	 */

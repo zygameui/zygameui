@@ -133,6 +133,9 @@
 	<!-- HLCheak  -->
 	<haxeflag name="-D" value="hl-check" if="hl" />
 
+	<!-- 开启ES6 -->
+	<define name="es" value="6" if="js"/>
+
 	<!-- 默认启动GPU粒子 -->
 	<haxedef name="gpu_particles" unless="cpu_particles" />
 

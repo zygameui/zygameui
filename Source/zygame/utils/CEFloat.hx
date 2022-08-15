@@ -98,19 +98,19 @@ abstract CEFloat(CEData) to CEData from CEData {
 		return value / this.value;
 	}
 
-	@:op(++A) public function pre() {
+	@:op(++A) public function pre():Float {
 		return this.value++;
 	}
 
-	@:op(A++) public function post() {
+	@:op(A++) public function post():Float {
 		return this.value++;
 	}
 
-	@:op(--A) public function pre2() {
+	@:op(--A) public function pre2():Float {
 		return this.value--;
 	}
 
-	@:op(A--) public function post2() {
+	@:op(A--) public function post2():Float {
 		return this.value--;
 	}
 

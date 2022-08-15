@@ -443,6 +443,12 @@ class Start extends ZScene {
 		_lastTime = Timer.stamp();
 		this.addEventListener(Event.ENTER_FRAME, onFrameEvent);
 		stage.addEventListener(Event.RESIZE, onResize);
+		// #if wechat
+		// untyped window.onSizeChange = function() {
+		// 	// onResize(null);
+		// 	@:privateAccess stage.__resize();
+		// }
+		// #end
 		stage.addEventListener(MouseEvent.CLICK, onStageMouseClick);
 		stage.addEventListener(RenderEvent.RENDER_CAIRO, onRender);
 		stage.addEventListener(RenderEvent.RENDER_OPENGL, onRender);

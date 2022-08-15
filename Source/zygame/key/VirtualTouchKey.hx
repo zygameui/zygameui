@@ -209,9 +209,20 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		_orignPos.x = beginOrginTouch ? _beginPos.x : 0;
 		_orignPos.y = beginOrginTouch ? _beginPos.y : 0;
 		if (Point.distance(_mathPos, _beginPos) < virtualTouchMaxRadius) {
-			_down = true;
-			onKeyMouseMove(e);
+			if (onCheckCanTouch(_beginPos)) {
+				_down = true;
+				onKeyMouseMove(e);
+			}
 		}
+	}
+
+	/**
+	 * 可重写它实现自定义可触摸逻辑
+	 * @param pos 
+	 * @return Bool
+	 */
+	dynamic public function onCheckCanTouch(pos:Point):Bool {
+		return true;
 	}
 
 	private function onKeyMouseMove(e:#if jsapi Dynamic #else Event #end):Void {

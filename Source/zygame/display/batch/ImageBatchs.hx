@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import haxe.Exception;
 import openfl.display.Tilemap;
 import zygame.utils.load.Atlas;
 import openfl.display.Tile;
@@ -110,14 +111,18 @@ class ImageBatchs extends Tilemap {
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		if (!hitTestEnbled)
-			return false;
-		if (!Std.isOfType(this.parent, TouchImageBatchsContainer))
-			return super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
-		var touchContainer:TouchImageBatchsContainer = cast this.parent;
-		var tile = touchContainer.getTilePosAt(touchContainer.mouseX, touchContainer.mouseY);
-		if (tile != null)
-			return true;
+		try {
+			if (!hitTestEnbled)
+				return false;
+			if (!Std.isOfType(this.parent, TouchImageBatchsContainer))
+				return super.__hitTest(x, y, shapeFlag, stack, interactiveOnly, hitObject);
+			var touchContainer:TouchImageBatchsContainer = cast this.parent;
+			var tile = touchContainer.getTilePosAt(touchContainer.mouseX, touchContainer.mouseY);
+			if (tile != null)
+				return true;
+		} catch (e:Exception) {
+			trace("[Tilemap hitTest Exception:" + e.message + "]");
+		}
 		return false;
 	}
 	#end

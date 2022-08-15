@@ -20,7 +20,7 @@ class SpineManager {
 	/**
 	 * CPU，默认为10%的使用率
 	 */
-	public static var cpu = 0.016 * 0.1;
+	public static var cpu = 0.016 * 0.2;
 
 	private static var _curcpu:Float = 0;
 

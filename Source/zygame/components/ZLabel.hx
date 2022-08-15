@@ -1,5 +1,6 @@
 package zygame.components;
 
+import haxe.Exception;
 import openfl.events.Event;
 import openfl.events.TextEvent;
 import zygame.shader.StrokeShader;
@@ -491,14 +492,16 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
-		if (len <= 0 || startIndex == -1) {
-			return;
-		}
-		var endIndex:Int = startIndex + len;
-		var rootColor = _font.color;
-		_font.color = color;
-		_display.setTextFormat(_font, startIndex, endIndex);
-		_font.color = rootColor;
+		try {
+			if (len <= 0 || startIndex == -1) {
+				return;
+			}
+			var endIndex:Int = startIndex + len;
+			var rootColor = _font.color;
+			_font.color = color;
+			_display.setTextFormat(_font, startIndex, endIndex);
+			_font.color = rootColor;
+		} catch (e:Exception) {}
 	}
 
 	/**

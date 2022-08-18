@@ -459,6 +459,7 @@ class ZAssets {
 			_loadStop = true;
 			if (func != null)
 				func(1);
+			_callBack = null;
 			return;
 		}
 		if (timeout != -1) {
@@ -1331,6 +1332,8 @@ class ZAssets {
 	 */
 	public function unloadAll():Void {
 		__unloadAll();
+		_callBack = null;
+		_errorCallBack = null;
 	}
 
 	private function __unloadAll(name:String = null):Void {

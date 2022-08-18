@@ -120,15 +120,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex1 = None
+            startIndex = None
             _hx_len = None
-            if (startIndex1 is None):
+            if (startIndex is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex1 + 1))
-                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex + 1))
+                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -1627,28 +1627,30 @@ class atf_AtfBuild:
 
     @staticmethod
     def build(path,out):
+        haxe_Log.trace("ATF",_hx_AnonObject({'fileName': "src/atf/AtfBuild.hx", 'lineNumber': 9, 'className': "atf.AtfBuild", 'methodName': "build", 'customParams': [Sys.args()]}))
+        tools = Sys.getCwd()
+        args = Sys.args()
+        Sys.setCwd(python_internal_ArrayImpl._get(args, (len(args) - 1)))
         if (not sys_FileSystem.exists(out)):
             sys_FileSystem.createDirectory(out)
         dir = sys_FileSystem.readDirectory(path)
         _g = 0
         while (_g < len(dir)):
-            _hx_str = (dir[_g] if _g >= 0 and _g < len(dir) else None)
+            file = (dir[_g] if _g >= 0 and _g < len(dir) else None)
             _g = (_g + 1)
-            if sys_FileSystem.isDirectory(((("null" if path is None else path) + "/") + ("null" if _hx_str is None else _hx_str))):
-                atf_AtfBuild.build(((("null" if path is None else path) + "/") + ("null" if _hx_str is None else _hx_str)),((("null" if out is None else out) + "/") + ("null" if _hx_str is None else _hx_str)))
-            elif _hx_str.endswith("png"):
-                if sys_FileSystem.exists(((("null" if path is None else path) + "/") + HxOverrides.stringOrNull(StringTools.replace(_hx_str,".png",".xml")))):
-                    Sys.command((((((("echo `sips -g pixelHeight -g pixelWidth " + ("null" if path is None else path)) + "/") + ("null" if _hx_str is None else _hx_str)) + "` > ") + ("null" if out is None else out)) + "/cache.txt"))
-                    _this = sys_io_File.getContent((("null" if out is None else out) + "/cache.txt"))
-                    size = _this.split(" ")
-                    filename = ((HxOverrides.stringOrNull((size[2] if 2 < len(size) else None)) + "x") + HxOverrides.stringOrNull((size[4] if 4 < len(size) else None)))
-                    sys_FileSystem.deleteFile((("null" if out is None else out) + "/cache.txt"))
-                    Sys.command(((((((("tools/atftools/png2atf -n 0,0 -c e -i " + ("null" if path is None else path)) + "/") + ("null" if _hx_str is None else _hx_str)) + " -o ") + ("null" if out is None else out)) + "/") + ("null" if filename is None else filename)))
-                    Sys.command(((((((((("cd " + ("null" if out is None else out)) + "\n                        zip -q -r -m -o ") + ("null" if _hx_str is None else _hx_str)) + ".zip ") + ("null" if filename is None else filename)) + "\n                        mv ") + ("null" if _hx_str is None else _hx_str)) + ".zip ") + ("null" if _hx_str is None else _hx_str)))
-                else:
-                    python_FileUtils.copyFile(((("null" if path is None else path) + "/") + ("null" if _hx_str is None else _hx_str)),((("null" if out is None else out) + "/") + ("null" if _hx_str is None else _hx_str)))
-            else:
-                python_FileUtils.copyFile(((("null" if path is None else path) + "/") + ("null" if _hx_str is None else _hx_str)),((("null" if out is None else out) + "/") + ("null" if _hx_str is None else _hx_str)))
+            startIndex = None
+            if ((((file.find(".") if ((startIndex is None)) else HxString.indexOfImpl(file,".",startIndex))) == 0) or (not file.endswith(".png"))):
+                continue
+            Sys.command((((((("echo `sips -g pixelHeight -g pixelWidth " + ("null" if path is None else path)) + "/") + ("null" if file is None else file)) + "` > ") + ("null" if out is None else out)) + "/cache.txt"))
+            _this = sys_io_File.getContent((("null" if out is None else out) + "/cache.txt"))
+            size = _this.split(" ")
+            filename = ((HxOverrides.stringOrNull((size[2] if 2 < len(size) else None)) + "x") + HxOverrides.stringOrNull((size[4] if 4 < len(size) else None)))
+            filename = StringTools.replace(filename,"\n","")
+            filename = StringTools.replace(filename,"\r","")
+            atf = StringTools.replace(file,".png","")
+            Sys.command(((((((((("null" if tools is None else tools) + "/tools/atftools/png2atf -n 0,0 -c p -i ") + ("null" if path is None else path)) + "/") + ("null" if file is None else file)) + " -o ") + ("null" if out is None else out)) + "/") + ("null" if filename is None else filename)))
+            cmd = ((((("cd " + ("null" if out is None else out)) + "\n            zip -q -m -o ") + ("null" if atf is None else atf)) + ".zip ") + ("null" if filename is None else filename))
+            Sys.command(cmd)
 atf_AtfBuild._hx_class = atf_AtfBuild
 _hx_classes["atf.AtfBuild"] = atf_AtfBuild
 

@@ -41,13 +41,16 @@ class TextureAtlasParser extends ParserBase {
 					sendError("TextureAtlas 无法解析Base64数据：" + getData().path);
 				});
 			} else {
-				AssetsUtils.loadBitmapData(img, false, atf).onComplete(function(data) {
-					bitmapData = data;
+				var paresr = LoaderAssets.createParserBase(img, getAssets().extPasrer);
+				paresr.out = (parser, type, assetsData, pro) -> {
+					bitmapData = assetsData;
 					this.finalAssets(PROGRESS, null, 0.5);
 					this.contiune();
-				}).onError(function(err) {
+				};
+				paresr.error = (msg) -> {
 					sendError("TextureAtlas PNG无法加载路径：" + getData().path);
-				});
+				}
+				paresr.load(getAssets());
 			}
 		} else {
 			// 开始载入XML

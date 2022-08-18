@@ -22,6 +22,8 @@ class ZScene extends ZBox {
 	 */
 	public function new() {
 		super();
+		// 监视场景引用关系
+		Start.current.watch(this);
 	}
 
 	/**

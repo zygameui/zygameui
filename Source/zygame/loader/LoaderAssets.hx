@@ -1,5 +1,6 @@
 package zygame.loader;
 
+import zygame.utils.StringUtils;
 import zygame.loader.parser.SparticleParser;
 import zygame.loader.parser.BitmapDataParser;
 import zygame.loader.parser.JSONParser;
@@ -23,8 +24,7 @@ class LoaderAssets {
 		SparticleParser,
 		MP3Parser,
 		TextParser,
-		#if castle
-		CDBParser,
+		#if castle CDBParser,
 		#end
 		XMLParser,
 		JSONParser,
@@ -32,4 +32,20 @@ class LoaderAssets {
 		#if (ldtk), LDTKParser
 		#end
 	];
+
+	public static function createParserBase(data:Dynamic, extPasrer:Map<String, String>):ParserBase {
+		for (base in LoaderAssets.fileparser) {
+			var cheakpath:String = data;
+			var ext:String = StringUtils.getExtType(cheakpath);
+			if (extPasrer.exists(ext)) {
+				ext = extPasrer.get(ext);
+				cheakpath = cheakpath.substr(0, cheakpath.lastIndexOf(".")) + "." + ext;
+			}
+			var bool = Reflect.callMethod(base, Reflect.field(base, "supportType"), [cheakpath]);
+			if (bool) {
+				return Type.createInstance(base, [data]);
+			}
+		}
+		return null;
+	}
 }

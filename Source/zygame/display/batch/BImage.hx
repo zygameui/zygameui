@@ -78,6 +78,7 @@ class BImage extends BDisplayObject {
 		var frame:Frame = data;
 		if (frame == null) {
 			super.set_id(-1);
+			curFrame = null;
 			return;
 		}
 		super.set_id(frame.id);

@@ -43,6 +43,41 @@ import zygame.components.ZLabel;
 @:access(lime.ui.Window)
 #end
 class Start extends ZScene {
+	#if memory_monitor
+	/**
+	 * 内存监视器
+	 */
+	public var memoryMonitor:MemoryMonitor = new MemoryMonitor();
+	#end
+
+	/**
+	 * 输出内存应用的状况
+	 * @return String
+	 */
+	public function logMemoryMonitorMessage():String {
+		#if memory_monitor
+		return memoryMonitor.log();
+		#else
+		return "MemoryMonitor Not support. Please use `<haxelib name='memory_monitor'/>`";
+		#end
+	}
+
+	/**
+	 * 监视内存
+	 * @param obj 
+	 */
+	public function watch(obj:Dynamic):Void {
+		#if memory_monitor
+		memoryMonitor.watch(obj);
+		#end
+	}
+
+	public function unwatch(obj:Dynamic):Void {
+		#if memory_monitor
+		memoryMonitor.unwatch(obj);
+		#end
+	}
+
 	/**
 	 * 1//60每帧的DT
 	 */
@@ -222,8 +257,8 @@ class Start extends ZScene {
 	 * @param scalePower - 测试性功能，使缩放永远为0.x5作为间隔缩放。
 	 */
 	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
-		super();
 		Start.current = this;
+		super();
 		#if openfl_console
 		haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
 			var msg = infos.className + ":" + infos.lineNumber + ":";

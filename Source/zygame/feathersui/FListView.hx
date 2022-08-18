@@ -16,6 +16,7 @@ class FListView extends ListView {
 
 	public function new() {
 		super();
+		this.scrollMode = SCROLL_RECT;
 	}
 
 	override function handleSelectionChange(item:Dynamic, index:Int, ctrlKey:Bool, shiftKey:Bool) {

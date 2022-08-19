@@ -13,6 +13,7 @@ import haxe.macro.Expr;
 /**
  * 性能分析工具
  */
+#if performance_analysis
 class PerformanceUtils {
 	#if macro
 	/**
@@ -88,3 +89,4 @@ class PerformanceUtils {
 	}
 	#end
 }
+#end

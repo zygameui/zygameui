@@ -1,6 +1,8 @@
 package zygame.utils;
 
+#if performance_analysis
 import zygame.macro.performance.PerformanceAnalysis;
+#end
 import zygame.components.ZBox;
 import zygame.components.ZQuad;
 import zygame.core.Start;
@@ -40,7 +42,7 @@ class FPSDebug extends ZBox {
 	public function new(inX:Float = 0.0, inY:Float = 0.0, inCol:Int = 0xffffff) {
 		super();
 
-        #if !final
+		#if !final
 		BitmapData.loadFromBase64(FPSAssets.assets, "image/png").onComplete(function(bitmapData:BitmapData):Void {
 			fnt = new FntData(bitmapData, Xml.parse(FPSAssets.fnt), null);
 			_text = new ZBitmapLabel(fnt);
@@ -63,7 +65,7 @@ class FPSDebug extends ZBox {
 
 			addEventListener(Event.ENTER_FRAME, onEnter);
 		}).onError(function(err:Dynamic):Void {});
-        #end
+		#end
 
 		this.y = 150;
 
@@ -97,8 +99,8 @@ class FPSDebug extends ZBox {
 				var msg = "CPU:" + getCpu() + "\nMODE:" + Lib.getRenderMode() + "\nMEM:" + mem + "MB\nMaxMEN:" + memPeak + "MB\nUPDATES:"
 					+ zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count() + "\nS_RUNING:" + SpineManager.playingCount
 					+ "\nFPS:" + Std.int(16 / fps * 60) + "_" + Start.current.renderFps + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:"
-					+ Start.currentScale + "\nRETAIN:" + GC.getRetainCounts() + "\nGPU:" + GPUUtils.getGpuMemoryMB() + "\nGL_BIND:"
-					+ PerformanceAnalysis.glBindTextureCounts;
+					+ Start.currentScale + "\nRETAIN:" + GC.getRetainCounts() + "\nGPU:" + GPUUtils.getGpuMemoryMB() #if performance_analysis + "\nGL_BIND:" +
+				PerformanceAnalysis.glBindTextureCounts; #else; #end
 				_text.dataProvider = msg;
 				if (_alltimes > 60) {
 					_alldt = 0;

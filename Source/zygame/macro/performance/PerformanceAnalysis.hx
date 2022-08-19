@@ -7,6 +7,7 @@ import haxe.Timer;
  * 性能分析器
  */
 @:expose
+#if performance_analysis
 class PerformanceAnalysis {
 	/**
 	 * 每帧glBindTextureCounts的调用数量
@@ -67,7 +68,9 @@ class PerformanceAnalysis {
 		#if js
 		if (inited == false) {
 			inited = true;
+			#if performance_analysis
 			untyped window.PerformanceAnalysis = PerformanceAnalysis;
+			#end
 		}
 		#end
 	}
@@ -123,3 +126,4 @@ typedef AnalysisData = {
 	totalTime:Float,
 	average:Float
 }
+#end

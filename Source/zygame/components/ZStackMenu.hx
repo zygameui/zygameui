@@ -86,8 +86,14 @@ class ZStackMenu extends DataProviderBox {
 		}
 	}
 
-	override function initComponents() {
+	override function onAddToStage() {
+		super.onAddToStage();
 		this.setFrameEvent(true);
+	}
+
+	override function onRemoveToStage() {
+		super.onRemoveToStage();
+		this.setFrameEvent(false);
 	}
 
 	override function onFrame() {
@@ -111,8 +117,6 @@ class ZStackMenu extends DataProviderBox {
 			rightLine.x -= (rightLine.x - (rightLine.customData + itemWidth * 0.2)) * 0.2;
 			_selectedItem.x = leftLine.x;
 			_selectedItem.width = rightLine.x - leftLine.x;
-
-			
 		}
 	}
 

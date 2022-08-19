@@ -1,7 +1,10 @@
 package zygame.feathersui;
 
 #if feathersui
+import feathers.events.ScrollEvent;
 import feathers.controls.ListView;
+import feathers.utils.Scroller;
+import openfl.display.DisplayObjectContainer;
 
 class FListView extends ListView {
 	/**
@@ -17,6 +20,19 @@ class FListView extends ListView {
 	public function new() {
 		super();
 		this.scrollMode = SCROLL_RECT;
+		// scrollerFactory = function() {
+		// 	var scroller = new Scroller();
+		// 	scroller.elasticEdges = false;
+		// 	scroller.addEventListener(ScrollEvent.SCROLL_START, function(e:ScrollEvent):Void {
+		// 		// 禁止不允许点击的处理
+		// 		if ((@:privateAccess scroller._target is DisplayObjectContainer)) {
+		// 			var container = cast(@:privateAccess scroller._target, DisplayObjectContainer);
+		// 			container.mouseChildren = @:privateAccess scroller.restoreMouseChildren;
+		// 			trace("恢复：", container.mouseChildren);
+		// 		}
+		// 	});
+		// 	return scroller;
+		// }
 	}
 
 	override function handleSelectionChange(item:Dynamic, index:Int, ctrlKey:Bool, shiftKey:Bool) {

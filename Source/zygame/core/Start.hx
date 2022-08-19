@@ -4,7 +4,9 @@ package zygame.core;
 import com.junkbyte.console.Cc;
 import com.junkbyte.console.addons.memorytracker.MemoryTrackerAddon;
 #end
+#if performance_analysis
 import zygame.macro.performance.PerformanceAnalysis;
+#end
 import zygame.utils.ScaleUtils;
 import lime.graphics.RenderContext;
 import haxe.Timer;
@@ -455,14 +457,18 @@ class Start extends ZScene {
 		}
 		var cpu = Timer.stamp();
 		_cpuDt = Std.int((cpu - newTime) * 1000);
+		#if performance_analysis
 		PerformanceAnalysis.onFrame();
+		#end
 	}
 
 	override public function onInit():Void {
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
 
+		#if performance_analysis
 		PerformanceAnalysis.init();
+		#end
 
 		stage.frameRate = 60;
 		SpineManager.init(stage);

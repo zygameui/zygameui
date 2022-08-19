@@ -460,6 +460,7 @@ class ZAssets {
 			if (func != null)
 				func(1);
 			_callBack = null;
+			_errorCallBack = null;
 			return;
 		}
 		if (timeout != -1) {
@@ -569,10 +570,10 @@ class ZAssets {
 			_loadfilelist = [];
 			currentLoadNumber = 0;
 			if (_errorCallBack != null) {
-				_callBack = null;
 				_errorCallBack(msg);
-				_errorCallBack = null;
 			}
+			_callBack = null;
+			_errorCallBack = null;
 		}
 	}
 

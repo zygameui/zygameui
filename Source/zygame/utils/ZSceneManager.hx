@@ -208,6 +208,10 @@ class ZSceneManager {
 			Start.current.addChild(newscene);
 		else
 			newscene.visible = true;
+		#if performance_analysis
+		// 切换场景时更新一下
+		PerformanceAnalysis.log();
+		#end
 		return newscene;
 	}
 

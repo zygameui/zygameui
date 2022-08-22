@@ -81,6 +81,15 @@ class ZSpine extends ZBox {
 		return bspine != null ? bspine.spine : null;
 	}
 
+	/**
+	 * 是否存在指定的皮肤
+	 * @param name 
+	 * @return Bool
+	 */
+	public function hasSkin(name:String):Bool {
+		return null != spine.skeleton.data.findSkin(name);
+	}
+
 	private function set_spineSkin(name:String):String {
 		try {
 			if (btilemap != null)
@@ -93,7 +102,7 @@ class ZSpine extends ZBox {
 				}
 			}
 		} catch (e:Exception) {
-			trace("异常，无法找到皮肤：" + name);
+			// trace("异常，无法找到皮肤：" + name);
 		}
 		return name;
 	}

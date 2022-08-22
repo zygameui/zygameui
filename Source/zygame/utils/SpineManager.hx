@@ -53,6 +53,8 @@ class SpineManager {
 	private static var _dt:Float;
 	private static var _nowTime:Float;
 
+	private static var _isRuning:Bool = true;
+
 	/**
 	 * 初始化更新器
 	 * @param stage
@@ -71,16 +73,14 @@ class SpineManager {
 	}
 
 	public static function pause():Void {
-		if (stage == null)
+		if (stage == null || !_isRuning)
 			return;
-
 		stage.removeEventListener(Event.ENTER_FRAME, onFrame);
 	}
 
 	public static function resume():Void {
-		if (stage == null)
+		if (stage == null || _isRuning)
 			return;
-
 		stage.addEventListener(Event.ENTER_FRAME, onFrame);
 	}
 
@@ -103,7 +103,16 @@ class SpineManager {
 		trace(spineUpdateList.length, spineUpdateList);
 	}
 
+	/**
+	 * 更新过滤器，如果返回的是true，则进行渲染，否则则不渲染
+	 */
+	public static var onSpineUpdateFilter:SpineBaseDisplay->Bool;
+
 	private static function onSpineUpdate(spine:SpineBaseDisplay, dt:Float):Void {
+		if (onSpineUpdateFilter != null) {
+			if (!onSpineUpdateFilter(spine))
+				return;
+		}
 		if (!savingMode) {
 			spine.onSpineUpdate(dt);
 			return;

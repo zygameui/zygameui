@@ -1,5 +1,7 @@
 package zygame.feathersui;
 
+import openfl.geom.Point;
+import openfl.events.MouseEvent;
 #if feathersui
 import feathers.events.ScrollEvent;
 import feathers.controls.ListView;
@@ -17,22 +19,48 @@ class FListView extends ListView {
 	 */
 	public var maxSelectCounts:Int = 0;
 
+	/**
+	 * 允许滑动的时候点击ItemRenderer，默认为true
+	 */
+	public var allowScrollClickItemRenderer(default, set):Bool;
+
+	private function set_allowScrollClickItemRenderer(v:Bool):Bool {
+		if (v) {
+			this.addEventListener(MouseEvent.MOUSE_DOWN, onItemCheckDown);
+			this.addEventListener(MouseEvent.MOUSE_UP, onItemCheckClick);
+		} else {
+			this.removeEventListener(MouseEvent.MOUSE_DOWN, onItemCheckDown);
+			this.removeEventListener(MouseEvent.MOUSE_UP, onItemCheckClick);
+		}
+		this.allowScrollClickItemRenderer = true;
+		return v;
+	}
+
 	public function new() {
 		super();
+		this.allowScrollClickItemRenderer = true;
 		this.scrollMode = SCROLL_RECT;
-		// scrollerFactory = function() {
-		// 	var scroller = new Scroller();
-		// 	scroller.elasticEdges = false;
-		// 	scroller.addEventListener(ScrollEvent.SCROLL_START, function(e:ScrollEvent):Void {
-		// 		// 禁止不允许点击的处理
-		// 		if ((@:privateAccess scroller._target is DisplayObjectContainer)) {
-		// 			var container = cast(@:privateAccess scroller._target, DisplayObjectContainer);
-		// 			container.mouseChildren = @:privateAccess scroller.restoreMouseChildren;
-		// 			trace("恢复：", container.mouseChildren);
-		// 		}
-		// 	});
-		// 	return scroller;
-		// }
+	}
+
+	private var _beginTouch:Point = new Point();
+
+	private function onItemCheckDown(e:MouseEvent):Void {
+		_beginTouch.x = this.mouseX;
+		_beginTouch.y = this.mouseY;
+	}
+
+	private function onItemCheckClick(e:MouseEvent):Void {
+		var mx = Math.abs(_beginTouch.x - this.mouseX);
+		var my = Math.abs(_beginTouch.y - this.mouseY);
+		if (mx > 10 || my > 10) {
+			return;
+		}
+		for (key => value in this.dataToItemRenderer) {
+			if (value.hitTestPoint(this.mouseX, this.mouseY)) {
+				this.selectedItem = key;
+				return;
+			}
+		}
 	}
 
 	override function handleSelectionChange(item:Dynamic, index:Int, ctrlKey:Bool, shiftKey:Bool) {

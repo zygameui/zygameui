@@ -1,5 +1,7 @@
 package zygame.net;
 
+import haxe.Timer;
+import zygame.worker.Worker;
 import haxe.io.Bytes;
 import haxe.io.Path;
 import haxe.Serializer;
@@ -24,13 +26,32 @@ import openfl.net.SharedObjectFlushStatus;
  * 这是一个改进的SharedObject，在微信小游戏上，储存序列改进
  */
 class SharedObject extends openfl.net.SharedObject {
+	public static var worker:Worker;
+
+	private static var __zygameui_save_name:String = null;
+
 	/**
 	 * 获取一个数据共享对象
 	 * @param name 
 	 * @return SharedObject
 	 */
 	public static function getLocal(name:String, localPath:String = null, secure:Bool = false /* note: unsupported**/):openfl.net.SharedObject {
+		__zygameui_save_name = name;
 		#if weixin
+		#if weixin_worker
+		if (Worker.isSupport() && worker == null) {
+			worker = new Worker("workers/worker.js");
+			worker.onMessage = function(data) {
+				switch (data.type) {
+					case "serialize":
+						// 序列化储存
+						var time = Timer.stamp();
+						cast(getLocal(__zygameui_save_name), SharedObject)._flush(data.data);
+						var now = Timer.stamp();
+				}
+			};
+		}
+		#end
 		// 微信小游戏改进
 		var illegalValues = [" ", "~", "%", "&", "\\", ";", ":", "\"", "'", ",", "<", ">", "?", "#"];
 		var allowed = true;
@@ -107,6 +128,32 @@ class SharedObject extends openfl.net.SharedObject {
 		#end
 	}
 
+	private function _flush(encodedData:String):SharedObjectFlushStatus {
+		try {
+			#if (js && html5)
+			var storage = Browser.getLocalStorage();
+			if (storage != null) {
+				storage.removeItem(__localPath + ":" + __name);
+				storage.setItem(__localPath + ":" + __name, encodedData);
+			}
+			#else
+			var path = __getPath(__localPath, __name);
+			var directory = Path.directory(path);
+
+			if (!FileSystem.exists(directory)) {
+				__mkdir(directory);
+			}
+
+			var output = File.write(path, false);
+			output.writeString(encodedData);
+			output.close();
+			#end
+			return SharedObjectFlushStatus.FLUSHED;
+		} catch (e:Dynamic) {
+			return SharedObjectFlushStatus.PENDING;
+		}
+	}
+
 	override function flush(minDiskSpace:Int = 0):SharedObjectFlushStatus {
 		#if weixin
 		if (Reflect.fields(data).length == 0) {
@@ -114,6 +161,14 @@ class SharedObject extends openfl.net.SharedObject {
 		}
 		// 微信小游戏改进，这里不做Haxe序列化，直接通过Json序列化
 		var encodedData = data;
+		if (worker != null) {
+			// worker异步处理
+			worker.postMessage({
+				type: "serialize",
+				data: data
+			});
+			return SharedObjectFlushStatus.FLUSHED;
+		}
 		try {
 			#if (js && html5)
 			var storage = Browser.getLocalStorage();

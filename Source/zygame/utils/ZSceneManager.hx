@@ -212,6 +212,7 @@ class ZSceneManager {
 		// 切换场景时更新一下
 		PerformanceAnalysis.log();
 		#end
+		onReplaceScene();
 		return newscene;
 	}
 
@@ -229,6 +230,11 @@ class ZSceneManager {
 		}
 		return null;
 	}
+
+	/**
+	 * 当发生更换场景事件时
+	 */
+	dynamic public function onReplaceScene() {}
 
 	/**
 	 * 根据实例替换场景

@@ -161,4 +161,9 @@ class ToggleButton extends Component {
 			return img.shader;
 		return null;
 	}
+
+	override function onRemoveToStage() {
+		super.onRemoveToStage();
+		_currentTouchID = -1;
+	}
 }

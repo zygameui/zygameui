@@ -1,0 +1,4 @@
+--library zygameui
+# --main Main
+# --js bin/main.js
+--run Main

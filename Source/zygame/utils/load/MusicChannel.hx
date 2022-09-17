@@ -4,25 +4,22 @@ package zygame.utils.load;
 import qq.media.SoundChannel;
 // #elseif android
 // import zygame.media.SoundChannel;
-#elseif extsound 
+#elseif extsound
 import common.media.SoundChannel;
 #else
 import openfl.media.SoundChannel;
 #end
 
 class MusicChannel {
+	private var _channel:SoundChannel;
 
-    private var _channel:SoundChannel;
+	public function new(channel:SoundChannel) {
+		_channel = channel;
+	}
 
-    public function new(channel:SoundChannel)
-    {
-        _channel = channel;
-    }
-
-    public function stop():Void
-    {
-        _channel.stop();
-        _channel = null;
-    }
-
+	public function stop():Void {
+		if (_channel != null)
+			_channel.stop();
+		_channel = null;
+	}
 }

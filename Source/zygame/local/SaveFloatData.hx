@@ -32,6 +32,86 @@ abstract SaveFloatData(SaveFloatDataContent) to SaveFloatDataContent from SaveFl
 	@:to public function toDynamic():Dynamic {
 		return this.data;
 	}
+
+	/**
+	 * 加法运算
+	 * @param value 
+	 * @return Float
+	 */
+	@:commutative @:op(A + B) public function add(value:Float):Float {
+		return this.data + value;
+	}
+
+	/**
+	 * 减法运算
+	 * @param value 
+	 * @return Float
+	 */
+	@:op(A - B) public function jian(value:Float):Float {
+		return this.data - value;
+	}
+
+	@:commutative @:op(B - A) public function jian2(value:Float):Float {
+		return value - this.data;
+	}
+
+	/**
+	 * 乘法运算
+	 * @param value 
+	 * @return Float
+	 */
+	@:commutative @:op(A * B) public function mul(value:Float):Float {
+		return this.data * value;
+	}
+
+	/**
+	 * 除法运算
+	 * @param value 
+	 * @return Float
+	 */
+	@:op(A / B) public function div(value:Float):Float {
+		return this.data / value;
+	}
+
+	@:commutative @:op(B / A) public function div2(value:Float):Float {
+		return value / this.data;
+	}
+
+	@:op(++A) public function pre():Float {
+		return this.data++;
+	}
+
+	@:op(A++) public function post():Float {
+		return this.data++;
+	}
+
+	@:op(--A) public function pre2():Float {
+		return this.data--;
+	}
+
+	@:op(A--) public function post2():Float {
+		return this.data--;
+	}
+
+	@:op(A > B) static function dy(a:SaveFloatData, b:SaveFloatData):Bool {
+		return a.toFloat() > b.toFloat();
+	};
+
+	@:op(A < B) static function xy(a:SaveFloatData, b:SaveFloatData):Bool {
+		return a.toFloat() < b.toFloat();
+	};
+
+	@:op(A >= B) static function dydy(a:SaveFloatData, b:SaveFloatData):Bool {
+		return a.toFloat() >= b.toFloat();
+	};
+
+	@:op(A <= B) static function xydy(a:SaveFloatData, b:SaveFloatData):Bool {
+		return a.toFloat() <= b.toFloat();
+	};
+
+	@:op(A == B) static function xd(a:SaveFloatData, b:SaveFloatData):Bool {
+		return a.toFloat() == b.toFloat();
+	};
 }
 
 class SaveFloatDataContent extends SaveDynamicDataBaseContent {

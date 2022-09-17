@@ -1,19 +1,38 @@
 package zygame.local;
 
+import zygame.utils.CEFloat.CEData;
+
 /**
  * 动态类型抽象类
  */
-abstract SaveDynamicData(SaveDynamicDataContent) to SaveDynamicDataContent from SaveDynamicDataContent {
-	public function new() {
+@:runtimeValue abstract SaveDynamicData<T>(SaveDynamicDataContent<T>) to SaveDynamicDataContent<T> from SaveDynamicDataContent<T> {
+	public function new(data:Dynamic = null) {
 		this = new SaveDynamicDataContent();
+		if (data != null) {
+			var keys = Reflect.fields(data);
+			for (key in keys) {
+				this.setValue(key, Reflect.getProperty(data, key));
+			}
+		}
 	}
 
-	@:op(a.b) public function fieldRead(name:String) {
+	@:op(a.b) public function fieldRead(name:String):T {
 		return this.getValue(name);
 	}
 
-	@:op(a.b) public function fieldWrite(name:String, value:Dynamic) {
+	@:op(a.b) public function fieldWrite(name:String, value:T):T {
 		return this.setValue(name, value);
+	}
+
+	@:arrayAccess
+	public inline function get(key:Int):T {
+		return this.getValue(Std.string(key));
+	}
+
+	@:arrayAccess
+	public inline function arrayWrite(k:Int, v:T):T {
+		this.setValue(Std.string(k), v);
+		return v;
 	}
 
 	/**
@@ -28,27 +47,32 @@ abstract SaveDynamicData(SaveDynamicDataContent) to SaveDynamicDataContent from 
 	 * 转为String
 	 * @return String
 	 */
-	@:to public function toDynamic():Dynamic {
-		return this.data;
+	// @:to public function toDynamic():Dynamic {
+	// 	return this.data;
+	// }
+
+	@:from public static function fromDynamic<T>(data:Dynamic):SaveDynamicData<T> {
+		var data = new SaveDynamicData(data);
+		return data;
 	}
 }
 
-class SaveDynamicDataContent extends SaveDynamicDataBaseContent {
+class SaveDynamicDataContent<T> extends SaveDynamicDataBaseContent {
 	/**
 	 * 发生变化的值
 	 */
-	public var changedValues:Map<String, Dynamic> = [];
+	public var changedValues:Map<String, T> = [];
 
 	/**
 	 * 数据储存
 	 */
-	public var data:Dynamic = {};
+	public var data:Dynamic<T> = {};
 
-	public function getValue(key:String):Dynamic {
+	public function getValue(key:String):T {
 		return Reflect.getProperty(this.data, key);
 	}
 
-	public function setValue(key:String, value:Dynamic):Dynamic {
+	public function setValue(key:String, value:T):T {
 		this.changed = true;
 		this.changedValues.set(key, value);
 		Reflect.setProperty(this.data, key, value);
@@ -61,9 +85,13 @@ class SaveDynamicDataContent extends SaveDynamicDataBaseContent {
 			changed = false;
 			var newdata = {};
 			for (key => value in changedValues) {
-				Reflect.setProperty(newdata, key, value);
+				if (value is CEData) {
+					Reflect.setProperty(newdata, key, cast(value, CEData).value);
+				} else
+					Reflect.setProperty(newdata, key, value);
 			}
 			Reflect.setProperty(changeData, key, newdata);
+			changedValues = [];
 		}
 	}
 

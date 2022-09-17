@@ -38,7 +38,7 @@ class FListView extends ListView {
 
 	public function new() {
 		super();
-		this.allowScrollClickItemRenderer = true;
+		// this.allowScrollClickItemRenderer = true;
 		this.scrollMode = SCROLL_RECT;
 	}
 

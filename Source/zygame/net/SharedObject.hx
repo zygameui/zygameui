@@ -25,6 +25,7 @@ import openfl.net.SharedObjectFlushStatus;
 /**
  * 这是一个改进的SharedObject，在微信小游戏上，储存序列改进
  */
+@:access(openfl.net.SharedObject)
 class SharedObject extends openfl.net.SharedObject {
 	public static var worker:Worker;
 
@@ -137,11 +138,11 @@ class SharedObject extends openfl.net.SharedObject {
 				storage.setItem(__localPath + ":" + __name, encodedData);
 			}
 			#else
-			var path = __getPath(__localPath, __name);
+			var path = openfl.net.SharedObject.__getPath(__localPath, __name);
 			var directory = Path.directory(path);
 
 			if (!FileSystem.exists(directory)) {
-				__mkdir(directory);
+				openfl.net.SharedObject.__mkdir(directory);
 			}
 
 			var output = File.write(path, false);

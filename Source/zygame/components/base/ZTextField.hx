@@ -22,6 +22,10 @@ import openfl.display.BitmapData;
 class ZTextField extends TextField 
 {
 
+    public function new() {
+        super();
+    }
+
     // private static var initTextFieldWindow:Bool = false;
 
     // private static var compositionstart:Bool = false;

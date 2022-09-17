@@ -186,7 +186,7 @@ class ZSceneManager {
 				}
 			} else {
 				GC.retain(zscene);
-				newscene.addEventListener(Event.COMPLETE, function(_) {
+				function _eventComplete(_) {
 					if (isReleaseScene)
 						releaseScene(zscene);
 					else
@@ -198,7 +198,9 @@ class ZSceneManager {
 								zscene.visible = false;
 						}
 					GC.release(zscene);
-				});
+					newscene.removeEventListener(Event.COMPLETE, _eventComplete);
+				}
+				newscene.addEventListener(Event.COMPLETE, _eventComplete);
 			}
 		}
 		#if debug

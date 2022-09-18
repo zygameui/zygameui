@@ -193,6 +193,32 @@ class SaveObject<T:SaveObjectData> {
 		// trace("最后更改的数据：", changed);
 	}
 
+	/**
+	 * 清空用户数据
+	 */
+	public function clear():Void {
+		#if v3apisave
+		zygame.cmnt.v3.V3Api.setData({}, function(data) {
+			if (data.code == 0) {
+				trace("重置成功");
+			} else {
+				trace("重置失败");
+			}
+		});
+		#end
+		var retdata = this.getData();
+		var keys = Reflect.fields(retdata);
+		for (key in keys) {
+			#if js
+			var storage = Browser.getLocalStorage();
+			if (storage != null) {
+				var saveid = _id + "." + key;
+				storage.removeItem(saveid);
+			}
+			#end
+		}
+	}
+
 	private function _flush(data:Dynamic, key:String):Void {
 		var keys = Reflect.fields(data);
 		if (keys.length == 0) {

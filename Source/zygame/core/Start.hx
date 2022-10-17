@@ -675,6 +675,9 @@ class Start extends ZScene {
 	private function onFrameEvent(e:Event):Void {
 		if (fps.visible)
 			topView.addChild(fps);
+		#if (hxonline && cpp)
+		hxonline.Client.getInstance().process();
+		#end
 		#if (ios_render_fix)
 		if (iosRender != null) {
 			stage.addChild(iosRender);

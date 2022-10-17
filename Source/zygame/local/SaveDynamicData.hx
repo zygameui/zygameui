@@ -47,9 +47,9 @@ import zygame.utils.CEFloat.CEData;
 	 * 转为String
 	 * @return String
 	 */
-	// @:to public function toDynamic():Dynamic {
-	// 	return this.data;
-	// }
+	public function toData():Dynamic {
+		return this.data;
+	}
 
 	@:from public static function fromDynamic<T>(data:Dynamic):SaveDynamicData<T> {
 		var data = new SaveDynamicData(data);

@@ -86,7 +86,7 @@ class SoundChannelManager extends EventDispatcher {
 		try {
 			if (_musicAvailable) {
 				if (_music != null) {
-					// trace("[背景音乐]开始播放");
+					trace("[背景音乐]开始播放");
 					_musicChannel = _music.play(99999);
 				}
 			}

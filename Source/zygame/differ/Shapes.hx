@@ -107,18 +107,24 @@ class Shapes {
 	 * @return Results<ShapeCollision>
 	 */
 	public function testList(shape:Shape, list:Array<Shape>, into:Results<ShapeCollision> = null):Results<ShapeCollision> {
-		if (list == null)
+		if (list == null || list.length == 0)
 			return null;
 		for (shapeB in list) {
 			if (shape == shapeB)
 				continue;
-			var ret = Collision.shapeWithShape(shape, shapeB);
-			if (ret != null) {
-				if (into == null) {
-					into = new Results<ShapeCollision>(0);
+			#if cpp
+			if (shape is Shape && shapeB is Shape) {
+			#end
+				var ret = Collision.shapeWithShape(shape, shapeB);
+				if (ret != null) {
+					if (into == null) {
+						into = new Results<ShapeCollision>(0);
+					}
+					into.push(ret);
 				}
-				into.push(ret);
+			#if cpp
 			}
+			#end
 		}
 		return into;
 	}

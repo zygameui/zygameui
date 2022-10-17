@@ -121,7 +121,7 @@ class SaveObjectMacro {
 										],
 										ret: retType,
 										expr: macro {
-											var value = this.$attName.fieldRead(key);
+											var value:Any = this.$attName.fieldRead(key);
 											return value == null ? defaultValue : value;
 										}
 									})

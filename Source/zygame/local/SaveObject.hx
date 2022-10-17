@@ -1,5 +1,7 @@
 package zygame.local;
 
+import zygame.utils.Lib;
+import haxe.Timer;
 import zygame.local.SaveArrayData.SaveArrayDataContent;
 import zygame.utils.CEFloat;
 #if js
@@ -31,6 +33,16 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	private var _changedData:Dynamic = {};
 
+	/**
+	 * 存档的间隔，默认为0，即立即存档
+	 */
+	public var saveInterval:Int = 0;
+
+	/**
+	 * 上一次上报的时间
+	 */
+	private var _lastTime:Float = 0;
+
 	private var _id:String;
 
 	private var _isReadData:Bool = false;
@@ -56,11 +68,40 @@ class SaveObject<T:SaveObjectData> {
 			}
 			this.updateUserData(localData);
 		}
+		#elseif cpp
+		var keys = Reflect.fields(data);
+		var localData = {};
+		for (k in keys) {
+			var id = _id + "." + k;
+			var shared = openfl.net.SharedObject.getLocal(id);
+			var value = shared.data.data;
+			if (value != null) {
+				trace("本地数据：", k, value);
+				Reflect.setProperty(localData, k, value);
+			}
+		}
+		this.updateUserData(localData);
 		#end
 		return this;
 	}
 
 	private var _cb:Bool->Void;
+
+	/**
+	 * 无效间隔操作
+	 */
+	public function invalidInterval():Void {
+		_lastTime = 0;
+		// trace("使存档时间间隔失效");
+	}
+
+	/**
+	 * 检测未同步的数据
+	 */
+	public function checkChangedData():Void {
+		_changedData = Lib.getData("_changedData", {});
+		// trace("checkChangedData", _changedData);
+	}
 
 	/**
 	 * 同步网络数据
@@ -84,10 +125,12 @@ class SaveObject<T:SaveObjectData> {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
 						}
-						// todo 这里的_changedData可能要做线上数据比对
 						this.flush();
-						_changedData = {};
-						cb(true);
+						// todo 这里的_changedData可能要做线上数据比对
+						checkChangedData();
+						_cbFunc(true);
+					} else {
+						_cbFunc(false);
 					}
 				});
 			} else {
@@ -95,7 +138,15 @@ class SaveObject<T:SaveObjectData> {
 			}
 		} else {
 			if (saveAgent != null) {
-				saveAgent.saveData(_changedData, _onSaveData);
+				var now = Timer.stamp();
+				if (now - _lastTime >= saveInterval) {
+					_lastTime = now;
+					// trace("开始存档", _changedData);
+					saveAgent.saveData(_changedData, _onSaveData);
+				} else {
+					//
+					// trace("跳过存档", now - _lastTime, _changedData);
+				}
 			} else {
 				_cbFunc(true);
 			}
@@ -108,23 +159,20 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	public function updateUserData(userData:Dynamic):Void {
 		#if test
-		trace("updateUserData", userData);
+		// trace("updateUserData", userData);
 		#end
 		var keys = Reflect.fields(userData);
 		for (k in keys) {
 			var current:Dynamic = Reflect.getProperty(data, k);
 			if (current == null)
 				continue;
-			var value = Reflect.getProperty(userData, k);
-			#if test
-			trace("写入：", k, value);
-			#end
+			var value:Dynamic = Reflect.getProperty(userData, k);
 			if (current is SaveArrayDataContent) {
 				// 数组写入
 				var obj = Reflect.isObject(value) ? value : Json.parse(value);
 				var keys = Reflect.fields(obj);
 				for (k2 in keys) {
-					var v = Reflect.getProperty(obj, k2);
+					var v:Dynamic = Reflect.getProperty(obj, k2);
 					if (data.ce.exists(k)) {
 						var setValue:Float = v;
 						var cedata:SaveArrayDataContent<CEFloat> = current;
@@ -143,10 +191,10 @@ class SaveObject<T:SaveObjectData> {
 				cast(current, SaveStringDataContent).changed = true;
 			} else if (current is SaveDynamicDataContent) {
 				// 动态对象写入
-				var obj = Reflect.isObject(value) ? value : Json.parse(value);
+				var obj:Dynamic = Reflect.isObject(value) ? value : Json.parse(value);
 				var keys = Reflect.fields(obj);
 				for (k2 in keys) {
-					var v = Reflect.getProperty(obj, k2);
+					var v:Dynamic = Reflect.getProperty(obj, k2);
 					if (data.ce.exists(k)) {
 						var setValue:Float = v;
 						var cedata:SaveDynamicDataContent<CEFloat> = current;
@@ -171,6 +219,7 @@ class SaveObject<T:SaveObjectData> {
 		if (data != null) {
 			_changedData = {};
 		}
+		// Lib.setData("_changedData2", _changedData);
 		_cbFunc(data != null);
 	}
 
@@ -189,8 +238,9 @@ class SaveObject<T:SaveObjectData> {
 		_flush(changed, _id);
 		if (clearChangedData) {
 			_changedData = {};
+			// this.checkChangedData();
 		}
-		// trace("最后更改的数据：", changed);
+		// Lib.setData("_changedData2", _changedData);
 	}
 
 	/**
@@ -229,10 +279,6 @@ class SaveObject<T:SaveObjectData> {
 			var v = Reflect.getProperty(data, value);
 			_setLocal(value, v);
 		}
-		#if sys
-		File.saveContent("save.test", Json.stringify(_localSaveData));
-		#end
-		// trace("应该上报到网络服务器的数据：", _changedData);
 	}
 
 	private function _setLocal(key:String, value:Dynamic):Void {
@@ -262,12 +308,31 @@ class SaveObject<T:SaveObjectData> {
 		var storage = Browser.getLocalStorage();
 		if (storage != null) {
 			var saveid = _id + "." + key;
+			try {
+				var v = Reflect.getProperty(_localSaveData, key);
+				if (v is Float || v is String) {
+					storage.setItem(saveid, v);
+				} else
+					storage.setItem(saveid, Json.stringify(v));
+			} catch (e:haxe.Exception) {
+				trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+			}
+		}
+		#elseif cpp
+		var saveid = _id + "." + key;
+		var shared = openfl.net.SharedObject.getLocal(saveid);
+		try {
 			var v = Reflect.getProperty(_localSaveData, key);
 			if (v is Float || v is String) {
-				storage.setItem(saveid, v);
-			} else
-				storage.setItem(saveid, Json.stringify(v));
+				shared.data.data = v;
+			} else {
+				shared.data.data = Json.stringify(v);
+			}
+		} catch (e:haxe.Exception) {
+			trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
 		}
+		shared.flush();
+		// File.saveContent("save.test", Json.stringify(_localSaveData));
 		#end
 	}
 

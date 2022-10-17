@@ -26,16 +26,20 @@ class Reflect {
 	}
 
 	public static function getProperty(o:Dynamic, field:String):Dynamic {
+		if (field == null)
+			return null;
 		if (o is SaveDynamicDataContent) {
 			return R.getProperty(cast(o, SaveDynamicDataContent<Dynamic>).data, field);
 		}
 		return R.getProperty(o, field);
 	}
 
-	public static function setProperty(o:Dynamic, field:String, value:Dynamic):Void untyped {
+	public static function setProperty(o:Dynamic, field:String, value:Dynamic):Void {
+		if (field == null)
+			return;
 		if (o is SaveDynamicDataContent) {
 			cast(o, SaveDynamicDataContent<Dynamic>).setValue(field, value);
-			return value;
+			return;
 		}
 		return R.setProperty(o, field, value);
 	}

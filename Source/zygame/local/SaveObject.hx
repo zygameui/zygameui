@@ -1,5 +1,6 @@
 package zygame.local;
 
+import haxe.io.Error;
 import zygame.utils.Lib;
 import haxe.Timer;
 import zygame.local.SaveArrayData.SaveArrayDataContent;
@@ -96,19 +97,14 @@ class SaveObject<T:SaveObjectData> {
 	}
 
 	/**
-	 * 检测未同步的数据
-	 */
-	public function checkChangedData():Void {
-		_changedData = Lib.getData("_changedData", {});
-		// trace("checkChangedData", _changedData);
-	}
-
-	/**
 	 * 同步网络数据
 	 * @param cb 
 	 */
 	public function async(cb:Bool->Void = null):Void {
 		_cb = cb;
+		if (saveAgent == null) {
+			data.version = data.version.toFloat() + 1;
+		}
 		this.flush();
 		if (!_isReadData) {
 			if (saveAgent != null) {
@@ -121,13 +117,18 @@ class SaveObject<T:SaveObjectData> {
 						trace("同步线上数据：onlineVersion=", onlineVersion, "lacalVersion=", localVersion);
 						if (onlineVersion > this.data.version) {
 							updateUserData(data);
+							this.flush();
+							// 这里需要进行数据比对
+							_changedData = {};
+							this.checkOnlineUserData(data);
 						} else {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
+							this.flush();
+							// 这里需要进行数据比对
+							_changedData = {};
+							this.checkOnlineUserData(data);
 						}
-						this.flush();
-						// todo 这里的_changedData可能要做线上数据比对
-						checkChangedData();
 						_cbFunc(true);
 					} else {
 						_cbFunc(false);
@@ -142,6 +143,8 @@ class SaveObject<T:SaveObjectData> {
 				if (now - _lastTime >= saveInterval) {
 					_lastTime = now;
 					// trace("开始存档", _changedData);
+					data.version = data.version.toFloat() + 1;
+					_changedData.version = data.version.toFloat();
 					saveAgent.saveData(_changedData, _onSaveData);
 				} else {
 					//
@@ -150,6 +153,105 @@ class SaveObject<T:SaveObjectData> {
 			} else {
 				_cbFunc(true);
 			}
+		}
+	}
+
+	/**
+	 * 检查线上数据比对
+	 * @param data 
+	 */
+	public function checkOnlineUserData(data:Dynamic):Void {
+		var keys = Reflect.fields(this.data);
+		for (key in keys) {
+			// trace("比对", key);
+			var content:Dynamic = Reflect.getProperty(this.data, key);
+			var compareContent:Dynamic = Reflect.getProperty(data, key);
+			if (content == null || compareContent == null) {
+				continue;
+			}
+			if (content is SaveArrayDataContent) {
+				// 数组写入
+				var array:SaveArrayDataContent<Dynamic> = content;
+				// trace("数组比对：", compareContent, "\n本地储存：", array.data);
+				for (index => dataB in array.data) {
+					var id = Std.string(index);
+					var dataA = Reflect.getProperty(compareContent, id);
+					if (this.data.ce.exists(key)) {
+						var cedata:SaveArrayDataContent<CEFloat> = content;
+						var dataC = cedata.getValue(index).toFloat();
+						if (compare(dataA, dataC)) {
+							// trace("比对不一致，更新");
+							cedata.setValue(index, dataC);
+						}
+					} else {
+						// 比对不一致时，刷新
+						if (compare(dataA, dataB)) {
+							// trace("比对不一致，更新");
+							array.setValue(index, dataB);
+						}
+					}
+				}
+			} else if (content is SaveFloatDataContent) {
+				// 浮点写入
+				var contentData:SaveFloatDataContent = content;
+				if (compare(contentData.data.toFloat(), compareContent)) {
+					var value:Float = compareContent;
+					contentData.data = value;
+					contentData.changed = true;
+				}
+			} else if (content is SaveStringDataContent) {
+				// 字符串写入
+				var contentData:SaveStringDataContent = content;
+				if (compare(contentData.data, compareContent)) {
+					contentData.data = compareContent;
+					contentData.changed = true;
+				}
+			} else if (content is SaveDynamicDataContent) {
+				// 动态类型写入
+				var contentData:SaveDynamicDataContent<Dynamic> = content;
+				var dataKeys = Reflect.fields(contentData.data);
+				for (k in dataKeys) {
+					if (this.data.ce.exists(key)) {
+						var contentData2:SaveDynamicDataContent<CEFloat> = content;
+						var dataA = contentData2.getValue(k).toFloat();
+						var dataB = Reflect.getProperty(compareContent, k);
+						if (compare(dataA, dataB)) {
+							// trace("比对不一致，更新", k, dataA, dataB);
+							contentData2.setValue(k, dataA);
+						}
+					} else {
+						var dataA = Reflect.getProperty(contentData, k);
+						var dataB = Reflect.getProperty(compareContent, k);
+						if (compare(dataA, dataB)) {
+							// trace("比对不一致，更新", k, dataA, dataB);
+							contentData.setValue(k, dataA);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * 通用比对
+	 * @param dataA 
+	 * @param dataB 
+	 * @return Bool
+	 */
+	private function compare(dataA:Dynamic, dataB:Dynamic):Bool {
+		if (dataA == null && dataB != null) {
+			return true;
+		}
+		if (dataB == null && dataA != null) {
+			return true;
+		}
+		if (dataA == null && dataB == null) {
+			return false;
+		}
+		try {
+			return Json.stringify(dataA) != Json.stringify(dataB);
+		} catch (e:Error) {
+			return false;
 		}
 	}
 
@@ -238,9 +340,7 @@ class SaveObject<T:SaveObjectData> {
 		_flush(changed, _id);
 		if (clearChangedData) {
 			_changedData = {};
-			// this.checkChangedData();
 		}
-		// Lib.setData("_changedData2", _changedData);
 	}
 
 	/**
@@ -376,7 +476,6 @@ class SaveObjectData {
 			}
 		}
 		if (Reflect.fields(data).length > 0) {
-			version = version.toFloat() + 1;
 			lastUploadTime = Std.int(Date.now().getTime() / 1000);
 			Reflect.setProperty(data, "version", version.toFloat());
 			Reflect.setProperty(data, "lastUploadTime", lastUploadTime.toFloat());

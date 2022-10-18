@@ -4,6 +4,7 @@ package zygame.local;
  * 其他数据储存接口
  */
 interface ISave {
+
 	/**
 	 * 储存数据
 	 * @param data 储存的数据

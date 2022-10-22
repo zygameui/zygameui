@@ -29,6 +29,14 @@ class SoundChannelManager extends EventDispatcher {
 
 	private var _musicChannel:MusicChannel;
 
+	/**
+	 * 获取背景音乐渠道
+	 * @return MusicChannel
+	 */
+	public function getMusicChannel():MusicChannel {
+		return _musicChannel;
+	}
+
 	private var _effectChannel:Array<SoundChannel> = [];
 
 	/**

@@ -93,8 +93,9 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	public function invalidInterval():Void {
 		_lastTime = 0;
-		// trace("使存档时间间隔失效");
 	}
+
+	public var isNewVersion:Bool = false;
 
 	/**
 	 * 同步网络数据
@@ -102,9 +103,7 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	public function async(cb:Bool->Void = null):Void {
 		_cb = cb;
-		if (saveAgent == null) {
-			data.version = data.version.toFloat() + 1;
-		}
+		data.version = data.version.toFloat() + 1;
 		this.flush();
 		if (!_isReadData) {
 			if (saveAgent != null) {
@@ -115,12 +114,12 @@ class SaveObject<T:SaveObjectData> {
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "lacalVersion=", localVersion);
-						if (onlineVersion > this.data.version) {
+						isNewVersion = onlineVersion > this.data.version;
+						if (isNewVersion) {
 							updateUserData(data);
 							this.flush();
 							// 这里需要进行数据比对
 							_changedData = {};
-							this.checkOnlineUserData(data);
 						} else {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
@@ -143,9 +142,10 @@ class SaveObject<T:SaveObjectData> {
 				if (now - _lastTime >= saveInterval) {
 					_lastTime = now;
 					// trace("开始存档", _changedData);
-					data.version = data.version.toFloat() + 1;
 					_changedData.version = data.version.toFloat();
-					saveAgent.saveData(_changedData, _onSaveData);
+					Lib.nextFrameCall(() -> {
+						saveAgent.saveData(_changedData, _onSaveData);
+					});
 				} else {
 					//
 					// trace("跳过存档", now - _lastTime, _changedData);
@@ -166,8 +166,16 @@ class SaveObject<T:SaveObjectData> {
 			// trace("比对", key);
 			var content:Dynamic = Reflect.getProperty(this.data, key);
 			var compareContent:Dynamic = Reflect.getProperty(data, key);
-			if (content == null || compareContent == null) {
+			if (content == null) {
 				continue;
+			}
+			var allin = false;
+			if (compareContent == null) {
+				// 全部上报
+				#if test
+				trace("全上报:" + key, content);
+				#end
+				allin = true;
 			}
 			if (content is SaveArrayDataContent) {
 				// 数组写入
@@ -175,17 +183,17 @@ class SaveObject<T:SaveObjectData> {
 				// trace("数组比对：", compareContent, "\n本地储存：", array.data);
 				for (index => dataB in array.data) {
 					var id = Std.string(index);
-					var dataA = Reflect.getProperty(compareContent, id);
+					var dataA = allin ? null : Reflect.getProperty(compareContent, id);
 					if (this.data.ce.exists(key)) {
 						var cedata:SaveArrayDataContent<CEFloat> = content;
 						var dataC = cedata.getValue(index).toFloat();
-						if (compare(dataA, dataC)) {
+						if (allin || compare(dataA, dataC)) {
 							// trace("比对不一致，更新");
 							cedata.setValue(index, dataC);
 						}
 					} else {
 						// 比对不一致时，刷新
-						if (compare(dataA, dataB)) {
+						if (allin || compare(dataA, dataB)) {
 							// trace("比对不一致，更新");
 							array.setValue(index, dataB);
 						}
@@ -194,16 +202,13 @@ class SaveObject<T:SaveObjectData> {
 			} else if (content is SaveFloatDataContent) {
 				// 浮点写入
 				var contentData:SaveFloatDataContent = content;
-				if (compare(contentData.data.toFloat(), compareContent)) {
-					var value:Float = compareContent;
-					contentData.data = value;
+				if (allin || compare(contentData.data.toFloat(), compareContent)) {
 					contentData.changed = true;
 				}
 			} else if (content is SaveStringDataContent) {
 				// 字符串写入
 				var contentData:SaveStringDataContent = content;
-				if (compare(contentData.data, compareContent)) {
-					contentData.data = compareContent;
+				if (allin || compare(contentData.data, compareContent)) {
 					contentData.changed = true;
 				}
 			} else if (content is SaveDynamicDataContent) {
@@ -214,15 +219,15 @@ class SaveObject<T:SaveObjectData> {
 					if (this.data.ce.exists(key)) {
 						var contentData2:SaveDynamicDataContent<CEFloat> = content;
 						var dataA = contentData2.getValue(k).toFloat();
-						var dataB = Reflect.getProperty(compareContent, k);
-						if (compare(dataA, dataB)) {
+						var dataB = allin ? null : Reflect.getProperty(compareContent, k);
+						if (allin || compare(dataA, dataB)) {
 							// trace("比对不一致，更新", k, dataA, dataB);
 							contentData2.setValue(k, dataA);
 						}
 					} else {
 						var dataA = Reflect.getProperty(contentData, k);
-						var dataB = Reflect.getProperty(compareContent, k);
-						if (compare(dataA, dataB)) {
+						var dataB = allin ? null : Reflect.getProperty(compareContent, k);
+						if (allin || compare(dataA, dataB)) {
 							// trace("比对不一致，更新", k, dataA, dataB);
 							contentData.setValue(k, dataA);
 						}

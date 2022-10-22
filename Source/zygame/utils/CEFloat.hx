@@ -159,11 +159,11 @@ class CEData {
 	function get_value():Float {
 		if (sign != values.join(""))
 			throw "游戏内存被修改";
-		return Std.parseFloat(sign);
+		return Std.parseFloat(sign.substr(1));
 	}
 
 	function set_value(value:Float):Float {
-		sign = Std.string(value);
+		sign = "s" + Std.string(value);
 		values = sign.split("");
 		return value;
 	}

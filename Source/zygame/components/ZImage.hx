@@ -17,6 +17,7 @@ import openfl.geom.Rectangle;
  * <ZImage src="img_png"/>
  * ```
  */
+@:access(zygame.display.Image)
 class ZImage extends DataProviderComponent {
 	private var isDispose:Bool = false;
 
@@ -80,9 +81,19 @@ class ZImage extends DataProviderComponent {
 	private function updateImageScaleWidthAndHeight():Void {
 		if (scaleWidth == 0 && scaleHeight == 0)
 			return;
-		var w = (scaleWidth == 0 ? this.width : scaleWidth) / this.display.width;
-		var h = (scaleHeight == 0 ? this.height : scaleHeight) / this.display.height;
-		this.scale(Math.min(w, h));
+		if (this.display.isBitmapDataDraw) {
+			if (this.display._bitmap != null) {
+				var w = (scaleWidth == 0 ? this.width : scaleWidth) / this.display._bitmap.bitmapData.width;
+				var h = (scaleHeight == 0 ? this.height : scaleHeight) / this.display._bitmap.bitmapData.height;
+				this.scale(Math.min(w, h));
+			}
+		} else {
+			if (this.display._curFrame != null) {
+				var w = (scaleWidth == 0 ? this.width : scaleWidth) / this.display._curFrame.width;
+				var h = (scaleHeight == 0 ? this.height : scaleHeight) / this.display._curFrame.height;
+				this.scale(Math.min(w, h));
+			}
+		}
 	}
 
 	override public function updateComponents():Void {

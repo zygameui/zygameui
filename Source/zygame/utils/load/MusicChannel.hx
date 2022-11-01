@@ -1,5 +1,6 @@
 package zygame.utils.load;
 
+import openfl.events.Event;
 import openfl.media.SoundTransform;
 #if qq
 import qq.media.SoundChannel;
@@ -16,7 +17,16 @@ class MusicChannel {
 
 	public function new(channel:SoundChannel) {
 		_channel = channel;
+		_channel.addEventListener(Event.SOUND_COMPLETE, function(e) {
+			if (onSoundComplete != null)
+				onSoundComplete();
+		});
 	}
+
+	/**
+	 * 当音频播放完成后
+	 */
+	public var onSoundComplete:Void->Void;
 
 	public function stop():Void {
 		if (_channel != null)
@@ -32,7 +42,7 @@ class MusicChannel {
 	 */
 	public function setVolume(volume:Float):Void {
 		transform.volume = volume;
-		#if weixin
+		#if (wechat)
 		@:privateAccess _channel._sound.volume = volume;
 		#else
 		_channel.soundTransform = transform;

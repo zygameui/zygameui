@@ -22,7 +22,9 @@ abstract SaveStringData(SaveStringDataContent) to SaveStringDataContent from Sav
 	 * @return String
 	 */
 	@:to public function toString():String {
-		return this.data;
+		if (this != null)
+			return this.data;
+		return null;
 	}
 
 	/**
@@ -30,7 +32,9 @@ abstract SaveStringData(SaveStringDataContent) to SaveStringDataContent from Sav
 	 * @return String
 	 */
 	@:to public function toDynamic():Dynamic {
-		return this.data;
+		if (this != null)
+			return this.data;
+		return null;
 	}
 }
 

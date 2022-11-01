@@ -1,11 +1,13 @@
 package zygame.local;
 
+import haxe.Exception;
 import haxe.io.Error;
 import zygame.utils.Lib;
 import haxe.Timer;
 import zygame.local.SaveArrayData.SaveArrayDataContent;
 import zygame.utils.CEFloat;
 #if js
+import js.html.Console;
 import js.Browser;
 #end
 import haxe.Json;
@@ -86,8 +88,6 @@ class SaveObject<T:SaveObjectData> {
 		return this;
 	}
 
-	private var _cb:Bool->Void;
-
 	/**
 	 * 无效间隔操作
 	 */
@@ -102,7 +102,6 @@ class SaveObject<T:SaveObjectData> {
 	 * @param cb 
 	 */
 	public function async(cb:Bool->Void = null):Void {
-		_cb = cb;
 		data.version = data.version.toFloat() + 1;
 		this.flush();
 		if (!_isReadData) {
@@ -115,6 +114,7 @@ class SaveObject<T:SaveObjectData> {
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "lacalVersion=", localVersion);
 						isNewVersion = onlineVersion > this.data.version;
+						// try {
 						if (isNewVersion) {
 							updateUserData(data);
 							this.flush();
@@ -128,13 +128,20 @@ class SaveObject<T:SaveObjectData> {
 							_changedData = {};
 							this.checkOnlineUserData(data);
 						}
-						_cbFunc(true);
+						// } catch (e:Exception) {
+						// 	#if html5
+						// 	Console.error(e.message, e.stack);
+						// 	#else
+						// 	trace("登陆数据发生错误：", e.message, e.stack);
+						// 	#end
+						// }
+						_cbFunc(cb, true);
 					} else {
-						_cbFunc(false);
+						_cbFunc(cb, false);
 					}
 				});
 			} else {
-				_cbFunc(true);
+				_cbFunc(cb, true);
 			}
 		} else {
 			if (saveAgent != null) {
@@ -150,8 +157,9 @@ class SaveObject<T:SaveObjectData> {
 					//
 					// trace("跳过存档", now - _lastTime, _changedData);
 				}
+				_cbFunc(cb, true);
 			} else {
-				_cbFunc(true);
+				_cbFunc(cb, true);
 			}
 		}
 	}
@@ -314,10 +322,9 @@ class SaveObject<T:SaveObjectData> {
 		this.data.updateUserData(userData);
 	}
 
-	private function _cbFunc(bool:Bool):Void {
-		if (_cb != null) {
-			_cb(bool);
-			_cb = null;
+	private function _cbFunc(cb:Bool->Void, bool:Bool):Void {
+		if (cb != null) {
+			cb(bool);
 		}
 	}
 
@@ -327,7 +334,6 @@ class SaveObject<T:SaveObjectData> {
 			_changedData = {};
 		}
 		// Lib.setData("_changedData2", _changedData);
-		_cbFunc(data != null);
 	}
 
 	/**

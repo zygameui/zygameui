@@ -35,6 +35,8 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Float
 	 */
 	@:to public function toFloat():Float {
+		if (this == null)
+			return 0;
 		return this.value;
 	}
 
@@ -43,6 +45,8 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Int
 	 */
 	@:to public function toInt():Int {
+		if (this == null)
+			return 0;
 		return Std.int(this.value);
 	}
 
@@ -51,6 +55,8 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return String
 	 */
 	@:to public function toString():String {
+		if (this == null)
+			return null;
 		return this.toString();
 	}
 

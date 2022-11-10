@@ -66,6 +66,7 @@ class SaveObject<T:SaveObjectData> {
 				var id = _id + "." + k;
 				var value = storage.getItem(id);
 				if (value != null) {
+					value = Encryption.decode(value);
 					Reflect.setProperty(localData, k, value);
 				}
 			}
@@ -422,9 +423,9 @@ class SaveObject<T:SaveObjectData> {
 			try {
 				var v = Reflect.getProperty(_localSaveData, key);
 				if (v is Float || v is String) {
-					storage.setItem(saveid, v);
+					storage.setItem(saveid, Encryption.encode(v));
 				} else
-					storage.setItem(saveid, Json.stringify(v));
+					storage.setItem(saveid, Encryption.encode(Json.stringify(v)));
 			} catch (e:haxe.Exception) {
 				trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
 			}

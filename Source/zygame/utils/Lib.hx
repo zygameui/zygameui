@@ -314,7 +314,9 @@ class Lib {
 	 * 获取渠道名
 	 */
 	public static function getChannel():String {
-		#if g4399
+		#if m4399web
+		return "4399H5";
+		#elseif g4399
 		return "g4399";
 		#elseif bili
 		return "bilibili";

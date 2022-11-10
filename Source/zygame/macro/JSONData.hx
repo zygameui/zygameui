@@ -1,5 +1,6 @@
 package zygame.macro;
 
+import haxe.Exception;
 import zygame.utils.StringUtils;
 import haxe.macro.Context;
 import haxe.macro.Expr;

@@ -665,7 +665,7 @@ class ZLabel extends DataProviderComponent {
 			this.updateComponents();
 		else {
 			#if html5
-			HTML5TextInput.closeInput();
+			HTML5TextInput.closeInput(this);
 			#end
 			// ZLabelAction.dipose();
 		}

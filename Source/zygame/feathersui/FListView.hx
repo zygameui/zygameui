@@ -36,6 +36,12 @@ class FListView extends ListView {
 		return v;
 	}
 
+	// 允许模拟触摸
+	override function createScroller() {
+		super.createScroller();
+		@:privateAccess this.scroller.simulateTouch = true;
+	}
+
 	public function new() {
 		super();
 		// this.allowScrollClickItemRenderer = true;

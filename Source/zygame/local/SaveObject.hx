@@ -50,6 +50,11 @@ class SaveObject<T:SaveObjectData> {
 
 	private var _isReadData:Bool = false;
 
+	/**
+	 * 丢失的存档key，当发生丢失的存档key，则从线上存档中读取
+	 */
+	private var lossKey:Array<String> = [];
+
 	public function new(id:String) {
 		this._id = id;
 	}
@@ -68,6 +73,10 @@ class SaveObject<T:SaveObjectData> {
 				if (value != null) {
 					value = Encryption.decode(value);
 					Reflect.setProperty(localData, k, value);
+				} else {
+					// Key丢失
+					// trace("存档key丢失：", id);
+					lossKey.push(k);
 				}
 			}
 			this.updateUserData(localData);
@@ -82,6 +91,10 @@ class SaveObject<T:SaveObjectData> {
 			if (value != null) {
 				trace("本地数据：", k, value);
 				Reflect.setProperty(localData, k, value);
+			} else {
+				// Key丢失
+				// trace("存档key丢失：", id);
+				lossKey.push(k);
 			}
 		}
 		this.updateUserData(localData);
@@ -93,7 +106,7 @@ class SaveObject<T:SaveObjectData> {
 	 * 无效间隔操作
 	 */
 	public function invalidInterval():Void {
-		_lastTime = 0;
+		_lastTime = -saveInterval;
 	}
 
 	public var isNewVersion:Bool = false;
@@ -104,7 +117,7 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	public function async(cb:Bool->Void = null):Void {
 		data.version = data.version.toFloat() + 1;
-		this.flush();
+		this.flush(false);
 		if (!_isReadData) {
 			if (saveAgent != null) {
 				saveAgent.readData(function(data, err) {
@@ -113,7 +126,7 @@ class SaveObject<T:SaveObjectData> {
 						// trace("用户数据读取成功：", data);
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
-						trace("同步线上数据：onlineVersion=", onlineVersion, "lacalVersion=", localVersion);
+						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);
 						isNewVersion = onlineVersion > this.data.version;
 						// try {
 						if (isNewVersion) {
@@ -121,6 +134,7 @@ class SaveObject<T:SaveObjectData> {
 							this.flush();
 							// 这里需要进行数据比对
 							_changedData = {};
+							lossKey = [];
 						} else {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
@@ -128,6 +142,10 @@ class SaveObject<T:SaveObjectData> {
 							// 这里需要进行数据比对
 							_changedData = {};
 							this.checkOnlineUserData(data);
+							// 这里做立即上报处理
+							trace("立即同步版本数据");
+							this.invalidInterval();
+							async();
 						}
 						// } catch (e:Exception) {
 						// 	#if html5
@@ -152,13 +170,18 @@ class SaveObject<T:SaveObjectData> {
 					// trace("开始存档", _changedData);
 					_changedData.version = data.version.toFloat();
 					Lib.nextFrameCall(() -> {
-						saveAgent.saveData(_changedData, _onSaveData);
+						saveAgent.saveData(_changedData, (data) -> {
+							if (data != null)
+								_cbFunc(cb, true);
+							else {
+								_cbFunc(cb, false);
+							}
+							_onSaveData(data);
+						});
 					});
 				} else {
-					//
-					// trace("跳过存档", now - _lastTime, _changedData);
+					_cbFunc(cb, false);
 				}
-				_cbFunc(cb, true);
 			} else {
 				_cbFunc(cb, true);
 			}
@@ -170,6 +193,7 @@ class SaveObject<T:SaveObjectData> {
 	 * @param data 
 	 */
 	public function checkOnlineUserData(data:Dynamic):Void {
+		// trace("开始处理lossKey:", lossKey);
 		var keys = Reflect.fields(this.data);
 		for (key in keys) {
 			// trace("比对", key);
@@ -177,6 +201,13 @@ class SaveObject<T:SaveObjectData> {
 			var compareContent:Dynamic = Reflect.getProperty(data, key);
 			if (content == null) {
 				continue;
+			}
+			if (lossKey.indexOf(key) != -1) {
+				// 丢失key还原
+				var obj = {};
+				Reflect.setProperty(obj, key, compareContent);
+				// trace("key还原：", key, obj);
+				this.updateUserData(obj);
 			}
 			var allin = false;
 			if (compareContent == null) {
@@ -211,6 +242,9 @@ class SaveObject<T:SaveObjectData> {
 			} else if (content is SaveFloatDataContent) {
 				// 浮点写入
 				var contentData:SaveFloatDataContent = content;
+				#if cpp
+				// trace("比对：", key, contentData.data.toFloat(), compareContent);
+				#end
 				if (allin || compare(contentData.data.toFloat(), compareContent)) {
 					contentData.changed = true;
 				}
@@ -225,6 +259,7 @@ class SaveObject<T:SaveObjectData> {
 				var contentData:SaveDynamicDataContent<Dynamic> = content;
 				var dataKeys = Reflect.fields(contentData.data);
 				for (k in dataKeys) {
+					// trace("开始比对：", key, k);
 					if (this.data.ce.exists(key)) {
 						var contentData2:SaveDynamicDataContent<CEFloat> = content;
 						var dataA = contentData2.getValue(k).toFloat();
@@ -244,6 +279,7 @@ class SaveObject<T:SaveObjectData> {
 				}
 			}
 		}
+		lossKey = [];
 	}
 
 	/**
@@ -274,9 +310,6 @@ class SaveObject<T:SaveObjectData> {
 	 * @param userData 
 	 */
 	public function updateUserData(userData:Dynamic):Void {
-		#if test
-		// trace("updateUserData", userData);
-		#end
 		var keys = Reflect.fields(userData);
 		for (k in keys) {
 			var current:Dynamic = Reflect.getProperty(data, k);
@@ -423,7 +456,7 @@ class SaveObject<T:SaveObjectData> {
 			try {
 				var v = Reflect.getProperty(_localSaveData, key);
 				if (v is Float || v is String) {
-					storage.setItem(saveid, Encryption.encode(v));
+					storage.setItem(saveid, Encryption.encode(Std.string(v)));
 				} else
 					storage.setItem(saveid, Encryption.encode(Json.stringify(v)));
 			} catch (e:haxe.Exception) {

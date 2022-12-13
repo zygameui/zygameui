@@ -364,10 +364,39 @@ class SaveObject<T:SaveObjectData> {
 
 	private function _onSaveData(data:Dynamic):Void {
 		// todo 这里要处理变更的数据，同步
+		#if test
+		trace("存档成功：", data, _changedData);
+		#end
 		if (data != null) {
-			_changedData = {};
+			// _changedData = {};
+			// 这里要做存档比对，然后将已上报的内容删除
+			var keys = Reflect.fields(data);
+			var checkKeys = [];
+			for (key in keys) {
+				var p = key.indexOf(".");
+				if (p != -1) {
+					// 复合key
+					var arr = key.split(".");
+					var setData = Reflect.getProperty(_changedData, arr[0]);
+					if (setData != null) {
+						if (checkKeys.indexOf(arr[0]) == -1) {
+							checkKeys.push(arr[0]);
+						}
+						Reflect.deleteField(setData, arr[1]);
+					}
+				} else {
+					// 单key
+					Reflect.deleteField(_changedData, key);
+				}
+			}
+			// 删除已空的复合key
+			for (key in checkKeys) {
+				var data = Reflect.getProperty(_changedData, key);
+				if (data != null && Reflect.fields(data).length == 0) {
+					Reflect.deleteField(_changedData, key);
+				}
+			}
 		}
-		// Lib.setData("_changedData2", _changedData);
 	}
 
 	/**

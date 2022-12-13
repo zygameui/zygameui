@@ -1,5 +1,7 @@
 package zygame.utils;
 
+import openfl.display.TileContainer;
+import openfl.display.Tilemap;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 
@@ -26,4 +28,5 @@ class DisplayTools {
 		}
 		return true;
 	}
+
 }

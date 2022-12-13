@@ -397,6 +397,12 @@ class ZLabel extends DataProviderComponent {
 
 		// 刷新内容
 		updateComponents();
+
+		#if html5
+		if(HTML5TextInput.zinput == this)
+			HTML5TextInput.openInput(this);
+		#end
+
 		return value;
 	}
 

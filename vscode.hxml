@@ -20,6 +20,7 @@
 -D zygame
 -D api
 -D openfl_swf
+-D cebytes
 -cp src
 -cp test
 -cp openfl9-source

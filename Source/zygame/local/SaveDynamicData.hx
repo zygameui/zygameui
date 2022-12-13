@@ -39,14 +39,6 @@ import zygame.utils.CEFloat.CEData;
 	 * 转为String
 	 * @return String
 	 */
-	@:to public function toString():String {
-		return Std.string(this.data);
-	}
-
-	/**
-	 * 转为String
-	 * @return String
-	 */
 	public function toData():Dynamic {
 		return this.data;
 	}

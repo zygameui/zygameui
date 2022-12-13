@@ -26,6 +26,11 @@ class ZImage extends DataProviderComponent {
 	private var _shader:Shader;
 
 	/**
+	 * 默认数据
+	 */
+	public var defaultDataProvider:Dynamic = null;
+
+	/**
 	 * ZImage的显示所使用的显示基类对象
 	 */
 	public var display:Image;
@@ -139,6 +144,10 @@ class ZImage extends DataProviderComponent {
 								onBitmapDataUpdate();
 								this.shader = _shader;
 								isAysn = true;
+							}).onError((data) -> {
+								if (defaultDataProvider != this.dataProvider) {
+									this.dataProvider = defaultDataProvider;
+								}
 							});
 						}
 					}

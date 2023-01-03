@@ -355,6 +355,8 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 * @return Float
 	 */
 	public function getAspectRatio():Float {
+		if (Start.current.stage.stageWidth > Start.current.stage.stageHeight)
+			return Start.current.stage.stageHeight / Start.current.stage.stageWidth;
 		return Start.current.stage.stageWidth / Start.current.stage.stageHeight;
 	}
 

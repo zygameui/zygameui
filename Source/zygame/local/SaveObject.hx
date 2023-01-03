@@ -89,7 +89,6 @@ class SaveObject<T:SaveObjectData> {
 			var shared = openfl.net.SharedObject.getLocal(id);
 			var value = shared.data.data;
 			if (value != null) {
-				trace("本地数据：", k, value);
 				Reflect.setProperty(localData, k, value);
 			} else {
 				// Key丢失
@@ -122,19 +121,25 @@ class SaveObject<T:SaveObjectData> {
 			if (saveAgent != null) {
 				saveAgent.readData(function(data, err) {
 					if (err == null) {
-						_isReadData = true;
+						// #if test
 						// trace("用户数据读取成功：", data);
+						// return;
+						// #end
+						_isReadData = true;
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);
 						isNewVersion = onlineVersion > this.data.version;
-						// try {
+						if (onlineVersion == 0) {
+							isNewVersion = true;
+						}
 						if (isNewVersion) {
 							updateUserData(data);
 							this.flush();
 							// 这里需要进行数据比对
 							_changedData = {};
 							lossKey = [];
+							_cbFunc(cb, true);
 						} else {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
@@ -143,18 +148,13 @@ class SaveObject<T:SaveObjectData> {
 							_changedData = {};
 							this.checkOnlineUserData(data);
 							// 这里做立即上报处理
-							trace("立即同步版本数据");
 							this.invalidInterval();
-							async();
+							this.flush(false);
+							#if test
+							trace("立即同步版本数据", _changedData);
+							#end
+							this.saveSaveAgent(cb);
 						}
-						// } catch (e:Exception) {
-						// 	#if html5
-						// 	Console.error(e.message, e.stack);
-						// 	#else
-						// 	trace("登陆数据发生错误：", e.message, e.stack);
-						// 	#end
-						// }
-						_cbFunc(cb, true);
 					} else {
 						_cbFunc(cb, false);
 					}
@@ -163,28 +163,31 @@ class SaveObject<T:SaveObjectData> {
 				_cbFunc(cb, true);
 			}
 		} else {
-			if (saveAgent != null) {
-				var now = Timer.stamp();
-				if (now - _lastTime >= saveInterval) {
-					_lastTime = now;
-					// trace("开始存档", _changedData);
-					_changedData.version = data.version.toFloat();
-					Lib.nextFrameCall(() -> {
-						saveAgent.saveData(_changedData, (data) -> {
-							if (data != null)
-								_cbFunc(cb, true);
-							else {
-								_cbFunc(cb, false);
-							}
-							_onSaveData(data);
-						});
+			saveSaveAgent(cb);
+		}
+	}
+
+	private function saveSaveAgent(cb:Bool->Void):Void {
+		if (saveAgent != null) {
+			var now = Timer.stamp();
+			if (now - _lastTime >= saveInterval) {
+				_lastTime = now;
+				_changedData.version = data.version.toFloat();
+				Lib.nextFrameCall(() -> {
+					saveAgent.saveData(_changedData, (data) -> {
+						if (data != null)
+							_cbFunc(cb, true);
+						else {
+							_cbFunc(cb, false);
+						}
+						_onSaveData(data);
 					});
-				} else {
-					_cbFunc(cb, false);
-				}
+				});
 			} else {
-				_cbFunc(cb, true);
+				_cbFunc(cb, false);
 			}
+		} else {
+			_cbFunc(cb, true);
 		}
 	}
 
@@ -212,9 +215,6 @@ class SaveObject<T:SaveObjectData> {
 			var allin = false;
 			if (compareContent == null) {
 				// 全部上报
-				#if test
-				trace("全上报:" + key, content);
-				#end
 				allin = true;
 			}
 			if (content is SaveArrayDataContent) {
@@ -409,7 +409,7 @@ class SaveObject<T:SaveObjectData> {
 	 * @param clearChangedData 是否清空`changedData`数据，这意味着网络存档不会知道修改了什么内容
 	 */
 	public function flush(clearChangedData:Bool = false):Void {
-		var changed = {};
+		var changed:Dynamic = {};
 		this.data.flush(changed);
 		_flush(changed, _id);
 		if (clearChangedData) {

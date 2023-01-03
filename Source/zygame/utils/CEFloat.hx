@@ -162,8 +162,6 @@ class CEData {
 
 	public var value(get, set):Float;
 
-	public var values:Array<String> = [];
-
 	public function toString():String {
 		return Std.string(value);
 	}

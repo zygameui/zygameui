@@ -19,8 +19,9 @@ class JSONParser extends ParserBase {
 			try {
 				this.finalAssets(JSON, Json.parse(text), 1);
 			} catch (e:Exception) {
+				var msg = haxe.CallStack.toString(haxe.CallStack.exceptionStack());
 				trace("错误信息：", e.message);
-				trace("错误内容：", text);
+				trace("错误内容：", msg);
 				// throw "无法正常解析" + getName() + ".json";
 				this.sendError("无法正常解析" + getName() + ".json");
 			}

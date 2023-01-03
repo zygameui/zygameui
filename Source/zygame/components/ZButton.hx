@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.events.TouchEvent;
 import zygame.media.SoundChannelManager;
 import openfl.events.MouseEvent;
 import zygame.components.base.ToggleButton;
@@ -81,6 +82,28 @@ class ZButton extends ToggleButton {
 	public function new() {
 		super();
 		this.addEventListener("click", _clickCall);
+	}
+
+	/**
+	 * 使用`TouchEvent`事件触发
+	 */
+	public function useTouchEvent():Void {
+		this.removeEventListener("click", _clickCall);
+		this.removeEventListener(TouchEvent.TOUCH_BEGIN, _touchBegin);
+		this.removeEventListener(TouchEvent.TOUCH_END, _touchEnd);
+	}
+
+	private var _touch = false;
+
+	private function _touchBegin(e:TouchEvent):Void {
+		_touch = true;
+	}
+
+	private function _touchEnd(e:TouchEvent):Void {
+		if (_touch) {
+			_clickCall(null);
+			_touch = false;
+		}
 	}
 
 	/**

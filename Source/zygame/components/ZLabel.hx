@@ -399,7 +399,7 @@ class ZLabel extends DataProviderComponent {
 		updateComponents();
 
 		#if html5
-		if(HTML5TextInput.zinput == this)
+		if (HTML5TextInput.zinput == this)
 			HTML5TextInput.openInput(this);
 		#end
 
@@ -603,7 +603,10 @@ class ZLabel extends DataProviderComponent {
 	 * @param blur 描边的厚度，默认建议使用1
 	 */
 	public function stroke(color:UInt, blur:Float = 1):Void {
-		this.getDisplay().shader = new zygame.shader.StrokeShader(blur, color);
+		if (blur == 0) {
+			this.getDisplay().shader = null;
+		} else
+			this.getDisplay().shader = new zygame.shader.StrokeShader(blur, color);
 	}
 
 	/**

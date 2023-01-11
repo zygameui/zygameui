@@ -141,6 +141,10 @@ abstract CEFloat(CEData) to CEData from CEData {
 	@:op(A == B) static function xd(a:CEFloat, b:CEFloat):Bool {
 		return a.toFloat() == b.toFloat();
 	};
+
+	@:op(A != B) static function bdy(a:CEFloat, b:CEFloat):Bool {
+		return a.toFloat() != b.toFloat();
+	};
 }
 
 #if cebytes

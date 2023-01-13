@@ -23,6 +23,11 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	public var virtualTouchRadius:Int = 300;
 
 	/**
+	 * 是否固定滑动的区域点，默认为`fales`，需要时，请设置为`true`
+	 */
+	public var fixedOrignPoint:Bool = false;
+
+	/**
 	 * 移动时，原点最大半径
 	 */
 	public var virtualTouchOrginMaxRadius:Int = 400;
@@ -192,6 +197,10 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 
 	private var _touchEventId:Int = -1;
 
+	public function getTouchEventId():Int {
+		return _touchEventId;
+	}
+
 	private function onKeyMouseDown(e:#if jsapi Dynamic #else Event #end):Void {
 		if (_touchEvent && _touchEventId != -1)
 			return;
@@ -281,7 +290,7 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		// 当虚拟机超出点击有效范围后，需要重新计算原点
 		var len = Point.distance(_touchPos, _orignPos);
 		var radian = Lib.getRadianByPos(_orignPos.x, _orignPos.y, _touchPos.x, _touchPos.y);
-		if (len > virtualTouchRadius) {
+		if (len > virtualTouchRadius && !fixedOrignPoint) {
 			// 弧度
 			var len2 = len - virtualTouchRadius;
 			_orignPos.x += Math.cos(radian) * len2;

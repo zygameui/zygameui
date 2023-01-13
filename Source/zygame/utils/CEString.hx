@@ -26,10 +26,31 @@ abstract CEString(CEStringData) to CEStringData from CEStringData {
 	}
 
 	/**
+	 * 接收String值
+	 * @param s 
+	 */
+	@:from
+	static public function fromDynamic(s:Dynamic) {
+		if (s == null)
+			return null;
+		return new CEString(cast s);
+	}
+
+	/**
 	 * 转为String
 	 * @return String
 	 */
 	@:to public function toString():String {
+		if (this == null)
+			return null;
+		return this.toString();
+	}
+
+	/**
+	 * 转为String
+	 * @return String
+	 */
+	@:to public function toDynamic():Dynamic {
 		if (this == null)
 			return null;
 		return this.toString();

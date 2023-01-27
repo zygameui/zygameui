@@ -369,34 +369,34 @@ class SaveObject<T:SaveObjectData> {
 		#end
 		if (data != null) {
 			// 回退版本
-			_changedData = {};
-			// // 这里要做存档比对，然后将已上报的内容删除
-			// var keys = Reflect.fields(data);
-			// var checkKeys = [];
-			// for (key in keys) {
-			// 	var p = key.indexOf(".");
-			// 	if (p != -1) {
-			// 		// 复合key
-			// 		var arr = key.split(".");
-			// 		var setData = Reflect.getProperty(_changedData, arr[0]);
-			// 		if (setData != null) {
-			// 			if (checkKeys.indexOf(arr[0]) == -1) {
-			// 				checkKeys.push(arr[0]);
-			// 			}
-			// 			Reflect.deleteField(setData, arr[1]);
-			// 		}
-			// 	} else {
-			// 		// 单key
-			// 		Reflect.deleteField(_changedData, key);
-			// 	}
-			// }
-			// // 删除已空的复合key
-			// for (key in checkKeys) {
-			// 	var data = Reflect.getProperty(_changedData, key);
-			// 	if (data != null && Reflect.fields(data).length == 0) {
-			// 		Reflect.deleteField(_changedData, key);
-			// 	}
-			// }
+			// _changedData = {};
+			// 这里要做存档比对，然后将已上报的内容删除
+			var keys = Reflect.fields(data);
+			var checkKeys = [];
+			for (key in keys) {
+				var p = key.indexOf(".");
+				if (p != -1) {
+					// 复合key
+					var arr = key.split(".");
+					var setData = Reflect.getProperty(_changedData, arr[0]);
+					if (setData != null) {
+						if (checkKeys.indexOf(arr[0]) == -1) {
+							checkKeys.push(arr[0]);
+						}
+						Reflect.deleteField(setData, arr[1]);
+					}
+				} else {
+					// 单key
+					Reflect.deleteField(_changedData, key);
+				}
+			}
+			// 删除已空的复合key
+			for (key in checkKeys) {
+				var data = Reflect.getProperty(_changedData, key);
+				if (data != null && Reflect.fields(data).length == 0) {
+					Reflect.deleteField(_changedData, key);
+				}
+			}
 		}
 	}
 

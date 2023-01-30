@@ -930,10 +930,18 @@ class ZBuilder {
 					base = Type.resolveClass(className);
 				} else
 					base = classMaps.get(className);
+				#if igonre_extends_error
+				if (base == null) {
+					ui = new ZBox();
+				}else{
+					ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
+				}
+				#else
 				if (base == null) {
 					throw "Extends Class name " + className + " is not find!";
 				}
 				ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
+				#end
 			} else
 				throw "Class name " + className + " is not define xml assets!";
 		} else {

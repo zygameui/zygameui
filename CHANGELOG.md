@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 13.0.0
+- [新增] 新增`ZScroll`属性`disableMoveTouchEvent`，设置为`true`可阻拦点击事件。
+
 ### 12.0.1
 - [改进] 改进onInit触发会在addChild之后发生。
 - [新增] 新增`getStage`方法直接获得舞台对象。

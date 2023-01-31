@@ -185,6 +185,7 @@ class ZScroll extends DataProviderComponent {
 	private var _cutRect2:Rectangle = new Rectangle();
 
 	// private var _cutSpr:ZQuad;
+
 	/**
 	 * 获取裁剪区域
 	 */
@@ -289,6 +290,13 @@ class ZScroll extends DataProviderComponent {
 		_moveMath = 0;
 	}
 
+	/**
+	 * 是否禁止在移动的时候允许触发点击事件，默认为`false`，当设置为`true`时，容器在滑动过程中将不再触发点击事件。
+	 */
+	public var disableMoveTouchEvent:Bool = false;
+
+	private var _disableMoveTouchQuad:ZQuad;
+
 	override public function onTouchBegin(touch:TouchEvent):Void {
 		super.onTouchBegin(touch);
 		if (this.mouseX < 0 || this.mouseY < 0 || this.mouseX > this.width || this.mouseY > this.height)
@@ -344,6 +352,15 @@ class ZScroll extends DataProviderComponent {
 			_lastMovePos.y = this.mouseY;
 			updateDisableSuperscreenEasing();
 			onScrolling(_v, _h);
+			if (getIsMoveing()) {
+				if (disableMoveTouchEvent && _disableMoveTouchQuad == null) {
+					_disableMoveTouchQuad = new ZQuad();
+					super.addChildAt(_disableMoveTouchQuad, this.numChildren);
+					_disableMoveTouchQuad.width = this.width;
+					_disableMoveTouchQuad.height = this.height;
+					_disableMoveTouchQuad.alpha = 0;
+				}
+			}
 		}
 	}
 
@@ -419,6 +436,10 @@ class ZScroll extends DataProviderComponent {
 			onScrolling(_v, _h);
 		} else {
 			_moveMath -= _moveMath > 0 ? 1 : 0;
+			if (!_isMove && _disableMoveTouchQuad != null) {
+				_disableMoveTouchQuad.parent.removeChild(_disableMoveTouchQuad);
+				_disableMoveTouchQuad = null;
+			}
 		}
 
 		updateDisableSuperscreenEasing();

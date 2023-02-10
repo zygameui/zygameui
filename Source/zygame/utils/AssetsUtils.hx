@@ -341,8 +341,17 @@ class BytesLoader extends BaseLoader {
 	#end
 }
 
+typedef BitmapDataLoaderCall = {
+	onCompleteCall:BitmapData->Void
+}
+
 @:access(lime.graphics.Image)
 class BitmapDataLoader extends BaseLoader {
+	/**
+	 * 重复任务的侦听回调支持
+	 */
+	private static var __listeners:Map<String, Array<BitmapDataLoaderCall>> = [];
+
 	public var isAtf:Bool = false;
 
 	private var _onCompleteAssetsCall:String->BitmapData->Void;
@@ -462,6 +471,18 @@ class BitmapDataLoader extends BaseLoader {
 				call = null;
 			});
 			#else
+			if (__listeners.exists(path)) {
+				// 已存在任务，追加列表
+				__listeners.get(path).push({
+					onCompleteCall: call
+				});
+				return this;
+			}
+			__listeners.set(path, [
+				{
+					onCompleteCall: call
+				}
+			]);
 			var img:Image = new Image();
 			img.__fromFile(path, function(loadedImage:Image):Void {
 				var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(loadedImage);
@@ -471,11 +492,18 @@ class BitmapDataLoader extends BaseLoader {
 				} else {
 					bitmapData.path = path;
 					GPUUtils.addBitmapData(bitmapData);
-					if (call != null)
-						call(bitmapData);
+					// if (call != null)
+					// 	call(bitmapData);
+					for (c in __listeners.get(path)) {
+						if (c != null) {
+							c.onCompleteCall(bitmapData);
+						}
+					}
 				}
+				__listeners.remove(path);
 				call = null;
 			}, function():Void {
+				// 加载失败，应该移除所有回调，并且重新载入
 				if (loadTimes < AssetsUtils.failTryLoadTimes) {
 					// 重试
 					trace("重载：" + path + "," + loadTimes);
@@ -483,6 +511,7 @@ class BitmapDataLoader extends BaseLoader {
 					onComplete2(call);
 				} else if (callError != null)
 					callError("无法加载" + path);
+				__listeners.remove(path);
 				call = null;
 			});
 			#end

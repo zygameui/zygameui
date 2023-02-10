@@ -44,7 +44,7 @@ class MusicChannel {
 		transform.volume = volume;
 		#if (wechat)
 		@:privateAccess _channel._sound.volume = volume;
-		#else
+		#elseif (!vivo)
 		_channel.soundTransform = transform;
 		#end
 	}

@@ -61,17 +61,35 @@ class SaveObject<T:SaveObjectData> {
 
 	@:generic public function make<K:SaveObjectData>(c:Class<SaveObjectData>):SaveObject<T> {
 		this.data = cast Type.createInstance(c, []);
-		// 读取本地的数据进行写入
-		#if js
-		var storage = Browser.getLocalStorage();
-		if (storage != null) {
+		try {
+			// 读取本地的数据进行写入
+			#if js
+			var storage = Browser.getLocalStorage();
+			if (storage != null) {
+				var keys = Reflect.fields(data);
+				var localData = {};
+				for (k in keys) {
+					var id = _id + "." + k;
+					var value = storage.getItem(id);
+					if (value != null) {
+						value = Encryption.decode(value);
+						Reflect.setProperty(localData, k, value);
+					} else {
+						// Key丢失
+						// trace("存档key丢失：", id);
+						lossKey.push(k);
+					}
+				}
+				this.updateUserData(localData);
+			}
+			#elseif cpp
 			var keys = Reflect.fields(data);
 			var localData = {};
 			for (k in keys) {
 				var id = _id + "." + k;
-				var value = storage.getItem(id);
+				var shared = openfl.net.SharedObject.getLocal(id);
+				var value = shared.data.data;
 				if (value != null) {
-					value = Encryption.decode(value);
 					Reflect.setProperty(localData, k, value);
 				} else {
 					// Key丢失
@@ -80,24 +98,11 @@ class SaveObject<T:SaveObjectData> {
 				}
 			}
 			this.updateUserData(localData);
+			#end
+		} catch (e:Exception) {
+			var msg = haxe.CallStack.toString(haxe.CallStack.exceptionStack());
+			trace(msg);
 		}
-		#elseif cpp
-		var keys = Reflect.fields(data);
-		var localData = {};
-		for (k in keys) {
-			var id = _id + "." + k;
-			var shared = openfl.net.SharedObject.getLocal(id);
-			var value = shared.data.data;
-			if (value != null) {
-				Reflect.setProperty(localData, k, value);
-			} else {
-				// Key丢失
-				// trace("存档key丢失：", id);
-				lossKey.push(k);
-			}
-		}
-		this.updateUserData(localData);
-		#end
 		return this;
 	}
 
@@ -406,10 +411,17 @@ class SaveObject<T:SaveObjectData> {
 	public var data(default, null):T = null;
 
 	/**
+	 * 锁定不允许写入
+	 */
+	public var lockFlush:Bool = false;
+
+	/**
 	 * 写入本地，请注意，调用该接口不会发生上报网络请求
 	 * @param clearChangedData 是否清空`changedData`数据，这意味着网络存档不会知道修改了什么内容
 	 */
 	public function flush(clearChangedData:Bool = false):Void {
+		if (lockFlush)
+			return;
 		var changed:Dynamic = {};
 		this.data.flush(changed);
 		_flush(changed, _id);

@@ -496,7 +496,7 @@ class BitmapDataLoader extends BaseLoader {
 					// 	call(bitmapData);
 					for (c in __listeners.get(path)) {
 						if (c != null) {
-							c.onCompleteCall(bitmapData);
+							c.onCompleteCall(bitmapData.clone());
 						}
 					}
 				}

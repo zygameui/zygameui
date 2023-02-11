@@ -36,24 +36,24 @@ import VectorMath;
          var wsize_y:Float = px.w / gl_openfl_TextureSize.y;
          // 矩形补充
          gl_FragColor = vec4(0);
-         if ((gl_openfl_TextureCoordv.x > xsize || gl_openfl_TextureCoordv.y > xsize_y)
-             && gl_openfl_TextureCoordv.x < 0.5
-             && gl_openfl_TextureCoordv.y < 0.5) {
+         if ((gl_openfl_TextureCoordv.x >= xsize || gl_openfl_TextureCoordv.y >= xsize_y)
+             && gl_openfl_TextureCoordv.x <= 0.5
+             && gl_openfl_TextureCoordv.y <= 0.5) {
              gl_FragColor = color;
          }
-         if ((gl_openfl_TextureCoordv.x < 1 - ysize || gl_openfl_TextureCoordv.y > ysize_y)
-             && gl_openfl_TextureCoordv.x > 0.5
-             && gl_openfl_TextureCoordv.y < 0.5) {
+         if ((gl_openfl_TextureCoordv.x <= 1 - ysize || gl_openfl_TextureCoordv.y >= ysize_y)
+             && gl_openfl_TextureCoordv.x >= 0.5
+             && gl_openfl_TextureCoordv.y <= 0.5) {
              gl_FragColor = color;
          }
-         if ((gl_openfl_TextureCoordv.x > zsize || gl_openfl_TextureCoordv.y < 1 - zsize_y)
-             && gl_openfl_TextureCoordv.x < 0.5
-             && gl_openfl_TextureCoordv.y > 0.5) {
+         if ((gl_openfl_TextureCoordv.x >= zsize || gl_openfl_TextureCoordv.y <= 1 - zsize_y)
+             && gl_openfl_TextureCoordv.x <= 0.5
+             && gl_openfl_TextureCoordv.y >= 0.5) {
              gl_FragColor = color;
          }
-         if ((gl_openfl_TextureCoordv.x < 1 - wsize || gl_openfl_TextureCoordv.y < 1 - wsize_y)
-             && gl_openfl_TextureCoordv.x > 0.5
-             && gl_openfl_TextureCoordv.y > 0.5) {
+         if ((gl_openfl_TextureCoordv.x <= 1 - wsize || gl_openfl_TextureCoordv.y <= 1 - wsize_y)
+             && gl_openfl_TextureCoordv.x >= 0.5
+             && gl_openfl_TextureCoordv.y >= 0.5) {
              gl_FragColor = color;
          }
          if (checkRound(xsize, xsize_y, xsize)

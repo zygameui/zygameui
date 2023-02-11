@@ -6466,14 +6466,8 @@ class xls_XlsBuild:
                 _g = (_g + 1)
                 xls_XlsBuild.build(((("null" if path is None else path) + "/") + ("null" if _hx_str is None else _hx_str)),saveDir)
         elif (path.endswith("xlsx") or path.endswith("xls")):
-            tmp = None
             startIndex = None
-            if (((path.find(".") if ((startIndex is None)) else HxString.indexOfImpl(path,".",startIndex))) != 0):
-                startIndex = None
-                tmp = (((path.find("~") if ((startIndex is None)) else HxString.indexOfImpl(path,"~",startIndex))) == 0)
-            else:
-                tmp = True
-            if tmp:
+            if (((path.find("/.") if ((startIndex is None)) else HxString.indexOfImpl(path,"/.",startIndex))) != -1):
                 return
             haxe_Log.trace(("parsing file:" + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 19, 'className': "xls.XlsBuild", 'methodName': "build"}))
             try:

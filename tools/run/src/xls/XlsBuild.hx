@@ -14,7 +14,7 @@ class XlsBuild {
 				build(path + "/" + str, saveDir);
 			}
 		} else if (StringTools.endsWith(path, "xlsx") || StringTools.endsWith(path, "xls")) {
-			if (path.indexOf(".") == 0 || path.indexOf("~") == 0)
+			if (path.indexOf("/.") != -1)
 				return;
 			trace("parsing file:" + path);
 			try {

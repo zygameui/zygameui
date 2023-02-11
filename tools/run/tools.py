@@ -120,15 +120,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex = None
+            startIndex1 = None
             _hx_len = None
-            if (startIndex is None):
+            if (startIndex1 is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex + 1))
-                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex1 + 1))
+                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -3914,8 +3914,14 @@ class platforms_Oppo(platforms_BuildSuper):
 
     def buildAfter(self):
         super().buildAfter()
-        haxe_Log.trace("开始oppo构造",_hx_AnonObject({'fileName': "src/platforms/QuickGame.hx", 'lineNumber': 65, 'className': "platforms.Oppo", 'methodName': "buildAfter"}))
-        code = Sys.command("cd Export/oppo\n            /Users/rainy/Documents/haxelib/oppo-rpk-core/tools/pkgtools/lib/bin/quickgame pack release")
+        haxe_Log.trace("开始oppo构造",_hx_AnonObject({'fileName': "src/platforms/QuickGame.hx", 'lineNumber': 66, 'className': "platforms.Oppo", 'methodName': "buildAfter"}))
+        p = sys_io_Process("haxelib",["path", "oppo-rpk-core"])
+        data = p.stdout.readAll().toString()
+        p.kill()
+        paths = HxOverrides.arrayGet(data.split("\n"), 0)
+        paths = StringTools.replace(paths,"/src/","/")
+        haxe_Log.trace("oppo config:",_hx_AnonObject({'fileName': "src/platforms/QuickGame.hx", 'lineNumber': 72, 'className': "platforms.Oppo", 'methodName': "buildAfter", 'customParams': [data]}))
+        code = Sys.command((("cd Export/oppo\n            " + ("null" if paths is None else paths)) + "tools/pkgtools/lib/bin/quickgame pack release"))
         if (code != 0):
             raise haxe_Exception.thrown(("Build error:" + Std.string(code)))
 
@@ -6161,6 +6167,7 @@ class sys_io_Process:
     _hx_class_name = "sys.io.Process"
     __slots__ = ("stdout", "stderr", "stdin", "p")
     _hx_fields = ["stdout", "stderr", "stdin", "p"]
+    _hx_methods = ["kill"]
 
     def __init__(self,cmd,args = None,detached = None):
         self.stdin = None
@@ -6187,6 +6194,9 @@ class sys_io_Process:
         self.stdout = python_io_IoTools.createFileInputFromText(python_lib_io_TextIOWrapper(python_lib_io_BufferedReader(self.p.stdout)))
         self.stderr = python_io_IoTools.createFileInputFromText(python_lib_io_TextIOWrapper(python_lib_io_BufferedReader(self.p.stderr)))
         self.stdin = python_io_IoTools.createFileOutputFromText(python_lib_io_TextIOWrapper(python_lib_io_BufferedWriter(self.p.stdin)))
+
+    def kill(self):
+        self.p.kill()
 
 sys_io_Process._hx_class = sys_io_Process
 _hx_classes["sys.io.Process"] = sys_io_Process

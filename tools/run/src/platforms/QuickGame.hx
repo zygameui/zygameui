@@ -1,5 +1,6 @@
 package platforms;
 
+import sys.io.Process;
 import python.FileUtils;
 import sys.FileSystem;
 
@@ -63,8 +64,14 @@ class Oppo extends BuildSuper {
 		// source ~/.bash_profile
 		// source ~/.zprofile
 		trace("开始oppo构造");
+		var p = new Process("haxelib", ["path", "oppo-rpk-core"]);
+		var data = p.stdout.readAll().toString();
+		p.kill();
+		var paths = data.split("\n")[0];
+		paths = StringTools.replace(paths, "/src/", "/");
+		trace("oppo config:", data);
 		var code = Sys.command("cd Export/oppo
-            /Users/rainy/Documents/haxelib/oppo-rpk-core/tools/pkgtools/lib/bin/quickgame pack release");
+            " + paths + "tools/pkgtools/lib/bin/quickgame pack release");
 		if (code != 0)
 			throw "Build error:" + code;
 	}

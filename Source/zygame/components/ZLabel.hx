@@ -588,9 +588,13 @@ class ZLabel extends DataProviderComponent {
 		// 安卓 IOS 原生输入支持
 		#if kengsdkv2
 		KengSDK.showKeyboard(this.dataProvider, _display.maxChars, function(text:String):Void {
+			#if android
 			Lib.resumeCall(function() {
 				this.dataProvider = text;
 			});
+			#else
+			this.dataProvider = text;
+			#end
 		});
 		#end
 		#end

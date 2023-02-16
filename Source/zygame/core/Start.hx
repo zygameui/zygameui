@@ -248,7 +248,7 @@ class Start extends ZScene {
 	public var frameDtScale(get, never):Float;
 
 	function get_frameDtScale():Float {
-		// return _frameDtScale #if test * 2 #end;
+		// return _frameDtScale #if test * 4 #end;
 		return _frameDtScale;
 	}
 

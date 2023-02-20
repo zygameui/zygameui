@@ -38,9 +38,10 @@ class JSONData {
 		var rootJsonPath = jsonPath;
 		var project:ZProjectData = AutoBuilder.firstProjectData;
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
+		trace("jsonPath=", jsonPath);
 		if (jsonPath == null)
 			jsonPath = rootJsonPath;
-		var data:Json = Json.parse(File.getContent(jsonPath));
+		var data:Dynamic = Json.parse(File.getContent(jsonPath));
 		var name = StringUtils.getName(jsonPath);
 		name = "AutoJson" + name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
 		var c = macro class $name {
@@ -70,7 +71,7 @@ class JSONData {
 						doc: null,
 						meta: [],
 						access: [APublic],
-						kind: FVar(macro:Array<String>, macro $v{bindData}),
+						kind: FVar(macro :Array<String>, macro $v{bindData}),
 						pos: Context.currentPos()
 					};
 				} else {
@@ -82,7 +83,7 @@ class JSONData {
 						doc: null,
 						meta: [],
 						access: [APublic],
-						kind: FVar(macro:Array<$t>, macro $v{bindData}),
+						kind: FVar(macro :Array<$t>, macro $v{bindData}),
 						pos: Context.currentPos()
 					};
 					// 新增get{value}At(index)的方法，进行获取
@@ -96,7 +97,7 @@ class JSONData {
 								doc: null,
 								meta: [],
 								access: [APrivate],
-								kind: FVar(macro:Map<String, Dynamic>),
+								kind: FVar(macro :Map<String, Dynamic>),
 								pos: Context.currentPos()
 							};
 							c.fields.push(getIndexMap);
@@ -107,7 +108,7 @@ class JSONData {
 								meta: [],
 								access: [APublic],
 								kind: FFun({
-									args: [{name: "name", type: macro:Dynamic}],
+									args: [{name: "name", type: macro :Dynamic}],
 									ret: t,
 									expr: macro {
 										if (this.$mapName == null) {
@@ -135,7 +136,7 @@ class JSONData {
 								doc: "根据" + typeName + "索引获取相同的数据列表",
 								meta: [],
 								access: [APrivate],
-								kind: FVar(macro:Map<String, Array<$t>>),
+								kind: FVar(macro :Map<String, Array<$t>>),
 								pos: Context.currentPos()
 							};
 							c.fields.push(getIndexMap);
@@ -146,8 +147,8 @@ class JSONData {
 								meta: [],
 								access: [APublic],
 								kind: FFun({
-									args: [{name: "name", type: macro:Dynamic}],
-									ret: macro:Array<$t>,
+									args: [{name: "name", type: macro :Dynamic}],
+									ret: macro :Array<$t>,
 									expr: macro {
 										if (this.$mapName == null) {
 											this.$mapName = [];
@@ -200,15 +201,15 @@ class JSONData {
 	 */
 	static function getType(value:Dynamic, pos:Dynamic, doc:Dynamic):Dynamic {
 		if (Std.isOfType(value, Bool))
-			return macro:Bool;
+			return macro :Bool;
 		if (Std.isOfType(value, Int) || Std.isOfType(value, Float))
-			return macro:Float;
+			return macro :Float;
 		else if (Std.isOfType(value, Array)) {
 			var v = value[0];
 			var t = getType(v, pos, doc);
-			return macro:Array<$t>;
+			return macro :Array<$t>;
 		} else if (Std.isOfType(value, String))
-			return macro:String;
+			return macro :String;
 		var args:Array<Field> = [];
 		var keys = Reflect.fields(value);
 		for (key in keys) {
@@ -223,6 +224,6 @@ class JSONData {
 			});
 		}
 		var t = TAnonymous(args);
-		return macro:$t;
+		return macro :$t;
 	}
 }

@@ -8,7 +8,6 @@ import chardet as python_Chardet
 import getpass as python_GetPass
 import urllib.request as python_HttpDownload
 import sys as python_lib_Sys
-import traceback as python_lib_Traceback
 import pandas as python_Pandas
 import xlrd as python_XlsData
 import builtins as python_lib_Builtins
@@ -21,6 +20,7 @@ import shutil as python_lib_Shutil
 import socket as python_lib_Socket
 import ssl as python_lib_Ssl
 import subprocess as python_lib_Subprocess
+import traceback as python_lib_Traceback
 from datetime import datetime as python_lib_datetime_Datetime
 from datetime import timezone as python_lib_datetime_Timezone
 from io import BufferedReader as python_lib_io_BufferedReader
@@ -120,15 +120,15 @@ class Build:
         c = (args[1] if 1 < len(args) else None)
         startIndex = None
         if (((c.find(":") if ((startIndex is None)) else HxString.indexOfImpl(c,":",startIndex))) != -1):
-            startIndex1 = None
+            startIndex = None
             _hx_len = None
-            if (startIndex1 is None):
+            if (startIndex is None):
                 _hx_len = c.rfind(":", 0, len(c))
             else:
-                i = c.rfind(":", 0, (startIndex1 + 1))
-                startLeft = (max(0,((startIndex1 + 1) - len(":"))) if ((i == -1)) else (i + 1))
+                i = c.rfind(":", 0, (startIndex + 1))
+                startLeft = (max(0,((startIndex + 1) - len(":"))) if ((i == -1)) else (i + 1))
                 check = c.find(":", startLeft, len(c))
-                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
             c = HxString.substr(c,0,_hx_len)
         c1 = c
         _hx_local_1 = len(c1)
@@ -419,50 +419,12 @@ class Date:
         try:
             return date.astimezone()
         except BaseException as _g:
+            None
             tzinfo = python_lib_datetime_Datetime.now(python_lib_datetime_Timezone.utc).astimezone().tzinfo
             return date.replace(**python__KwArgs_KwArgs_Impl_.fromT(_hx_AnonObject({'tzinfo': tzinfo})))
 
 Date._hx_class = Date
 _hx_classes["Date"] = Date
-
-
-class haxe_IMap:
-    _hx_class_name = "haxe.IMap"
-    __slots__ = ()
-haxe_IMap._hx_class = haxe_IMap
-_hx_classes["haxe.IMap"] = haxe_IMap
-
-
-class haxe_ds_StringMap:
-    _hx_class_name = "haxe.ds.StringMap"
-    __slots__ = ("h",)
-    _hx_fields = ["h"]
-    _hx_methods = ["keys", "toString"]
-    _hx_interfaces = [haxe_IMap]
-
-    def __init__(self):
-        self.h = dict()
-
-    def keys(self):
-        return python_HaxeIterator(iter(self.h.keys()))
-
-    def toString(self):
-        s_b = python_lib_io_StringIO()
-        s_b.write("{")
-        it = self.keys()
-        i = it
-        while i.hasNext():
-            i1 = i.next()
-            s_b.write(Std.string(i1))
-            s_b.write(" => ")
-            s_b.write(Std.string(Std.string(self.h.get(i1,None))))
-            if it.hasNext():
-                s_b.write(", ")
-        s_b.write("}")
-        return s_b.getvalue()
-
-haxe_ds_StringMap._hx_class = haxe_ds_StringMap
-_hx_classes["haxe.ds.StringMap"] = haxe_ds_StringMap
 
 
 class Defines:
@@ -677,6 +639,7 @@ class Std:
             try:
                 tmp1 = int(v)
             except BaseException as _g:
+                None
                 tmp1 = None
             tmp = (v == tmp1)
         else:
@@ -701,6 +664,7 @@ class Std:
         try:
             tmp = isinstance(v,t)
         except BaseException as _g:
+            None
             tmp = False
         if tmp:
             return True
@@ -746,6 +710,7 @@ class Std:
         try:
             return int(x)
         except BaseException as _g:
+            None
             base = 10
             _hx_len = len(x)
             foundCount = 0
@@ -1045,15 +1010,15 @@ class Tools:
             Tools.haxelib = sys_FileSystem.absolutePath("")
             _this = Tools.haxelib
             _this1 = Tools.haxelib
-            startIndex1 = None
+            startIndex = None
             _hx_len = None
-            if (startIndex1 is None):
+            if (startIndex is None):
                 _hx_len = _this1.rfind("/zygameui", 0, len(_this1))
             else:
-                i = _this1.rfind("/zygameui", 0, (startIndex1 + 1))
-                startLeft = (max(0,((startIndex1 + 1) - len("/zygameui"))) if ((i == -1)) else (i + 1))
+                i = _this1.rfind("/zygameui", 0, (startIndex + 1))
+                startLeft = (max(0,((startIndex + 1) - len("/zygameui"))) if ((i == -1)) else (i + 1))
                 check = _this1.find("/zygameui", startLeft, len(_this1))
-                _hx_len = (check if (((check > i) and ((check <= startIndex1)))) else i)
+                _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
             Tools.haxelib = HxString.substr(_this,0,_hx_len)
         authorization = (("/Users/" + HxOverrides.stringOrNull(python_GetPass.getuser())) + "/.authorization")
         if sys_FileSystem.exists(authorization):
@@ -1394,6 +1359,7 @@ class Type:
             try:
                 return c.__name__
             except BaseException as _g:
+                None
                 return None
 
     @staticmethod
@@ -1685,6 +1651,13 @@ class atlasxml_AtlasTools:
         sys_io_File.saveContent((("null" if xmlpath is None else xmlpath) + ".2"),haxe_xml_Printer.print(xml))
 atlasxml_AtlasTools._hx_class = atlasxml_AtlasTools
 _hx_classes["atlasxml.AtlasTools"] = atlasxml_AtlasTools
+
+
+class haxe_IMap:
+    _hx_class_name = "haxe.IMap"
+    __slots__ = ()
+haxe_IMap._hx_class = haxe_IMap
+_hx_classes["haxe.IMap"] = haxe_IMap
 
 
 class haxe_Exception(Exception):
@@ -2018,6 +1991,38 @@ class haxe_crypto_Md5:
 
 haxe_crypto_Md5._hx_class = haxe_crypto_Md5
 _hx_classes["haxe.crypto.Md5"] = haxe_crypto_Md5
+
+
+class haxe_ds_StringMap:
+    _hx_class_name = "haxe.ds.StringMap"
+    __slots__ = ("h",)
+    _hx_fields = ["h"]
+    _hx_methods = ["keys", "toString"]
+    _hx_interfaces = [haxe_IMap]
+
+    def __init__(self):
+        self.h = dict()
+
+    def keys(self):
+        return python_HaxeIterator(iter(self.h.keys()))
+
+    def toString(self):
+        s_b = python_lib_io_StringIO()
+        s_b.write("{")
+        it = self.keys()
+        i = it
+        while i.hasNext():
+            i1 = i.next()
+            s_b.write(Std.string(i1))
+            s_b.write(" => ")
+            s_b.write(Std.string(Std.string(self.h.get(i1,None))))
+            if it.hasNext():
+                s_b.write(", ")
+        s_b.write("}")
+        return s_b.getvalue()
+
+haxe_ds_StringMap._hx_class = haxe_ds_StringMap
+_hx_classes["haxe.ds.StringMap"] = haxe_ds_StringMap
 
 
 class haxe_exceptions_PosException(haxe_Exception):
@@ -2533,6 +2538,7 @@ class haxe_io_Input:
                 pos = (pos + 1)
                 k = (k - 1)
         except BaseException as _g:
+            None
             if (not Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof)):
                 raise _g
         return (_hx_len - k)
@@ -2555,6 +2561,7 @@ class haxe_io_Input:
                     raise haxe_Exception.thrown(haxe_io_Error.OutsideBounds)
                 total.b.extend(buf.b[0:_hx_len])
         except BaseException as _g:
+            None
             if (not Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof)):
                 raise _g
         return total.getBytes()
@@ -2573,6 +2580,7 @@ class haxe_io_Input:
             if (HxString.charCodeAt(s,(len(s) - 1)) == 13):
                 s = HxString.substr(s,0,-1)
         except BaseException as _g:
+            None
             _g1 = haxe_Exception.caught(_g).unwrap()
             if Std.isOfType(_g1,haxe_io_Eof):
                 e = _g1
@@ -4216,6 +4224,7 @@ class python_Boot:
                 else:
                     return str(o)
             except BaseException as _g:
+                None
                 return str(o)
         if isinstance(o,list):
             o1 = o
@@ -4237,7 +4246,7 @@ class python_Boot:
             if hasattr(o,"toString"):
                 return o.toString()
         except BaseException as _g:
-            pass
+            None
         if hasattr(o,"__class__"):
             if isinstance(o,_hx_AnonObject):
                 toStr = None
@@ -4253,6 +4262,7 @@ class python_Boot:
                     fieldsStr = _g
                     toStr = (("{ " + HxOverrides.stringOrNull(", ".join([x1 for x1 in fieldsStr]))) + " }")
                 except BaseException as _g:
+                    None
                     return "{ ... }"
                 if (toStr is None):
                     return "{ ... }"
@@ -4311,7 +4321,7 @@ class python_Boot:
                 if hasattr(o,"__repr__"):
                     return o.__repr__()
             except BaseException as _g:
-                pass
+                None
             if hasattr(o,"__str__"):
                 return o.__str__([])
             if hasattr(o,"__name__"):
@@ -4586,7 +4596,7 @@ class python_Boot:
                 return c._hx_super
             return None
         except BaseException as _g:
-            pass
+            None
         return None
 
     @staticmethod
@@ -4687,6 +4697,7 @@ class python_FileUtils:
                 try:
                     sys_io_File.copy(file2,((("null" if copyTo is None else copyTo) + "/") + ("null" if dicName is None else dicName)))
                 except BaseException as _g1:
+                    None
                     e = haxe_Exception.caught(_g1).unwrap()
                     haxe_Log.trace(("Warring:" + ("null" if file2 is None else file2)),_hx_AnonObject({'fileName': "python/FileUtils.hx", 'lineNumber': 51, 'className': "python.FileUtils", 'methodName': "copyDic", 'customParams': [e]}))
 
@@ -4773,6 +4784,7 @@ class python_HaxeIterator:
                 self.x = self.it.__next__()
                 self.has = True
             except BaseException as _g:
+                None
                 if Std.isOfType(haxe_Exception.caught(_g).unwrap(),StopIteration):
                     self.has = False
                     self.x = None
@@ -4796,118 +4808,6 @@ class python__KwArgs_KwArgs_Impl_:
         return this1
 python__KwArgs_KwArgs_Impl_._hx_class = python__KwArgs_KwArgs_Impl_
 _hx_classes["python._KwArgs.KwArgs_Impl_"] = python__KwArgs_KwArgs_Impl_
-
-
-class HxString:
-    _hx_class_name = "HxString"
-    __slots__ = ()
-    _hx_statics = ["split", "charCodeAt", "charAt", "lastIndexOf", "toUpperCase", "toLowerCase", "indexOf", "indexOfImpl", "toString", "substring", "substr"]
-
-    @staticmethod
-    def split(s,d):
-        if (d == ""):
-            return list(s)
-        else:
-            return s.split(d)
-
-    @staticmethod
-    def charCodeAt(s,index):
-        if ((((s is None) or ((len(s) == 0))) or ((index < 0))) or ((index >= len(s)))):
-            return None
-        else:
-            return ord(s[index])
-
-    @staticmethod
-    def charAt(s,index):
-        if ((index < 0) or ((index >= len(s)))):
-            return ""
-        else:
-            return s[index]
-
-    @staticmethod
-    def lastIndexOf(s,_hx_str,startIndex = None):
-        if (startIndex is None):
-            return s.rfind(_hx_str, 0, len(s))
-        elif (_hx_str == ""):
-            length = len(s)
-            if (startIndex < 0):
-                startIndex = (length + startIndex)
-                if (startIndex < 0):
-                    startIndex = 0
-            if (startIndex > length):
-                return length
-            else:
-                return startIndex
-        else:
-            i = s.rfind(_hx_str, 0, (startIndex + 1))
-            startLeft = (max(0,((startIndex + 1) - len(_hx_str))) if ((i == -1)) else (i + 1))
-            check = s.find(_hx_str, startLeft, len(s))
-            if ((check > i) and ((check <= startIndex))):
-                return check
-            else:
-                return i
-
-    @staticmethod
-    def toUpperCase(s):
-        return s.upper()
-
-    @staticmethod
-    def toLowerCase(s):
-        return s.lower()
-
-    @staticmethod
-    def indexOf(s,_hx_str,startIndex = None):
-        if (startIndex is None):
-            return s.find(_hx_str)
-        else:
-            return HxString.indexOfImpl(s,_hx_str,startIndex)
-
-    @staticmethod
-    def indexOfImpl(s,_hx_str,startIndex):
-        if (_hx_str == ""):
-            length = len(s)
-            if (startIndex < 0):
-                startIndex = (length + startIndex)
-                if (startIndex < 0):
-                    startIndex = 0
-            if (startIndex > length):
-                return length
-            else:
-                return startIndex
-        return s.find(_hx_str, startIndex)
-
-    @staticmethod
-    def toString(s):
-        return s
-
-    @staticmethod
-    def substring(s,startIndex,endIndex = None):
-        if (startIndex < 0):
-            startIndex = 0
-        if (endIndex is None):
-            return s[startIndex:]
-        else:
-            if (endIndex < 0):
-                endIndex = 0
-            if (endIndex < startIndex):
-                return s[endIndex:startIndex]
-            else:
-                return s[startIndex:endIndex]
-
-    @staticmethod
-    def substr(s,startIndex,_hx_len = None):
-        if (_hx_len is None):
-            return s[startIndex:]
-        else:
-            if (_hx_len == 0):
-                return ""
-            if (startIndex < 0):
-                startIndex = (len(s) + startIndex)
-                if (startIndex < 0):
-                    startIndex = 0
-            return s[startIndex:(startIndex + _hx_len)]
-HxString._hx_class = HxString
-_hx_classes["HxString"] = HxString
 
 
 class python_Lib:
@@ -5155,6 +5055,7 @@ class python_internal_ArrayImpl:
             x.remove(e)
             return True
         except BaseException as _g:
+            None
             return False
 
     @staticmethod
@@ -5327,6 +5228,118 @@ class python_internal_MethodClosure:
 
 python_internal_MethodClosure._hx_class = python_internal_MethodClosure
 _hx_classes["python.internal.MethodClosure"] = python_internal_MethodClosure
+
+
+class HxString:
+    _hx_class_name = "HxString"
+    __slots__ = ()
+    _hx_statics = ["split", "charCodeAt", "charAt", "lastIndexOf", "toUpperCase", "toLowerCase", "indexOf", "indexOfImpl", "toString", "substring", "substr"]
+
+    @staticmethod
+    def split(s,d):
+        if (d == ""):
+            return list(s)
+        else:
+            return s.split(d)
+
+    @staticmethod
+    def charCodeAt(s,index):
+        if ((((s is None) or ((len(s) == 0))) or ((index < 0))) or ((index >= len(s)))):
+            return None
+        else:
+            return ord(s[index])
+
+    @staticmethod
+    def charAt(s,index):
+        if ((index < 0) or ((index >= len(s)))):
+            return ""
+        else:
+            return s[index]
+
+    @staticmethod
+    def lastIndexOf(s,_hx_str,startIndex = None):
+        if (startIndex is None):
+            return s.rfind(_hx_str, 0, len(s))
+        elif (_hx_str == ""):
+            length = len(s)
+            if (startIndex < 0):
+                startIndex = (length + startIndex)
+                if (startIndex < 0):
+                    startIndex = 0
+            if (startIndex > length):
+                return length
+            else:
+                return startIndex
+        else:
+            i = s.rfind(_hx_str, 0, (startIndex + 1))
+            startLeft = (max(0,((startIndex + 1) - len(_hx_str))) if ((i == -1)) else (i + 1))
+            check = s.find(_hx_str, startLeft, len(s))
+            if ((check > i) and ((check <= startIndex))):
+                return check
+            else:
+                return i
+
+    @staticmethod
+    def toUpperCase(s):
+        return s.upper()
+
+    @staticmethod
+    def toLowerCase(s):
+        return s.lower()
+
+    @staticmethod
+    def indexOf(s,_hx_str,startIndex = None):
+        if (startIndex is None):
+            return s.find(_hx_str)
+        else:
+            return HxString.indexOfImpl(s,_hx_str,startIndex)
+
+    @staticmethod
+    def indexOfImpl(s,_hx_str,startIndex):
+        if (_hx_str == ""):
+            length = len(s)
+            if (startIndex < 0):
+                startIndex = (length + startIndex)
+                if (startIndex < 0):
+                    startIndex = 0
+            if (startIndex > length):
+                return length
+            else:
+                return startIndex
+        return s.find(_hx_str, startIndex)
+
+    @staticmethod
+    def toString(s):
+        return s
+
+    @staticmethod
+    def substring(s,startIndex,endIndex = None):
+        if (startIndex < 0):
+            startIndex = 0
+        if (endIndex is None):
+            return s[startIndex:]
+        else:
+            if (endIndex < 0):
+                endIndex = 0
+            if (endIndex < startIndex):
+                return s[endIndex:startIndex]
+            else:
+                return s[startIndex:endIndex]
+
+    @staticmethod
+    def substr(s,startIndex,_hx_len = None):
+        if (_hx_len is None):
+            return s[startIndex:]
+        else:
+            if (_hx_len == 0):
+                return ""
+            if (startIndex < 0):
+                startIndex = (len(s) + startIndex)
+                if (startIndex < 0):
+                    startIndex = 0
+            return s[startIndex:(startIndex + _hx_len)]
+HxString._hx_class = HxString
+_hx_classes["HxString"] = HxString
 
 
 class python_io_NativeInput(haxe_io_Input):
@@ -5808,6 +5821,7 @@ class sys_Http(haxe_http_HttpBase):
             self.readHttpResponse(api,sock)
             sock.close()
         except BaseException as _g:
+            None
             e = haxe_Exception.caught(_g).unwrap()
             try:
                 sock.close()
@@ -5828,6 +5842,7 @@ class sys_Http(haxe_http_HttpBase):
                 try:
                     _hx_len = fileInput.readBytes(buf,0,size)
                 except BaseException as _g:
+                    None
                     if Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof):
                         break
                     else:
@@ -5948,6 +5963,7 @@ class sys_Http(haxe_http_HttpBase):
                     if (not self.readChunk(chunk_re,api,buf,_hx_len)):
                         break
             except BaseException as _g:
+                None
                 if Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof):
                     raise haxe_Exception.thrown("Transfer aborted")
                 else:
@@ -5962,6 +5978,7 @@ class sys_Http(haxe_http_HttpBase):
                         break
                     api.writeBytes(buf,0,_hx_len)
             except BaseException as _g:
+                None
                 if (not Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof)):
                     raise _g
         else:
@@ -5972,6 +5989,7 @@ class sys_Http(haxe_http_HttpBase):
                     api.writeBytes(buf,0,_hx_len)
                     size = (size - _hx_len)
             except BaseException as _g:
+                None
                 if Std.isOfType(haxe_Exception.caught(_g).unwrap(),haxe_io_Eof):
                     raise haxe_Exception.thrown("Transfer aborted")
                 else:
@@ -6237,6 +6255,7 @@ class sys_net__Socket_SocketInput(haxe_io_Input):
         try:
             r = self._hx___s.recv(1,0)
         except BaseException as _g:
+            None
             if Std.isOfType(haxe_Exception.caught(_g).unwrap(),BlockingIOError):
                 raise haxe_Exception.thrown(haxe_io_Error.Blocked)
             else:
@@ -6257,6 +6276,7 @@ class sys_net__Socket_SocketInput(haxe_io_Input):
                 _g = (_g + 1)
                 data.__setitem__(i,r[(i - pos)])
         except BaseException as _g:
+            None
             if Std.isOfType(haxe_Exception.caught(_g).unwrap(),BlockingIOError):
                 raise haxe_Exception.thrown(haxe_io_Error.Blocked)
             else:
@@ -6286,6 +6306,7 @@ class sys_net__Socket_SocketOutput(haxe_io_Output):
         try:
             self._hx___s.send(bytes([c]),0)
         except BaseException as _g:
+            None
             if Std.isOfType(haxe_Exception.caught(_g).unwrap(),BlockingIOError):
                 raise haxe_Exception.thrown(haxe_io_Error.Blocked)
             else:
@@ -6298,6 +6319,7 @@ class sys_net__Socket_SocketOutput(haxe_io_Output):
             r = self._hx___s.send(payload,0)
             return r
         except BaseException as _g:
+            None
             if Std.isOfType(haxe_Exception.caught(_g).unwrap(),BlockingIOError):
                 raise haxe_Exception.thrown(haxe_io_Error.Blocked)
             else:

@@ -1,6 +1,7 @@
 package zygame.macro;
 
 #if macro
+import haxe.Json;
 import sys.io.File;
 import zygame.utils.StringUtils;
 import haxe.macro.Context;
@@ -36,6 +37,11 @@ class AutoBuilder {
 		if (path == null) {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
+
+		// var jsonPath = project.assetsPath.get("material.json");
+		// Json.parse(File.getContent(jsonPath));
+
+		// trace("parser", path);
 
 		var fields = Context.getBuildFields();
 		// return fields;
@@ -115,7 +121,7 @@ class AutoBuilder {
 				doc: null,
 				meta: [],
 				access: [APublic],
-				kind: FVar(macro:zygame.components.ZBuilder.Builder),
+				kind: FVar(macro :zygame.components.ZBuilder.Builder),
 				pos: Context.currentPos()
 			}
 			fields.push(assetsBuilder);
@@ -129,7 +135,7 @@ class AutoBuilder {
 				access: isZBuilderScene ? [APublic] : [APublic, AOverride],
 				kind: FFun({
 					args: [],
-					ret: macro:Void,
+					ret: macro :Void,
 					expr: isZBuilderScene ? macro {
 						super($v{path});
 						var textures:Array<{png:String, xml:String}> = $v{textures};
@@ -195,9 +201,9 @@ class AutoBuilder {
 		} else if (typeName == "VBox" || typeName == "HBox") {
 			switch (typeName) {
 				case "VBox":
-					return macro:zygame.components.ZBox.VBox;
+					return macro :zygame.components.ZBox.VBox;
 				case "HBox":
-					return macro:zygame.components.ZBox.HBox;
+					return macro :zygame.components.ZBox.HBox;
 			}
 		} else if (typeName.indexOf("F") == 0) {
 			return TPath({
@@ -223,11 +229,11 @@ class AutoBuilder {
 			});
 		} else if (typeName.indexOf("ImageBatchs") != -1 || typeName.indexOf("B") != -1) {
 			if (typeName == "BScale9Button")
-				return macro:zygame.display.batch.BButton.BScale9Button;
+				return macro :zygame.display.batch.BButton.BScale9Button;
 			else if (typeName == "HBBox")
-				return macro:zygame.display.batch.BBox.HBBox;
+				return macro :zygame.display.batch.BBox.HBBox;
 			else if (typeName == "VBBox")
-				return macro:zygame.display.batch.BBox.VBBox;
+				return macro :zygame.display.batch.BBox.VBBox;
 			else
 				return TPath({
 					pack: ["zygame", "display", "batch"],

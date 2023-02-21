@@ -259,7 +259,7 @@ class AutoBuilder {
 		};
 		// create: `private inline function get_$fieldName() return $value`
 		var getterField:Field = {
-			name: "get_" + $v{id},
+			name: "get_" + id,
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun(myFunc),
 			pos: Context.currentPos()

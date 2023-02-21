@@ -38,10 +38,10 @@ class JSONData {
 		var rootJsonPath = jsonPath;
 		var project:ZProjectData = AutoBuilder.firstProjectData;
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
-		trace("jsonPath=", jsonPath);
+		// trace("jsonPath=", jsonPath);
 		if (jsonPath == null)
 			jsonPath = rootJsonPath;
-		var data:Dynamic = Json.parse(File.getContent(jsonPath));
+		var data:Dynamic = haxe.Json.parse(File.getContent(jsonPath));
 		var name = StringUtils.getName(jsonPath);
 		name = "AutoJson" + name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
 		var c = macro class $name {

@@ -1,6 +1,7 @@
 
 package zygame.display.batch;
 
+import zygame.components.ZBuilder;
 import openfl.geom.Rectangle;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
 import zygame.display.batch.BSprite;
@@ -87,9 +88,12 @@ class BLabel extends BSprite{
      */
     public var fontEnd:String = "";
 
-    public function new(fnt:Atlas){
+    public function new(fnt:Dynamic){
         super();
-        fntData = fnt;
+        if(fnt is String)
+            fntData = ZBuilder.getBaseTextureAtlas(fnt);
+        else
+            fntData = fnt;
         _node = new BSprite();
         this.addChild(_node);
     }

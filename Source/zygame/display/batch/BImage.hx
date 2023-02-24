@@ -17,7 +17,13 @@ class BImage extends BDisplayObject {
 
 	public var curParent:TextureAtlas;
 
-	public function new(frame:Frame = null) {
+	public function new(data:Dynamic = null) {
+		var frame:Frame = null;
+		if (data is String) {
+			frame = ZBuilder.getBaseBitmapData(data);
+		} else {
+			frame = data;
+		}
 		super(frame != null ? frame.id : -1, 0, 0, 1, 1);
 		setFrame(frame);
 	}

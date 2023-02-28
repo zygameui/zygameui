@@ -1,5 +1,6 @@
 package zygame.zip;
 
+import js.Syntax;
 import haxe.io.Bytes;
 import haxe.io.BytesOutput;
 import haxe.zip.Entry;
@@ -34,7 +35,7 @@ class ZipWriter extends Writer {
 		#if js
 		// Haxe Deflate is currently unoptimized, use pako instead,
 		// didn't want 3rd party library but it works very well so...
-		var data = untyped __js__("pako.deflateRaw")(bytes.getData());
+		var data = Syntax.code("pako.deflateRaw")(bytes.getData());
 		return Bytes.ofData(data);
 		#elseif lime
 		return Deflate.compress(bytes);

@@ -25,6 +25,15 @@ class Lib {
 	private static var sharedObject:SharedObject;
 
 	/**
+	 * 清空所有用户数据
+	 */
+	public static function clearSharedObject():Void {
+		if (sharedObject != null) {
+			sharedObject.clear();
+		}
+	}
+
+	/**
 	 * 获取当前渲染模式
 	 * @return String
 	 */

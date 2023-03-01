@@ -446,13 +446,15 @@ class SaveObject<T:SaveObjectData> {
 		var retdata = this.getData();
 		var keys = Reflect.fields(retdata);
 		for (key in keys) {
-			#if js
-			var storage = Browser.getLocalStorage();
-			if (storage != null) {
-				var saveid = _id + "." + key;
-				storage.removeItem(saveid);
-			}
-			#end
+			// #if js
+			// var storage = Browser.getLocalStorage();
+			// if (storage != null) {
+			// 	var saveid = _id + "." + key;
+			// 	storage.removeItem(saveid);
+			// }
+			// #end
+			trace("删除字段：", key);
+			_setLocal(key, "");
 		}
 	}
 

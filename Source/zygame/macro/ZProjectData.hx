@@ -23,10 +23,9 @@ class ZProjectData {
 		var zprojectPath = createZProjectDataString();
 		if (zprojectPath == null)
 			return;
-		if (!FileSystem.exists(".macro")) {
-			FileSystem.createDirectory(".macro");
-		}
-
+		// if (!FileSystem.exists(".macro")) {
+		// 	FileSystem.createDirectory(".macro");
+		// }
 		nowCwd = Sys.getCwd();
 		Sys.setCwd(oldCwd);
 		this.readXml(nowCwd + "/" + zprojectPath, nowCwd);

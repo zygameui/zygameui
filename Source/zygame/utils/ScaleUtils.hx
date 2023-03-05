@@ -24,13 +24,17 @@ class ScaleUtils {
 		}
 
 		if (scalePower) {
-			var currentScale3 = Std.int(currentScale);
-			if (currentScale != currentScale3) {
-				currentScale = currentScale3 + 1;
-			}
-			if (currentScale < 1) {
-				currentScale = 1;
-			}
+			// var currentScale3 = Std.int(currentScale);
+			// if (currentScale != currentScale3) {
+			// 	currentScale = currentScale3 + 1;
+			// }
+			// if (currentScale < 0.5) {
+			// 	currentScale = 0.5;
+			// }
+			var currentScaleCounts = Std.int(currentScale / 0.5);
+			if (currentScaleCounts <= 0)
+				currentScaleCounts++;
+			currentScale = currentScaleCounts * 0.5;
 		}
 
 		return currentScale;

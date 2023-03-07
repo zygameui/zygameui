@@ -1,6 +1,8 @@
 package zygame.zip;
 
+#if js
 import js.Syntax;
+#end
 import haxe.io.Bytes;
 import haxe.io.BytesOutput;
 import haxe.zip.Entry;

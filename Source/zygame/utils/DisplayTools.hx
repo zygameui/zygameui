@@ -12,7 +12,7 @@ class DisplayTools {
 	/**
 	 * 遍历容器里的所有对象
 	 * @param display 
-	 * @param cb 
+	 * @param cb 当返回`false`时，则会中断循环
 	 */
 	public static function map(display:DisplayObjectContainer, cb:DisplayObject->Bool):Bool {
 		for (i in 0...display.numChildren) {
@@ -28,5 +28,4 @@ class DisplayTools {
 		}
 		return true;
 	}
-
 }

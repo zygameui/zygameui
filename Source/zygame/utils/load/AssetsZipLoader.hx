@@ -12,8 +12,10 @@ import zygame.zip.ZipReader;
 import haxe.zip.Entry;
 import haxe.io.BytesInput;
 import openfl.display.BitmapData;
+#if lime
 import lime._internal.format.Deflate;
 import lime.graphics.Image;
+#end
 import zygame.utils.load.TextureLoader;
 import zygame.utils.StringUtils;
 import zygame.display.ZBitmapData;
@@ -71,7 +73,7 @@ class Zip {
 	 * @return Bytes
 	 */
 	public function readBytes(entry:Entry):Bytes {
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes:Bytes = decompress(entry);
 		entry.compressed = false;
 		return bytes;
 	}
@@ -100,6 +102,28 @@ class Zip {
 		// },10);
 	}
 
+	/**
+	 * Zip统一解压实现
+	 * @param entry 
+	 * @return Bytes
+	 */
+	private function decompress(entry:Entry):Bytes {
+		#if deflatex
+		if (entry.compressed) {
+			var inflater:deflatex.Inflater = new deflatex.Inflater();
+			entry.data = inflater.decompress(entry.data);
+		}
+		#elseif lime
+		entry.data = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		#else
+		if (!entry.compressed) {
+			throw "Current platform don't support."
+		}
+		#end
+		entry.compressed = false;
+		return entry.data;
+	}
+
 	public function loadSound(id:String, call:Sound->Void):Void {
 		var entry:Entry = entrys.get(id + ".mp3");
 		entry = entry == null ? entrys.get(id + ".ogg") : entry;
@@ -107,7 +131,7 @@ class Zip {
 			call(null);
 			return;
 		}
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes = decompress(entry);
 		var soundLoader:BytesSoundLoader = new BytesSoundLoader(id, ByteArray.fromBytes(bytes));
 		soundLoader.onComplete(function(sound) {
 			call(sound);
@@ -125,7 +149,7 @@ class Zip {
 			call(null);
 			return;
 		}
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes = decompress(entry);
 		var bitmapData:ZBitmapData = new ZBitmapData(0, 0, true, 0);
 		#if !flash
 		@:privateAccess bitmapData.__loadFromBytes(bytes).onComplete(function(bitmapData:BitmapData):Void {
@@ -144,7 +168,7 @@ class Zip {
 		var entry:Entry = entrys.get(id + ".xml");
 		if (entry == null)
 			return null;
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes = decompress(entry);
 		var xmlconent:String = bytes.toString();
 		return Xml.parse(xmlconent);
 	}
@@ -158,7 +182,7 @@ class Zip {
 		var entry:Entry = entrys.get(id + ".json");
 		if (entry == null)
 			return null;
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes = decompress(entry);
 		return haxe.Json.parse(bytes.toString());
 	}
 
@@ -171,7 +195,7 @@ class Zip {
 		var entry:Entry = entrys.get(id);
 		if (entry == null)
 			return null;
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes = decompress(entry);
 		return bytes.toString();
 	}
 
@@ -200,7 +224,7 @@ class Zip {
 		var entry:Entry = entrys.get(id + ".hx");
 		if (entry == null)
 			return null;
-		var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
+		var bytes = decompress(entry);
 		return bytes.toString();
 	}
 }

@@ -108,7 +108,21 @@ class Zip {
 	 * @return Bytes
 	 */
 	private function decompress(entry:Entry):Bytes {
-		#if deflatex
+		#if haxezip
+		// 使用haxe自带的官方解压
+		var inf = new haxe.zip.InflateImpl(new haxe.io.BytesInput(entry.data), false, false);
+		var output = new haxe.io.BytesBuffer();
+		var bufsize = 1024 * 1024;
+		var buf = haxe.io.Bytes.alloc(bufsize);
+		while (true) {
+			var len = inf.readBytes(buf, 0, bufsize);
+			output.addBytes(buf, 0, len);
+			if (len < bufsize) {
+				break;
+			}
+		}
+		entry.data = output.getBytes();
+		#elseif deflatex
 		if (entry.compressed) {
 			var inflater:deflatex.Inflater = new deflatex.Inflater();
 			entry.data = inflater.decompress(entry.data);

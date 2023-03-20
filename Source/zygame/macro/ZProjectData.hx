@@ -61,7 +61,9 @@ class ZProjectData {
 						trace("array", item.get("name"), array);
 						var haxepath = null;
 						for (s in array) {
-							if (s.indexOf(item.get("name")) != -1) {
+							var low = s.toLowerCase();
+							var lowlibname = item.get("name").toLowerCase();
+							if (low.indexOf(lowlibname) != -1) {
 								haxepath = s;
 								break;
 							}

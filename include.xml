@@ -4,9 +4,11 @@
 	<source path="Source" />
 	<haxelib name="openfl" unless="openfl8" />
 	<!-- <haxelib name="openfl-dev-8.9.6" if="openfl8"/> -->
-	<haxelib name="swf" if="${openfl >= 9.0.0}" />
-	<!-- OpenFL9兼容8.9.0的代码 -->
-	<source path="openfl9-source" if="${openfl >= 9.0.0}" />
+	<section unless="unable_swf">
+		<haxelib name="swf" if="${openfl >= 9.0.0}" />
+		<!-- OpenFL9兼容8.9.0的代码 -->
+		<source path="openfl9-source" if="${openfl >= 9.0.0}" />
+	</section>
 	<!-- 新增openfl-console支持 -->
 	<section if="openfl-console">
 		<haxelib name="openfl-console" />

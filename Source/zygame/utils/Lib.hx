@@ -25,6 +25,15 @@ class Lib {
 	private static var sharedObject:SharedObject;
 
 	/**
+	 * 重新初始化sharedObject
+	 * @param saveName 
+	 */
+	public static function init(name:String):Void {
+		saveName = name;
+		sharedObject = SharedObject.getLocal(saveName);
+	}
+
+	/**
 	 * 清空所有用户数据
 	 */
 	public static function clearSharedObject():Void {
@@ -323,7 +332,11 @@ class Lib {
 	 * 获取渠道名
 	 */
 	public static function getChannel():String {
-		#if taptap
+		#if qq_pc_game
+		return "qqgame_pc";
+		#elseif qq_mobile_game
+		return "qqgame_m";
+		#elseif taptap
 		return "taptap";
 		#elseif m4399
 		return "4399";

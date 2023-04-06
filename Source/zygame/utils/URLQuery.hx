@@ -16,7 +16,7 @@ class URLQuery {
 		for (item in array) {
 			if (item.indexOf("=") != -1) {
 				var p = item.split("=");
-				map.set(p[0], p[1]);
+				map.set(p[0], p.slice(1).join("="));
 			}
 		}
 		return map;

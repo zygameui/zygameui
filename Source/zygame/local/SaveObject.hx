@@ -373,8 +373,10 @@ class SaveObject<T:SaveObjectData> {
 		trace("存档成功：", data, _changedData);
 		#end
 		if (data != null) {
+			#if cpp
 			// 回退版本
-			// _changedData = {};
+			_changedData = {};
+			#else
 			// 这里要做存档比对，然后将已上报的内容删除
 			var keys = Reflect.fields(data);
 			var checkKeys = [];
@@ -402,6 +404,7 @@ class SaveObject<T:SaveObjectData> {
 					Reflect.deleteField(_changedData, key);
 				}
 			}
+			#end
 		}
 	}
 
@@ -446,14 +449,6 @@ class SaveObject<T:SaveObjectData> {
 		var retdata = this.getData();
 		var keys = Reflect.fields(retdata);
 		for (key in keys) {
-			// #if js
-			// var storage = Browser.getLocalStorage();
-			// if (storage != null) {
-			// 	var saveid = _id + "." + key;
-			// 	storage.removeItem(saveid);
-			// }
-			// #end
-			trace("删除字段：", key);
 			_setLocal(key, "");
 		}
 	}

@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 13.0.1
+- [新增] 新增`QuadsBatchs`批处理性能改进对象。
+
 ### 13.0.0
 - [新增] 新增`ZScroll`属性`disableMoveTouchEvent`，设置为`true`可阻拦点击事件。
 - [新增] 新增`NullMacro`宏支持`?a.?b.?c`的处理。（Haxe4.3.0后就不需要了）

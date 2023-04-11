@@ -115,7 +115,7 @@ class SaveObject<T:SaveObjectData> {
 			var msg = haxe.CallStack.toString(haxe.CallStack.exceptionStack());
 			trace(msg);
 		}
-		return this;
+		return cast this;
 	}
 
 	#if cpp

@@ -13,6 +13,7 @@ import js.Browser;
 import haxe.Json;
 #if sys
 import sys.io.File;
+import lime.system.ThreadPool;
 #end
 import zygame.local.SaveDynamicData;
 import zygame.local.SaveFloatData;
@@ -20,6 +21,10 @@ import zygame.local.SaveStringData;
 import haxe.Constraints;
 
 class SaveObject<T:SaveObjectData> {
+	#if cpp
+	private static var threadPool:ThreadPool;
+	#end
+
 	/**
 	 * 本地实时储存的数据，它会对每个储存的key做分离处理：
 	 * - data.data=xxx
@@ -59,7 +64,14 @@ class SaveObject<T:SaveObjectData> {
 		this._id = id;
 	}
 
-	@:generic public function make<K:SaveObjectData>(c:Class<SaveObjectData>):SaveObject<T> {
+	@:generic public function make<T:SaveObjectData>(c:Class<SaveObjectData>):SaveObject<T> {
+		#if cpp
+		threadPool = new ThreadPool(0, 1);
+		threadPool.doWork.add(threadPool_doWork);
+		// threadPool.onProgress.add(threadPool_onProgress);
+		// threadPool.onComplete.add(threadPool_onComplete);
+		// threadPool.onError.add(threadPool_onError);
+		#end
 		this.data = cast Type.createInstance(c, []);
 		try {
 			// 读取本地的数据进行写入
@@ -105,6 +117,28 @@ class SaveObject<T:SaveObjectData> {
 		}
 		return this;
 	}
+
+	#if cpp
+	private static function threadPool_doWork(state:Dynamic):Void {
+		// var saveid = _id + "." + key;
+		var saveid = state.saveid;
+		var key = state.key;
+		var _localSaveData = state._localSaveData;
+		var shared = openfl.net.SharedObject.getLocal(saveid);
+		try {
+			var v = Reflect.getProperty(_localSaveData, key);
+			if (v is Float || v is String) {
+				shared.data.data = v;
+			} else {
+				shared.data.data = Json.stringify(v);
+			}
+		} catch (e:haxe.Exception) {
+			trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+		}
+		shared.flush();
+		threadPool.sendComplete({});
+	}
+	#end
 
 	/**
 	 * 无效间隔操作
@@ -504,19 +538,19 @@ class SaveObject<T:SaveObjectData> {
 		}
 		#elseif cpp
 		var saveid = _id + "." + key;
-		var shared = openfl.net.SharedObject.getLocal(saveid);
-		try {
-			var v = Reflect.getProperty(_localSaveData, key);
-			if (v is Float || v is String) {
-				shared.data.data = v;
-			} else {
-				shared.data.data = Json.stringify(v);
-			}
-		} catch (e:haxe.Exception) {
-			trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
-		}
-		shared.flush();
-		// File.saveContent("save.test", Json.stringify(_localSaveData));
+		threadPool.queue({saveid: saveid, key: key, _localSaveData: _localSaveData});
+		// var shared = openfl.net.SharedObject.getLocal(saveid);
+		// try {
+		// 	var v = Reflect.getProperty(_localSaveData, key);
+		// 	if (v is Float || v is String) {
+		// 		shared.data.data = v;
+		// 	} else {
+		// 		shared.data.data = Json.stringify(v);
+		// 	}
+		// } catch (e:haxe.Exception) {
+		// 	trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+		// }
+		// shared.flush();
 		#end
 	}
 

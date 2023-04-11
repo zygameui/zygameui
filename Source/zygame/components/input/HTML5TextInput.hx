@@ -75,8 +75,10 @@ class HTML5TextInput {
 	public static function closeInput(label:ZLabel):Void {
 		if (label == zinput) {
 			zinput = null;
-			if (textureArea != null)
+			if (textureArea != null) {
 				textureArea.style.visibility = "hidden";
+				textureArea.blur();
+			}
 		}
 	}
 }

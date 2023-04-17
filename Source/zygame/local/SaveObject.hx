@@ -164,7 +164,6 @@ class SaveObject<T:SaveObjectData> {
 						// trace("用户数据读取成功：", data);
 						// return;
 						// #end
-						_isReadData = true;
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);
@@ -194,6 +193,7 @@ class SaveObject<T:SaveObjectData> {
 							#end
 							this.saveSaveAgent(cb);
 						}
+						_isReadData = true;
 					} else {
 						_cbFunc(cb, false);
 					}
@@ -538,7 +538,10 @@ class SaveObject<T:SaveObjectData> {
 		}
 		#elseif cpp
 		var saveid = _id + "." + key;
+
+		// 异步存档似乎有问题，暂不使用
 		threadPool.queue({saveid: saveid, key: key, _localSaveData: _localSaveData});
+
 		// var shared = openfl.net.SharedObject.getLocal(saveid);
 		// try {
 		// 	var v = Reflect.getProperty(_localSaveData, key);

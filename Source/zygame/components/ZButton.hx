@@ -124,6 +124,8 @@ class ZButton extends ToggleButton {
 	private var _clickEventCall:Void->Void;
 
 	private function _clickCall(e:MouseEvent):Void {
+		if (!this.mouseEnabled)
+			return;
 		if (sound != null || defaultSound != null) {
 			var playsound = ZBuilder.getBaseSound(sound == null ? defaultSound : sound);
 			if (SoundChannelManager.current.isEffectAvailable()) {

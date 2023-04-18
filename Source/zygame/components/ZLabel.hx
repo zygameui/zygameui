@@ -32,6 +32,11 @@ enum ZLabelRenderType {
 @:keep
 class ZLabel extends DataProviderComponent {
 	/**
+	 * 全局文本过滤实现
+	 */
+	public static var onGlobalCharFilter:String->String;
+
+	/**
 	 * 渲染模式：
 	 * 系统文字ZLabelRenderType.NATIVE，使用系统fillText渲染。
 	 * 缓存文字ZLabelRenderType.CACHE，使用缓存文字的基础上渲染。
@@ -360,6 +365,9 @@ class ZLabel extends DataProviderComponent {
 		#if (!neko && !hl)
 		if (value != null && Std.isOfType(value, String) && value.indexOf("@") == 0)
 			value = zygame.utils.LanguageUtils.getText(value);
+		if (onGlobalCharFilter != null) {
+			value = onGlobalCharFilter(value);
+		}
 		#end
 		if (_isHtml)
 			_display.htmlText = value;

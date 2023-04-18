@@ -108,6 +108,8 @@ class Zip {
 	 * @return Bytes
 	 */
 	private function decompress(entry:Entry):Bytes {
+		if (!entry.compressed)
+			return entry.data;
 		#if haxezip
 		// 使用haxe自带的官方解压
 		var inf = new haxe.zip.InflateImpl(new haxe.io.BytesInput(entry.data), false, false);

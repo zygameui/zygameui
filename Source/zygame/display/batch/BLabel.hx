@@ -1,6 +1,6 @@
-
 package zygame.display.batch;
 
+import zygame.components.ZLabel;
 import zygame.components.ZBuilder;
 import openfl.geom.Rectangle;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
@@ -196,6 +196,8 @@ class BLabel extends BSprite{
     {
         if(!Std.isOfType(value,String))
             value = Std.string(value);
+        if(ZLabel.onGlobalCharFilter != null)
+            value = ZLabel.onGlobalCharFilter(value);
         if(_text != value || sizeChange)
         {
             _text = value;

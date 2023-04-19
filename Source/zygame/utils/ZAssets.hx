@@ -1102,6 +1102,20 @@ class ZAssets {
 	}
 
 	/**
+	 * 获取压缩文件中的文本
+	 * @param id 
+	 * @return Dynamic
+	 */
+	private function getZipString(id:String):String {
+		for (zip in _zips) {
+			var data:String = _zips.get(zip).getString(id);
+			if (data != null)
+				return data;
+		}
+		return null;
+	}
+
+	/**
 	 * 获取位图文本数据
 	 * @param id
 	 * @return FntData

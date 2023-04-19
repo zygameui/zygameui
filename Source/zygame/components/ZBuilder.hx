@@ -494,6 +494,20 @@ class ZBuilder {
 	}
 
 	/**
+	 * 判断是否存在对应的zip资源包
+	 * @param name 
+	 * @param ext 
+	 * @return ZAssets
+	 */
+	public static function getZipAssetsByExsit(name:String, type:String):ZAssets {
+		for (assets in baseAssetsList) {
+			if (assets.existZipAssets(name, type))
+				return assets;
+		}
+		return null;
+	}
+
+	/**
 	 * 判断png/xml等资源是否存在
 	 * @param file 
 	 * @return Bool
@@ -933,7 +947,7 @@ class ZBuilder {
 				#if igonre_extends_error
 				if (base == null) {
 					ui = new ZBox();
-				}else{
+				} else {
 					ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
 				}
 				#else

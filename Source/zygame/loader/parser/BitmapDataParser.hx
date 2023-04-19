@@ -10,13 +10,6 @@ import zygame.utils.AssetsUtils;
 	}
 
 	override function process() {
-		var ext = StringUtils.getExtType(getData());
-		if (getAssets().existZipAssets(getName(), ext)) {
-			@:privateAccess getAssets().loadZipBitmapData(getName(), function(bitmapData:BitmapData):Void {
-				this.finalAssets(BITMAP, bitmapData, 1);
-			});
-			return;
-		}
 		AssetsUtils.loadBitmapData(getData()).onComplete(function(data) {
 			this.finalAssets(BITMAP, data, 1);
 		}).onError(function(err) {

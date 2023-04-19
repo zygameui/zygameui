@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.components.ZBuilder;
 import haxe.Json;
 import haxe.macro.Compiler;
 import haxe.io.Encoding;
@@ -423,6 +424,14 @@ class BitmapDataLoader extends BaseLoader {
 	}
 
 	private function onComplete2(call:BitmapData->Void):BitmapDataLoader {
+		var imgname = StringUtils.getName(path);
+		var ext = StringUtils.getExtType(path);
+		var zipAssets = ZBuilder.getZipAssetsByExsit(imgname, ext);
+		if (zipAssets != null) {
+			// 直接通过Zip资源包加载
+			@:privateAccess zipAssets.loadZipBitmapData(imgname, call);
+			return this;
+		}
 		if (isAtf) {
 			// ATF载入流程分解：需要先将zip加载，然后进行解压，获取到对应imgPath的文件，然后再创建读取Texture
 			AssetsUtils.loadBytes(path, false).onComplete(function(bytes:Bytes):Void {
@@ -541,6 +550,16 @@ class TextLoader extends BaseLoader {
 	}
 
 	public function onComplete(call:String->Void):TextLoader {
+		var filename = StringUtils.getName(path);
+		var ext = StringUtils.getExtType(path);
+		var zipAssets = ZBuilder.getZipAssetsByExsit(filename, ext);
+		if (zipAssets != null) {
+			// 直接通过Zip资源包加载
+			var text = @:privateAccess zipAssets.getZipString(filename + "." + ext);
+			call(text);
+			trace("加载zip text", filename);
+			return this;
+		}
 		_onCompleteCall = call;
 		var url:URLRequest = new URLRequest(path);
 		var data:URLLoader = new URLLoader();

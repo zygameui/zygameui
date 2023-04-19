@@ -557,7 +557,6 @@ class TextLoader extends BaseLoader {
 			// 直接通过Zip资源包加载
 			var text = @:privateAccess zipAssets.getZipString(filename + "." + ext);
 			call(text);
-			trace("加载zip text", filename);
 			return this;
 		}
 		_onCompleteCall = call;

@@ -407,7 +407,7 @@ class SaveObject<T:SaveObjectData> {
 		trace("存档成功：", data, _changedData);
 		#end
 		if (data != null) {
-			#if cpp
+			#if false
 			// 回退版本
 			_changedData = {};
 			#else

@@ -167,10 +167,22 @@ class SaveObject<T:SaveObjectData> {
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);
+						var onlineDevice = data != null ? data.deviceid : "";
+						var localDevice = this.data.deviceid.toString();
+						trace("同步设备比较", onlineDevice, localDevice);
 						isNewVersion = onlineVersion > this.data.version;
+						if (!isNewVersion) {
+							if (onlineDevice != localDevice) {
+								trace("### 同步因设备不一致，需要强制更新线上数据 ###");
+								isNewVersion = true;
+							}
+						}
 						if (onlineVersion == 0) {
 							isNewVersion = true;
 						}
+						// 更新设备
+						this.data.deviceid = Lib.getUUID();
+						// 新版本处理
 						if (isNewVersion) {
 							updateUserData(data);
 							this.flush();
@@ -581,6 +593,11 @@ class SaveObjectData {
 	public var lastUploadTime:SaveFloatData = 0.;
 
 	/**
+	 * 最后登陆的设备
+	 */
+	public var deviceid:SaveStringData = "";
+
+	/**
 	 * CE对象
 	 */
 	public var ce:Map<String, Bool> = [];
@@ -599,6 +616,7 @@ class SaveObjectData {
 		if (Reflect.fields(data).length > 0) {
 			lastUploadTime = Std.int(Date.now().getTime() / 1000);
 			Reflect.setProperty(data, "version", version.toFloat());
+			Reflect.setProperty(data, "deviceid", deviceid.toString());
 			Reflect.setProperty(data, "lastUploadTime", lastUploadTime.toFloat());
 		}
 	}

@@ -31,6 +31,8 @@
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
 
+	<define name="message-reporting" value="pretty"/>
+
 	<!-- 无物理系统碰撞类 -->
 	<haxelib name="differ" />
 	<haxelib name="zygameui-nape" if="nape" />

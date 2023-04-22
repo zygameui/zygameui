@@ -160,10 +160,6 @@ class SaveObject<T:SaveObjectData> {
 			if (saveAgent != null) {
 				saveAgent.readData(function(data, err) {
 					if (err == null) {
-						// #if test
-						// trace("用户数据读取成功：", data);
-						// return;
-						// #end
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);

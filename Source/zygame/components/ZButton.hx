@@ -1,5 +1,6 @@
 package zygame.components;
 
+import haxe.Timer;
 import openfl.events.TouchEvent;
 import zygame.media.SoundChannelManager;
 import openfl.events.MouseEvent;
@@ -123,7 +124,16 @@ class ZButton extends ToggleButton {
 
 	private var _clickEventCall:Void->Void;
 
+	private var _time:Float = -1;
+
 	private function _clickCall(e:MouseEvent):Void {
+		// 防止连点器
+		var n = Timer.stamp();
+		if (n - _time <= 0.16) {
+			_time = n;
+			return;
+		}
+		_time = n;
 		if (!this.mouseEnabled)
 			return;
 		if (sound != null || defaultSound != null) {

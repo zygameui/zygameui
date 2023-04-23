@@ -36,4 +36,22 @@ class StringUtils {
 			return source;
 		return data;
 	}
+
+	/**
+	 * 转成整数
+	 * @param text 
+	 * @return Int
+	 */
+	public static function toInt(text:String):Int {
+		return Std.parseInt(text);
+	}
+
+	/**
+	 * 转成浮点数
+	 * @param text 
+	 * @return Float
+	 */
+	public static function toFloat(text:String):Float {
+		return Std.parseFloat(text);
+	}
 }

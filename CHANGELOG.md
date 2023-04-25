@@ -8,6 +8,7 @@
 
 ### 13.0.9
 - [新增] 新增`ZString`扩展字符串对象，自带常用的API。
+- [改进] 改进`ZBuilderScene`的`onBuildedEvent`事件顺序流程。
 
 ### 13.0.8
 - [增强] 增强`AssetsUtils`的图片和字符串载入功能，允许优先从Zip资源包中载入。

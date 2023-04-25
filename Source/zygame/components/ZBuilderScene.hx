@@ -85,8 +85,8 @@ class ZBuilderScene extends ZScene {
 			if (bool) {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				_loaded = true;
-				this.onBuildedEvent();
 				onBuilded();
+				this.onBuildedEvent();
 				postCompleteEvent();
 			} else {
 				if (onBuildError()) {

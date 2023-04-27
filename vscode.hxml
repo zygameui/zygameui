@@ -9,7 +9,7 @@
 --library tweenxcore
 # --library crypto
 # --library KengSDK
-# --library feathersui
+--library feathersui
 # --library swf
 --library differ
 --library vector-math

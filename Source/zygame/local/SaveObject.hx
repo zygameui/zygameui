@@ -480,13 +480,13 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	public function clear():Void {
 		#if v3apisave
-		zygame.cmnt.v3.V3Api.setData({}, function(data) {
-			if (data.code == 0) {
-				trace("重置成功");
-			} else {
-				trace("重置失败");
-			}
-		});
+		// zygame.cmnt.v3.V3Api.setData({}, function(data) {
+		// 	if (data.code == 0) {
+		// 		trace("重置成功");
+		// 	} else {
+		// 		trace("重置失败");
+		// 	}
+		// });
 		#end
 		var retdata = this.getData();
 		var keys = Reflect.fields(retdata);

@@ -51,9 +51,6 @@ class ZBitmapData extends BitmapData {
 
 	override function dispose() {
 		super.dispose();
-		#if html5
-		// this.disposeCavansImage();
-		#end
 	}
 
 }

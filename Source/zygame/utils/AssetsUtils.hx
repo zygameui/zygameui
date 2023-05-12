@@ -128,6 +128,20 @@ class AssetsUtils {
 		if (newPath != null)
 			path = newPath;
 		#end
+		#if cpp
+		if (nativePath != null) {
+			if (path.indexOf("http") == -1) {
+				var assetsVersion:Dynamic = Assets.cache.version;
+				// 生成远程地址
+				path = nativePath + "/" + path;
+				if (path.indexOf('?') > -1) {
+					path += '&' + assetsVersion;
+				} else {
+					path += '?' + assetsVersion;
+				}
+			}
+		}
+		#end
 		return path;
 	}
 }

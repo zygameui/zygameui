@@ -6,11 +6,12 @@
 
 # ZYGameUI 更新日志
 
-### 13.0.9
+### 13.0.13
 - [新增] 新增`ZString`扩展字符串对象，自带常用的API。
 - [改进] 改进`ZBuilderScene`的`onBuildedEvent`事件顺序流程。（回退）
 - [新增] 新增`ZInt64`扩展64对象支持，可以使用内置的`div`,`mul`方法。
 - [新增] 新增`DisplayObjectRecyclerPool.withClass`支持，使用`FListView`时，推荐使用该方法进行创建`DisplayObjectRecycler`对象，自带垃圾池实现。
+- [新增] 新增`C++`目标的远程资源加载资源。
 
 ### 13.0.8
 - [增强] 增强`AssetsUtils`的图片和字符串载入功能，允许优先从Zip资源包中载入。

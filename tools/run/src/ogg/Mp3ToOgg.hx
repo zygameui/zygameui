@@ -1,5 +1,6 @@
 package ogg;
 
+import sys.io.File;
 import js.node.ChildProcess;
 import sys.FileSystem;
 
@@ -35,14 +36,13 @@ class Mp3ToOgg {
 			// trace("列入缓存：", path);
 			return;
 		}
+		var saveTo = StringTools.replace(path, ".mp3", ".ogg");
+		if (FileSystem.exists(saveTo)) {
+			return;
+		}
 		thridCounts++;
 		trace(Sys.programPath(), Sys.getCwd());
-		var command = "./tools/run/ffmpeg "
-			+ " -y -i \""
-			+ path
-			+ "\" -c:a libvorbis -q:a 2 \""
-			+ StringTools.replace(path, ".mp3", ".ogg")
-			+ "\"";
+		var command = "./tools/run/ffmpeg " + " -y -i \"" + path + "\" -c:a libvorbis -q:a 2 \"" + saveTo + "\"";
 		ChildProcess.exec(command, function(e, i, o) {
 			okCounts++;
 			if (e != null)

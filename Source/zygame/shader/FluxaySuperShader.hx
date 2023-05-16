@@ -4,12 +4,13 @@ import glsl.OpenFLShader;
 import VectorMath;
 import glsl.GLSL;
 
-
 /**
  * 流光效果渲染
  */
 class FluxaySuperShader extends OpenFLShader {
 	@:uniform public var speed:Float;
+
+	@:uniform public var texalpha:Float;
 
 	@:precision("highp float")
 	@:define("TAU 6.12")
@@ -38,13 +39,14 @@ class FluxaySuperShader extends OpenFLShader {
 		tex[0] = tex[0] + colour[0] * alpha;
 		tex[1] = tex[1] + colour[1] * alpha;
 		tex[2] = tex[2] + colour[2] * alpha;
-		gl_FragColor = tex + color * tex;
+		gl_FragColor = tex + color * tex * texalpha;
 	}
 
-	public function new(speed:Float = 1) {
+	public function new(speed:Float = 1, alpha:Float = 1) {
 		super();
 		this.setFrameEvent(true);
 		this.speed = speed;
+		this.u_texalpha.value = [alpha];
 	}
 
 	override function onFrame() {

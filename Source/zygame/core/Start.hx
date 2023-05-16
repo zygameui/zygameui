@@ -471,7 +471,11 @@ class Start extends ZScene {
 		PerformanceAnalysis.init();
 		#end
 
+		#if cpp
+		stage.frameRate = 61;
+		#else
 		stage.frameRate = 60;
+		#end
 		SpineManager.init(stage);
 
 		fps = new FPSDebug();
@@ -696,7 +700,9 @@ class Start extends ZScene {
 			this.invalidate();
 		}
 		#end
-		if (fps.getFps() < 61 || fps60.update()) {
+		#if !cpp
+		// if (fps.getFps() < 61 || fps60.update()) {
+		#end
 			var newTime = Timer.stamp();
 			_frameDt = newTime - _frameTime;
 			_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
@@ -724,7 +730,9 @@ class Start extends ZScene {
 			if (zygame.core.Start3D.current != null)
 				zygame.core.Start3D.current.onRender();
 			#end
-		}
+		#if !cpp
+		// }
+		#end
 	}
 
 	/**

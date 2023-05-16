@@ -185,7 +185,7 @@ class SaveObject<T:SaveObjectData> {
 							// 这里需要进行数据比对
 							_changedData = {};
 							lossKey = [];
-							_cbFunc(cb, true);
+							_cbFunc(cb, true);	
 						} else {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
@@ -215,6 +215,10 @@ class SaveObject<T:SaveObjectData> {
 	}
 
 	private function saveSaveAgent(cb:Bool->Void):Void {
+		#if test
+		// trace("saveSaveAgent=",saveSaveAgent);
+		// throw 1;
+		#end
 		if (saveAgent != null) {
 			var now = Timer.stamp();
 			if (now - _lastTime >= saveInterval) {

@@ -142,6 +142,9 @@ class AssetsUtils {
 			}
 		}
 		#end
+		#if openfl_so_load
+		path = soutils.FileManager.ofPath(path);
+		#end
 		return path;
 	}
 }
@@ -195,7 +198,7 @@ class BytesLoader extends BaseLoader {
 	public function onComplete(call:Bytes->Void):BytesLoader {
 		_onCompleteCall = call;
 		#if (cpp && !ios)
-		var uri:String = #if ios path #else AssetsUtils.ofPath(path) #end;
+		var uri:String = #if ios path #else path #end;
 		this.promise = new Promise<Bytes>();
 		var md5path:String = haxe.crypto.Md5.encode(uri);
 		if (uri.indexOf("http") == 0) {
@@ -240,7 +243,7 @@ class BytesLoader extends BaseLoader {
 		}
 		threadPool.queue({instance: this, uri: uri});
 		#else
-		var request:URLRequest = new URLRequest(#if ios path #else AssetsUtils.ofPath(path) #end);
+		var request:URLRequest = new URLRequest(#if ios path #else path #end);
 		var url:URLLoader = new URLLoader();
 		url.dataFormat = openfl.net.URLLoaderDataFormat.BINARY;
 		url.load(request);
@@ -264,7 +267,7 @@ class BytesLoader extends BaseLoader {
 		var path:String = state.uri;
 
 		if (state.uri.indexOf("http") == 0) {
-			var req:Http = new Http(AssetsUtils.ofPath(path));
+			var req:Http = new Http(path);
 			var responseBytes = new haxe.io.BytesOutput();
 			req.onError = function(err) {
 				// trace("http.onError status = ", err, AssetsUtils.ofPath(path));

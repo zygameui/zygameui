@@ -700,9 +700,9 @@ class Start extends ZScene {
 			this.invalidate();
 		}
 		#end
-		#if !cpp
-		// if (fps.getFps() < 61 || fps60.update()) {
-		#end
+		// #if !cpp
+		if (fps.getFps() < 61 || fps60.update()) {
+		// #end
 			var newTime = Timer.stamp();
 			_frameDt = newTime - _frameTime;
 			_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
@@ -730,9 +730,9 @@ class Start extends ZScene {
 			if (zygame.core.Start3D.current != null)
 				zygame.core.Start3D.current.onRender();
 			#end
-		#if !cpp
-		// }
-		#end
+		// #if !cpp
+		}
+		// #end
 	}
 
 	/**

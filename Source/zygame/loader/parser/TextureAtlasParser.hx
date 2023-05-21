@@ -1,5 +1,6 @@
 package zygame.loader.parser;
 
+import haxe.Exception;
 import zygame.utils.Lib;
 import zygame.utils.load.TextureLoader.TextureAtlas;
 import zygame.utils.AssetsUtils;
@@ -56,17 +57,29 @@ class TextureAtlasParser extends ParserBase {
 			// 开始载入XML
 			if (isbase64) {
 				// Base64一般使用现成的XML数据
-				var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, Xml.parse(xml));
-				textureAtlas.path = getData().path;
-				finalAssets(TEXTUREATLAS, textureAtlas, 1);
-				bitmapData = null;
-			} else {
-				// 载入
-				AssetsUtils.loadText(xml).onComplete(function(xmldata) {
-					var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, Xml.parse(xmldata));
+				var xmlContext:Xml = null;
+				try {
+					xmlContext = Xml.parse(xml);
+					var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, xmlContext);
 					textureAtlas.path = getData().path;
 					finalAssets(TEXTUREATLAS, textureAtlas, 1);
 					bitmapData = null;
+				} catch (e:Exception) {
+					sendError("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path);
+				}
+			} else {
+				// 载入
+				AssetsUtils.loadText(xml).onComplete(function(xmldata) {
+					var xmlContext:Xml = null;
+					try {
+						xmlContext = Xml.parse(xmldata);
+						var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, Xml.parse(xmldata));
+						textureAtlas.path = getData().path;
+						finalAssets(TEXTUREATLAS, textureAtlas, 1);
+						bitmapData = null;
+					} catch (e:Exception) {
+						sendError("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path);
+					}
 				}).onError(function(err) {
 					sendError("TextureAtlas XML无法加载路径：" + getData().path);
 				});

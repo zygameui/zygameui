@@ -187,17 +187,22 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
+	 * 高清渲染比
+	 */
+	public var hdscale:Float = 1;
+
+	/**
 	 * 舞台大小适配变化，为该容器设置设计尺寸，可以在不同的分辨率下，使用不同的设计尺寸；如果设置为null，则使用全局的设计尺寸。
 	 * @param width 设置hdwidth宽度
 	 * @param height 设置hdheight高度
 	 * @param scaleMath 是否需要实装缩放处理
 	 */
 	public function onSizeChange(width:Null<Float>, height:Null<Float>, scaleMath:Bool = true):Void {
-		var currentScale = ScaleUtils.mathScale(getStageWidth(), getStageHeight(), width, height, false, false);
+		hdscale = ScaleUtils.mathScale(getStageWidth(), getStageHeight(), width, height, false, false);
 		if (scaleMath)
-			this.scale(currentScale);
-		_hdwidth = Std.int(getStageWidth() / currentScale) + 1;
-		_hdheight = Std.int(getStageHeight() / currentScale) + 1;
+			this.scale(hdscale);
+		_hdwidth = Std.int(getStageWidth() / hdscale) + 1;
+		_hdheight = Std.int(getStageHeight() / hdscale) + 1;
 	}
 
 	/**

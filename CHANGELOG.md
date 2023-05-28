@@ -11,6 +11,7 @@
     - `color`：文本颜色，参数：0xffffff
     - `offest`：文本偏移，参数：x,y
     - `storek`：stroke，参数：0xffffff
+- [新增] 新增`xmlStyle`样式的支持；
 
 ### 13.0.14
 - [新增] 新增`ZString`扩展字符串对象，自带常用的API。

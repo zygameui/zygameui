@@ -52,6 +52,7 @@ class ZBuilderData {
 			if (assetsLoads.indexOf(styleids[0]) == -1)
 				assetsLoads.push(styleids[0]);
 		}
+		// 应用后会自动加载资源
 		xmlStyle.apply(item);
 		var idname = null;
 		if (item.exists("id")) {

@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.components.style.XmlStyle;
 #if feathersui
 import zygame.feathersui.FListView;
 #end
@@ -696,6 +697,31 @@ class ZBuilder {
 	}
 
 	/**
+	 * xml样式功能
+	 */
+	private static var __xmlStyle:XmlStyle = new XmlStyle();
+
+	/**
+	 * 根据xml名称绑定样式
+	 * @param name 
+	 */
+	public static function bindStyleByXml(name:String):Void {
+		var xml = getXml(name);
+		if (xml != null) {
+			__xmlStyle.addXml(name, xml);
+		}
+	}
+
+	/**
+	 * 绑定样式
+	 * @param styleName 
+	 * @param data 
+	 */
+	public static function bindStyle(styleName:String, data:Dynamic):Void {
+		//
+	}
+
+	/**
 	 * 解除绑定资源
 	 * @param assets
 	 */
@@ -797,6 +823,8 @@ class ZBuilder {
 		var xml = getXml(xmlfileName);
 		if (xml == null)
 			throw xmlfileName + "配置不存在";
+		// 使用副本
+		xml = Xml.parse(xml.toString());
 		var builder:Builder = new Builder();
 		#if openfl_console
 		Cc.watch(builder, xmlfileName);
@@ -923,6 +951,7 @@ class ZBuilder {
 			if (!isExists)
 				return null;
 		}
+		__xmlStyle.apply(xml);
 		var tween:String = null;
 		var className:String = xml.nodeName;
 		var childxml = getXml(className);

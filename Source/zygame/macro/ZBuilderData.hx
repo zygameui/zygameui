@@ -1,5 +1,6 @@
 package zygame.macro;
 
+import zygame.components.style.XmlStyle;
 import zygame.utils.StringUtils;
 #if macro
 import sys.FileSystem;
@@ -15,6 +16,8 @@ class ZBuilderData {
 	public var content:String;
 
 	public var project:ZProjectData;
+
+	public var xmlStyle:XmlStyle = new XmlStyle();
 
 	public function new(xmlPath:String, project:ZProjectData) {
 		this.project = project;
@@ -38,6 +41,18 @@ class ZBuilderData {
 	}
 
 	private function parserItem(item:Xml, parentId:String = null, isClassed:Bool = false, noParseId:Bool = false) {
+		// 样式查询
+		if (item.exists("style")) {
+			var styleid = item.get("style");
+			// 需要切割成两个：xml配置:样式id
+			var styleids = styleid.split(":");
+			var childcontent = File.getContent(project.assetsPath.get(styleids[0] + ".xml"));
+			var childxml:Xml = Xml.parse(childcontent);
+			xmlStyle.addXml(styleids[0], childxml);
+			if (assetsLoads.indexOf(styleids[0]) == -1)
+				assetsLoads.push(styleids[0]);
+		}
+		xmlStyle.apply(item);
 		var idname = null;
 		if (item.exists("id")) {
 			idname = (parentId != null ? parentId + "_" : "") + item.get("id");

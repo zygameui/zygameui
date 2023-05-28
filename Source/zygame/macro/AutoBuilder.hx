@@ -149,7 +149,6 @@ class AutoBuilder {
 						for (s in spines) {
 							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(s.png)) == null) {
 								this.$bindBuilder.loadSpine([s.png], s.atlas);
-								// this.$bindBuilder.loadFiles([s.json]);
 							}
 						}
 						for (item in textures) {

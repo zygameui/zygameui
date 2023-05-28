@@ -6,6 +6,12 @@
 
 # ZYGameUI 更新日志
 
+### 13.0.15
+- [新增] 新增`ZButton`的XML配置支持；
+    - `color`：文本颜色，参数：0xffffff
+    - `offest`：文本偏移，参数：x,y
+    - `storek`：stroke，参数：0xffffff
+
 ### 13.0.14
 - [新增] 新增`ZString`扩展字符串对象，自带常用的API。
 - [改进] 改进`ZBuilderScene`的`onBuildedEvent`事件顺序流程。（回退）

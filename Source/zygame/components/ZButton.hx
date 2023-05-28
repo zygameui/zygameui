@@ -238,12 +238,21 @@ class ZButton extends ToggleButton {
 	}
 
 	/**
-	 * 设置文本颜色，XML配置可通过color设置
+	 * 设置文本颜色，XML配置可通过`color`设置
 	 * @param color 文本颜色
 	 */
 	public function setTextColor(color:UInt):Void {
 		initText();
 		_text.setFontColor(color);
+	}
+
+	/**
+	 * 设置文本的描边，XML配置可通过`stroke`进行设置
+	 * @param color 
+	 */
+	public function setTextStroke(color:UInt):Void {
+		initText();
+		_text.stroke(color);
 	}
 
 	/**
@@ -280,6 +289,7 @@ class ZButton extends ToggleButton {
 	 * @param yz Y轴偏移
 	 */
 	public function setTextPos(xz:Float, yz:Float):Void {
+		initText();
 		_text.x = xz;
 		_text.y = yz;
 	}

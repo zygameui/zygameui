@@ -305,6 +305,16 @@ class ZBuilder {
 		bindParsing(ZButton, "text", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZButton).setText(value);
 		});
+		bindParsing(ZButton, "color", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZButton).setTextColor(Std.parseInt(value));
+		});
+		bindParsing(ZButton, "stroke", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZButton).setTextStroke(Std.parseInt(value));
+		});
+		bindParsing(ZButton, "offest", function(ui:Dynamic, name:String, value:String):Void {
+			var args = value.split(",");
+			cast(ui, ZButton).setTextPos(Std.parseInt(args[0]), Std.parseInt(args[1]));
+		});
 		bindParsing(ZLabel, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).stroke(Std.parseInt(value));
 		});

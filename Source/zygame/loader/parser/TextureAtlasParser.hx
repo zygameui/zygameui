@@ -60,26 +60,31 @@ class TextureAtlasParser extends ParserBase {
 				var xmlContext:Xml = null;
 				try {
 					xmlContext = Xml.parse(xml);
-					var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, xmlContext);
-					textureAtlas.path = getData().path;
-					finalAssets(TEXTUREATLAS, textureAtlas, 1);
-					bitmapData = null;
 				} catch (e:Exception) {
 					sendError("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path);
+					return;
 				}
+				var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, xmlContext);
+				textureAtlas.path = getData().path;
+				finalAssets(TEXTUREATLAS, textureAtlas, 1);
+				bitmapData = null;
 			} else {
 				// 载入
 				AssetsUtils.loadText(xml).onComplete(function(xmldata) {
 					var xmlContext:Xml = null;
 					try {
 						xmlContext = Xml.parse(xmldata);
-						var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, Xml.parse(xmldata));
-						textureAtlas.path = getData().path;
-						finalAssets(TEXTUREATLAS, textureAtlas, 1);
-						bitmapData = null;
 					} catch (e:Exception) {
+						// #if !final
+						trace("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path, e.message);
+						// #end
 						sendError("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path);
+						return;
 					}
+					var textureAtlas:TextureAtlas = new TextureAtlas(bitmapData, Xml.parse(xmldata));
+					textureAtlas.path = getData().path;
+					finalAssets(TEXTUREATLAS, textureAtlas, 1);
+					bitmapData = null;
 				}).onError(function(err) {
 					sendError("TextureAtlas XML无法加载路径：" + getData().path);
 				});

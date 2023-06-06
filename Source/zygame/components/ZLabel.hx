@@ -114,7 +114,10 @@ class ZLabel extends DataProviderComponent {
 		if (_defaultDisplay == null)
 			updatedefaultText();
 		this.updateComponents();
-		_defaultDisplay.text = value;
+		if (ZLabel.onGlobalCharFilter != null)
+			_defaultDisplay.text = ZLabel.onGlobalCharFilter(value);
+		else
+			_defaultDisplay.text = value;
 		return value;
 	}
 
@@ -575,6 +578,10 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	#if (minigame || android || ios || html5)
+	public function openInput():Void {
+		onMiniGameInput(null);
+	}
+
 	/**
 	 * 触发小游戏的输入事件
 	 * @param e

@@ -5,6 +5,8 @@
 - [未解决]quartOut在JS压缩的情况下，会发生问题。
 
 # ZYGameUI 更新日志
+### 13.0.18
+- 【新增】新增`ZLabel`的`openInput`方法，主动打开输入框支持；
 
 ### 13.0.15
 - [新增] 新增`ZButton`的XML配置支持；

@@ -77,7 +77,6 @@ class XmlStyle {
 	 * @param xml 
 	 */
 	public function addXml(name:String, xml:Xml):Void {
-		trace("添加样式", name, xml.toString());
 		if (__cacheStyle.exists(name)) {
 			return;
 		}

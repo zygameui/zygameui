@@ -90,6 +90,24 @@ class AssetsUtils {
 		return new BytesLoader(ofPath(id));
 	}
 
+	/**
+	 * 清理缓存
+	 * @param url 
+	 */
+	public static function cleanCacheId(url:String):Bool {
+		#if cpp
+		url = ofPath(url);
+		// 将缓存清理
+		var md5path:String = haxe.crypto.Md5.encode(url);
+		if (sys.FileSystem.exists(lime.system.System.applicationStorageDirectory + md5path)) {
+			trace("缓存异常，删除：", lime.system.System.applicationStorageDirectory + md5path);
+			sys.FileSystem.deleteFile(lime.system.System.applicationStorageDirectory + md5path);
+			return true;
+		}
+		#end
+		return false;
+	}
+
 	public static function ofPath(path:String):String {
 		if (path == null)
 			return null;
@@ -172,7 +190,7 @@ class BaseLoader {
 }
 
 class BytesLoader extends BaseLoader {
-	#if (cpp && !ios)
+	#if (cpp && !ios && !use_openfl_bytes_loader)
 	private static var threadPool:ThreadPool;
 
 	private var promise:Promise<Bytes>;
@@ -197,7 +215,7 @@ class BytesLoader extends BaseLoader {
 
 	public function onComplete(call:Bytes->Void):BytesLoader {
 		_onCompleteCall = call;
-		#if (cpp && !ios)
+		#if (cpp && !ios && !use_openfl_bytes_loader)
 		var uri:String = #if ios path #else path #end;
 		this.promise = new Promise<Bytes>();
 		var md5path:String = haxe.crypto.Md5.encode(uri);
@@ -235,7 +253,7 @@ class BytesLoader extends BaseLoader {
 			});
 		}
 		if (threadPool == null) {
-			threadPool = new ThreadPool(0, 1);
+			threadPool = new ThreadPool(0, 10);
 			threadPool.doWork.add(threadPool_doWork);
 			threadPool.onProgress.add(threadPool_onProgress);
 			threadPool.onComplete.add(threadPool_onComplete);
@@ -261,7 +279,7 @@ class BytesLoader extends BaseLoader {
 		return this;
 	}
 
-	#if (cpp && !ios)
+	#if (cpp && !ios && !use_openfl_bytes_loader)
 	private static function threadPool_doWork(state:Dynamic):Void {
 		var instance:BytesLoader = state.instance;
 		var path:String = state.uri;
@@ -269,9 +287,14 @@ class BytesLoader extends BaseLoader {
 		if (state.uri.indexOf("http") == 0) {
 			var req:Http = new Http(path);
 			var responseBytes = new haxe.io.BytesOutput();
+			var isError = false;
 			req.onError = function(err) {
-				// trace("http.onError status = ", err, AssetsUtils.ofPath(path));
-				// threadPool.sendError({instance: instance, promise: instance.promise, error: "Cannot load file: " + path});
+				// 超时会走这里
+				trace("http.onError status = ", err, AssetsUtils.ofPath(path));
+				if (isError)
+					return;
+				isError = true;
+				threadPool.sendError({instance: instance, promise: instance.promise, error: "Cannot load file: " + path});
 			};
 			var status:Int = 0;
 			req.onStatus = function(code:Int):Void {
@@ -305,6 +328,9 @@ class BytesLoader extends BaseLoader {
 					result: bytes
 				});
 			} else {
+				if (isError)
+					return;
+				isError = true;
 				threadPool.sendError({instance: instance, promise: instance.promise, error: "Cannot load file: " + path});
 			}
 		}
@@ -320,34 +346,16 @@ class BytesLoader extends BaseLoader {
 			promise.complete(state.result);
 
 		var instance = state.instance;
-
-		// 超时实现
-		// if (instance.timeout != null) {
-
-		// 	instance.timeout.stop ();
-		// 	instance.timeout = null;
-
-		// }
-
-		// instance.bytes = null;
 		instance.promise = null;
 	}
 
 	private static function threadPool_onError(state:Dynamic):Void {
 		var promise:Promise<Bytes> = state.promise;
-		promise.error(state.error);
-
-		var instance = state.instance;
-
-		// if (instance.timeout != null) {
-
-		// 	instance.timeout.stop ();
-		// 	instance.timeout = null;
-
-		// }
-
-		// instance.bytes = null;
-		instance.promise = null;
+		if (promise != null) {
+			promise.error(state.error);
+			var instance = state.instance;
+			instance.promise = null;
+		}
 	}
 
 	private static function threadPool_onProgress(state:Dynamic):Void {

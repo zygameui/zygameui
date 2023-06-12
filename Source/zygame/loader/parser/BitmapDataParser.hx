@@ -13,7 +13,12 @@ import zygame.utils.AssetsUtils;
 		AssetsUtils.loadBitmapData(getData()).onComplete(function(data) {
 			this.finalAssets(BITMAP, data, 1);
 		}).onError(function(err) {
-			this.sendError("无法加载：" + getData());
+			if (AssetsUtils.cleanCacheId(getData())) {
+				// 可重试
+				process();
+			} else {
+				this.sendError("无法加载：" + getData());
+			}
 		});
 	}
 }

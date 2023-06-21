@@ -149,7 +149,9 @@ class ZSpine extends ZBox {
 			if (spine != null)
 				spine.playForce(v, isLoop);
 		} catch (e:Exception) {
+			#if !final
 			trace("异常：动作" + v + "不存在");
+			#end
 		}
 		return v;
 	}

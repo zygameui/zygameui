@@ -283,11 +283,11 @@ class BytesLoader extends BaseLoader {
 	private static function threadPool_doWork(state:Dynamic):Void {
 		var instance:BytesLoader = state.instance;
 		var path:String = state.uri;
+		var isError = false;
 
 		if (state.uri.indexOf("http") == 0) {
 			var req:Http = new Http(path);
 			var responseBytes = new haxe.io.BytesOutput();
-			var isError = false;
 			req.onError = function(err) {
 				// 超时会走这里
 				trace("http.onError status = ", err, AssetsUtils.ofPath(path));
@@ -302,6 +302,8 @@ class BytesLoader extends BaseLoader {
 			}
 			req.customRequest(false, responseBytes, null, "GET");
 			if (status == 200) {
+				if (isError)
+					return;
 				threadPool.sendComplete({
 					instance: instance,
 					promise: instance.promise,
@@ -309,6 +311,9 @@ class BytesLoader extends BaseLoader {
 					result: responseBytes
 				});
 			} else {
+				if (isError)
+					return;
+				isError = true;
 				threadPool.sendError({instance: instance, promise: instance.promise, error: "Cannot load file: " + path});
 			}
 		} else {

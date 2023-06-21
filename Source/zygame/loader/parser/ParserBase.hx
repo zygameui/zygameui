@@ -139,7 +139,8 @@ import zygame.utils.Lib;
 		if (pro == 1) {
 			this.done();
 			this._assets = null;
-			this._data = null;
+			// TODO 忽略处理
+			// this._data = null;
 		}
 	}
 }

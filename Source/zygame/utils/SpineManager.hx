@@ -115,6 +115,7 @@ class SpineManager {
 		}
 		if (!savingMode) {
 			spine.onSpineUpdate(dt);
+			playingCount++;
 			return;
 		}
 		// 节能模式，节能模式所有渲染都是24FPS
@@ -125,6 +126,7 @@ class SpineManager {
 		var newcur = Timer.stamp();
 		spine.lastDrawTime = newcur;
 		_curcpu += (newcur - cur);
+		playingCount++;
 	}
 
 	private static function onFrame(event:Event):Void {
@@ -144,7 +146,6 @@ class SpineManager {
 			spineOnFrames.sort((a, b) -> a.lastDrawTime > b.lastDrawTime ? 1 : -1);
 			for (display in spineOnFrames) {
 				if (!display.isHidden() && display.isPlay && !display.independent) {
-					playingCount++;
 					onSpineUpdate(display, Start.current.frameDt);
 				}
 			}
@@ -161,7 +162,6 @@ class SpineManager {
 				_nowTime = nTime;
 				for (display in spineOnFrames) {
 					if (!display.isHidden() && display.isPlay && !display.independent) {
-						playingCount++;
 						onSpineUpdate(display, dt);
 					}
 				}
@@ -172,7 +172,6 @@ class SpineManager {
 		} else if (fps.fps == 60 || fps.update()) {
 			for (display in spineOnFrames) {
 				if (!display.isHidden() && display.isPlay && !display.independent) {
-					playingCount++;
 					onSpineUpdate(display, 1 / fps.fps);
 				}
 			}

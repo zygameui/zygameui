@@ -10,13 +10,13 @@ import python.FileUtils;
 class Wechat extends BuildSuper {
 	public function new(args:Array<String>, dir:String) {
 		super(args, dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/game.js", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/index.js", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/game.json", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/project.config.json", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/zygameui-dom.js", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/leuok.bi.wx.js", dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/sdk", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/game.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/index.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/game.json", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/project.config.json", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/zygameui-dom.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/leuok.bi.wx.js", dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/sdk", dir);
 	}
 }
 

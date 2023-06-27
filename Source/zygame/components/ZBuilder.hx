@@ -1161,7 +1161,10 @@ class ZBuilder {
 
 		// 动画最后赋值实现
 		if (tween != null) {
-			setProperty(ui, "tween", new ZTween(ZBuilder.getBaseXml(tween)));
+			var tweenXml = ZBuilder.getBaseXml(tween);
+			if (tweenXml != null) {
+				setProperty(ui, "tween", new ZTween(tweenXml));
+			}
 		}
 		return ui;
 	}

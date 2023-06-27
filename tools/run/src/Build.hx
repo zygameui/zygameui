@@ -45,22 +45,26 @@ class Build {
 	public var buildPlatform:String = null;
 
 	public function new(args:Array<String>) {
-		trace("BUILDING " + args);
 		var buildAgs = args[1].split(":");
-		Sys.setCwd(args[2]);
+		Sys.setCwd(args[args.length - 1]);
+		trace("BUILDING " + args, Sys.getCwd());
 		if (args.length < 3)
 			throw "参数不足，请参考`haxelib run zygameui -build 平台`命令\n 已支持平台：" + platforms.join(" ");
 		if (platforms.indexOf(buildAgs[0]) == -1)
 			throw "平台`" + args[1] + "`无效，不存在于`" + platforms.join(" ") + "`当中";
-		if (!FileSystem.exists(args[2] + "zproject.xml"))
+		if (!FileSystem.exists(Sys.getCwd() + "zproject.xml"))
 			throw "项目不存在有效的zproject.xml配置";
 		// 开始编译
 		var target = buildAgs.length > 1 ? buildAgs[1] : buildAgs[0];
-		var xml:Xml = Xml.parse(File.getContent(args[2] + "zproject.xml"));
+		var xml:Xml = Xml.parse(File.getContent(Sys.getCwd() + "zproject.xml"));
 		xml.firstElement().insertChild(Xml.parse("<define name=\"" + (target == "html5" ? "html5-platform" : target) + "\"/>"), 0);
 		xml.firstElement().insertChild(Xml.parse("<define name=\"zybuild\"/>"), 0);
-		File.saveContent(args[2] + "project.xml", xml.toString());
-		var dir:String = args[2] + "Export/" + target;
+		// 额外的参数，全部都需要定义为define
+		for (i in 2...args.length - 1) {
+			xml.firstElement().insertChild(Xml.parse('<define name="${args[i]}"/>'), 0);
+		}
+		File.saveContent(Sys.getCwd() + "project.xml", xml.toString());
+		var dir:String = Sys.getCwd() + "Export/" + target;
 		if (args[1] == "html5")
 			dir += "/bin";
 		Defines.define("zybuild");
@@ -126,7 +130,7 @@ class Build {
 			throw "Build.mainFileName is NULL!";
 		// 通用资源拷贝
 		FileUtils.copyDic("Export/html5/bin/lib", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/" + mainFileName + ".js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/" + mainFileName + ".js", dir);
 		// 运行平台自定义脚本
 		var platformName = args[1];
 		platformName = platformName.substr(0, 1).toUpperCase() + platformName.substr(1).toLowerCase();
@@ -281,7 +285,7 @@ class Build {
 						// trace("action copy:",cp,args[1]);
 						if (cp.indexOf(args[1]) != -1 || cp.indexOf("all") != -1) {
 							var filepath:String = item.exists("rename") ? item.get("rename") : item.get("path");
-							var path = args[2] + "Export/html5/bin/" + filepath;
+							var path = Sys.getCwd() + "Export/html5/bin/" + filepath;
 							trace("CP " + path, "root=", currentBuild.root);
 							if (FileSystem.isDirectory(path))
 								FileUtils.copyDic(path, currentBuild.root != null ? (dir + "/" + currentBuild.root) : dir);

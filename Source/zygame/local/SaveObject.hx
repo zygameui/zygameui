@@ -160,6 +160,7 @@ class SaveObject<T:SaveObjectData> {
 			if (saveAgent != null) {
 				saveAgent.readData(function(data, err) {
 					if (err == null) {
+						_isReadData = true;
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
 						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);
@@ -185,7 +186,7 @@ class SaveObject<T:SaveObjectData> {
 							// 这里需要进行数据比对
 							_changedData = {};
 							lossKey = [];
-							_cbFunc(cb, true);	
+							_cbFunc(cb, true);
 						} else {
 							// 不同步本地的时候，直接同步
 							this.data.updateUserData(data);
@@ -201,7 +202,6 @@ class SaveObject<T:SaveObjectData> {
 							#end
 							this.saveSaveAgent(cb);
 						}
-						_isReadData = true;
 					} else {
 						_cbFunc(cb, false);
 					}

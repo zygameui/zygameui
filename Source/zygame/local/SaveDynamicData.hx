@@ -43,6 +43,14 @@ import zygame.utils.CEFloat.CEData;
 		return this.data;
 	}
 
+	/**
+	 * 是否已经存在更改数据
+	 * @return Bool
+	 */
+	public function isChanged():Bool {
+		return this.changed;
+	}
+
 	@:from public static function fromDynamic<T>(data:Dynamic):SaveDynamicData<T> {
 		var data = new SaveDynamicData(data);
 		return data;

@@ -12,16 +12,16 @@ class QuickGame extends BuildSuper {
 		super(args, dir);
 		FileUtils.createDir(dir + "/src");
 		FileUtils.createDir(dir + "/engine");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/" + Build.mainFileName + ".js", dir + "/engine");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/game.js", dir + "/src");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/manifest.json", dir + "/src");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/package.json", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/zygameui-dom.js", dir + "/src");
-		FileUtils.copyDic(args[2] + "Export/html5/bin/vivosrc", dir + "/src");
-		FileUtils.copyDic(args[2] + "Export/html5/bin/config", dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/sign", dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/lib", dir + "/src");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir + "/src");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/" + Build.mainFileName + ".js", dir + "/engine");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/game.js", dir + "/src");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/manifest.json", dir + "/src");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/package.json", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/zygameui-dom.js", dir + "/src");
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/vivosrc", dir + "/src");
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/config", dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/sign", dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/lib", dir + "/src");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/pkgicon.png", dir + "/src");
 	}
 
 	override public function run(cName:String):Void {
@@ -47,16 +47,16 @@ class Vivo extends QuickGame {
 class Oppo extends BuildSuper {
 	public function new(args:Array<String>, dir:String) {
 		super(args, dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/main.js", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/zygameui-dom.js", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/manifest.json", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/icon.png", dir);
-		// FileUtils.copyDic(args[2]+"Export/html5/bin/subcontract",dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/res", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/lib/pako.min", dir + "/lib");
-		FileUtils.copyDic(args[2] + "Export/html5/bin/release", dir + "/sign");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/sdk", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/main.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/zygameui-dom.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/manifest.json", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/icon.png", dir);
+		// FileUtils.copyDic(Sys.getCwd()+"Export/html5/bin/subcontract",dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/res", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/lib/pako.min", dir + "/lib");
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/release", dir + "/sign");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/pkgicon.png", dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/sdk", dir);
 	}
 
 	override function buildAfter() {

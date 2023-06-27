@@ -1,5 +1,3 @@
-package game.data;
-
 import haxe.Int64;
 
 using StringTools;

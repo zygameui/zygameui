@@ -6,13 +6,13 @@ import python.FileUtils;
 class Meizu extends BuildSuper {
 	public function new(args:Array<String>, dir:String) {
 		super(args, dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/index-meizu.html", dir + "/index.html");
-		FileUtils.copyFile(args[2] + "Export/html5/bin/zygameui-dom.js", dir);
-		FileUtils.copyFile(args[2] + "Export/html5/bin/manifest.json", dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/sign", dir);
-		FileUtils.copyDic(args[2] + "Export/html5/bin/image", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/index-meizu.html", dir + "/index.html");
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/zygameui-dom.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/manifest.json", dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/sign", dir);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/image", dir);
 		// 兼容打包工具的ICON
-		FileUtils.copyFile(args[2] + "Export/html5/bin/pkgicon.png", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/pkgicon.png", dir);
 		var oldDir = Sys.getCwd();
 		Sys.setCwd(dir);
 		var npmInstall:Bool = FileSystem.exists(this.dir + "/../html5/bin/tools/meizu-build/node_modules");

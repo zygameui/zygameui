@@ -91,7 +91,7 @@ class Tools {
 				MiniEngineBuild.build(args[1]);
 			case "-atf":
 				// 批量生成ATF文件
-				AtfBuild.build(args[1], args[2]);
+				AtfBuild.build(args[1], Sys.getCwd());
 			case "-build", "-final", "-debug":
 				Build.run(args);
 			case "-upload":
@@ -104,9 +104,9 @@ class Tools {
 				showLibs();
 			case "-xls":
 				var isRoot = args[1].charAt(0) == "/";
-				var isRoot2 = args[2].charAt(0) == "/";
+				var isRoot2 = Sys.getCwd().charAt(0) == "/";
 				trace("isRoot", isRoot, "isRoot2", isRoot2);
-				XlsBuild.build((isRoot ? "" : args[3]) + args[1], (isRoot2 ? "" : args[3]) + args[2]);
+				XlsBuild.build((isRoot ? "" : args[3]) + args[1], (isRoot2 ? "" : args[3]) + Sys.getCwd());
 			case "-atlas":
 				AtlasTools.removeXmlItem(args[1]);
 			case "-ogg":

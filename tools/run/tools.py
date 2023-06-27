@@ -1097,8 +1097,8 @@ class Tools:
             if (command1 == "-atf"):
                 atf_AtfBuild.build((args[1] if 1 < len(args) else None),Sys.getCwd())
             elif (command1 == "-ogg"):
-                haxe_Log.trace("Mp3 to Ogg...",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 114, 'className': "Tools", 'methodName': "main", 'customParams': [Sys.getCwd()]}))
-                Sys.command("node",[(HxOverrides.stringOrNull(Sys.getCwd()) + "/tools/run/mp3toogg.js"), (args[1] if 1 < len(args) else None)])
+                haxe_Log.trace("Mp3 to Ogg...",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 114, 'className': "Tools", 'methodName': "main", 'customParams': [(args[2] if 2 < len(args) else None)]}))
+                Sys.command("node",[(HxOverrides.stringOrNull((args[2] if 2 < len(args) else None)) + "/tools/run/mp3toogg.js"), (args[1] if 1 < len(args) else None)])
             elif (command1 == "-pkg"):
                 pkg_PkgTools.build()
             elif (command1 == "-xls"):
@@ -1107,7 +1107,7 @@ class Tools:
                 _this = Sys.getCwd()
                 isRoot2 = ((("" if ((0 >= len(_this))) else _this[0])) == "/")
                 haxe_Log.trace("isRoot",_hx_AnonObject({'fileName': "src/Tools.hx", 'lineNumber': 108, 'className': "Tools", 'methodName': "main", 'customParams': [isRoot, "isRoot2", isRoot2]}))
-                xls_XlsBuild.build((HxOverrides.stringOrNull((("" if isRoot else (args[3] if 3 < len(args) else None)))) + HxOverrides.stringOrNull((args[1] if 1 < len(args) else None))),(HxOverrides.stringOrNull((("" if isRoot2 else (args[3] if 3 < len(args) else None)))) + HxOverrides.stringOrNull(Sys.getCwd())))
+                xls_XlsBuild.build((HxOverrides.stringOrNull((("" if isRoot else (args[3] if 3 < len(args) else None)))) + HxOverrides.stringOrNull((args[1] if 1 < len(args) else None))),(HxOverrides.stringOrNull((("" if isRoot2 else (args[3] if 3 < len(args) else None)))) + HxOverrides.stringOrNull((args[2] if 2 < len(args) else None))))
         elif (_hx_local_1 == 5):
             if (command1 == "-libs"):
                 Tools.showLibs()
@@ -6460,7 +6460,8 @@ class xls_XlsBuild:
 
     @staticmethod
     def build(path,saveDir):
-        haxe_Log.trace("XLS:",_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 10, 'className': "xls.XlsBuild", 'methodName': "build", 'customParams': [path, saveDir, sys_FileSystem.isDirectory(path)]}))
+        Sys.setCwd(python_internal_ArrayImpl._get(Sys.args(), (len(Sys.args()) - 1)))
+        haxe_Log.trace("XLS:",_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 11, 'className': "xls.XlsBuild", 'methodName': "build", 'customParams': [path, saveDir, sys_FileSystem.isDirectory(path)]}))
         if sys_FileSystem.isDirectory(path):
             array = sys_FileSystem.readDirectory(path)
             _g = 0
@@ -6472,7 +6473,7 @@ class xls_XlsBuild:
             startIndex = None
             if (((path.find("/.") if ((startIndex is None)) else HxString.indexOfImpl(path,"/.",startIndex))) != -1):
                 return
-            haxe_Log.trace(("parsing file:" + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 19, 'className': "xls.XlsBuild", 'methodName': "build"}))
+            haxe_Log.trace(("parsing file:" + ("null" if path is None else path)),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 20, 'className': "xls.XlsBuild", 'methodName': "build"}))
             try:
                 xlsData = python_XlsData.open_workbook(path)
                 names = xlsData.sheet_names()
@@ -6481,7 +6482,7 @@ class xls_XlsBuild:
                     name = (names[_g] if _g >= 0 and _g < len(names) else None)
                     _g = (_g + 1)
                     data = _hx_AnonObject({'data': []})
-                    haxe_Log.trace((("do " + ("null" if name is None else name)) + " parsing..."),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 25, 'className': "xls.XlsBuild", 'methodName': "build"}))
+                    haxe_Log.trace((("do " + ("null" if name is None else name)) + " parsing..."),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 26, 'className': "xls.XlsBuild", 'methodName': "build"}))
                     sheet = xlsData.sheet_by_name(name)
                     keys = sheet.row_values(0)
                     newkeys = []
@@ -6515,7 +6516,7 @@ class xls_XlsBuild:
                         saveName = HxString.substr(saveName,0,_hx_len)
                     else:
                         continue
-                    haxe_Log.trace(("keys:" + Std.string(keys)),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 51, 'className': "xls.XlsBuild", 'methodName': "build"}))
+                    haxe_Log.trace(("keys:" + Std.string(keys)),_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 52, 'className': "xls.XlsBuild", 'methodName': "build"}))
                     _g3 = 2
                     _g4 = sheet.nrows
                     while (_g3 < _g4):
@@ -6544,6 +6545,7 @@ class xls_XlsBuild:
                         Reflect.setProperty(Reflect.field(data,"doc"),value.name,value.doc)
                     if (not sys_FileSystem.exists(saveDir)):
                         sys_FileSystem.createDirectory(saveDir)
+                    haxe_Log.trace("saveTo",_hx_AnonObject({'fileName': "src/xls/XlsBuild.hx", 'lineNumber': 73, 'className': "xls.XlsBuild", 'methodName': "build", 'customParams': [(((("null" if saveDir is None else saveDir) + "/") + ("null" if saveName is None else saveName)) + ".json")]}))
                     sys_io_File.saveContent((((("null" if saveDir is None else saveDir) + "/") + ("null" if saveName is None else saveName)) + ".json"),haxe_format_JsonPrinter.print(data,None,None))
             except BaseException as _g:
                 err = haxe_Exception.caught(_g)

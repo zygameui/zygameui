@@ -7,7 +7,8 @@ import sys.FileSystem;
 
 class XlsBuild {
 	public static function build(path:String, saveDir:String):Void {
-		trace("XLS:",path,saveDir,FileSystem.isDirectory(path));
+		Sys.setCwd(Sys.args()[Sys.args().length - 1]);
+		trace("XLS:", path, saveDir, FileSystem.isDirectory(path));
 		if (FileSystem.isDirectory(path)) {
 			var array = FileSystem.readDirectory(path);
 			for (str in array) {
@@ -27,16 +28,16 @@ class XlsBuild {
 					// Key值为第二列中
 					var keys:Array<String> = sheet.getRowValues(0);
 					var newkeys:Array<String> = [];
-					var newDockey:Array<{name:String,doc:String}> = [];
+					var newDockey:Array<{name:String, doc:String}> = [];
 					var docKeys:Array<String> = sheet.getRowValues(1);
-					for(i in 0...keys.length){
+					for (i in 0...keys.length) {
 						var s = keys[i];
 						var d = docKeys[i];
-						if (s != "" && s != null && s != "null"){
+						if (s != "" && s != null && s != "null") {
 							newkeys.push(s);
 							newDockey.push({
-								name:s,
-								doc:d
+								name: s,
+								doc: d
 							});
 						}
 					}
@@ -52,7 +53,7 @@ class XlsBuild {
 					for (i in 2...sheet.nrows) {
 						var values:Array<String> = sheet.getRowValues(i);
 						var obj:Dynamic = {
-							id:(i - 1)
+							id: (i - 1)
 						};
 						for (i2 in 1...values.length) {
 							var key:String = Std.string(keys[i2]);
@@ -64,15 +65,16 @@ class XlsBuild {
 					}
 					data.doc = {};
 					for (index => value in newDockey) {
-						Reflect.setProperty(data.doc,value.name,value.doc);
+						Reflect.setProperty(data.doc, value.name, value.doc);
 					}
 					if (!FileSystem.exists(saveDir)) {
 						FileSystem.createDirectory(saveDir);
 					}
+					trace("saveTo", saveDir + "/" + saveName + ".json");
 					File.saveContent(saveDir + "/" + saveName + ".json", haxe.Json.stringify(data));
 				}
 			} catch (err:Exception) {
-				throw ("file "+path+" is not xls, skip!" + "\n" + err.message);
+				throw("file " + path + " is not xls, skip!" + "\n" + err.message);
 			}
 		}
 	}

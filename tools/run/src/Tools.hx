@@ -106,13 +106,13 @@ class Tools {
 				var isRoot = args[1].charAt(0) == "/";
 				var isRoot2 = Sys.getCwd().charAt(0) == "/";
 				trace("isRoot", isRoot, "isRoot2", isRoot2);
-				XlsBuild.build((isRoot ? "" : args[3]) + args[1], (isRoot2 ? "" : args[3]) + Sys.getCwd());
+				XlsBuild.build((isRoot ? "" : args[3]) + args[1], (isRoot2 ? "" : args[3]) + args[2]);
 			case "-atlas":
 				AtlasTools.removeXmlItem(args[1]);
 			case "-ogg":
 				// 转换为OGG
-				trace("Mp3 to Ogg...", Sys.getCwd());
-				Sys.command("node", [Sys.getCwd() + "/tools/run/mp3toogg.js", args[1]]);
+				trace("Mp3 to Ogg...", args[2]);
+				Sys.command("node", [args[2] + "/tools/run/mp3toogg.js", args[1]]);
 		}
 	}
 

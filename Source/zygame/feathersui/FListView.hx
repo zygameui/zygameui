@@ -1,5 +1,7 @@
 package zygame.feathersui;
 
+import openfl.events.Event;
+import feathers.data.IFlatCollection;
 import openfl.geom.Point;
 import openfl.events.MouseEvent;
 #if feathersui
@@ -36,6 +38,14 @@ class FListView extends ListView {
 		return v;
 	}
 
+	/**
+	 * 是否正在滑动中
+	 * @return Bool
+	 */
+	public function isScrolling():Bool {
+		return this.listViewPort != null && !this.listViewPort.mouseChildren;
+	}
+
 	// 允许模拟触摸
 	override function createScroller() {
 		super.createScroller();
@@ -46,6 +56,13 @@ class FListView extends ListView {
 		super();
 		// this.allowScrollClickItemRenderer = true;
 		this.scrollMode = SCROLL_RECT;
+		this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+	}
+
+	private function onAddToStage(e:Event):Void {
+		if (this.listViewPort != null) {
+			listViewPort.mouseChildren = true;
+		}
 	}
 
 	private var _beginTouch:Point = new Point();

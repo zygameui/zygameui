@@ -5,11 +5,12 @@
 - [未解决]quartOut在JS压缩的情况下，会发生问题。
 
 # ZYGameUI 更新日志
-### 13.0.23
+### 13.0.25
 - [新增] 新增`ZLabel`的`openInput`方法，主动打开输入框支持；
 - [改进] 改进载入线程为10；
 - [改进] 改进`haxe.Http`的加载实现，减少安卓的卡加载流程问题；
 - [新增] 新增`SaveDataContent`对`isChanged()`数据是否有更改的API；
+- [修复] 修复`FListView`可能会发生无法触摸的问题；
 
 ### 13.0.15
 - [新增] 新增`ZButton`的XML配置支持；

@@ -113,6 +113,16 @@ class ZStack extends ZBox {
 			}
 		}
 	}
+
+	override function destroy() {
+		super.destroy();
+		for (i in 0...this.stacks.length) {
+			var child = this.stacks[i];
+			if (child != null && child is ZBuilderScene) {
+				cast(child, ZBuilderScene).releaseScene();
+			}
+		}
+	}
 }
 
 /**

@@ -1,8 +1,11 @@
 package pkg;
 
+import sys.FileSystem;
 import haxe.crypto.Md5;
+#if macro
 import python.FileUtils;
 import sys.io.File;
+#end
 
 class ZProjectData {
 	private var _xml:Xml;
@@ -33,7 +36,13 @@ class ZProjectData {
 
 	public function new(path:String, xmlData:String = null) {
 		var rootPath = path.substr(0, path.lastIndexOf("/"));
+		#if macro
+		if (!FileSystem.exists(path)) {
+			trace("Igrone bind:" + path);
+			return;
+		}
 		_xml = Xml.parse(xmlData != null ? xmlData : File.getContent(path));
+		#end
 		for (item in _xml.firstElement().iterator()) {
 			if (item.nodeType == Element) {
 				trace(item.nodeType, item.nodeName, item);

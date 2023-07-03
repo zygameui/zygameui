@@ -47,7 +47,8 @@ class ZProjectData {
 						var path = item.get("path");
 						var parentPath = rootPath + path;
 						parentPath = parentPath.substr(0, parentPath.lastIndexOf("/") + 1);
-						readXml(path, parentPath);
+						if (FileSystem.exists(path))
+							readXml(path, parentPath);
 					}
 				case "haxelib":
 					if (item.get("bind") == "true") {

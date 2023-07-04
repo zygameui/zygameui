@@ -1,5 +1,6 @@
 package zygame.feathersui;
 
+import zygame.components.ZQuad;
 import feathers.controls.IToggle;
 import feathers.core.IUIControl;
 import feathers.controls.dataRenderers.IDataRenderer;
@@ -58,5 +59,23 @@ class FItemRenderer extends ZBox implements IUIControl implements IDataRenderer 
 	public function set_selected(value:Bool):Bool {
 		_selected = value;
 		return _selected;
+	}
+
+	private var _bg:ZQuad = new ZQuad();
+
+	public function new() {
+		super();
+		_bg.alpha = 0;
+		this.addChild(_bg);
+	}
+
+	override function set_width(value:Float):Float {
+		_bg.width = value;
+		return super.set_width(value);
+	}
+
+	override function set_height(value:Float):Float {
+		_bg.height = value;
+		return super.set_height(value);
 	}
 }

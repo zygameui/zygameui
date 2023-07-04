@@ -19,7 +19,7 @@ class Build {
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
 		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl",
-		"electron", "ks", "lianxin", "mac"
+		"electron", "ks", "lianxin", "mac", "meituan"
 	];
 
 	/**

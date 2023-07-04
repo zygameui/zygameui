@@ -99,32 +99,38 @@ haxelib git openfl-console https://github.com/barisyild/openfl-console
 在HTML5等平台上，游戏将使用JavaScript运行游戏；并支持不同渠道的小游戏兼容。
 
 ### 已支持编译平台
-- HTML5
-- 微信小游戏
-- 4399游戏盒
-- Bilibili快游戏
-- 字节跳动快游戏
-- 手Q小游戏
-- 百度小游戏
-- 梦工厂小游戏
-- 奇虎小游戏
-- Facebook小游戏
-- 魅族快游戏
-- 华为快游戏
-- 小米快游戏
-- 移动MMH5小游戏
-- Vivo快游戏
-- Oppo快游戏
-- Wifi无极环境小游戏
-- 豹趣H5小游戏
-- 趣头条H5小游戏
-- 360奇虎快游戏
-- 九游UCH5小游戏
-- 安卓Android
-- 苹果IOS
-- 4399H5全平台兼容小游戏
-- 小米赚赚H5小游戏
-- YY小游戏（H5）
-- HashLink
+通用的编译处理
+```shell
+haxelib run zygameui ${编译指令}
+```
+| 编译目标 | 编译指令 | 依赖库 | 说明 |
+| -- | -- | -- | -- |
+| HTML5 | html5 | - | - | 
+| 微信小游戏 | wechat | wechat-zygame-dom | - |
+| 4399游戏盒 | g4399 | 4399h5-sdk | 一般直接生成H5版本，不会生成游戏盒版本 |
+| Bilibili快游戏 | bili | wechat-zygame-dom | - |
+| 字节跳动快游戏 | tt | wechat-zygame-dom | - |
+| 手Q小游戏 | qqquick | wechat-zygame-dom | - |
+| 百度小游戏 | baidu | wechat-zygame-dom | - |
+| 梦工厂小游戏 | mgc | wechat-zygame-dom | - |
+| 奇虎360小游戏 | qihoo | wechat-zygame-dom | - |
+| Facebook小游戏 | facebook | - | - |
+| 魅族快游戏 | meizu | wechat-zygame-dom | - |
+| 华为快游戏 | huawei | huawei-rpk-core | - |
+| 小米快游戏 | xiaomi | xiaomi-rpk-core | - |
+| 移动MMH5小游戏 | mmh5 | mm-h5-sdk | - |
+| Vivo快游戏 | vivo | vivo-rpk-core | - |
+| Oppo快游戏 | oppo | oppo-rpk-core | - |
+| Wifi无极环境小游戏 | wifi | - |
+| 豹趣H5小游戏 | - | - | - |
+| 趣头条H5小游戏 | - | - | - |
+| 九游UCH5小游戏 | - | - | - |
+| 安卓Android | android | hxcpp | - |
+| 苹果IOS | ios | hxcpp | - | 
+| 4399H5全平台兼容小游戏 | - | - | - |
+| 小米赚赚H5小游戏 | - | - | - |
+| YY小游戏（H5）| yygame | - | - |
+| HashLink | hashlink | - | - |
+| 美团快游戏 | meituan | wechat-zygame-dom | - | - |
 
 （以上库暂未发布，如果有需要，可以联系我！）

@@ -543,6 +543,7 @@ class BitmapDataLoader extends BaseLoader {
 				call = null;
 			}, function():Void {
 				// 加载失败，应该移除所有回调，并且重新载入
+				__listeners.remove(path);
 				if (loadTimes < AssetsUtils.failTryLoadTimes) {
 					// 重试
 					trace("重载：" + path + "," + loadTimes);
@@ -550,7 +551,6 @@ class BitmapDataLoader extends BaseLoader {
 					onComplete2(call);
 				} else if (callError != null)
 					callError("无法加载" + path);
-				__listeners.remove(path);
 				call = null;
 			});
 			#end

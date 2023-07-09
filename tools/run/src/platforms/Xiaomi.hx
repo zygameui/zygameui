@@ -20,6 +20,7 @@ class Xiaomi extends BuildSuper {
 		Sys.setCwd(dir);
 		if (!FileSystem.exists("node_moules"))
 			Sys.command(" npm install;");
+		// FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/webpack-conf.js", dir + "/node_modules/quickgame-cli/lib/webpack-conf.js");
 		Sys.command("npm run release;");
 	}
 }

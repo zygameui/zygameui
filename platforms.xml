@@ -1,6 +1,6 @@
 <project>
     <!-- 微信小游戏库编译 -->
-    <section if="wechat || qihoo || qqquick || baidu || g4399 || bili || mgc || tt || ks">
+    <section if="wechat || qihoo || qqquick || baidu || g4399 || bili || mgc || tt || ks || meituan">
         <haxelib name="wechat-zygame-dom" />
     </section>
     <section if="oppo">

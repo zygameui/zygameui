@@ -10,6 +10,7 @@ import platforms.Mmh5;
 import platforms.Huawei;
 import platforms.Facebook;
 import platforms.Hl;
+import platforms.Meituan;
 
 class Build {
 	public static var currentBuild:BuildSuper;

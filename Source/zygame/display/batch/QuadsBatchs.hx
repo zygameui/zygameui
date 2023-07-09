@@ -25,8 +25,8 @@ class QuadsBatchs extends Shape {
 	 */
 	public function drawImageBatch(batch:ImageBatchs):Void {
 		_tileset = batch.getAtlas().getTileset();
-		_quads = new Vector();
-		_transform = new Vector();
+		_quads = new Vector(0, false);
+		_transform = new Vector(0, false);
 		this.graphics.clear();
 		this.graphics.beginBitmapFill(_tileset.bitmapData);
 		for (i in 0...batch.numTiles) {

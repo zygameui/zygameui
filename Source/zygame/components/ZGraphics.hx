@@ -17,14 +17,14 @@ import openfl.utils.ByteArray;
  */
 class ZGraphics extends DisplayObjectContainer {
 	private var draw:Sprite;
-	private var vertices:Vector<Float> = new Vector();
-	private var indices:Vector<Int> = new Vector();
-	private var uv:Vector<Float> = new Vector();
+	private var vertices:Vector<Float> = new Vector(0, false);
+	private var indices:Vector<Int> = new Vector(0, false);
+	private var uv:Vector<Float> = new Vector(0, false);
 	private var ids:Array<String> = [];
 
-	private var eraseVertices:Vector<Float> = new Vector();
+	private var eraseVertices:Vector<Float> = new Vector(0, false);
 	private var eraseIds:Array<String> = [];
-	private var eraseUv:Vector<Float> = new Vector();
+	private var eraseUv:Vector<Float> = new Vector(0, false);
 	private var eraseIndexs:Array<Int> = [];
 
 	private var indicesID:Int = 0;

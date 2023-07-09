@@ -58,9 +58,9 @@ class KnifeLight extends #if !zygame openfl.display.Sprite #else TouchDisplayObj
 		var gfx = this.graphics;
 		gfx.clear();
 		var now = Timer.stamp();
-		var vertices:Vector<Float> = new Vector<Float>();
-		var indices:Vector<Int> = new Vector<Int>();
-		var uvtData:Vector<Float> = new Vector<Float>();
+		var vertices:Vector<Float> = new Vector<Float>(0, false);
+		var indices:Vector<Int> = new Vector<Int>(0, false);
+		var uvtData:Vector<Float> = new Vector<Float>(0, false);
 		var numpt = 0;
 		for (track in tracks) {
 			if (track == null)

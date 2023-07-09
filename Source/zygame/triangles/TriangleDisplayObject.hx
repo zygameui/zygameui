@@ -99,7 +99,7 @@ class TriangleDisplayObject implements ITriangleDisplayObject {
 	public var changed:Bool;
 
 	public function new() {
-		vertices = new Vector();
+		vertices = new Vector(0, false);
 	}
 
 	public function onRenderReady():Void {

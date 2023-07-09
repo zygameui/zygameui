@@ -289,7 +289,7 @@ class Start extends ZScene {
 		this.HDHeight = HDHeight;
 		this.HDWidth = HDWidth;
 		this.isDebug = isDebug;
-		updates = new Vector<Refresher>();
+		updates = new Vector<Refresher>(0, false);
 		log('[zygameui] build time:${zygame.utils.System.buildTime}');
 		log("[zygameui] channel=" + Lib.getChannel() + " render=" + Lib.getRenderMode());
 
@@ -701,7 +701,7 @@ class Start extends ZScene {
 		#end
 		// #if !cpp
 		if (fps.getFps() < 61 || fps60.update()) {
-		// #end
+			// #end
 			var newTime = Timer.stamp();
 			_frameDt = newTime - _frameTime;
 			_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
@@ -729,7 +729,7 @@ class Start extends ZScene {
 			if (zygame.core.Start3D.current != null)
 				zygame.core.Start3D.current.onRender();
 			#end
-		// #if !cpp
+			// #if !cpp
 		}
 		// #end
 	}

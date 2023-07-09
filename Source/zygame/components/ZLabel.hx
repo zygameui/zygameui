@@ -199,7 +199,6 @@ class ZLabel extends DataProviderComponent {
 		_display.width = 0;
 		_display.height = 0;
 		_display.text = "";
-		_display.setTextFormat(_font);
 		_display.wordWrap = true;
 		_display.selectable = false;
 		// 调试使用
@@ -208,13 +207,25 @@ class ZLabel extends DataProviderComponent {
 		_display.borderColor = 0xff0000;
 		#end
 		_display.addEventListener("change", (_) -> {
-			_display.setTextFormat(_font);
+			setTextFormat();
 			this.updateComponents();
 		});
 		this.mouseChildren = false;
 		zquad = new ZQuad();
 		zquad.visible = false;
 		this.vAlign = Align.CENTER;
+	}
+
+	private function setTextFormat():Void {
+		if (_display != null && _display.text != "") {
+			_display.setTextFormat(_font);
+		}
+		if (_defaultDisplay != null && _defaultDisplay.text != "") {
+			var oldColor = _font.color;
+			_font.color = defaultColor;
+			_defaultDisplay.setTextFormat(_font);
+			_font.color = oldColor;
+		}
 	}
 
 	override private function set_vAlign(value:String):String {
@@ -381,7 +392,7 @@ class ZLabel extends DataProviderComponent {
 			if (_display.text == value)
 				return value;
 			_display.text = Std.string(value);
-			_display.setTextFormat(_font);
+			setTextFormat();
 		}
 
 		// 刷新内容
@@ -448,7 +459,7 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
-		_display.setTextFormat(_font);
+		setTextFormat();
 		updateComponents();
 	}
 
@@ -462,7 +473,7 @@ class ZLabel extends DataProviderComponent {
 		font = Std.int(font * zygame.core.Start.currentScale);
 		#end
 		_font.size = Std.int(font * _scale);
-		_display.setTextFormat(_font);
+		setTextFormat();
 		zquad.width = 2;
 		zquad.height = font;
 		updateComponents();
@@ -476,7 +487,7 @@ class ZLabel extends DataProviderComponent {
 		_font.color = color;
 		zquad.color = color;
 		_display.textColor = color;
-		_display.setTextFormat(_font);
+		setTextFormat();
 		updateComponents();
 	}
 

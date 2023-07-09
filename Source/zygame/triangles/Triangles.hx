@@ -13,9 +13,9 @@ import openfl.Vector;
 class Triangles extends Shape {
 	private var _shader:zygame.triangles.shader.TrianglesShader;
 
-	private var _array:Vector<Float> = new Vector<Float>();
+	private var _array:Vector<Float> = new Vector<Float>(0, false);
 
-	private var _ids:Vector<Int> = new Vector<Int>();
+	private var _ids:Vector<Int> = new Vector<Int>(0, false);
 
 	private var _changed:Bool = true;
 

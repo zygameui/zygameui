@@ -190,7 +190,7 @@ class TextureAtlas extends Atlas {
 		}
 		// 更新渲染
 		_tileset.bitmapData = bitmapData;
-		_tileset.rectData = new Vector<Float>();
+		_tileset.rectData = new Vector<Float>(0, false);
 		@:privateAccess _tileset.__data = new Array();
 		for (i in 0...rects.length) {
 			_tileset.addRect(rects[i]);

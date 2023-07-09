@@ -45,6 +45,8 @@ class ZLabel extends DataProviderComponent {
 
 	private var _defaultDisplay:ZTextField;
 
+	private var _clickquad:ZQuad;
+
 	private var _display:ZTextField;
 
 	private var _font:TextFormat;
@@ -91,6 +93,8 @@ class ZLabel extends DataProviderComponent {
 	 */
 	private var _scale:Float = #if (html5 && !un_scale_label) 2 #else 1 #end;
 
+	//  private var _scale:Float = 1;
+
 	/**
 	 * 光标色块
 	 */
@@ -109,11 +113,11 @@ class ZLabel extends DataProviderComponent {
 	private function set_defaultText(value:String):String {
 		if (_defaultDisplay == null)
 			updatedefaultText();
+		this.updateComponents();
 		if (ZLabel.onGlobalCharFilter != null)
 			_defaultDisplay.text = ZLabel.onGlobalCharFilter(value);
 		else
 			_defaultDisplay.text = value;
-		this.updateComponents();
 		return value;
 	}
 
@@ -166,7 +170,7 @@ class ZLabel extends DataProviderComponent {
 		_defaultDisplay.scaleY = 1 / _scale;
 		_defaultDisplay.width = _display.width * _scale;
 		_defaultDisplay.height = _display.height * _scale;
-		_defaultDisplay.mouseEnabled = false;
+		_defaultDisplay.mouseEnabled = #if cpp true #else false #end;
 		var oldColor:UInt = _font.color;
 		_font.color = defaultColor;
 		_defaultDisplay.setTextFormat(_font);
@@ -182,12 +186,10 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function new() {
 		super();
+		_clickquad = new ZQuad();
+		this.addChild(_clickquad);
+		_clickquad.alpha = 0;
 		_display = new ZTextField();
-		#if (android || ios)
-		// BATE：移动端兼容？
-		_display.needsSoftKeyboard = true;
-		_display.moveForSoftKeyboard = true;
-		#end
 		#if ios
 		_font = new TextFormat("assets/" + zygame.components.base.ZConfig.fontName);
 		#else
@@ -198,17 +200,10 @@ class ZLabel extends DataProviderComponent {
 		_display.scaleY = 1 / _scale;
 		_display.width = 0;
 		_display.height = 0;
-		_display.text = "";
 		_display.setTextFormat(_font);
 		_display.wordWrap = true;
 		_display.selectable = false;
-		// 调试使用
-		#if zlabel_debug
-		_display.border = true;
-		_display.borderColor = 0xff0000;
-		#end
 		_display.addEventListener("change", (_) -> {
-			_display.setTextFormat(_font);
 			this.updateComponents();
 		});
 		this.mouseChildren = false;
@@ -244,6 +239,10 @@ class ZLabel extends DataProviderComponent {
 
 	private function updateTextXY(txt:TextField):Void {
 		var txtHeight:Float = _display.textHeight;
+		// 新版本是否不再需要移动位移？
+		// #if (quickgame)
+		// _display.y -= 5;
+		// #end
 		#if (openfl < '9.0.0')
 		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
 			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end + 32;
@@ -253,15 +252,22 @@ class ZLabel extends DataProviderComponent {
 		} else if (__height != 0 && __height != _height) {
 			this._height = __height;
 		}
-		txt.height = _height;
+		_display.height = _height;
 		#end
-		if (_defaultDisplay != null)
-			trace("updateTextXY:", _defaultDisplay.textHeight, _display.textHeight);
-		if (_defaultDisplay != null && txtHeight < _defaultDisplay.textHeight) {
-			txtHeight = _defaultDisplay.textHeight;
-		}
 		if (txtHeight == 0)
-			txtHeight = (_font.size);
+			txtHeight = _font.size;
+		switch (hAlign) {
+			case Align.LEFT:
+				txt.x = 0;
+			case Align.RIGHT:
+				txt.x = _width - txt.textWidth / _scale #if quickgame_scale / _getCurrentScale() #end;
+			case Align.CENTER:
+				txt.x = _width / 2 - txt.textWidth / _scale / 2 #if quickgame_scale / _getCurrentScale() #end;
+				#if quickgame_scale
+				txt.x -= (_width - _width / _getCurrentScale()) / 2;
+				#end
+			default:
+		}
 		switch (vAlign) {
 			case Align.TOP:
 				txt.y = 0;
@@ -279,16 +285,8 @@ class ZLabel extends DataProviderComponent {
 	override public function updateComponents():Void {
 		_display.width = _width * _scale;
 		_display.height = _height;
-
-		switch (hAlign) {
-			case LEFT:
-				_font.align = LEFT;
-			case RIGHT:
-				_font.align = RIGHT;
-			case CENTER:
-				_font.align = CENTER;
-			default:
-		}
+		_clickquad.width = _width;
+		_clickquad.height = _height;
 
 		for (text in igoneChars) {
 			_display.text = StringTools.replace(_display.text, text, "");
@@ -297,7 +295,7 @@ class ZLabel extends DataProviderComponent {
 		this.updateTextXY(_display);
 
 		// 更新可选区域
-		// this.scrollRect = new Rectangle(0, 0, this.width, this.height);
+		this.scrollRect = new Rectangle(0, 0, this.width, this.height);
 
 		// 光标实现
 		if (zquad.visible) {
@@ -325,11 +323,10 @@ class ZLabel extends DataProviderComponent {
 				_defaultDisplay.visible = false;
 			}
 		}
-		// 当存在超出时处理
-		var textHeight = _display.textHeight + 5;
-		if (textHeight > _height)
-			_display.height = textHeight;
+		_display.width = _display.textWidth + 5;
+		_display.height = _display.textHeight + 5;
 		if (_defaultDisplay != null) {
+			_defaultDisplay.width = _defaultDisplay.textWidth + 5;
 			_defaultDisplay.height = _defaultDisplay.textHeight + 5;
 		}
 	}
@@ -380,7 +377,32 @@ class ZLabel extends DataProviderComponent {
 		else {
 			if (_display.text == value)
 				return value;
+			#if (cpp)
+			// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
+			if (_display != null) {
+				var newText = new ZTextField();
+				newText.width = _display.width;
+				newText.height = _display.height;
+				newText.scaleX = 1 / _scale;
+				newText.scaleY = 1 / _scale;
+				newText.x = _display.x;
+				newText.y = _display.y;
+				newText.setTextFormat(_font);
+				newText.wordWrap = true;
+				newText.selectable = false;
+				newText.maxChars = _display.maxChars;
+				newText.displayAsPassword = _display.displayAsPassword;
+				newText.shader = _display.shader;
+				this.removeChild(_display);
+				_display = newText;
+				this.addChild(_display);
+			}
+			#end
+			// 不再主动调用__cleanup();
+			// if (_display.text != Std.string(value))
+			// 	@:privateAccess _display.__cleanup();
 			_display.text = Std.string(value);
+			// 修复9.0.0设置无法正常格式化问题
 			_display.setTextFormat(_font);
 		}
 
@@ -475,7 +497,6 @@ class ZLabel extends DataProviderComponent {
 	public function setFontColor(color:UInt):Void {
 		_font.color = color;
 		zquad.color = color;
-		_display.textColor = color;
 		_display.setTextFormat(_font);
 		updateComponents();
 	}
@@ -614,6 +635,37 @@ class ZLabel extends DataProviderComponent {
 	public function bold(blur:Float = 1):Void {
 		this.getDisplay().shader = new zygame.shader.StrokeShader(blur, _font.color);
 	}
+
+	#if android
+	// override function getBounds(target:DisplayObject):Rectangle {
+	// 	var rect = super.getBounds(target);
+	// 	rect.height /= _scale;
+	// 	rect.width /= _scale;
+	// 	__point.x = this.x;
+	// 	__point.y = this.y;
+	// 	__point = this.parent.localToGlobal(__point);
+	// 	var rect:Rectangle = new Rectangle(__point.x,__point.y);
+	// 	__point.x = this.x + this.width;
+	// 	__point.y = this.y + this.height;
+	// 	__point = this.parent.localToGlobal(__point);
+	// 	rect.width = __point.x - rect.x;
+	// 	rect.height = __point.y - rect.y;
+	// 	//转换至target坐标系
+	// 	__point.x = rect.x;
+	// 	__point.y = rect.y;
+	// 	__point = target.globalToLocal(__point);
+	// 	var rx = rect.x;
+	// 	var ry = rect.y;
+	// 	rect.x = __point.x;
+	// 	rect.y = __point.y;
+	// 	__point.x = rx + rect.width;
+	// 	__point.y = ry + rect.height;
+	// 	__point = target.globalToLocal(__point);
+	// 	rect.width = __point.x - rect.x;
+	// 	rect.height = __point.y - rect.y;
+	// 	return rect;
+	// }
+	#end
 
 	/**
 	 *  释放文本占用的缓存

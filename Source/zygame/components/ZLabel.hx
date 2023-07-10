@@ -183,11 +183,11 @@ class ZLabel extends DataProviderComponent {
 	public function new() {
 		super();
 		_display = new ZTextField();
-		#if (android || ios)
-		// BATE：移动端兼容？
-		_display.needsSoftKeyboard = true;
-		_display.moveForSoftKeyboard = true;
-		#end
+		// #if (android || ios)
+		// // BATE：移动端兼容？
+		// _display.needsSoftKeyboard = true;
+		// _display.moveForSoftKeyboard = true;
+		// #end
 		#if ios
 		_font = new TextFormat("assets/" + zygame.components.base.ZConfig.fontName);
 		#else
@@ -266,8 +266,6 @@ class ZLabel extends DataProviderComponent {
 		}
 		txt.height = _height;
 		#end
-		if (_defaultDisplay != null)
-			trace("updateTextXY:", _defaultDisplay.textHeight, _display.textHeight);
 		if (_defaultDisplay != null && txtHeight < _defaultDisplay.textHeight) {
 			txtHeight = _defaultDisplay.textHeight;
 		}

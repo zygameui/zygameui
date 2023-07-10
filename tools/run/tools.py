@@ -3799,7 +3799,7 @@ class platforms_Meituan(platforms_BuildSuper):
     def __init__(self,args,dir):
         super().__init__(args,dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull(Sys.getCwd()) + "Export/html5/bin/game.js"),dir)
-        python_FileUtils.copyFile((HxOverrides.stringOrNull(Sys.getCwd()) + "Export/html5/bin/mgc.config.js"),dir)
+        python_FileUtils.copyFile((HxOverrides.stringOrNull(Sys.getCwd()) + "Export/html5/bin/mgc.config.js"),(("null" if dir is None else dir) + "/../"))
         python_FileUtils.copyFile((HxOverrides.stringOrNull(Sys.getCwd()) + "Export/html5/bin/index.js"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull(Sys.getCwd()) + "Export/html5/bin/game.json"),dir)
         python_FileUtils.copyFile((HxOverrides.stringOrNull(Sys.getCwd()) + "Export/html5/bin/project.config.json"),dir)
@@ -3809,7 +3809,7 @@ class platforms_Meituan(platforms_BuildSuper):
 
     def buildAfter(self):
         super().buildAfter()
-        Sys.setCwd(self.dir)
+        Sys.setCwd((HxOverrides.stringOrNull(self.dir) + "/../"))
         haxe_Log.trace("美团小游戏打包开始",_hx_AnonObject({'fileName': "src/platforms/Meituan.hx", 'lineNumber': 26, 'className': "platforms.Meituan", 'methodName': "buildAfter"}))
         Sys.command("mgc debug")
 
@@ -4174,6 +4174,16 @@ class platforms_Xiaomi(platforms_BuildSuper):
     def buildAfter(self):
         super().buildAfter()
         Sys.setCwd(self.dir)
+        jsPath = haxe_io_Path.join([self.dir, (HxOverrides.stringOrNull(Build.mainFileName) + ".js")])
+        content = sys_io_File.getContent(jsPath)
+        content = StringTools.replace(content,"if(typeof define == \"function\" && define.amd) {","")
+        content = StringTools.replace(content,"define([], function() { return $hx_exports.lime; });","")
+        content = StringTools.replace(content,"define.__amd = define.amd;","")
+        content = StringTools.replace(content,"define.amd = null;\n}","")
+        content = StringTools.replace(content,"if(typeof define == \"function\" && define.__amd) {","")
+        content = StringTools.replace(content,"define.amd = define.__amd;","")
+        content = StringTools.replace(content,"delete define.__amd;\n}","")
+        sys_io_File.saveContent(jsPath,content)
         if (not sys_FileSystem.exists("node_moules")):
             Sys.command(" npm install;")
         Sys.command("npm run release;")

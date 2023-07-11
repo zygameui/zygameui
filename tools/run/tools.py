@@ -6,12 +6,10 @@ import math as python_lib_Math
 import math as Math
 from os import path as python_lib_os_Path
 import inspect as python_lib_Inspect
-import chardet as python_Chardet
 import getpass as python_GetPass
 import urllib.request as python_HttpDownload
 import sys as python_lib_Sys
 import traceback as python_lib_Traceback
-import pandas as python_Pandas
 import xlrd as python_XlsData
 import builtins as python_lib_Builtins
 import functools as python_lib_Functools
@@ -4183,6 +4181,8 @@ class platforms_Xiaomi(platforms_BuildSuper):
         content = StringTools.replace(content,"if(typeof define == \"function\" && define.__amd) {","")
         content = StringTools.replace(content,"define.amd = define.__amd;","")
         content = StringTools.replace(content,"delete define.__amd;\n}","")
+        content = StringTools.replace(content,"\"function\"==typeof define&&define.__amd&&(define.amd=define.__amd,delete define.__amd);","")
+        content = StringTools.replace(content,"\"function\"==typeof define&&define.amd&&(define([],function(){return va.lime}),define.__amd=define.amd,define.amd=null)","")
         sys_io_File.saveContent(jsPath,content)
         if (not sys_FileSystem.exists("node_moules")):
             Sys.command(" npm install;")
@@ -4947,119 +4947,6 @@ class python_Sheet:
     _hx_methods = ["col_values", "row_values"]
 python_Sheet._hx_class = python_Sheet
 _hx_classes["python.Sheet"] = python_Sheet
-
-
-class python_HTMLXlsData:
-    _hx_class_name = "python.HTMLXlsData"
-    __slots__ = ("xls",)
-    _hx_fields = ["xls"]
-    _hx_methods = ["sheet_names", "sheet_by_name"]
-    _hx_interfaces = [python_Xls]
-
-    def __init__(self,path):
-        data = None
-        codebytes = None
-        f2 = open(path, 'rb') ;codebytes=f2.read();f2.close();
-        char = python_Chardet.detect(codebytes)
-        encoding = char['encoding']
-        haxe_Log.trace("编码：",_hx_AnonObject({'fileName': "python/XlsData.hx", 'lineNumber': 167, 'className': "python.HTMLXlsData", 'methodName': "new", 'customParams': [encoding]}))
-        f = open(path, 'r', encoding=encoding);data=f.read();f.close();
-        obj = python_Pandas.read_html(data)
-        startIndex = None
-        _hx_len = None
-        if (startIndex is None):
-            _hx_len = path.rfind("/", 0, len(path))
-        else:
-            i = path.rfind("/", 0, (startIndex + 1))
-            startLeft = (max(0,((startIndex + 1) - len("/"))) if ((i == -1)) else (i + 1))
-            check = path.find("/", startLeft, len(path))
-            _hx_len = (check if (((check > i) and ((check <= startIndex)))) else i)
-        outpath = (HxOverrides.stringOrNull(HxString.substr(path,0,_hx_len)) + "/txtmp")
-        if sys_FileSystem.exists(outpath):
-            python_FileUtils.removeDic(outpath)
-        sys_FileSystem.createDirectory(outpath)
-        outpath = (("null" if outpath is None else outpath) + "/tmp.xls")
-        xlsWrite = python_Pandas.ExcelWriter(outpath)
-        HxOverrides.arrayGet(obj, 0).to_excel(xlsWrite)
-        xlsWrite.close()
-        haxe_Log.trace(("导出：" + ("null" if outpath is None else outpath)),_hx_AnonObject({'fileName': "python/XlsData.hx", 'lineNumber': 178, 'className': "python.HTMLXlsData", 'methodName': "new"}))
-        self.xls = python_XlsData.open_workbook(outpath)
-
-    def sheet_names(self):
-        return self.xls.sheet_names()
-
-    def sheet_by_name(self,name):
-        return self.xls.sheet_by_name(name)
-
-python_HTMLXlsData._hx_class = python_HTMLXlsData
-_hx_classes["python.HTMLXlsData"] = python_HTMLXlsData
-
-
-class python_CSVXlsData:
-    _hx_class_name = "python.CSVXlsData"
-    __slots__ = ("csv",)
-    _hx_fields = ["csv"]
-    _hx_methods = ["sheet_names", "sheet_by_name"]
-    _hx_interfaces = [python_Xls]
-
-    def __init__(self,path):
-        data = None
-        codebytes = None
-        f2 = open(path, 'rb') ;codebytes=f2.read();f2.close();
-        char = python_Chardet.detect(codebytes)
-        encoding = char['encoding']
-        haxe_Log.trace("编码：",_hx_AnonObject({'fileName': "python/XlsData.hx", 'lineNumber': 207, 'className': "python.CSVXlsData", 'methodName': "new", 'customParams': [encoding]}))
-        if (encoding.upper() == "GB2312"):
-            encoding = "gbk"
-        f = open(path, 'r', encoding=encoding);data=f.read();f.close();
-        data = StringTools.replace(data,"\"","")
-        self.csv = python_CSVXlsSheet(data)
-
-    def sheet_names(self):
-        return ["default"]
-
-    def sheet_by_name(self,name):
-        return self.csv
-
-python_CSVXlsData._hx_class = python_CSVXlsData
-_hx_classes["python.CSVXlsData"] = python_CSVXlsData
-
-
-class python_CSVXlsSheet:
-    _hx_class_name = "python.CSVXlsSheet"
-    __slots__ = ("rarray", "carray", "nrows", "ncols")
-    _hx_fields = ["rarray", "carray", "nrows", "ncols"]
-    _hx_methods = ["col_values", "row_values"]
-    _hx_interfaces = [python_Sheet]
-
-    def __init__(self,data):
-        self.ncols = None
-        self.carray = []
-        self.rarray = []
-        r = data.split("\n")
-        self.nrows = len(r)
-        _g = 0
-        _g1 = len(r)
-        while (_g < _g1):
-            i = _g
-            _g = (_g + 1)
-            d = (r[i] if i >= 0 and i < len(r) else None)
-            startIndex = None
-            if (((d.find(",") if ((startIndex is None)) else HxString.indexOfImpl(d,",",startIndex))) == -1):
-                python_internal_ArrayImpl._set(self.rarray, i, d.split("\t"))
-            else:
-                python_internal_ArrayImpl._set(self.rarray, i, d.split(","))
-        self.ncols = len((self.rarray[0] if 0 < len(self.rarray) else None))
-        haxe_Log.trace("CSV:",_hx_AnonObject({'fileName': "python/XlsData.hx", 'lineNumber': 248, 'className': "python.CSVXlsSheet", 'methodName': "new", 'customParams': [self.nrows, self.ncols]}))
-
-    def col_values(self,index):
-        return None
-
-    def row_values(self,index):
-        return (self.rarray[index] if index >= 0 and index < len(self.rarray) else None)
-
-python_CSVXlsSheet._hx_class = python_CSVXlsSheet
-_hx_classes["python.CSVXlsSheet"] = python_CSVXlsSheet
 
 
 class python_internal_ArrayImpl:

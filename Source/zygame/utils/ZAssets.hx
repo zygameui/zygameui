@@ -357,6 +357,13 @@ class ZAssets {
 				return;
 			}
 		}
+		// 这里需要检测资源是否已经存在，如果存在，则不再载入
+		var name = StringUtils.getName(parser.getName());
+		if (getBitmapData(name) != null)
+			return;
+		#if debug
+		trace("[push pasrers]", parser.getName());
+		#end
 		_parsers.push(parser);
 	}
 

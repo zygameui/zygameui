@@ -760,6 +760,17 @@ class Start extends ZScene {
 	}
 
 	/**
+	 * 清空所有update
+	 */
+	public function clearAllUpdate():Void {
+		var len = this.updates.length;
+		while (len > 0) {
+			len--;
+			removeToUpdate(this.updates[len]);
+		}
+	}
+
+	/**
 	 * 按每秒运行60次的帧事件回调入口
 	 */
 	override public function onFrame():Void {}

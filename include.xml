@@ -4,6 +4,7 @@
 	<source path="Source" />
 	<haxelib name="openfl" />
 	<!-- DPI自动感知行为，9.2.1的新DPI如果不开启会导致显示异常，开启后，可能会使内存增加 -->
+	<haxedef name="openfl_dpi_aware" if="meituan"/>
 	<!-- <define name="openfl_dpi_aware" if="${openfl >= 9.2.0} || focre_openfl_dpi_aware"/> -->
 	<!-- <haxelib name="openfl-dev-8.9.6" if="openfl8"/> -->
 	<section unless="unable_swf">

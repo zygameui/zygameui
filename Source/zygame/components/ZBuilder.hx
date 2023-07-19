@@ -951,6 +951,21 @@ class ZBuilder {
 			if (!isExists)
 				return null;
 		}
+		// 模板功能
+		if (xml.nodeName == "template") {
+			// 需要将parent修改
+			var bindName = xml.get("name");
+			if (bindName != null) {
+				parent = builder.ids.get(bindName);
+				if (parent == null)
+					return null;
+			}
+			for (item in xml.elements()) {
+				buildui(item, parent, builder, superInit, defalutArgs, idpush);
+			}
+			return null;
+		}
+
 		__xmlStyle.apply(xml);
 		var tween:String = null;
 		var className:String = xml.nodeName;

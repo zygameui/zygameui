@@ -47,7 +47,6 @@ class AutoBuilder {
 		// return fields;
 
 		// Context.registerModuleDependency(Context.getLocalModule(), path);
-
 		var builder:ZBuilderData = new ZBuilderData(path, project);
 
 		bindBuilder = bindBuilder == null ? "assetsBuilder" : bindBuilder;

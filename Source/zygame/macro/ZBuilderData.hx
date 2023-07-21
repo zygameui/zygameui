@@ -5,6 +5,7 @@ import zygame.utils.StringUtils;
 #if macro
 import sys.FileSystem;
 import sys.io.File;
+import haxe.macro.Context;
 #end
 
 class ZBuilderData {
@@ -19,8 +20,11 @@ class ZBuilderData {
 
 	public var xmlStyle:XmlStyle = new XmlStyle();
 
-	public function new(xmlPath:String, project:ZProjectData) {
+	public var ifUnless:Bool = false;
+
+	public function new(xmlPath:String, project:ZProjectData, ?ifUnless:Bool = false) {
 		this.project = project;
+		this.ifUnless = ifUnless;
 		if (!FileSystem.exists(xmlPath)) {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
@@ -40,7 +44,45 @@ class ZBuilderData {
 		}
 	}
 
+	/**
+	 * 检测if和unless逻辑
+	 * @param xml 
+	 * @return Bool
+	 */
+	public static function checkIfUnless(xml:Xml):Bool {
+		var defineMaps = Context.getDefines();
+		if (xml.exists("if")) {
+			var isExists:Bool = false;
+			var array:Array<String> = xml.get("if").split(" ");
+			for (ifstr in array) {
+				if (defineMaps.exists(ifstr)) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists)
+				return false;
+		}
+		if (xml.exists("unless")) {
+			var isExists:Bool = false;
+			var array:Array<String> = xml.get("unless").split(" ");
+			for (ifstr in array) {
+				if (!defineMaps.exists(ifstr)) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists)
+				return false;
+		}
+		return true;
+	}
+
 	private function parserItem(item:Xml, parentId:String = null, isClassed:Bool = false, noParseId:Bool = false) {
+		// 判断是否符合条件
+		if (ifUnless && !checkIfUnless(item)) {
+			return;
+		}
 		// 样式查询
 		if (item.exists("style")) {
 			var styleid = item.get("style");

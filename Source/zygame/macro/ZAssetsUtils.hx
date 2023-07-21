@@ -1,5 +1,6 @@
 package zygame.macro;
 
+import haxe.macro.Context;
 import zygame.utils.StringUtils;
 
 using StringTools;
@@ -9,7 +10,7 @@ using StringTools;
  */
 class ZAssetsUtils {
 	#if macro
-	private static function getAssetsData(path:String, xmlid:String, project:ZProjectData):{
+	private static function getAssetsData(path:String, xmlid:String, project:ZProjectData, ifUnless:Bool = false):{
 		files:Array<String>,
 		spines:Array<{
 			png:String,
@@ -22,7 +23,7 @@ class ZAssetsUtils {
 		}>
 	} {
 		// 是一个XML配置，进行读取
-		var builder:ZBuilderData = new ZBuilderData(path, project);
+		var builder:ZBuilderData = new ZBuilderData(path, project, ifUnless);
 		var textures:Array<{png:String, xml:String}> = [];
 		var spines:Array<{png:String, atlas:String, json:String}> = [];
 		var files:Array<String> = [project.assetsRenamePath.get(StringUtils.getName(xmlid) + ".xml")];
@@ -72,14 +73,15 @@ class ZAssetsUtils {
 	 * 预加载页面资源
 	 * @param assets 资源载入器
 	 * @param xmlid 页面文件名
+	 * @param ifUnless 是否仅加载符合if、unless条件的资源，默认为`false`
 	 * @return Dynamic
 	 */
-	macro public static function preload(assets:Dynamic, xmlid:String):Dynamic {
+	macro public static function preload(assets:Dynamic, xmlid:String, ifUnless:Bool = false):Dynamic {
 		var project:ZProjectData = AutoBuilder.firstProjectData;
 		var path = project.assetsPath.get(StringUtils.getName(xmlid) + ".xml");
 		if (path != null) {
 			// 是一个XML配置，进行读取
-			var config = getAssetsData(path, xmlid, project);
+			var config = getAssetsData(path, xmlid, project, ifUnless);
 			return macro {
 				for (item in $v{config.files}) {
 					${assets}.loadFile(item);

@@ -909,6 +909,39 @@ class ZBuilder {
 	}
 
 	/**
+	 * 检测if和unless逻辑
+	 * @param xml 
+	 * @return Bool
+	 */
+	public static function checkIfUnless(xml:Xml):Bool {
+		if (xml.exists("if")) {
+			var isExists:Bool = false;
+			var array:Array<String> = xml.get("if").split(" ");
+			for (ifstr in array) {
+				if (defineMaps.exists(ifstr)) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists)
+				return false;
+		}
+		if (xml.exists("unless")) {
+			var isExists:Bool = false;
+			var array:Array<String> = xml.get("unless").split(" ");
+			for (ifstr in array) {
+				if (!defineMaps.exists(ifstr)) {
+					isExists = true;
+					break;
+				}
+			}
+			if (!isExists)
+				return false;
+		}
+		return true;
+	}
+
+	/**
 	 * 根据XML创建UI
 	 * @param xml xml本体
 	 * @param parent 添加父节点容器
@@ -1325,6 +1358,63 @@ class AssetsBuilder extends Builder {
 	private var _viewParent:Dynamic;
 
 	/**
+	 * 必须需要的资源列表
+	 */
+	public var needAssetsList:Map<String, Bool> = [];
+
+	/**
+	 * 解析必须需要的资源加载
+	 * @param xml 
+	 */
+	private function parserNeedAssets(xml:Xml):Void {
+		if (xml.nodeType == Document) {
+			parserNeedAssets(xml.firstElement());
+			return;
+		}
+		for (item in xml.elements()) {
+			// 检查
+			var id = null;
+			if (item.exists("src")) {
+				var src = item.get("src");
+				if (src.indexOf(":") != -1) {
+					// 精灵图
+					id = src.split(":")[0];
+				} else {
+					// 单图
+					id = src;
+				}
+			}
+			if (ZBuilder.checkIfUnless(item)) {
+				needAssetsList.set(item.nodeName, true);
+				needAssetsList.set(id, true);
+			} else {
+				if (id != null && !needAssetsList.exists(id)) {
+					needAssetsList.set(id, false);
+				}
+			}
+			parserNeedAssets(item);
+		}
+	}
+
+	/**
+	 * 是否需要加载此资源
+	 * @param id 
+	 * @return Bool
+	 */
+	private function hasLoad(id:String):Bool {
+		var name = StringUtils.getName(id);
+		if (needAssetsList.exists(name)) {
+			if (!needAssetsList.get(name)) {
+				#if test
+				trace("忽略载入文件:", id);
+				#end
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * 预备构造xml时的处理，当设置此方法，允许在完成`ZBuilder.buildui`之前对XML配置进行修改，此方法会逐个将XML子对象返回：
 	 * ```haxe
 	 * this.buildXmlContent = function(xml){
@@ -1411,6 +1501,24 @@ class AssetsBuilder extends Builder {
 	}
 
 	/**
+	 * 准备载入的纹理资源
+	 */
+	public var readyTextures:Array<{
+		png:String,
+		xml:String
+	}> = null;
+
+	/**
+	 * 准备载入的单资源配置
+	 */
+	public var readFiles:Array<String> = null;
+
+	/**
+	 * 准备载入的Spine资源
+	 */
+	public var readSpines:Array<{png:String, atlas:String}> = null;
+
+	/**
 	 * 开始构造当前页面内容
 	 * @param cb 构造完成回调，其中布尔值会告知成功与失败
 	 * @param onloaded 当资源加载完成提前回调，该时机在完成构造之前
@@ -1424,15 +1532,59 @@ class AssetsBuilder extends Builder {
 		} else {
 			existXml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath));
 		}
+		if (isNewXmlPath) {
+			assets.start((f) -> {
+				if (f == 1) {
+					// 资源加载完毕
+					// 这里需要剔除不需要加载的资源，例如if unless
+					buildAllAssets(isNewXmlPath, existXml, cb, onloaded);
+				}
+			});
+		} else {
+			buildAllAssets(isNewXmlPath, existXml, cb, onloaded);
+		}
+		return this;
+	}
+
+	private function buildAllAssets(isNewXmlPath:Bool, existXml:Xml, cb:Bool->Void, onloaded:Void->Void = null):Void {
+		var viewxml = assets.getXml(StringUtils.getName(viewXmlPath)) ?? existXml;
+		if (viewxml == null) {
+			trace("无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。");
+			cb(false);
+			return;
+		}
+		this.parserNeedAssets(viewxml);
+		#if test
+		for (key => value in needAssetsList) {
+			if (!value) {
+				trace("不需要加载的资源：", key);
+			}
+		}
+		#end
+		if (readFiles != null)
+			for (f in readFiles) {
+				if (hasLoad(f) && !zygame.components.ZBuilder.existFile(f)) {
+					this.loadFiles([f]);
+				}
+			}
+		if (readSpines != null)
+			for (s in readSpines) {
+				if (hasLoad(s.png) && zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(s.png)) == null) {
+					this.loadSpine([s.png], s.atlas);
+				}
+			}
+		if (readyTextures != null)
+			for (item in readyTextures) {
+				if (hasLoad(item.png)
+					&& zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(item.png)) == null)
+					this.loadTextures(item.png, item.xml);
+			}
 		assets.start((f) -> {
 			onProgress(f);
 			if (f == 1) {
 				ZBuilder.bindAssets(assets);
 				if (onloaded != null)
 					onloaded();
-				var viewxml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath)) ?? existXml;
-				if (viewxml == null)
-					throw "无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。";
 				if (buildXmlContent != null) {
 					// 使用一个全新的xml进行处理
 					if (!isNewXmlPath)
@@ -1453,7 +1605,6 @@ class AssetsBuilder extends Builder {
 		}, (msg) -> {
 			cb(false);
 		});
-		return this;
 	}
 
 	/**

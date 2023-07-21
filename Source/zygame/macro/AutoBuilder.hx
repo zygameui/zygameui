@@ -138,26 +138,9 @@ class AutoBuilder {
 					ret: macro :Void,
 					expr: isZBuilderScene ? macro {
 						super($v{path});
-						var textures:Array<{
-							png:String,
-							xml:String
-						}> = $v{textures};
-						var files:Array<String> = $v{files};
-						var spines:Array<{png:String, atlas:String}> = $v{spines};
-						for (f in files) {
-							if (!zygame.components.ZBuilder.existFile(f)) {
-								this.$bindBuilder.loadFiles([f]);
-							}
-						}
-						for (s in spines) {
-							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(s.png)) == null) {
-								this.$bindBuilder.loadSpine([s.png], s.atlas);
-							}
-						}
-						for (item in textures) {
-							if (zygame.components.ZBuilder.getBaseTextureAtlas(zygame.utils.StringUtils.getName(item.png)) == null)
-								this.$bindBuilder.loadTextures(item.png, item.xml);
-						}
+						this.$bindBuilder.readyTextures = $v{textures};
+						this.$bindBuilder.readFiles = $v{files};
+						this.$bindBuilder.readSpines = $v{spines};
 					} : isCreateInit ? macro {
 						super.onInit();
 						if ($v{embed}) {

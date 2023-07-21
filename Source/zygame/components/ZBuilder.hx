@@ -1417,9 +1417,12 @@ class AssetsBuilder extends Builder {
 	 */
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
 		var isNewXmlPath = false;
+		var existXml:Xml = null;
 		if (!ZBuilder.existFile(viewXmlPath)) {
 			isNewXmlPath = true;
 			assets.loadFile(viewXmlPath);
+		} else {
+			existXml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath));
 		}
 		assets.start((f) -> {
 			onProgress(f);
@@ -1427,7 +1430,7 @@ class AssetsBuilder extends Builder {
 				ZBuilder.bindAssets(assets);
 				if (onloaded != null)
 					onloaded();
-				var viewxml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath));
+				var viewxml = ZBuilder.getBaseXml(StringUtils.getName(viewXmlPath)) ?? existXml;
 				if (viewxml == null)
 					throw "无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。";
 				if (buildXmlContent != null) {
@@ -1440,9 +1443,6 @@ class AssetsBuilder extends Builder {
 				// 需要同时配置了hdwidth、hdheight值，会进行屏幕适配
 				if (onSizeChange != null && viewxml.firstElement().exists("hdwidth") && viewxml.firstElement().exists("hdheight")) {
 					// todo 是否需要兼容强制横幅、缩放取整支持
-					#if hl
-					trace("onSizeChange=", onSizeChange);
-					#end
 					onSizeChange(Std.parseFloat(viewxml.firstElement().get("hdwidth")), Std.parseFloat(viewxml.firstElement().get("hdheight")), true);
 				}
 				@:privateAccess ZBuilder.buildui(viewxml.firstElement(), _viewParent, this);

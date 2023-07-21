@@ -138,7 +138,10 @@ class AutoBuilder {
 					ret: macro :Void,
 					expr: isZBuilderScene ? macro {
 						super($v{path});
-						var textures:Array<{png:String, xml:String}> = $v{textures};
+						var textures:Array<{
+							png:String,
+							xml:String
+						}> = $v{textures};
 						var files:Array<String> = $v{files};
 						var spines:Array<{png:String, atlas:String}> = $v{spines};
 						for (f in files) {

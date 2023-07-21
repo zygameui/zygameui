@@ -19,8 +19,7 @@ class Build {
 		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
 		"g4399", // 快游戏
 		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl",
-		"electron", "ks", "lianxin", "mac", "meituan"
+		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin", "mac", "meituan"
 	];
 
 	/**
@@ -130,9 +129,11 @@ class Build {
 			FileSystem.createDirectory(dir);
 		if (mainFileName == null)
 			throw "Build.mainFileName is NULL!";
-		// 通用资源拷贝
-		FileUtils.copyDic("Export/html5/bin/lib", dir);
-		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/" + mainFileName + ".js", dir);
+		if (buildPlatform == "html5") {
+			// 通用资源拷贝
+			FileUtils.copyDic("Export/html5/bin/lib", dir);
+			FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/" + mainFileName + ".js", dir);
+		}
 		// 运行平台自定义脚本
 		var platformName = args[1];
 		platformName = platformName.substr(0, 1).toUpperCase() + platformName.substr(1).toLowerCase();

@@ -1,5 +1,6 @@
 package platforms;
 
+import haxe.io.Path;
 import sys.FileSystem;
 import python.FileUtils;
 
@@ -9,14 +10,21 @@ import python.FileUtils;
 class Meituan extends BuildSuper {
 	public function new(args:Array<String>, dir:String) {
 		super(args, dir);
+		var sub_game = Path.join([dir, "sub_game"]);
+		FileUtils.createDir(sub_game);
 		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/game.js", dir);
-		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/mgc.config.js", dir + "/../");
-		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/index.js", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/" + Build.mainFileName + ".js", sub_game);
+		FileSystem.deleteFile(Path.join([dir, Build.mainFileName + ".js"]));
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/sub_game/game.js", Path.join([sub_game, "game.js"]));
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/mgc.config.js", new Path(dir).dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/index.js", sub_game);
 		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/game.json", dir);
-		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/project.config.json", dir);
-		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/zygameui-dom.js", dir);
-		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/leuok.bi.wx.js", dir);
-		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/sdk", dir);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/project.config.json", sub_game);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/zygameui-dom.js", sub_game);
+		FileUtils.copyFile(Sys.getCwd() + "Export/html5/bin/leuok.bi.wx.js", sub_game);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/sdk", sub_game);
+		FileUtils.copyDic(Sys.getCwd() + "Export/html5/bin/lib", sub_game);
+		FileUtils.removeDic(Sys.getCwd() + "Export/html5/bin/lib");
 	}
 
 	override function buildAfter() {

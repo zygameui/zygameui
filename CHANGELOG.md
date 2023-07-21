@@ -5,7 +5,7 @@
 - [未解决]quartOut在JS压缩的情况下，会发生问题。
 
 # ZYGameUI 更新日志
-### 13.0.30
+### 13.0.36
 - [新增] 新增`ZLabel`的`openInput`方法，主动打开输入框支持；
 - [改进] 改进载入线程为10；
 - [改进] 改进`haxe.Http`的加载实现，减少安卓的卡加载流程问题；
@@ -15,6 +15,8 @@
 - [改进] 改进`ZLabel`在Android/ios/mac目标的兼容性；
 - [改进] 改进`小米快游戏`的编译处理；
 - [删除] 删除`pandas`库的支持；
+- [改进] 更新了UI布局加载流程，会减少不必要的资源加载；
+- [改进] 改进`ZAssetsUtils.preload(GameData.assets, "StateView", true);`接口，会先判断if和unless的条件是否符合，不符合的资源不再加载。
 
 ### 13.0.15
 - [新增] 新增`ZButton`的XML配置支持；

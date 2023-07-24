@@ -369,7 +369,7 @@ class ZLabel extends DataProviderComponent {
 			value = StringTools.replace(value, "\n", "");
 			value = StringTools.replace(value, "\r", "");
 		}
-		#if !wechat
+		#if (!wechat)
 		#if (quickgame || qqquick || minigame)
 		// 快游戏引擎不会清理文本画布，请在这里进行清理
 		if (untyped _display.__graphics.__context != null)
@@ -389,6 +389,27 @@ class ZLabel extends DataProviderComponent {
 		else {
 			if (_display.text == value)
 				return value;
+			#if (meituan)
+			// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
+			if (_display != null) {
+				var newText = new ZTextField();
+				newText.width = _display.width;
+				newText.height = _display.height;
+				newText.scaleX = 1 / _scale;
+				newText.scaleY = 1 / _scale;
+				newText.x = _display.x;
+				newText.y = _display.y;
+				newText.setTextFormat(_font);
+				newText.wordWrap = true;
+				newText.selectable = false;
+				newText.maxChars = _display.maxChars;
+				newText.displayAsPassword = _display.displayAsPassword;
+				newText.shader = _display.shader;
+				this.removeChild(_display);
+				_display = newText;
+				this.addChild(_display);
+			}
+			#end
 			_display.text = Std.string(value);
 			setTextFormat();
 		}

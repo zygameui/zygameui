@@ -1,3 +1,4 @@
+import haxe.io.Path;
 import project.ProjectUtils;
 import setup.SetupRun;
 import pkg.PkgTools;
@@ -111,8 +112,11 @@ class Tools {
 				AtlasTools.removeXmlItem(args[1]);
 			case "-ogg":
 				// 转换为OGG
-				trace("Mp3 to Ogg...", args[2]);
-				Sys.command("node", [args[2] + "/tools/run/mp3toogg.js", args[1]]);
+				trace("Mp3 to Ogg...", Sys.getCwd());
+				Sys.command("node", [
+					Path.join([Sys.getCwd(), "/tools/run/mp3toogg.js"]),
+					Path.join([args[args.length - 1], args[1]])
+				]);
 		}
 	}
 

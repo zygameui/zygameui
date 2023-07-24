@@ -1198,11 +1198,13 @@ class ZBuilder {
 		if (endMaps.exists(className)) {
 			endMaps.get(className)(ui);
 		}
+		#if !zide
 		// 让父节点绑定当前容器的宽高
 		if (xml.get("parentBind") == "true") {
 			setProperty(parent, "width", getProperty(ui, "width"));
 			setProperty(parent, "height", getProperty(ui, "height"));
 		}
+		#end
 		// 对齐算法
 		if (parent != null)
 			align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));

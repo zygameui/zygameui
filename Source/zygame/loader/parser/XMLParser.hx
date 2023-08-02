@@ -1,6 +1,8 @@
 package zygame.loader.parser;
 
+import haxe.Exception;
 import zygame.utils.AssetsUtils;
+
 @:keep
 class XMLParser extends ParserBase {
 	public static function supportType(data:Dynamic):Bool {
@@ -13,7 +15,12 @@ class XMLParser extends ParserBase {
 			return;
 		}
 		AssetsUtils.loadText(getData()).onComplete(function(text) {
-			this.finalAssets(XML, Xml.parse(text), 1);
+			try {
+				this.finalAssets(XML, Xml.parse(text), 1);
+			} catch (e:Exception) {
+				// 无效XML配置
+				this.sendError("无法加载：" + getData());
+			}
 		}).onError(function(err) {
 			this.sendError("无法加载：" + getData());
 		});

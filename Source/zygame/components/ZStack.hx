@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.display.DisplayObjectContainer;
 import openfl.events.Event;
 import tweenxcore.Tools.Easing;
 import zygame.utils.FrameEngine;
@@ -118,8 +119,12 @@ class ZStack extends ZBox {
 		super.destroy();
 		for (i in 0...this.stacks.length) {
 			var child = this.stacks[i];
-			if (child != null && child is ZBuilderScene) {
-				cast(child, ZBuilderScene).releaseScene();
+			if (child != null) {
+				if (child is ZBuilderScene)
+					cast(child, ZBuilderScene).releaseScene();
+				else if (child is DisplayObjectContainer && child.parent == null) {
+					cast(child, DisplayObjectContainer).destroy();
+				}
 			}
 		}
 	}

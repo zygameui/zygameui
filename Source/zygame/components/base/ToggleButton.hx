@@ -61,7 +61,6 @@ class ToggleButton extends Component {
 		this.addChild(box);
 		this.mouseChildren = false;
 		// this.mouseEvent = true;
-		this.setTouchEvent(true);
 		var img:ZImage = new ZImage();
 		this.addComponent(img, COMPONENT_IMAGE);
 		this.setChildIndex(img, 0);
@@ -162,8 +161,14 @@ class ToggleButton extends Component {
 		return null;
 	}
 
+	override function onAddToStage() {
+		super.onAddToStage();
+		this.setTouchEvent(true);
+	}
+
 	override function onRemoveToStage() {
 		super.onRemoveToStage();
+		this.setTouchEvent(false);
 		_currentTouchID = -1;
 	}
 }

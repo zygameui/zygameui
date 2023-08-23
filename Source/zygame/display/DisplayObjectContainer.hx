@@ -339,7 +339,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
-	 * 当自已被删掉时
+	 * 当子项被移动时发生
 	 */
 	public function onRemove():Void {}
 

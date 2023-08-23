@@ -258,7 +258,7 @@ class Start extends ZScene {
 	 * @param isDebug - 是否显示debug数据，当该值为true时，FPSDebug对象将会建立，一般在发布正式版时，该值应该被设置为false。
 	 * @param scalePower - 测试性功能，使缩放永远为0.x5作为间隔缩放。
 	 */
-	public function new(HDWidth:Int = 800, HDHeight:Int = 480, isDebug:Bool = false, scalePower:Bool = false) {
+	public function new(HDWidth:Int = 1920, HDHeight:Int = 1080, isDebug:Bool = false, scalePower:Bool = false) {
 		Start.current = this;
 		super();
 		#if openfl_console

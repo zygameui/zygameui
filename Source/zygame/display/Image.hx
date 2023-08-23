@@ -56,18 +56,15 @@ class Image extends DisplayObjectContainer {
 	 * 如果设置boundsEnabled为false时，则getBounds永远获得0，0，0，0的值，默认为true
 	 */
 	// public var boundsEnabled(get, set):Bool;
-
 	// private var _boundsEnabled:Bool = true;
-
 	// private function set_boundsEnabled(bool:Bool):Bool {
-		// _boundsEnabled = bool;
-		// if (_bitmap != null)
-			// _bitmap.boundsEnabled = bool;
-		// return _boundsEnabled;
+	// _boundsEnabled = bool;
+	// if (_bitmap != null)
+	// _bitmap.boundsEnabled = bool;
+	// return _boundsEnabled;
 	// }
-
 	// private function get_boundsEnabled():Bool {
-		// return _boundsEnabled;
+	// return _boundsEnabled;
 	// }
 
 	/**

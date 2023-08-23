@@ -34,7 +34,7 @@
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
 
-	<define name="message-reporting" value="pretty"/>
+	<define name="message.reporting" value="pretty"/>
 	<define name="message.log-format" value="pretty"/>
 
 	<!-- 无物理系统碰撞类 -->

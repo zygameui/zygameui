@@ -233,6 +233,7 @@ class Start extends ZScene {
 	private var _dt:Float = 0;
 	private var _frameTime:Float = 0;
 	private var _frameDt:Float = 0;
+	private var _frameDtArray:Array<Float> = [];
 	private var _frameDtScale:Float = 0;
 	private var _cpuDt:Float = 0;
 
@@ -702,8 +703,18 @@ class Start extends ZScene {
 		// #if !cpp
 		if (fps.getFps() < 61 || fps60.update()) {
 			// #end
+			// 平滑处理
 			var newTime = Timer.stamp();
-			_frameDt = newTime - _frameTime;
+			var nowTime = newTime - _frameTime;
+			_frameDtArray.push(nowTime);
+			if (_frameDtArray.length > 30) {
+				_frameDtArray.shift();
+			}
+			var all = 0.;
+			for (f in _frameDtArray) {
+				all += f;
+			}
+			_frameDt = all / _frameDtArray.length;
 			_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
 			_frameTime = newTime;
 			this.onFrame();

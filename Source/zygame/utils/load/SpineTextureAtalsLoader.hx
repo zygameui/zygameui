@@ -1,4 +1,4 @@
-	package zygame.utils.load;
+package zygame.utils.load;
 
 import spine.tilemap.BitmapDataTextureLoader;
 import openfl.display.Tileset;
@@ -240,7 +240,9 @@ class SpineTextureAtals extends Atlas {
 	public function getBitmapDataFrame(name:String):Frame {
 		if (loader == null)
 			getTilemapSkeletonManager();
-		return cast(loader, BitmapDataTextureLoader).frameMaps.get(name);
+		if (loader is BitmapDataTextureLoader)
+			return cast(loader, BitmapDataTextureLoader).frameMaps.get(name);
+		return null;
 	}
 
 	override function getTileset():Tileset {

@@ -147,7 +147,8 @@ abstract CEFloat(CEData) to CEData from CEData {
 	};
 }
 
-#if cebytes
+// 默认启动cebytes
+#if true
 /**
  * 一种防止内存修改器进行修改的简易方案
  * 使用`cebytes`可使用该模式，所有的数值都需要经过加密解密得到

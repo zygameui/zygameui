@@ -1,5 +1,6 @@
 package zygame.macro;
 
+import haxe.macro.TypeTools;
 import haxe.Exception;
 import zygame.utils.StringUtils;
 import haxe.macro.Context;
@@ -43,10 +44,12 @@ class JSONData {
 			jsonPath = rootJsonPath;
 		var data:Dynamic = haxe.Json.parse(File.getContent(jsonPath));
 		var name = StringUtils.getName(jsonPath);
-		name = "AutoJson" + name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
+		var className = name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
+		name = "AutoJson" + className;
 		var c = macro class $name {
 			public function new() {}
 		}
+		var t:ComplexType = null;
 		// doc文档
 		var doc = Reflect.getProperty(data, "doc");
 		var keys = Reflect.fields(data);
@@ -75,8 +78,34 @@ class JSONData {
 						pos: Context.currentPos()
 					};
 				} else {
-					var getData:Dynamic = keyValue[0];
-					var t = getType(getData, Context.currentPos(), doc);
+					if (t == null) {
+						var getData:Dynamic = keyValue[0];
+						t = getType(getData, Context.currentPos(), doc);
+						// switch t {
+						// 	case TAnonymous(a):
+						// 		// Context.onAfterInitMacros(() -> {
+						// 		var typedefName = 'JSON${className}Typedef';
+						// 		trace("t=", typedefName);
+						// 		Context.defineModule("JSONDataType", [
+						// 			{
+						// 				name: typedefName,
+						// 				pack: [],
+						// 				pos: Context.currentPos(),
+						// 				fields: a,
+						// 				kind: TDAlias(t)
+						// 			}
+						// 		]);
+						// 	// });
+						// 	default:
+						// }
+					}
+					// var t2 = haxe.macro.Type.TType({
+					// 	name: "Test1",
+					// 	pack: [],
+					// 	params: [],
+					// 	fields: t,
+					// 	pos: Context.currentPos()
+					// });
 					// 将数组储存
 					newField = {
 						name: value,
@@ -185,6 +214,21 @@ class JSONData {
 			if (newField != null)
 				c.fields.push(newField);
 		}
+		var ofTypeField = {
+			name: "ofType",
+			doc: null,
+			meta: [],
+			access: [APublic],
+			kind: FFun({
+				args: [{name: "data", type: macro :Dynamic}],
+				ret: t,
+				expr: macro {
+					return data;
+				}
+			}),
+			pos: Context.currentPos()
+		};
+		c.fields.push(ofTypeField);
 		Context.defineType(c);
 		var cls = {
 			pack: [],

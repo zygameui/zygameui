@@ -35,6 +35,17 @@ import zygame.utils.CEFloat.CEData;
 		return v;
 	}
 
+	@:arrayAccess
+	public inline function getString(key:String):T {
+		return this.getValue(key);
+	}
+
+	@:arrayAccess
+	public inline function arrayStringWrite(k:String, v:T):T {
+		this.setValue(k, v);
+		return v;
+	}
+
 	/**
 	 * 转为String
 	 * @return String
@@ -51,7 +62,7 @@ import zygame.utils.CEFloat.CEData;
 		return this.changed;
 	}
 
-	@:from public static function fromDynamic<T>(data:Dynamic):SaveDynamicData<T> {
+	@:from public static function fromDynamic<T>(data:Dynamic<T>):SaveDynamicData<T> {
 		var data = new SaveDynamicData(data);
 		return data;
 	}

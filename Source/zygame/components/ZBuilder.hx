@@ -1161,7 +1161,19 @@ class ZBuilder {
 
 			var att:Dynamic = getProperty(ui, name);
 			var parsingName:String = className + "." + name;
-			if (name == "tween") {
+			if (name.indexOf(":") == 0) {
+				// 访问当前Builder对象
+				if (builder.display.parent != null) {
+					var v = Reflect.getProperty(builder.display.parent, value);
+					if (Reflect.isFunction(v)) {
+						setProperty(ui, name.substr(1), createCallFunc(builder.display.parent, v, []));
+					} else {
+						setProperty(ui, name.substr(1), v);
+					}
+				} else {
+					setProperty(ui, name.substr(1), builder.ids.get(value));
+				}
+			} else if (name == "tween") {
 				// 过渡动画实现
 				// trace("过渡动画实现：", parsingName);
 				tween = value;
@@ -1217,6 +1229,12 @@ class ZBuilder {
 			}
 		}
 		return ui;
+	}
+
+	private static function createCallFunc(target:Dynamic, func:Dynamic, args:Array<Dynamic>):Void->Void {
+		return () -> {
+			Reflect.callMethod(target, func, args);
+		};
 	}
 
 	/**

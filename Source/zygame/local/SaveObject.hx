@@ -160,6 +160,7 @@ class SaveObject<T:SaveObjectData> {
 			if (saveAgent != null) {
 				saveAgent.readData(function(data, err) {
 					if (err == null) {
+						var copyData = std.Reflect.copy(data);
 						_isReadData = true;
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
@@ -193,7 +194,7 @@ class SaveObject<T:SaveObjectData> {
 							this.flush();
 							// 这里需要进行数据比对
 							_changedData = {};
-							this.checkOnlineUserData(data);
+							this.checkOnlineUserData(copyData);
 							// 这里做立即上报处理
 							this.invalidInterval();
 							this.flush(false);

@@ -18,11 +18,19 @@ abstract SaveFloatData(SaveFloatDataContent) to SaveFloatDataContent from SaveFl
 	}
 
 	/**
-	 * 转为String
+	 * 转换为Float
 	 * @return String
 	 */
 	@:to public function toFloat():Float {
 		return this.data.toFloat();
+	}
+
+	/**
+	 * 转换为Int
+	 * @return Float
+	 */
+	@:to public function toInt():Int {
+		return this.data.toInt();
 	}
 
 	/**

@@ -9,6 +9,12 @@ using StringTools;
 typedef ZInt64 = Int64;
 
 class GIntTools {
+	/**
+	 * 乘法
+	 * @param v 
+	 * @param f 
+	 * @return ZInt64
+	 */
 	public static function mul(v:Int64, f:Float):ZInt64 {
 		var f = Std.parseFloat(@:privateAccess v.toString()) * f;
 		var v = Std.string(f);

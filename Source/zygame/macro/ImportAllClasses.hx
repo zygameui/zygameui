@@ -20,7 +20,7 @@ class ImportAllClasses {
 		var files = FileSystem.readDirectory(path);
 		var array = Context.getBuildFields();
 		for (hxfile in files) {
-			if (hxfile.indexOf(".") == 0)
+			if (hxfile.indexOf(".hx") == -1)
 				continue;
 			hxfile = StringTools.replace(hxfile, ".hx", "");
 			var t = Context.toComplexType(Context.getType(packageName + "." + hxfile));

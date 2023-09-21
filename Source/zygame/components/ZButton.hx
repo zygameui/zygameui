@@ -129,7 +129,7 @@ class ZButton extends ToggleButton {
 	private function _clickCall(e:MouseEvent):Void {
 		// 防止连点器
 		var n = Timer.stamp();
-		if (n - _time <= 0.16) {
+		if (n - _time <= 0.05) {
 			_time = n;
 			return;
 		}

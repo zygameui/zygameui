@@ -260,6 +260,21 @@ class Lib {
 	}
 
 	/**
+	 * 获得RGB的颜色值
+	 * @param color 
+	 */
+	public static function getRGBColor(color:UInt):{r:Float, g:Float, b:Float} {
+		var r:Int = color >> 16;
+		var g:Int = color >> 8 & 0xff;
+		var b:Int = color & 0xff;
+		return {
+			r: r,
+			g: g,
+			b: b
+		}
+	}
+
+	/**
 	 * 清理计时器
 	 * @param id
 	 */

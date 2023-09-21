@@ -19,6 +19,8 @@
 - [改进] 改进`ZAssetsUtils.preload(GameData.assets, "StateView", true);`接口，会先判断if和unless的条件是否符合，不符合的资源不再加载。
 - [修复] 修复`ZButton`的内存泄漏的问题；
 - [修复] 修复`XMLParser`的异常数据处理；
+- [改进] 改进`ZButton`的点击反应；
+- [新增] 新增`Lib.getRGBColor`接口，可获得16进制的RGB值；
 
 ### 13.0.15
 - [新增] 新增`ZButton`的XML配置支持；

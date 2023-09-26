@@ -65,6 +65,11 @@ class ZLabel extends DataProviderComponent {
 	private var __point:Point = new Point();
 
 	/**
+	 * 自动文本尺寸
+	 */
+	public var autoTextSize:Bool = false;
+
+	/**
 	 * 正则限制符
 	 */
 	public var restrict(get, set):String;
@@ -340,6 +345,12 @@ class ZLabel extends DataProviderComponent {
 			_display.height = textHeight;
 		if (_defaultDisplay != null) {
 			_defaultDisplay.height = _defaultDisplay.textHeight + 5;
+		}
+
+		// 自动字体大小
+		if (autoTextSize && !this.getDisplay().wordWrap) {
+			this.getDisplay().scaleY = this.getDisplay().scaleX = Math.min(1, _width / this.getTextWidth());
+			this.getDisplay().width = _width / this.getDisplay().scaleY;
 		}
 	}
 

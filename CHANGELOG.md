@@ -21,6 +21,7 @@
 - [修复] 修复`XMLParser`的异常数据处理；
 - [改进] 改进`ZButton`的点击反应；
 - [新增] 新增`Lib.getRGBColor`接口，可获得16进制的RGB值；
+- [新增] 新增`ZLabel`的`autoTextSize`自动文本缩放支持；
 
 ### 13.0.15
 - [新增] 新增`ZButton`的XML配置支持；

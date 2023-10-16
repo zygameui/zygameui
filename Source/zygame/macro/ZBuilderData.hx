@@ -137,7 +137,7 @@ class ZBuilderData {
 			var childxml:Xml = Xml.parse(childcontent);
 			if (childxml.firstElement().exists("classed")) {
 				item.set("classed", childxml.firstElement().get("classed"));
-				if (idname == null)
+				if (idname == null && item.get("load") != "true")
 					throw item.nodeName + "XML配置中使用了" + item.get("classed") + "，需要定义id。";
 				if (!noParseId)
 					ids.set(idname, item.get("classed"));

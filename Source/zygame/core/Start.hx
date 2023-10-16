@@ -430,6 +430,11 @@ class Start extends ZScene {
 
 	private var _update:Int = 0;
 
+	/**
+	 * 是否渲染状态下
+	 */
+	public var rendering:Bool = true;
+
 	private function onGameRender(context:RenderContext):Void {
 		var newTime = Timer.stamp();
 		_dt = Std.int((newTime - _lastTime) * 1000);
@@ -450,8 +455,10 @@ class Start extends ZScene {
 		#end
 		if (isCanRender || _update >= 2) {
 			_update = 0;
+			rendering = true;
 			@:privateAccess stage.__onLimeRender(context);
 		} else {
+			rendering = false;
 			@:privateAccess stage.__broadcastEvent(new Event(Event.ENTER_FRAME));
 			@:privateAccess stage.__broadcastEvent(new Event(Event.FRAME_CONSTRUCTED));
 			@:privateAccess stage.__broadcastEvent(new Event(Event.EXIT_FRAME));

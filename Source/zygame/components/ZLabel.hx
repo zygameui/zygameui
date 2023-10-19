@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.geom.Matrix;
 import haxe.Exception;
 import openfl.events.Event;
 import openfl.events.TextEvent;
@@ -56,6 +57,8 @@ class ZLabel extends DataProviderComponent {
 	private var _height:Float = 0;
 
 	private var __height:Float = 0;
+
+	private var __changed:Bool = false;
 
 	/**
 	 * 忽略字符段，在赋值时存在符合条件的字符，会自动忽略
@@ -118,7 +121,7 @@ class ZLabel extends DataProviderComponent {
 			_defaultDisplay.text = ZLabel.onGlobalCharFilter(value);
 		else
 			_defaultDisplay.text = value;
-		this.updateComponents();
+		this.__changed = true;
 		return value;
 	}
 
@@ -156,7 +159,7 @@ class ZLabel extends DataProviderComponent {
 	private function set_defaultColor(value:UInt):UInt {
 		if (_defaultDisplay == null)
 			updatedefaultText();
-		this.updateComponents();
+		this.__changed = true;
 		_defaultDisplay.textColor = value;
 		return value;
 	}
@@ -188,11 +191,6 @@ class ZLabel extends DataProviderComponent {
 	public function new() {
 		super();
 		_display = new ZTextField();
-		// #if (android || ios)
-		// // BATE：移动端兼容？
-		// _display.needsSoftKeyboard = true;
-		// _display.moveForSoftKeyboard = true;
-		// #end
 		#if ios
 		_font = new TextFormat("assets/" + zygame.components.base.ZConfig.fontName);
 		#else
@@ -213,12 +211,23 @@ class ZLabel extends DataProviderComponent {
 		#end
 		_display.addEventListener("change", (_) -> {
 			setTextFormat();
-			this.updateComponents();
+			this.__changed = true;
 		});
 		this.mouseChildren = false;
 		zquad = new ZQuad();
 		zquad.visible = false;
 		this.vAlign = Align.CENTER;
+	}
+
+	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
+		if (__changed) {
+			if (this.dataProvider != this._display.text) {
+				this.drawText();
+			}
+			this.updateComponents();
+			__changed = false;
+		}
+		super.__updateTransforms(overrideTransform);
 	}
 
 	private function setTextFormat():Void {
@@ -235,13 +244,13 @@ class ZLabel extends DataProviderComponent {
 
 	override private function set_vAlign(value:Align):Align {
 		super.set_vAlign(value);
-		updateComponents();
+		__changed = true;
 		return value;
 	}
 
 	override private function set_hAlign(value:Align):Align {
 		super.set_hAlign(value);
-		updateComponents();
+		__changed = true;
 		return value;
 	}
 
@@ -304,6 +313,8 @@ class ZLabel extends DataProviderComponent {
 			default:
 		}
 
+		setTextFormat();
+
 		for (text in igoneChars) {
 			_display.text = StringTools.replace(_display.text, text, "");
 		}
@@ -354,13 +365,13 @@ class ZLabel extends DataProviderComponent {
 		}
 	}
 
-	override private function get_dataProvider():Dynamic {
-		if (_isHtml)
-			return _display.htmlText;
-		else {
-			return _display.text;
-		}
-	}
+	// override private function get_dataProvider():Dynamic {
+	// 	if (_isHtml)
+	// 		return _display.htmlText;
+	// 	else {
+	// 		return _display.text;
+	// 	}
+	// }
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
 		value = Std.isOfType(value, String) ? value : Std.string(value);
@@ -370,6 +381,23 @@ class ZLabel extends DataProviderComponent {
 		}
 
 		super.dataProvider = value;
+
+		// 刷新内容
+		__changed = true;
+		if (this._display.text == "") {
+			this.drawText();
+		}
+
+		#if html5
+		if (HTML5TextInput.zinput == this)
+			HTML5TextInput.openInput(this);
+		#end
+
+		return value;
+	}
+
+	private function drawText():Void {
+		var value:String = this.dataProvider;
 		if (value != null && value.length > _maxChars) {
 			if (_maxChars != 0) {
 				value = value.substr(0, _maxChars);
@@ -399,7 +427,7 @@ class ZLabel extends DataProviderComponent {
 			_display.htmlText = value;
 		else {
 			if (_display.text == value)
-				return value;
+				return;
 			#if (meituan)
 			// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
 			if (_display != null) {
@@ -422,18 +450,7 @@ class ZLabel extends DataProviderComponent {
 			}
 			#end
 			_display.text = Std.string(value);
-			setTextFormat();
 		}
-
-		// 刷新内容
-		updateComponents();
-
-		#if html5
-		if (HTML5TextInput.zinput == this)
-			HTML5TextInput.openInput(this);
-		#end
-
-		return value;
 	}
 
 	/**
@@ -448,7 +465,7 @@ class ZLabel extends DataProviderComponent {
 
 	override private function set_width(value:Float):Float {
 		_width = value #if quickgame_scale * _getCurrentScale() #end;
-		updateComponents();
+		this.__changed = true;
 		return value;
 	}
 
@@ -459,7 +476,7 @@ class ZLabel extends DataProviderComponent {
 	override private function set_height(value:Float):Float {
 		_height = value #if quickgame_scale * _getCurrentScale() #end;
 		__height = value;
-		updateComponents();
+		this.__changed = true;
 		return value;
 	}
 
@@ -472,6 +489,11 @@ class ZLabel extends DataProviderComponent {
 	 * @return Float
 	 */
 	public function getTextHeight():Float {
+		if (__changed) {
+			this.drawText();
+			this.updateComponents();
+			__changed = false;
+		}
 		return _display.textHeight / _scale;
 	}
 
@@ -480,6 +502,11 @@ class ZLabel extends DataProviderComponent {
 	 * @return Float
 	 */
 	public function getTextWidth():Float {
+		if (__changed) {
+			this.drawText();
+			this.updateComponents();
+			__changed = false;
+		}
 		return _display.textWidth / _scale;
 	}
 
@@ -490,7 +517,7 @@ class ZLabel extends DataProviderComponent {
 	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
 		setTextFormat();
-		updateComponents();
+		__changed = true;
 	}
 
 	/**
@@ -506,7 +533,7 @@ class ZLabel extends DataProviderComponent {
 		setTextFormat();
 		zquad.width = 2;
 		zquad.height = font;
-		updateComponents();
+		__changed = true;
 	}
 
 	/**
@@ -518,7 +545,7 @@ class ZLabel extends DataProviderComponent {
 		zquad.color = color;
 		_display.textColor = color;
 		setTextFormat();
-		updateComponents();
+		__changed = true;
 	}
 
 	/**
@@ -678,13 +705,12 @@ class ZLabel extends DataProviderComponent {
 		zquad.visible = b;
 		zquad.alpha = 1;
 		setFrameEvent(b);
-		if (b)
-			this.updateComponents();
-		else {
+		if (b) {
+			this.__changed = true;
+		} else {
 			#if html5
 			HTML5TextInput.closeInput(this);
 			#end
-			// ZLabelAction.dipose();
 		}
 	}
 

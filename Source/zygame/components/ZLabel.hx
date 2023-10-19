@@ -221,11 +221,11 @@ class ZLabel extends DataProviderComponent {
 
 	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
 		if (__changed) {
+			__changed = false;
 			if (this.dataProvider != this._display.text) {
 				this.drawText();
 			}
 			this.updateComponents();
-			__changed = false;
 		}
 		super.__updateTransforms(overrideTransform);
 	}
@@ -490,9 +490,9 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function getTextHeight():Float {
 		if (__changed) {
+			__changed = false;
 			this.drawText();
 			this.updateComponents();
-			__changed = false;
 		}
 		return _display.textHeight / _scale;
 	}
@@ -503,9 +503,9 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function getTextWidth():Float {
 		if (__changed) {
+			__changed = false;
 			this.drawText();
 			this.updateComponents();
-			__changed = false;
 		}
 		return _display.textWidth / _scale;
 	}

@@ -233,13 +233,13 @@ class ZLabel extends DataProviderComponent {
 		}
 	}
 
-	override private function set_vAlign(value:String):String {
+	override private function set_vAlign(value:Align):Align {
 		super.set_vAlign(value);
 		updateComponents();
 		return value;
 	}
 
-	override private function set_hAlign(value:String):String {
+	override private function set_hAlign(value:Align):Align {
 		super.set_hAlign(value);
 		updateComponents();
 		return value;

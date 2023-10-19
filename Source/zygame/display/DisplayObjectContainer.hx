@@ -106,7 +106,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 */
 	public var hAlign(get, set):Align;
 
-	private var _hAlign:Align = "left";
+	private var _hAlign:Align = LEFT;
 
 	private function get_hAlign():Align {
 		return _hAlign;
@@ -123,7 +123,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	 */
 	public var vAlign(get, set):Align;
 
-	private var _vAlign:Align = "top";
+	private var _vAlign:Align = TOP;
 
 	private function get_vAlign():Align {
 		return _vAlign;

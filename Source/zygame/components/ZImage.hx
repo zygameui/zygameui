@@ -271,12 +271,12 @@ class ZImage extends DataProviderComponent {
 		// this._shader = null;
 	}
 
-	override function set_vAlign(value:String):String {
+	override function set_vAlign(value:Align):Align {
 		this.display.vAlign = value;
 		return super.set_vAlign(value);
 	}
 
-	override function set_hAlign(value:String):String {
+	override function set_hAlign(value:Align):Align {
 		this.display.hAlign = value;
 		return super.set_hAlign(value);
 	}

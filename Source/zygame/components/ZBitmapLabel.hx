@@ -91,21 +91,21 @@ class ZBitmapLabel extends DataProviderComponent {
 		return _node.wordWrap;
 	}
 
-	override private function get_vAlign():String {
+	override private function get_vAlign():Align {
 		return _node.vAlign;
 	}
 
-	override private function get_hAlign():String {
+	override private function get_hAlign():Align {
 		return _node.hAlign;
 	}
 
-	override private function set_vAlign(value:String):String {
+	override private function set_vAlign(value:Align):Align {
 		_node.vAlign = value;
 		updateComponents();
 		return value;
 	}
 
-	override private function set_hAlign(value:String):String {
+	override private function set_hAlign(value:Align):Align {
 		_node.hAlign = value;
 		updateComponents();
 		return value;

@@ -115,6 +115,8 @@ class ZLabel extends DataProviderComponent {
 	public var defaultText(get, set):String;
 
 	private function set_defaultText(value:String):String {
+		if (value == null)
+			value = "";
 		if (_defaultDisplay == null)
 			updatedefaultText();
 		if (ZLabel.onGlobalCharFilter != null)
@@ -222,7 +224,7 @@ class ZLabel extends DataProviderComponent {
 	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
 		if (__changed) {
 			__changed = false;
-			if (this.dataProvider != this._display.text) {
+			if (this.dataProvider != null && this.dataProvider != this._display.text) {
 				this.drawText();
 			}
 			this.updateComponents();
@@ -374,6 +376,9 @@ class ZLabel extends DataProviderComponent {
 	// }
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
+		if (value == null) {
+			value = "";
+		}
 		value = Std.isOfType(value, String) ? value : Std.string(value);
 
 		if (_restrictEreg != null) {

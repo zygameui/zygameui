@@ -470,6 +470,11 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function get_width():Float {
+		if (__changed) {
+			__changed = false;
+			this.drawText();
+			this.updateComponents();
+		}
 		return Math.abs(_width #if quickgame_scale / _getCurrentScale() #end * this.scaleX);
 	}
 
@@ -481,6 +486,11 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function get_height():Float {
+		if (__changed) {
+			__changed = false;
+			this.drawText();
+			this.updateComponents();
+		}
 		return Math.abs(_height #if quickgame_scale / _getCurrentScale() #end * this.scaleY);
 	}
 

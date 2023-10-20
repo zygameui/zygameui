@@ -7,6 +7,7 @@
 # ZYGameUI 更新日志
 ### 13.0.40
 - [修复] 修复vAlign hAlign的无效提示的问题；
+- [改进] 改进`ImageBitmap`，支持`dataProvider`读取字符串的精灵图id；
 
 ### 13.0.39
 - [新增] 新增`ZLabel`的`openInput`方法，主动打开输入框支持；

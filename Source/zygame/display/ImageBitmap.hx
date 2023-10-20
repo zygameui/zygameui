@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.components.ZBuilder;
 import zygame.utils.load.Frame;
 import openfl.display.BitmapData;
 import openfl.display.Bitmap;
@@ -46,6 +47,9 @@ class ImageBitmap extends Bitmap {
 	}
 
 	function set_dataProvider(value:Dynamic):Dynamic {
+		if (Std.isOfType(value, String)) {
+			value = ZBuilder.getBaseBitmapData(value);
+		}
 		_data = value;
 		if (Std.isOfType(value, BitmapData)) {
 			this.bitmapData = value;
@@ -66,5 +70,4 @@ class ImageBitmap extends Bitmap {
 		}
 		return _data;
 	}
-	
 }

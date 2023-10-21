@@ -264,7 +264,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	/**
 	 *  锚点对齐，不能直接对齐调用，容器不直接支持该功能。
 	 */
-	public function alignPivot(v:Align = null, h:Align = null):Void {
+	public function alignPivot(v:Align = CENTER, h:Align = CENTER):Void {
 		_vAlign = v;
 		_hAlign = h;
 	}

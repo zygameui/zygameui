@@ -5,7 +5,12 @@
 - [未解决]quartOut在JS压缩的情况下，会发生问题。
 
 # ZYGameUI 更新日志
-### 13.0.50
+
+### 13.0.52
+- [修复] 修复`ZLabel`的`wordWarp`如果为true的时候，文本又是null的时候，会发生错误；
+- [修复] 修复`ZLabel`在`getBounds`时没有及时刷新文本的问题；
+
+### 13.0.51
 - [修复] 修复vAlign hAlign的无效提示的问题；
 - [改进] 改进`ImageBitmap`，支持`dataProvider`读取字符串的精灵图id；
 - [改进] 改进`ZLabel`延迟渲染的逻辑；

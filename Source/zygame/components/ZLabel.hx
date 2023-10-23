@@ -39,6 +39,11 @@ class ZLabel extends DataProviderComponent {
 	public static var onGlobalCharFilter:String->String;
 
 	/**
+	 * 描边着色器
+	 */
+	public static var __textFieldStrokeShader = new zygame.shader.StrokeShader();
+
+	/**
 	 * 渲染模式：
 	 * 系统文字ZLabelRenderType.NATIVE，使用系统fillText渲染。
 	 * 缓存文字ZLabelRenderType.CACHE，使用缓存文字的基础上渲染。
@@ -224,6 +229,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	private function __onRender(e:RenderEvent):Void {
+		if (this.getDisplay().shader != null) {
+			__textFieldStrokeShader.updateParam(__blur, __color);
+		}
 		this.__updateLabel();
 	}
 
@@ -694,16 +702,23 @@ class ZLabel extends DataProviderComponent {
 	}
 	#end
 
+	private var __color:UInt = 0;
+
+	private var __blur:Float = 0;
+
 	/**
 	 * 描边字体：更改了文字大小后，可重新描边一次。
 	 * @param color 描边的颜色
 	 * @param blur 描边的厚度，默认建议使用1
 	 */
 	public function stroke(color:UInt, blur:Float = 1):Void {
+		__blur = blur;
+		__color = color;
 		if (blur == 0) {
 			this.getDisplay().shader = null;
-		} else
-			this.getDisplay().shader = new zygame.shader.StrokeShader(blur, color);
+		} else {
+			this.getDisplay().shader = __textFieldStrokeShader;
+		}
 	}
 
 	/**
@@ -711,7 +726,9 @@ class ZLabel extends DataProviderComponent {
 	 * @param blur 加粗大小
 	 */
 	public function bold(blur:Float = 1):Void {
-		this.getDisplay().shader = new zygame.shader.StrokeShader(blur, _font.color);
+		__blur = blur;
+		__color = _font.color;
+		this.getDisplay().shader = __textFieldStrokeShader;
 	}
 
 	/**

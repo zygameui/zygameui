@@ -57,6 +57,10 @@ class StrokeShader extends OpenFLShader {
 
 	public function new(size:Float = 1.5, color:UInt = 0x0) {
 		super();
+		updateParam(size, color);
+	}
+
+	public function updateParam(size:Float, color:UInt):Void {
 		u_storksize.value = [size];
 		var r = (color >> 16) & 0xFF;
 		var g = (color >> 8) & 0xFF;

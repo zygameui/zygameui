@@ -250,6 +250,17 @@ class ZLabel extends DataProviderComponent {
 		return value;
 	}
 
+	override private function __getBounds(rect:Rectangle, matrix:Matrix):Void {
+		if (__changed) {
+			__changed = false;
+			if (this.dataProvider != null && this.dataProvider != this._display.text) {
+				this.drawText();
+			}
+			this.updateComponents();
+		}
+		super.__getBounds(rect, matrix);
+	}
+
 	override private function set_hAlign(value:Align):Align {
 		super.set_hAlign(value);
 		__changed = true;

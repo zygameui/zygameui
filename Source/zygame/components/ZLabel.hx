@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.events.RenderEvent;
 import openfl.geom.Matrix;
 import haxe.Exception;
 import openfl.events.Event;
@@ -219,9 +220,14 @@ class ZLabel extends DataProviderComponent {
 		zquad = new ZQuad();
 		zquad.visible = false;
 		this.vAlign = Align.CENTER;
+		this.addEventListener(RenderEvent.RENDER_OPENGL, __onRender);
 	}
 
-	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
+	private function __onRender(e:RenderEvent):Void {
+		this.__updateLabel();
+	}
+
+	private function __updateLabel():Void {
 		if (__changed) {
 			__changed = false;
 			if (this.dataProvider != null && this.dataProvider != this._display.text) {
@@ -229,6 +235,10 @@ class ZLabel extends DataProviderComponent {
 			}
 			this.updateComponents();
 		}
+	}
+
+	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
+		__updateLabel();
 		super.__updateTransforms(overrideTransform);
 	}
 
@@ -251,13 +261,7 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function __getBounds(rect:Rectangle, matrix:Matrix):Void {
-		if (__changed) {
-			__changed = false;
-			if (this.dataProvider != null && this.dataProvider != this._display.text) {
-				this.drawText();
-			}
-			this.updateComponents();
-		}
+		__updateLabel();
 		super.__getBounds(rect, matrix);
 	}
 
@@ -409,6 +413,7 @@ class ZLabel extends DataProviderComponent {
 			HTML5TextInput.openInput(this);
 		#end
 
+		this.invalidate();
 		return value;
 	}
 

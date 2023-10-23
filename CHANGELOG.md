@@ -5,9 +5,10 @@
 - [未解决]quartOut在JS压缩的情况下，会发生问题。
 
 # ZYGameUI 更新日志
-### 13.0.40
+### 13.0.50
 - [修复] 修复vAlign hAlign的无效提示的问题；
 - [改进] 改进`ImageBitmap`，支持`dataProvider`读取字符串的精灵图id；
+- [改进] 改进`ZLabel`延迟渲染的逻辑；
 
 ### 13.0.39
 - [新增] 新增`ZLabel`的`openInput`方法，主动打开输入框支持；

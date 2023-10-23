@@ -403,16 +403,16 @@ class ZLabel extends DataProviderComponent {
 
 	private function drawText():Void {
 		var value:String = this.dataProvider;
-		if (value != null && value.length > _maxChars) {
-			if (_maxChars != 0) {
+		if (value != null) {
+			if (value.length > _maxChars && _maxChars != 0) {
 				value = value.substr(0, _maxChars);
+			}
+			if (getDisplay().wordWrap == false) {
+				value = StringTools.replace(value, "\n", "");
+				value = StringTools.replace(value, "\r", "");
 			}
 		}
 
-		if (getDisplay().wordWrap == false) {
-			value = StringTools.replace(value, "\n", "");
-			value = StringTools.replace(value, "\r", "");
-		}
 		#if (!wechat)
 		#if (quickgame || qqquick || minigame)
 		// 快游戏引擎不会清理文本画布，请在这里进行清理

@@ -1,6 +1,7 @@
 package zygame.components;
 
 // import openfl.display.Shape;
+import openfl.events.RenderEvent;
 import openfl.display.Bitmap;
 import zygame.components.ZBox;
 import openfl.geom.Point;
@@ -17,6 +18,11 @@ import openfl.filters.ShaderFilter;
  */
 class ZQuad extends ZBox {
 	/**
+	 * 颜色着色器
+	 */
+	private static var __colorShader:ColorShader = new ColorShader(0x0);
+
+	/**
 	 * 图块的渲染纹理对象
 	 */
 	public static var quadBitmapData:BitmapData;
@@ -32,10 +38,15 @@ class ZQuad extends ZBox {
 	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
 		display = new Bitmap(quadBitmapData);
-		display.shader = new ColorShader(color);
+		display.shader = __colorShader;
 		this.width = width;
 		this.height = height;
 		this.color = color;
+		this.addEventListener(RenderEvent.RENDER_OPENGL, onRenderOpenGL);
+	}
+
+	private function onRenderOpenGL(e:RenderEvent):Void {
+		cast(display.shader, ColorShader).updateColor(color);
 	}
 
 	override public function initComponents():Void {
@@ -45,7 +56,6 @@ class ZQuad extends ZBox {
 	}
 
 	override public function updateComponents():Void {
-		cast(display.shader, ColorShader).updateColor(color);
 		display.width = this.width == 0 ? 0 : this.width + 1;
 		display.height = this.height == 0 ? 0 : this.height + 1;
 	}

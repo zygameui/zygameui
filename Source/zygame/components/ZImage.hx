@@ -281,7 +281,7 @@ class ZImage extends DataProviderComponent {
 		return super.set_hAlign(value);
 	}
 
-	override function alignPivot(?v:Align = null, ?h:Align = null) {
+	override function alignPivot(?v:Align = CENTER, ?h:Align = CENTER) {
 		super.alignPivot(v, h);
 		this.display.alignPivot(v, h);
 	}

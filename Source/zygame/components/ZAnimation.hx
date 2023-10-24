@@ -118,7 +118,7 @@ class ZAnimation extends ZImage {
 	private override function set_dataProvider(data:Dynamic):Dynamic {
 		_animation = cast data;
 		if (isPlaying)
-			this.playGo(0);
+			this.gotoAndPlay(0);
 		else
 			this.stop(0);
 		return data;

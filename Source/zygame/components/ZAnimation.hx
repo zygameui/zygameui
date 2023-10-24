@@ -157,7 +157,17 @@ class ZAnimation extends ZImage {
 	 * @param frame - 指定播放帧
 	 * @param loop - 播放次数
 	 */
+	@:deprecated("弃用playGo接口，请改使用gotoAndPlay接口")
 	public function playGo(frame:Int, loop:Int = 0):Void {
+		gotoAndPlay(frame, loop);
+	}
+
+	/**
+	 * 跳转到某一帧开始播放
+	 * @param frame 
+	 * @param loop 
+	 */
+	public function gotoAndPlay(frame:Int, loop:Int = 0):Void {
 		if (_animation != null) {
 			isPlaying = true;
 			if (frame >= 0)
@@ -165,6 +175,15 @@ class ZAnimation extends ZImage {
 			if (_animation.getFrame(currentFrame) != null)
 				super.dataProvider = _animation.getFrame(currentFrame).bitmapData;
 		}
+	}
+
+	/**
+	 * 跳转到某一帧停止
+	 * @param frame 
+	 */
+	public function gotoAndStop(frame:Int):Void {
+		gotoAndPlay(frame, 0);
+		isPlaying = false;
 	}
 
 	override public function onRemove():Void {

@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.display.Bitmap;
 #if zimage_v2
 import openfl.display.DisplayObject;
 import haxe.Exception;
@@ -24,6 +25,10 @@ class ImageRender extends Sprite {
 	private var __data:Dynamic;
 
 	public var smoothing:Bool = true;
+
+	#if zimage_v2_bitmap_draw
+	private var __bitmapRender:Bitmap;
+	#end
 
 	/**
 	 * 获得位图的实际大小
@@ -60,10 +65,22 @@ class ImageRender extends Sprite {
 		__width = width;
 		__height = height;
 		__data = data;
+		#if zimage_v2_bitmap_draw
+		__bitmapRender?.parent?.removeChild(__bitmapRender);
+		#end
 		if (data is BitmapData) {
 			var bitmap:BitmapData = data;
+			#if zimage_v2_bitmap_draw
+			if (__bitmapRender == null) {
+				__bitmapRender = new Bitmap();
+			}
+			this.addChild(__bitmapRender);
+			__bitmapRender.bitmapData = bitmap;
+			#else
 			__beginBitmapFill(data);
 			this.graphics.drawQuads(new Vector(4, false, [0., 0., bitmap.width, bitmap.height]));
+			#end
+			return;
 		} else if (data is Frame) {
 			this.scaleX = this.scaleY = 1;
 			var frame:Frame = data;
@@ -258,8 +275,11 @@ class ImageRender extends Sprite {
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		var pos = this.globalToLocal(new Point(x, y));
-		if (this.getBounds(this.parent).contains(pos.x, pos.y)) {
+		if (this.mouseEnabled == false || this.visible == false)
+			return false;
+		if (this.getBounds(stage).contains(x, y)) {
+			if (stack != null)
+				stack.push(this);
 			return true;
 		}
 		return false;

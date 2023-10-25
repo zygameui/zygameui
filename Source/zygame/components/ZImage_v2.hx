@@ -70,9 +70,9 @@ class ZImage_v2 extends DataProviderBox {
 		super();
 		__render = new ImageRender();
 		this.addChild(__render);
-		var quad = new ZQuad(5, 5, 0xff0000);
-		this.addChild(quad);
-		quad.x = quad.y = -2;
+		// var quad = new ZQuad(5, 5, 0xff0000);
+		// this.addChild(quad);
+		// quad.x = quad.y = -2;
 	}
 
 	override public function initComponents():Void {
@@ -87,6 +87,11 @@ class ZImage_v2 extends DataProviderBox {
 			} else {
 				// 异步加载资源
 				var path:String = data;
+				if (path == this.dataProvider) {
+					return data;
+				}
+				// 先不支持
+				// return data;
 				// 当为: ${}格式时，则不会进行加载
 				if ((path.indexOf("http") != 0 && path.indexOf(":") != -1) || path.indexOf("${") != -1) {
 					return data;

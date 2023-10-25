@@ -70,6 +70,9 @@ class ZImage_v2 extends DataProviderBox {
 		super();
 		__render = new ImageRender();
 		this.addChild(__render);
+		var quad = new ZQuad(5, 5, 0xff0000);
+		this.addChild(quad);
+		quad.x = quad.y = -2;
 	}
 
 	override public function initComponents():Void {
@@ -161,19 +164,25 @@ class ZImage_v2 extends DataProviderBox {
 		super.updateComponents();
 		if (__currentDraw == null)
 			return;
+		var size = __render.getFrameSize();
+		if (size.width == 0 || size.height == 0)
+			return;
 		__render.x = __render.y = 0;
 		if (fill) {
-			var scale1 = this.getStageWidth() / __render.width;
-			var scale2 = this.getStageHeight() / __render.height;
+			var scale1 = this.getStageWidth() / size.width;
+			var scale2 = this.getStageHeight() / size.height;
 			var scale = Math.max(scale1, scale2);
 			__renderScale(scale, scale);
 		} else if (scaleWidth != 0 && scaleHeight != 0) {
-			var scale1 = scaleWidth / __render.width;
-			var scale2 = scaleHeight / __render.height;
+			var scale1 = scaleWidth / size.width;
+			var scale2 = scaleHeight / size.height;
 			var scale = Math.min(scale1, scale2);
 			__renderScale(scale, scale);
-			// super.width = scaleWidth;
-			// super.height = scaleHeight;
+			super.width = scaleWidth;
+			super.height = scaleHeight;
+		} else {
+			super.width = size.width;
+			super.height = size.height;
 		}
 		switch (vAlign) {
 			case TOP:
@@ -196,8 +205,9 @@ class ZImage_v2 extends DataProviderBox {
 	}
 
 	private function __renderScale(scaleX:Float, scaleY:Float):Void {
-		__render.width = __render.width * scaleX;
-		__render.height = __render.height * scaleY;
+		var size = __render.getFrameSize();
+		__render.width = size.width * scaleX;
+		__render.height = size.height * scaleY;
 		super.width = __render.width;
 		super.height = __render.height;
 	}

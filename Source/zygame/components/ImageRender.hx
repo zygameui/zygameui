@@ -25,8 +25,21 @@ class ImageRender extends Sprite {
 
 	public var smoothing:Bool = true;
 
+	/**
+	 * 获得位图的实际大小
+	 */
+	public function getFrameSize():{width:Float, height:Float} {
+		if (__data is Frame) {
+			return {width: cast(__data, Frame).width, height: cast(__data, Frame).height};
+		} else if (__data is BitmapData) {
+			return {width: cast(__data, BitmapData).width, height: cast(__data, BitmapData).height};
+		}
+		return {width: 0, height: 0};
+	}
+
 	private function __beginBitmapFill(data:BitmapData):Void {
 		if (this.shader != null && shader is GraphicsShader) {
+			// TODO 这样的话，非GraphicsShader的着色器就没有办法使用了
 			// var gShader = new CloneGraphicsShader(this.shader);
 			// gShader.data = this.shader.data;
 			// if (gShader.bitmap != null)
@@ -244,8 +257,8 @@ class ImageRender extends Sprite {
 	 * @param hitObject 
 	 * @return Bool
 	 */
-	 override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		var pos = this.globalToLocal(new Point(x,y));
+	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
+		var pos = this.globalToLocal(new Point(x, y));
 		if (this.getBounds(this.parent).contains(pos.x, pos.y)) {
 			return true;
 		}

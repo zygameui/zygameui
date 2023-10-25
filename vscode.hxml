@@ -26,3 +26,4 @@
 -cp openfl9-source
 --js bin/main.js
 --no-output
+-D zimage_v2

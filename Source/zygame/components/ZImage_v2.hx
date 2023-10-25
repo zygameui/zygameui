@@ -1,7 +1,6 @@
 package zygame.components;
 
 #if zimage_v2
-
 import openfl.display.Shader;
 import openfl.geom.Rectangle;
 import zygame.utils.AssetsUtils;
@@ -137,8 +136,8 @@ class ZImage_v2 extends DataProviderBox {
 		__render.scaleX = __render.scaleY = 1;
 		__render.x = __render.y = 0;
 		__render.draw(bitmapData, this._setWidth ? this.width : null, this._setHeight ? this.height : null);
-		onBitmapDataUpdate();
 		this.updateComponents();
+		onBitmapDataUpdate();
 	}
 
 	override function set_width(value:Float):Float {
@@ -159,21 +158,41 @@ class ZImage_v2 extends DataProviderBox {
 	}
 
 	override function updateComponents() {
+		super.updateComponents();
+		if (__currentDraw == null)
+			return;
+		__render.x = __render.y = 0;
 		if (fill) {
 			var scale1 = this.getStageWidth() / __render.width;
 			var scale2 = this.getStageHeight() / __render.height;
 			var scale = Math.max(scale1, scale2);
-			__render.width = __render.width * scale;
-			__render.height = __render.height * scale;
 			__renderScale(scale, scale);
 		} else if (scaleWidth != 0 && scaleHeight != 0) {
 			var scale1 = scaleWidth / __render.width;
 			var scale2 = scaleHeight / __render.height;
 			var scale = Math.min(scale1, scale2);
 			__renderScale(scale, scale);
+			// super.width = scaleWidth;
+			// super.height = scaleHeight;
 		}
-		super.updateComponents();
-		zygame.utils.Align.AlignTools.alignDisplay(__render, vAlign, hAlign);
+		switch (vAlign) {
+			case TOP:
+				display.y = 0;
+			case BOTTOM:
+				display.y = -display.height;
+			case CENTER:
+				display.y = -display.height * 0.5;
+			default:
+		}
+		switch (hAlign) {
+			case LEFT:
+				display.x = 0;
+			case RIGHT:
+				display.x = -display.width;
+			case CENTER:
+				display.x = -display.width * 0.5;
+			default:
+		}
 	}
 
 	private function __renderScale(scaleX:Float, scaleY:Float):Void {
@@ -229,5 +248,4 @@ class ZImage_v2 extends DataProviderBox {
 		return _shader;
 	}
 }
-
 #end

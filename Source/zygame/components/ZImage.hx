@@ -11,6 +11,10 @@ import zygame.utils.AssetsUtils in Assets;
 import zygame.utils.load.Frame;
 import openfl.geom.Rectangle;
 
+#if zimage_v2
+typedef ZImage = zygame.components.ZImage_v2;
+#else
+
 /**
  * 支持使用图片路径、以及位图设置内容，默认允许XML中使用。
  * ```xml
@@ -313,3 +317,4 @@ class ZImage extends DataProviderComponent {
 		display.y = (display.getStageHeight() - display.height) / 2;
 	}
 }
+#end

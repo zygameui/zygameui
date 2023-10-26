@@ -40,6 +40,8 @@ class Slice9Frame extends BaseFrame {
 		}
 		if (_scale9frames != null)
 			return _scale9frames;
+		scale9rect.width = Math.abs(scale9rect.width);
+		scale9rect.height = Math.abs(scale9rect.height);
 		var rects:Array<Rectangle> = zygame.utils.Scale9Utils.createScale9Rects(this.x, this.y, this.width, this.height, scale9rect);
 		_scale9frames = [];
 		for (rect in rects) {
@@ -49,8 +51,8 @@ class Slice9Frame extends BaseFrame {
 			frame.id = @:privateAccess parent._tileset.numRects - 1;
 			frame.x = rect.x;
 			frame.y = rect.y;
-			frame.width = Math.abs(rect.width);
-			frame.height = Math.abs(rect.height);
+			frame.width = rect.width;
+			frame.height = rect.height;
 			frame.parent = parent;
 			_scale9frames.push(frame);
 		}

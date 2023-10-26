@@ -96,8 +96,6 @@ class ZImage_v2 extends DataProviderBox {
 				if (path == this.dataProvider) {
 					return data;
 				}
-				// 先不支持
-				// return data;
 				// 当为: ${}格式时，则不会进行加载
 				if ((path.indexOf("http") != 0 && path.indexOf(":") != -1) || path.indexOf("${") != -1) {
 					return data;
@@ -110,10 +108,6 @@ class ZImage_v2 extends DataProviderBox {
 							return;
 						if (Std.isOfType(dataProvider, String)) {
 							__drawRender(bitmapData);
-							// display.bitmapData = bitmapData;
-							// updateImageScaleWidthAndHeight();
-							// onBitmapDataUpdate();
-							// this.shader = _shader;
 						}
 					});
 				} else {
@@ -122,15 +116,6 @@ class ZImage_v2 extends DataProviderBox {
 						if (dataProvider != path)
 							return;
 						__drawRender(bitmapData);
-						// if (isDispose || !Std.isOfType(dataProvider, String)) {
-						// 	ZGC.disposeBitmapData(bitmapData);
-						// 	return;
-						// }
-						// display.bitmapData = bitmapData;
-						// updateImageScaleWidthAndHeight();
-						// onBitmapDataUpdate();
-						// this.shader = _shader;
-						// isAysn = true;
 					}).onError(__loadError);
 				}
 			}

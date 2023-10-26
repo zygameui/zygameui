@@ -228,13 +228,13 @@ class ZImage_v2 extends DataProviderBox {
 	private function __renderScale(scaleX:Float, scaleY:Float):Void {
 		var size = __render.getFrameSize();
 		#if zimage_v2_bitmap_draw
-		// if (__render.isBitmapDraw) {
-		// __render.scaleX = scaleX;
-		// __render.scaleY = scaleY;
-		// } else {
-		__render.width = size.width * scaleX;
-		__render.height = size.height * scaleY;
-		// }
+		if (__render.isBitmapDraw) {
+			__render.scaleX = scaleX;
+			__render.scaleY = scaleY;
+		} else {
+			__render.width = size.width * scaleX;
+			__render.height = size.height * scaleY;
+		}
 		#else
 		__render.width = size.width * scaleX;
 		__render.height = size.height * scaleY;

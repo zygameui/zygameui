@@ -102,6 +102,8 @@ class ZImage_v2 extends DataProviderBox {
 				if ((path.indexOf("http") != 0 && path.indexOf(":") != -1) || path.indexOf("${") != -1) {
 					return data;
 				}
+				if (path == "")
+					return data;
 				if (cacheAssets != null) {
 					cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
 						if (dataProvider != path)
@@ -133,7 +135,8 @@ class ZImage_v2 extends DataProviderBox {
 				}
 			}
 		}
-		__drawRender(data);
+		if (!Std.isOfType(data, String))
+			__drawRender(data);
 		return super.set_dataProvider(data);
 	}
 

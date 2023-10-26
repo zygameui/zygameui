@@ -196,8 +196,13 @@ class ZImage_v2 extends DataProviderBox {
 		} else {
 			// 这是默认行为
 			if (@:privateAccess !this.__render.__isS9Draw) {
-				super.width = size.width;
-				super.height = size.height;
+				var pwidth = _setWidth ? _componentWidth : size.width;
+				var pheight = _setHeight ? _componentHeight : size.height;
+				var scaleX = pwidth / size.width;
+				var scaleY = pheight / size.height;
+				__renderScale(scaleX, scaleY);
+				super.width = pwidth;
+				super.height = pheight;
 			}
 		}
 		switch (vAlign) {

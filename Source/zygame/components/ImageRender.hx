@@ -2,7 +2,6 @@ package zygame.components;
 
 import openfl.geom.Rectangle;
 import openfl.display.Bitmap;
-// #if zimage_v2
 import openfl.display.DisplayObject;
 import haxe.Exception;
 import openfl.display.Sprite;
@@ -16,6 +15,7 @@ import openfl.geom.Point;
 /**
  * 图片渲染器
  */
+@:access(openfl.geom.Rectangle)
 class ImageRender extends Sprite {
 	private var __isS9Draw:Bool = false;
 
@@ -26,6 +26,8 @@ class ImageRender extends Sprite {
 	private var __data:Dynamic;
 
 	public var smoothing:Bool = true;
+
+	public var isBitmapDraw:Bool = false;
 
 	#if zimage_v2_bitmap_draw
 	private var __bitmapRender:Bitmap;
@@ -67,11 +69,13 @@ class ImageRender extends Sprite {
 		__height = height;
 		__data = data;
 		#if zimage_v2_bitmap_draw
+		isBitmapDraw = false;
 		__bitmapRender?.parent?.removeChild(__bitmapRender);
 		#end
 		if (data is BitmapData) {
 			var bitmap:BitmapData = data;
 			#if zimage_v2_bitmap_draw
+			isBitmapDraw = true;
 			if (__bitmapRender == null) {
 				__bitmapRender = new Bitmap();
 			}
@@ -87,8 +91,6 @@ class ImageRender extends Sprite {
 			var frame:Frame = data;
 			if (frame.scale9frames != null) {
 				__isS9Draw = true;
-				if (frame.name == "s9_unlock_bg")
-					trace("九图渲染：", frame.name, width, height);
 				__beginBitmapFill(frame.parent.getRootBitmapData());
 				// 九图渲染
 				var quads:Vector<Float> = new Vector();
@@ -233,7 +235,8 @@ class ImageRender extends Sprite {
 				}
 				this.graphics.drawQuads(quads, null, transform);
 			} else {
-				#if false
+				#if zimage_v2_bitmap_draw
+				isBitmapDraw = true;
 				if (__bitmapRender == null) {
 					__bitmapRender = new Bitmap();
 				}
@@ -263,6 +266,9 @@ class ImageRender extends Sprite {
 					super.width = width;
 				if (height != null)
 					super.height = height;
+			}
+			if (__bitmapRender != null && __bitmapRender.parent != null) {
+				__bitmapRender.shader = this.shader;
 			}
 		}
 		#else
@@ -330,7 +336,19 @@ class ImageRender extends Sprite {
 		}
 		return false;
 	}
+
+	/**
+	 * 兼容OPENFL错误的ScrollRect尺寸
+	 * @param rect 
+	 * @param matrix 
+	 */
+	override private function __getBounds(rect:Rectangle, matrix:Matrix):Void {
+		var bounds = Rectangle.__pool.get();
+		var size = getFrameSize();
+		bounds.setTo(0, 0, __width ?? size.width, __height ?? size.height);
+		bounds.__transform(bounds, matrix);
+		rect.__expand(bounds.x, bounds.y, bounds.width, bounds.height);
+		Rectangle.__pool.release(bounds);
+	}
 	#end
 }
-
-// #end

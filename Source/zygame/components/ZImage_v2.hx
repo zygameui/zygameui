@@ -1,6 +1,7 @@
 package zygame.components;
 
 // #if zimage_v2
+import zygame.components.ImageRender;
 import openfl.display.Shader;
 import openfl.geom.Rectangle;
 import zygame.utils.AssetsUtils;
@@ -14,6 +15,7 @@ import zygame.utils.load.Frame;
 /**
  * 图片显示对象
  */
+@:access(ImageRender)
 class ZImage_v2 extends DataProviderBox {
 	private var __render:ImageRender;
 
@@ -183,11 +185,13 @@ class ZImage_v2 extends DataProviderBox {
 			return;
 		__render.x = __render.y = 0;
 		if (fill) {
+			// 这是平铺的计算
 			var scale1 = this.getStageWidth() / size.width;
 			var scale2 = this.getStageHeight() / size.height;
 			var scale = Math.max(scale1, scale2);
 			__renderScale(scale, scale);
 		} else if (scaleWidth != 0 && scaleHeight != 0) {
+			// 这是等比缩放
 			var scale1 = scaleWidth / size.width;
 			var scale2 = scaleHeight / size.height;
 			var scale = Math.min(scale1, scale2);
@@ -195,6 +199,7 @@ class ZImage_v2 extends DataProviderBox {
 			super.width = scaleWidth;
 			super.height = scaleHeight;
 		} else {
+			// 这是默认行为
 			if (@:privateAccess !this.__render.__isS9Draw) {
 				super.width = size.width;
 				super.height = size.height;
@@ -222,8 +227,18 @@ class ZImage_v2 extends DataProviderBox {
 
 	private function __renderScale(scaleX:Float, scaleY:Float):Void {
 		var size = __render.getFrameSize();
+		#if zimage_v2_bitmap_draw
+		// if (__render.isBitmapDraw) {
+		// __render.scaleX = scaleX;
+		// __render.scaleY = scaleY;
+		// } else {
 		__render.width = size.width * scaleX;
 		__render.height = size.height * scaleY;
+		// }
+		#else
+		__render.width = size.width * scaleX;
+		__render.height = size.height * scaleY;
+		#end
 		super.width = __render.width;
 		super.height = __render.height;
 	}

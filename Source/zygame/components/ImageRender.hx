@@ -314,13 +314,36 @@ class ImageRender extends Sprite {
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		if (this.mouseEnabled == false || this.visible == false)
+		// if (this.mouseEnabled == false || this.visible == false)
+		// 	return false;
+		// if (this.parent.parent is ZButton)
+		// 	trace("test", this.getBounds(stage), x, y);
+		// if (this.getBounds(stage).contains(x, y)) {
+		// 	if (stack != null)
+		// 		stack.push(this);
+		// 	return true;
+		// }
+		// return false;
+		if (!hitObject.visible || __data == null)
 			return false;
-		if (this.getBounds(stage).contains(x, y)) {
-			if (stack != null)
-				stack.push(this);
+		if (mask != null && !mask.__hitTestMask(x, y))
+			return false;
+		__getRenderTransform();
+		var px = @:privateAccess __renderTransform.__transformInverseX(x, y);
+		var py = @:privateAccess __renderTransform.__transformInverseY(x, y);
+		var size = this.getFrameSize();
+		if (px > 0 && py > 0 && px <= size.width && py <= size.height) {
+			if (__scrollRect != null && !__scrollRect.contains(px, py)) {
+				return false;
+			}
+
+			if (stack != null && !interactiveOnly) {
+				stack.push(hitObject);
+			}
+
 			return true;
 		}
+
 		return false;
 	}
 	#end

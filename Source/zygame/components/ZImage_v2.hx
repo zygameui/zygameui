@@ -1,6 +1,6 @@
 package zygame.components;
 
-#if zimage_v2
+// #if zimage_v2
 import openfl.display.Shader;
 import openfl.geom.Rectangle;
 import zygame.utils.AssetsUtils;
@@ -9,6 +9,7 @@ import zygame.utils.CacheAssets;
 import zygame.utils.Align;
 import zygame.components.ZBuilder;
 import zygame.components.base.DataProviderBox;
+import zygame.utils.load.Frame;
 
 /**
  * 图片显示对象
@@ -143,7 +144,7 @@ class ZImage_v2 extends DataProviderBox {
 		__currentDraw = bitmapData;
 		__render.scaleX = __render.scaleY = 1;
 		__render.x = __render.y = 0;
-		__render.draw(bitmapData, this._setWidth ? this.width : null, this._setHeight ? this.height : null);
+		@:privateAccess __render.draw(bitmapData, this._setWidth ? this._componentWidth : null, this._setHeight ? this._componentHeight : null);
 		this.updateComponents();
 		onBitmapDataUpdate();
 	}
@@ -158,6 +159,14 @@ class ZImage_v2 extends DataProviderBox {
 		__render.height = value;
 		this.updateComponents();
 		return super.set_height(value);
+	}
+
+	private override function get_width():Float {
+		return Math.abs(_componentWidth * scaleX);
+	}
+
+	private override function get_height():Float {
+		return Math.abs(_componentHeight * scaleY);
 	}
 
 	override function alignPivot(v:Align = CENTER, h:Align = CENTER) {
@@ -186,8 +195,10 @@ class ZImage_v2 extends DataProviderBox {
 			super.width = scaleWidth;
 			super.height = scaleHeight;
 		} else {
-			super.width = size.width;
-			super.height = size.height;
+			if (@:privateAccess !this.__render.__isS9Draw) {
+				super.width = size.width;
+				super.height = size.height;
+			}
 		}
 		switch (vAlign) {
 			case TOP:
@@ -263,4 +274,5 @@ class ZImage_v2 extends DataProviderBox {
 		return _shader;
 	}
 }
-#end
+
+// #end

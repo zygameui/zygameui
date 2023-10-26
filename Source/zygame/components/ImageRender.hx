@@ -1,7 +1,8 @@
 package zygame.components;
 
+import openfl.geom.Rectangle;
 import openfl.display.Bitmap;
-#if zimage_v2
+// #if zimage_v2
 import openfl.display.DisplayObject;
 import haxe.Exception;
 import openfl.display.Sprite;
@@ -86,6 +87,8 @@ class ImageRender extends Sprite {
 			var frame:Frame = data;
 			if (frame.scale9frames != null) {
 				__isS9Draw = true;
+				if (frame.name == "s9_unlock_bg")
+					trace("九图渲染：", frame.name, width, height);
 				__beginBitmapFill(frame.parent.getRootBitmapData());
 				// 九图渲染
 				var quads:Vector<Float> = new Vector();
@@ -230,20 +233,63 @@ class ImageRender extends Sprite {
 				}
 				this.graphics.drawQuads(quads, null, transform);
 			} else {
+				#if false
+				if (__bitmapRender == null) {
+					__bitmapRender = new Bitmap();
+				}
+				this.addChild(__bitmapRender);
+				__bitmapRender.bitmapData = frame.parent.getRootBitmapData();
+				__bitmapRender.scrollRect = new Rectangle(frame.x, frame.y, frame.width, frame.height);
+				#else
 				__beginBitmapFill(frame.parent.getRootBitmapData());
 				var m = this.transform.matrix;
 				this.graphics.drawQuads(new Vector(4, false, [frame.x, frame.y, frame.width, frame.height]), null,
 					new Vector(6, false, [m.a, m.b, m.c, m.d, m.tx, m.ty]));
+				#end
 			}
 		}
 		this.graphics.endFill();
+		#if zimage_v2_bitmap_draw
+		// TODO 宽高可能受影响
+		if (!__isS9Draw) {
+			if (__data is Frame) {
+				var size = getFrameSize();
+				if (__width != null)
+					this.scaleX = __width / size.width;
+				if (__height != null)
+					this.scaleY = __height / size.height;
+			} else {
+				if (width != null)
+					super.width = width;
+				if (height != null)
+					super.height = height;
+			}
+		}
+		#else
 		if (!__isS9Draw) {
 			if (width != null)
 				super.width = width;
 			if (height != null)
 				super.height = height;
 		}
+		#end
 	}
+
+	#if false
+	override function get_width():Float {
+		if (__data is Frame)
+			return __width ?? 0;
+		else
+			return super.get_width();
+	}
+
+	override function get_height():Float {
+		if (__data is Frame)
+			return __height ?? 0;
+		else
+			return super.get_height();
+	}
+	#end
 
 	override function set_width(value:Float):Float {
 		if (__isS9Draw) {
@@ -286,4 +332,5 @@ class ImageRender extends Sprite {
 	}
 	#end
 }
-#end
+
+// #end

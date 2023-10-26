@@ -12,7 +12,7 @@ import zygame.utils.load.Frame;
 import openfl.geom.Rectangle;
 
 #if zimage_v2
-typedef ZImage = zygame.components.ZImage_v2;
+class ZImage extends zygame.components.ZImage_v2 {}
 #else
 
 /**

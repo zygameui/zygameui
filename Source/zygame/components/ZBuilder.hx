@@ -158,12 +158,8 @@ class ZBuilder {
 			cast(ui, zygame.components.ZParticles).dataProvider = value;
 		});
 		bindParsing(ZImage, "mouseEnabled", function(ui:Dynamic, name:String, value:String):Void {
-			#if !zimage_v2
 			cast(ui, zygame.components.ZImage).display.mouseEnabled = value == "true";
 			cast(ui, zygame.components.ZImage).mouseEnabled = cast(ui, zygame.components.ZImage).display.mouseEnabled;
-			#else
-			cast(ui, zygame.components.ZImage).mouseEnabled = value == "true";
-			#end
 		});
 		bindParsing(zygame.components.ZImage, "src", function(ui:Dynamic, name:String, value:String):Void {
 			var values = value.split(":");
@@ -753,11 +749,6 @@ class ZBuilder {
 		else
 			className = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		#if zimage_v2
-		if (className == "ZImage_v2") {
-			className = "ZImage";
-		}
-		#end
 		classMaps.set(className, Std.isOfType(obj, String) ? Type.resolveClass(obj) : obj);
 	}
 
@@ -769,11 +760,6 @@ class ZBuilder {
 	public static function bindCreate(obj:Class<Dynamic>, fun:Xml->Array<Dynamic>):Void {
 		var className:String = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		#if zimage_v2
-		if (className == "ZImage_v2") {
-			className = "ZImage";
-		}
-		#end
 		createMaps.set(className, fun);
 	}
 
@@ -785,11 +771,6 @@ class ZBuilder {
 	public static function bindEnd(obj:Class<Dynamic>, fun:Dynamic->Void):Void {
 		var className:String = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		#if zimage_v2
-		if (className == "ZImage_v2") {
-			className = "ZImage";
-		}
-		#end
 		endMaps.set(className, fun);
 	}
 
@@ -801,11 +782,6 @@ class ZBuilder {
 	public static function bindAdd(obj:Class<Dynamic>, fun:Dynamic->Dynamic->Xml->Void):Void {
 		var className:String = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		#if zimage_v2
-		if (className == "ZImage_v2") {
-			className = "ZImage";
-		}
-		#end
 		addMaps.set(className, fun);
 	}
 
@@ -822,11 +798,6 @@ class ZBuilder {
 		else
 			className = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		#if zimage_v2
-		if (className == "ZImage_v2") {
-			className = "ZImage";
-		}
-		#end
 		parsingMaps.set(className + "." + key, fun);
 	}
 

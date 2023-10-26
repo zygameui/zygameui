@@ -13,7 +13,10 @@ import zygame.components.base.DataProviderBox;
 import zygame.utils.load.Frame;
 
 /**
- * 图片显示对象
+ * 图片显示对象（v2）Bate
+ * 当前显示对象，可通过`<haxedef name="zimage_v2"/>`定义开启，开启后，将不再使用`Tilemap`，默认使用`Bitmap`渲染。
+ * 当前显示对象支持`Sprite`三角形渲染，但是在某些设备上，不支持非2次幂图，会呈黑色，并且会导致无法使用`Shader`，而是需要使用`GraphicsShader`，如果需要使用，定义`<haxedef name="zimage_v2_use_sprite_draw"/>`开启。
+ * 当使用默认的`Bitmap`渲染时，其效果与`ZImage(v1)`版本是没有差异的。
  */
 @:access(ImageRender)
 class ZImage_v2 extends DataProviderBox {

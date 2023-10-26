@@ -29,7 +29,7 @@ class ImageRender extends Sprite {
 
 	public var isBitmapDraw:Bool = false;
 
-	#if zimage_v2_bitmap_draw
+	#if !zimage_v2_use_sprite_draw
 	private var __bitmapRender:Bitmap;
 	#end
 
@@ -68,13 +68,13 @@ class ImageRender extends Sprite {
 		__width = width;
 		__height = height;
 		__data = data;
-		#if zimage_v2_bitmap_draw
+		#if !zimage_v2_use_sprite_draw
 		isBitmapDraw = false;
 		__bitmapRender?.parent?.removeChild(__bitmapRender);
 		#end
 		if (data is BitmapData) {
 			var bitmap:BitmapData = data;
-			#if zimage_v2_bitmap_draw
+			#if !zimage_v2_use_sprite_draw
 			isBitmapDraw = true;
 			if (__bitmapRender == null) {
 				__bitmapRender = new Bitmap();
@@ -235,7 +235,7 @@ class ImageRender extends Sprite {
 				}
 				this.graphics.drawQuads(quads, null, transform);
 			} else {
-				#if zimage_v2_bitmap_draw
+				#if !zimage_v2_use_sprite_draw
 				isBitmapDraw = true;
 				if (__bitmapRender == null) {
 					__bitmapRender = new Bitmap();
@@ -252,7 +252,7 @@ class ImageRender extends Sprite {
 			}
 		}
 		this.graphics.endFill();
-		#if zimage_v2_bitmap_draw
+		#if !zimage_v2_use_sprite_draw
 		// TODO 宽高可能受影响
 		if (!__isS9Draw) {
 			if (__data is Frame) {
@@ -280,22 +280,6 @@ class ImageRender extends Sprite {
 		}
 		#end
 	}
-
-	#if false
-	override function get_width():Float {
-		if (__data is Frame)
-			return __width ?? 0;
-		else
-			return super.get_width();
-	}
-
-	override function get_height():Float {
-		if (__data is Frame)
-			return __height ?? 0;
-		else
-			return super.get_height();
-	}
-	#end
 
 	override function set_width(value:Float):Float {
 		if (__isS9Draw) {

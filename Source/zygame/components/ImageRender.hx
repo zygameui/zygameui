@@ -314,16 +314,6 @@ class ImageRender extends Sprite {
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		// if (this.mouseEnabled == false || this.visible == false)
-		// 	return false;
-		// if (this.parent.parent is ZButton)
-		// 	trace("test", this.getBounds(stage), x, y);
-		// if (this.getBounds(stage).contains(x, y)) {
-		// 	if (stack != null)
-		// 		stack.push(this);
-		// 	return true;
-		// }
-		// return false;
 		if (!hitObject.visible || __data == null)
 			return false;
 		if (mask != null && !mask.__hitTestMask(x, y))

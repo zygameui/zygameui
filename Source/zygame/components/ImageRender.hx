@@ -102,8 +102,8 @@ class ImageRender extends Sprite {
 				var leftbottom = frame.scale9frames[6];
 				var rightbottom = frame.scale9frames[8];
 				var center = frame.scale9frames[4];
-				var wScale = (width - lefttop.width - righttop.width) / center.width;
-				var hScale = (height - lefttop.height - leftbottom.height) / center.height;
+				var wScale = Math.abs((width - lefttop.width - righttop.width) / center.width);
+				var hScale = Math.abs((height - lefttop.height - leftbottom.height) / center.height);
 				for (index => pFrame in frame.scale9frames) {
 					switch index {
 						case 0:
@@ -166,6 +166,7 @@ class ImageRender extends Sprite {
 							// 居中
 							m.identity();
 							m.scale(wScale, hScale);
+							trace("quads=", pFrame.x, pFrame.y, pFrame.width, pFrame.height, "wScale=", wScale, "hScale=", hScale);
 							transform.push(m.a);
 							transform.push(m.b);
 							transform.push(m.c);

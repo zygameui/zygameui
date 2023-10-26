@@ -18,7 +18,7 @@ class Slice9Frame extends BaseFrame {
 
 	private var _rect:Rectangle = null;
 
-    public var parent:TextureAtlas;
+	public var parent:TextureAtlas;
 
 	private function get_scale9rect():Rectangle {
 		return _rect;
@@ -49,8 +49,8 @@ class Slice9Frame extends BaseFrame {
 			frame.id = @:privateAccess parent._tileset.numRects - 1;
 			frame.x = rect.x;
 			frame.y = rect.y;
-			frame.width = rect.width;
-			frame.height = rect.height;
+			frame.width = Math.abs(rect.width);
+			frame.height = Math.abs(rect.height);
 			frame.parent = parent;
 			_scale9frames.push(frame);
 		}

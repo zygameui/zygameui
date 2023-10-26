@@ -336,19 +336,5 @@ class ImageRender extends Sprite {
 		}
 		return false;
 	}
-
-	/**
-	 * 兼容OPENFL错误的ScrollRect尺寸
-	 * @param rect 
-	 * @param matrix 
-	 */
-	override private function __getBounds(rect:Rectangle, matrix:Matrix):Void {
-		var bounds = Rectangle.__pool.get();
-		var size = getFrameSize();
-		bounds.setTo(0, 0, __width ?? size.width, __height ?? size.height);
-		bounds.__transform(bounds, matrix);
-		rect.__expand(bounds.x, bounds.y, bounds.width, bounds.height);
-		Rectangle.__pool.release(bounds);
-	}
 	#end
 }

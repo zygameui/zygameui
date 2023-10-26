@@ -185,9 +185,4 @@ class ZAnimation extends ZImage {
 		gotoAndPlay(frame, 0);
 		isPlaying = false;
 	}
-
-	override public function onRemove():Void {
-		super.onRemove();
-		this.setFrameEvent(false);
-	}
 }

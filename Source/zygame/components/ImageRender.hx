@@ -38,7 +38,8 @@ class ImageRender extends Sprite {
 	 */
 	public function getFrameSize():{width:Float, height:Float} {
 		if (__data is Frame) {
-			return {width: cast(__data, Frame).width, height: cast(__data, Frame).height};
+			var frameData:Frame = cast __data;
+			return {width: Math.max(frameData.frameWidth, frameData.width), height: Math.max(frameData.frameHeight, frameData.height)};
 		} else if (__data is BitmapData) {
 			return {width: cast(__data, BitmapData).width, height: cast(__data, BitmapData).height};
 		}
@@ -242,7 +243,9 @@ class ImageRender extends Sprite {
 				}
 				this.addChild(__bitmapRender);
 				__bitmapRender.bitmapData = frame.parent.getRootBitmapData();
-				__bitmapRender.scrollRect = new Rectangle(frame.x, frame.y, frame.width, frame.height);
+				__bitmapRender.scrollRect = new Rectangle(frame.x, frame.y, frame.width - 1, frame.height - 1);
+				__bitmapRender.x = frame.frameX;
+				__bitmapRender.y = frame.frameY;
 				#else
 				__beginBitmapFill(frame.parent.getRootBitmapData());
 				var m = this.transform.matrix;

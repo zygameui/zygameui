@@ -1,5 +1,6 @@
 package zygame.loader;
 
+import zygame.loader.parser.JSONTextureAtlas;
 import zygame.utils.StringUtils;
 import zygame.loader.parser.SparticleParser;
 import zygame.loader.parser.BitmapDataParser;

@@ -10,6 +10,7 @@
 - [修复] 修复`ZLabel`的`wordWarp`如果为true的时候，文本又是null的时候，会发生错误；
 - [修复] 修复`ZLabel`在`getBounds`时没有及时刷新文本的问题；
 - [修复] 修复`ZLabel`的刷新不及时的问题；
+- [新增] 新增`JSONTextureAtlas`JSON格式的精灵图解析加载支持；
 
 ### 13.0.51
 - [修复] 修复vAlign hAlign的无效提示的问题；

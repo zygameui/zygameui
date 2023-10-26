@@ -181,6 +181,10 @@ class ZImage_v2 extends DataProviderBox {
 			var scale2 = this.getStageHeight() / size.height;
 			var scale = Math.max(scale1, scale2);
 			__renderScale(scale, scale);
+			super.width = __render.width;
+			super.height = __render.height;
+			this.x = (this.getStageWidth() - this.width) / 2;
+			this.y = (this.getStageHeight() - this.height) / 2;
 		} else if (scaleWidth != 0 && scaleHeight != 0) {
 			// 这是等比缩放
 			var scale1 = scaleWidth / size.width;
@@ -230,8 +234,6 @@ class ZImage_v2 extends DataProviderBox {
 		__render.width = size.width * scaleX;
 		__render.height = size.height * scaleY;
 		#end
-		super.width = __render.width;
-		super.height = __render.height;
 	}
 
 	/**

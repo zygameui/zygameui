@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.loader.parser.JSONTextureAtlas;
 #if away3d
 import away3d.textures.BitmapTexture;
 #end
@@ -283,16 +284,20 @@ class ZAssets {
 	/**
 	 *  载入纹理资源
 	 * @param img 如果只传递图片，xml会直接识别图片资源
-	 * @param xml -
+	 * @param config 可传递.xml或者.json文件，如果不传递，则默认使用.xml后缀
 	 */
-	public function loadTextures(img:String, xml:String = null, isAtf:Bool = false):Void {
-		var _xml = xml != xml ? xml : img.substr(0, img.lastIndexOf(".")) + ".xml";
-		pushPasrers(new TextureAtlasParser({
-			imgpath: img,
-			xmlpath: _xml,
-			path: _xml,
-			atf: isAtf
-		}));
+	public function loadTextures(img:String, config:String = null, isAtf:Bool = false):Void {
+		var _config = config != null ? config : img.substr(0, img.lastIndexOf(".")) + ".xml";
+		if (StringTools.endsWith(_config, ".xml"))
+			pushPasrers(new TextureAtlasParser({
+				imgpath: img,
+				xmlpath: _config,
+				path: _config,
+				atf: isAtf
+			}));
+		else if (StringTools.endsWith(_config, ".json")) {
+			pushPasrers(new JSONTextureAtlas(img, _config));
+		}
 	}
 
 	/**

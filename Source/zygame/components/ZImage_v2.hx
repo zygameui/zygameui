@@ -155,10 +155,24 @@ class ZImage_v2 extends DataProviderBox {
 	}
 
 	private override function get_width():Float {
+		if (fill) {
+			return __render.width * scaleX;
+		} else if (!_setWidth && @:privateAccess !this.__render.__isS9Draw) {
+			var size = this.__render.getFrameSize();
+			var pwidth = size.width;
+			return pwidth * scaleY;
+		}
 		return Math.abs(_componentWidth * scaleX);
 	}
 
 	private override function get_height():Float {
+		if (fill) {
+			return __render.height * scaleY;
+		} else if (!_setHeight && @:privateAccess !this.__render.__isS9Draw) {
+			var size = this.__render.getFrameSize();
+			var pheight = size.height;
+			return pheight * scaleY;
+		}
 		return Math.abs(_componentHeight * scaleY);
 	}
 
@@ -181,8 +195,6 @@ class ZImage_v2 extends DataProviderBox {
 			var scale2 = this.getStageHeight() / size.height;
 			var scale = Math.max(scale1, scale2);
 			__renderScale(scale, scale);
-			super.width = __render.width;
-			super.height = __render.height;
 			this.x = (this.getStageWidth() - this.width) / 2;
 			this.y = (this.getStageHeight() - this.height) / 2;
 		} else if (scaleWidth != 0 && scaleHeight != 0) {
@@ -201,8 +213,6 @@ class ZImage_v2 extends DataProviderBox {
 				var scaleX = pwidth / size.width;
 				var scaleY = pheight / size.height;
 				__renderScale(scaleX, scaleY);
-				super.width = pwidth;
-				super.height = pheight;
 			}
 		}
 		switch (vAlign) {
@@ -286,6 +296,4 @@ class ZImage_v2 extends DataProviderBox {
 	override function get_shader():Shader {
 		return _shader;
 	}
-}
-
-// #end
+} // #end

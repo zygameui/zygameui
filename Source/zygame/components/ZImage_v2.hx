@@ -19,6 +19,7 @@ import zygame.utils.load.Frame;
  * 当使用默认的`Bitmap`渲染时，其效果与`ZImage(v1)`版本是没有差异的。
  */
 @:access(ImageRender)
+@:noCompletion
 class ZImage_v2 extends DataProviderBox {
 	private var __render:ImageRender;
 

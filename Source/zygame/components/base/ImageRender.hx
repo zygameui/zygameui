@@ -1,4 +1,4 @@
-package zygame.components;
+package zygame.components.base;
 
 import openfl.geom.Rectangle;
 import openfl.display.Bitmap;

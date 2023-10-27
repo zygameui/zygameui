@@ -1,7 +1,7 @@
 package zygame.components;
 
 // #if zimage_v2
-import zygame.components.ImageRender;
+import zygame.components.base.ImageRender;
 import openfl.display.Shader;
 import openfl.geom.Rectangle;
 import zygame.utils.AssetsUtils;

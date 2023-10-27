@@ -3,16 +3,16 @@ package zygame.components.base;
 /**
  *  包含数据的组件
  */
-class DataProviderBox extends ZBox {
+class DataProviderBox extends ZBox implements IDataProvider {
 	public function new() {
 		super();
 	}
 
+	private var _dataProvider:Dynamic;
+
 	/**
 	 *  数据接口，所有组件的数据接收源
 	 */
-	private var _dataProvider:Dynamic;
-
 	public var dataProvider(get, set):Dynamic;
 
 	private function set_dataProvider(data:Dynamic):Dynamic {

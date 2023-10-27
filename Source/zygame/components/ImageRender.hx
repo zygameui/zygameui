@@ -166,7 +166,6 @@ class ImageRender extends Sprite {
 							// 居中
 							m.identity();
 							m.scale(wScale, hScale);
-							trace("quads=", pFrame.x, pFrame.y, pFrame.width, pFrame.height, "wScale=", wScale, "hScale=", hScale);
 							transform.push(m.a);
 							transform.push(m.b);
 							transform.push(m.c);

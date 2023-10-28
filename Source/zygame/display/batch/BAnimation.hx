@@ -76,28 +76,6 @@ class BAnimation extends BImage {
 		if (_animation == null || !isPlaying || loop == 0)
 			return;
 		timeline.advanceTime(Start.current.frameDt);
-		// if (_animation.update()) {
-		// 	if (_delayFrame > 0) {
-		// 		_delayFrame--;
-		// 		return;
-		// 	}
-		// 	currentFrame++;
-		// 	if (currentFrame >= _animation.frames.length) {
-		// 		currentFrame = 0;
-		// 		if (loop > 0)
-		// 			loop--;
-		// 		onComplete();
-		// 	}
-		// 	// 设置间隔帧
-		// 	if (_animation != null) {
-		// 		var frameData:FrameData = _animation.getFrame(currentFrame);
-		// 		if (frameData != null) {
-		// 			_delayFrame = frameData.delayFrame;
-		// 			frameData.tryCall();
-		// 			this.setFrame(frameData.bitmapData);
-		// 		}
-		// 	}
-		// }
 	}
 
 	public var dataProvider(get, set):AnimationData;

@@ -101,42 +101,10 @@ class ZAnimation extends ZImage {
 		}
 	}
 
-	/**
-	 * 下一帧
-	 */
-	// public function nextFrame():Void {
-	// currentFrame++;
-	// if (currentFrame >= _animation.frames.length) {
-	// 	if (loop > 0)
-	// 		loop--;
-	// 	if (loop > 0) {
-	// 		currentFrame = 0;
-	// 	} else
-	// 		currentFrame = _animation.frames.length - 1;
-	// }
-	// updateFrame();
-	// }
-	// private function updateFrame():Void {
-	// 设置间隔帧
-	// var frameData:FrameData = _animation.getFrame(currentFrame);
-	// if (frameData != null) {
-	// 	_delayFrame = frameData.delayFrame;
-	// 	frameData.tryCall();
-	// 	super.dataProvider = frameData.bitmapData;
-	// }
-	// }
-
 	override public function onFrame():Void {
 		if (_animation == null || !isPlaying)
 			return;
 		this.timeline.advanceTime(this.delay);
-		// if (_animation.update()) {
-		// 	if (_delayFrame > 0) {
-		// 		_delayFrame--;
-		// 		return;
-		// 	}
-		// 	nextFrame();
-		// }
 	}
 
 	/**

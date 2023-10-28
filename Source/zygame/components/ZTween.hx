@@ -23,8 +23,14 @@ class ZTween implements Refresher {
 
 	private var _isPlay:Bool = false;
 
+	/**
+	 * 是否正在播放中，可通过`stop`进行停止，`play`进行播放
+	 */
 	public var isPlay(get, never):Bool;
 
+	/**
+	 * 是否立即同步
+	 */
 	public var sync:Bool = false;
 
 	private function get_isPlay():Bool {
@@ -44,6 +50,10 @@ class ZTween implements Refresher {
 		this.timeline.loop = 1;
 	}
 
+	/**
+	 * 绑定显示对象
+	 * @param display 
+	 */
 	public function bindDisplayObject(display:DisplayObjectContainer):Void {
 		_baseFrames = [];
 		if (_baseXml.get("auto") == "true") {
@@ -69,6 +79,10 @@ class ZTween implements Refresher {
 		}
 	}
 
+	/**
+	 * 追加`TweenFrame`帧数据
+	 * @param tw 
+	 */
 	public function pushTweenFrame(tw:TweenFrame):Void {
 		_baseFrames.push(tw);
 		if (tw.getNodeName() == "scale") {
@@ -137,10 +151,16 @@ class ZTween implements Refresher {
 		}
 	}
 
+	/**
+	 * 前往下一帧
+	 */
 	public function nextFrame():Void {
 		timeline.nextFrame();
 	}
 
+	/**
+	 * 回到上一帧
+	 */
 	public function lastFrame():Void {
 		timeline.lastFrame();
 	}
@@ -160,6 +180,10 @@ class ZTween implements Refresher {
 		}
 	}
 
+	/**
+	 * 获得帧列表
+	 * @return Array<TweenFrame>
+	 */
 	public function getFrameList():Array<TweenFrame> {
 		return _baseFrames;
 	}
@@ -170,6 +194,9 @@ class ZTween implements Refresher {
 		timeline.advanceTime(Start.current.frameDt);
 	}
 
+	/**
+	 * 更新当前帧所有事件
+	 */
 	public function update():Void {
 		__updateFrame(timeline.currentFrame);
 	}

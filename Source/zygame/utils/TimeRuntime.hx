@@ -206,7 +206,7 @@ class Call {
 
 	public var id:Int = 0;
 
-	#if zygameui13
+	#if (zygameui13 || zygameui > '14.0.0')
 	private var _dt:Float = 0;
 	#end
 
@@ -229,7 +229,7 @@ class Call {
 	 * @return Bool
 	 */
 	public function call(isInterval:Bool = false):Bool {
-		#if zygameui13
+		#if (zygameui13 || zygameui > '14.0.0')
 		_dt += Start.current.frameDt;
 		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
 		if (add_frame < 0) {

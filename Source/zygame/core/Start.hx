@@ -261,6 +261,9 @@ class Start extends ZScene {
 	 */
 	public function new(HDWidth:Int = 1920, HDHeight:Int = 1080, isDebug:Bool = false, scalePower:Bool = false) {
 		Start.current = this;
+		// 唯一帧刷新事件
+		_lastTime = Timer.stamp();
+		_frameTime = _lastTime;
 		super();
 		#if openfl_console
 		haxe.Log.trace = function(v:Dynamic, ?infos:haxe.PosInfos) {
@@ -492,8 +495,6 @@ class Start extends ZScene {
 		// 默认最高质量
 		stage.quality = openfl.display.StageQuality.HIGH;
 
-		// 唯一帧刷新事件
-		_lastTime = Timer.stamp();
 		this.addEventListener(Event.ENTER_FRAME, onFrameEvent);
 		stage.addEventListener(Event.RESIZE, onResize);
 		// #if wechat

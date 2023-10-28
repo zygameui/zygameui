@@ -1,5 +1,7 @@
 package zygame.components.data;
 
+import haxe.Rest;
+
 /**
  * 时间戳数据
  */
@@ -49,9 +51,37 @@ class TimelineData {
 		return currentFrame / maxFrame;
 	}
 
+	/**
+	 * 帧事件脚本
+	 */
+	private var __frameScript:Map<Int, Array<Void->Void>> = [];
+
 	public function new(maxFrame:Int, fps:Int) {
 		this.maxFrame = maxFrame;
 		this.fps = fps;
+	}
+
+	/**
+	 * 添加帧事件
+	 * @param frame 
+	 * @param call 
+	 * @param ...args 
+	 */
+	public function addFrameScript(frame:Int, call:Void->Void, ...args:Dynamic):Void {
+		__addFrameScript(frame, call);
+		var array = args.toArray();
+		var len = Math.floor(array.length / 2);
+		for (i in 0...len) {
+			__addFrameScript(array[i * 2], array[i * 2 + 1]);
+		}
+	}
+
+	private function __addFrameScript(frame:Int, call:Void->Void):Void {
+		if (!__frameScript.exists(frame)) {
+			__frameScript.set(frame, [call]);
+		} else {
+			__frameScript.get(frame).push(call);
+		}
 	}
 
 	/**
@@ -59,6 +89,7 @@ class TimelineData {
 	 * @param dt 
 	 */
 	public function advanceTime(dt:Float):Void {
+		var oldFrame = currentFrame;
 		__frameCurrentDt += dt;
 		var frame = currentFrame + Math.floor(__frameCurrentDt / __frameDtSetp);
 		__frameCurrentDt = __frameCurrentDt % __frameDtSetp;
@@ -66,10 +97,29 @@ class TimelineData {
 			if (loop == -1 || loop > 0) {
 				if (loop > 0)
 					loop--;
+				for (i in oldFrame...maxFrame) {
+					__frameScriptExecute(i);
+				}
+				oldFrame = 0;
 				currentFrame = frame % maxFrame;
 			}
 		} else {
 			currentFrame = frame;
+		}
+		for (i in oldFrame...currentFrame) {
+			__frameScriptExecute(i);
+		}
+	}
+
+	/**
+	 * 执行帧事件逻辑
+	 * @param frame 
+	 */
+	private function __frameScriptExecute(frame:Int):Void {
+		if (__frameScript.exists(frame)) {
+			for (call in __frameScript.get(frame)) {
+				call();
+			}
 		}
 	}
 }

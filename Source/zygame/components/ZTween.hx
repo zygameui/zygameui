@@ -16,7 +16,7 @@ class ZTween implements Refresher {
 
 	private var _baseFrames:Array<TweenFrame>;
 
-	#if (zygameui13 || zygameui > '14.0.0')
+	#if (zygameui13 || zygameui >= '14.0.0')
 	private var _dt:Float = 0;
 	#end
 
@@ -186,7 +186,7 @@ class ZTween implements Refresher {
 	public function onFrame():Void {
 		if (!_isPlay)
 			return;
-		#if (zygameui13 || zygameui > '14.0.0')
+		#if (zygameui13 || zygameui >= '14.0.0')
 		_dt += Start.current.frameDt;
 		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
 		_dt -= add_frame * Start.FRAME_DT_STEP;

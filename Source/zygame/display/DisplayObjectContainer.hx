@@ -280,7 +280,7 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 			zygame.core.Start.current.removeToUpdate(this);
 	}
 
-	#if (zygameui13 || zygameui > '14.0.0')
+	#if (zygameui13 || zygameui >= '14.0.0')
 	/**
 	 * 重写该方法触发addChild之后的onInit事件
 	 * @param event 

@@ -5,6 +5,9 @@ import zygame.core.Start;
 import zygame.components.data.AnimationData;
 import zygame.utils.load.Frame;
 
+/**
+ * 批处理的动画类
+ */
 class BAnimation extends BImage {
 	private var _animation:AnimationData;
 

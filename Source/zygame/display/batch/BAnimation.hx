@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import zygame.components.data.TimelineData;
 import zygame.core.Start;
 import zygame.components.data.AnimationData;
 import zygame.utils.load.Frame;
@@ -7,10 +8,21 @@ import zygame.utils.load.Frame;
 class BAnimation extends BImage {
 	private var _animation:AnimationData;
 
+	public var timeline:TimelineData = new TimelineData(0, 60);
+
 	/**
 	 *  播放次数
 	 */
-	public var loop:Int = -1;
+	public var loop(get, set):Int;
+
+	private function get_loop():Int {
+		return timeline.loop;
+	}
+
+	private function set_loop(l:Int):Int {
+		this.timeline.loop = l;
+		return l;
+	}
 
 	/**
 	 *  是否播放中
@@ -27,6 +39,28 @@ class BAnimation extends BImage {
 	 */
 	private var _delayFrame:Int;
 
+	override function onInit() {
+		super.onInit();
+		timeline.onFrame = __onFrameUpdate;
+	}
+
+	private function __onFrameUpdate(frame:Int):Void {
+		if (_delayFrame > 0) {
+			_delayFrame--;
+			frame = 0;
+			this.timeline.currentFrame--;
+		}
+		var frameData:FrameData = _animation.getFrame(frame);
+		if (frameData != null) {
+			_delayFrame = frameData.delayFrame;
+			frameData.tryCall();
+			this.setFrame(frameData.bitmapData);
+		}
+		if (frame == this.timeline.maxFrame - 1) {
+			onComplete();
+		}
+	}
+
 	dynamic public function onComplete():Void {}
 
 	public static function createAnimation(fps:Int, bitmaps:Array<Frame>):BAnimation {
@@ -41,28 +75,29 @@ class BAnimation extends BImage {
 		super.onFrame();
 		if (_animation == null || !isPlaying || loop == 0)
 			return;
-		if (_animation.update()) {
-			if (_delayFrame > 0) {
-				_delayFrame--;
-				return;
-			}
-			currentFrame++;
-			if (currentFrame >= _animation.frames.length) {
-				currentFrame = 0;
-				if (loop > 0)
-					loop--;
-				onComplete();
-			}
-			// 设置间隔帧
-			if (_animation != null) {
-				var frameData:FrameData = _animation.getFrame(currentFrame);
-				if (frameData != null) {
-					_delayFrame = frameData.delayFrame;
-					frameData.tryCall();
-					this.setFrame(frameData.bitmapData);
-				}
-			}
-		}
+		timeline.advanceTime(Start.current.frameDt);
+		// if (_animation.update()) {
+		// 	if (_delayFrame > 0) {
+		// 		_delayFrame--;
+		// 		return;
+		// 	}
+		// 	currentFrame++;
+		// 	if (currentFrame >= _animation.frames.length) {
+		// 		currentFrame = 0;
+		// 		if (loop > 0)
+		// 			loop--;
+		// 		onComplete();
+		// 	}
+		// 	// 设置间隔帧
+		// 	if (_animation != null) {
+		// 		var frameData:FrameData = _animation.getFrame(currentFrame);
+		// 		if (frameData != null) {
+		// 			_delayFrame = frameData.delayFrame;
+		// 			frameData.tryCall();
+		// 			this.setFrame(frameData.bitmapData);
+		// 		}
+		// 	}
+		// }
 	}
 
 	public var dataProvider(get, set):AnimationData;
@@ -72,9 +107,12 @@ class BAnimation extends BImage {
 	}
 
 	private function set_dataProvider(value:AnimationData):AnimationData {
-        _animation = value;
-        if(_animation != null && _animation.getFrame(currentFrame) != null)
-		    this.setFrame(_animation.getFrame(currentFrame).bitmapData);
+		_animation = value;
+		if (_animation != null && _animation.getFrame(currentFrame) != null) {
+			timeline.fps = _animation.fps;
+			timeline.maxFrame = _animation.frames.length;
+			this.setFrame(_animation.getFrame(currentFrame).bitmapData);
+		}
 		return value;
 	}
 

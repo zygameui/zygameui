@@ -236,7 +236,7 @@ class ZBuilder {
 				anData = new AnimationData(12);
 				cast(ui, ZAnimation).dataProvider = anData;
 			}
-			anData.fps.fps = Std.parseInt(value);
+			anData.fps = Std.parseInt(value);
 		});
 
 		// 动画批渲染
@@ -277,7 +277,7 @@ class ZBuilder {
 				anData = new AnimationData(12);
 				cast(ui, BAnimation).dataProvider = anData;
 			}
-			anData.fps.fps = Std.parseInt(value);
+			anData.fps = Std.parseInt(value);
 		});
 		bindParsing(BScale9Button, "src", function(ui:Dynamic, name:String, value:String):Void {
 			var arr:Array<String> = value.split(":");

@@ -10,11 +10,6 @@ import openfl.events.Event;
  */
 class ZAnimation extends ZImage {
 	/**
-	 * 时间轴
-	 */
-	public var timeline:TimelineData = new TimelineData(0, 60);
-
-	/**
 	 * 快捷创建一个动画
 	 * @param fps 动画频率
 	 * @param bitmaps 动画帧动画列表
@@ -31,16 +26,7 @@ class ZAnimation extends ZImage {
 	/**
 	 *  播放次数
 	 */
-	public var loop(get, set):Int;
-
-	private function get_loop():Int {
-		return timeline.loop;
-	}
-
-	private function set_loop(l:Int):Int {
-		this.timeline.loop = l;
-		return l;
-	}
+	public var loop:Int = -1;
 
 	/**
 	 *  是否播放中
@@ -50,7 +36,7 @@ class ZAnimation extends ZImage {
 	/**
 	 *  当前帧
 	 */
-	// public var currentFrame:Int;
+	public var currentFrame:Int;
 
 	/**
 	 *  延迟计算
@@ -68,7 +54,6 @@ class ZAnimation extends ZImage {
 	 */
 	public function new() {
 		super();
-		timeline.onFrame = __onFrameUpdate;
 	}
 
 	override public function initComponents():Void {
@@ -83,60 +68,44 @@ class ZAnimation extends ZImage {
 		this.setFrameEvent(false);
 	}
 
-	private function __onFrameUpdate(frame:Int):Void {
-		if (_delayFrame > 0) {
-			_delayFrame--;
-			frame = 0;
-			this.timeline.currentFrame--;
+	/**
+	 * 下一帧
+	 */
+	public function nextFrame():Void {
+		currentFrame++;
+		if (currentFrame >= _animation.frames.length) {
+			if (loop > 0)
+				loop--;
+			if (loop > 0) {
+				currentFrame = 0;
+			} else
+				currentFrame = _animation.frames.length - 1;
+			if (this.hasEventListener(Event.COMPLETE))
+				this.dispatchEvent(new Event(Event.COMPLETE));
 		}
-		var frameData:FrameData = _animation.getFrame(frame);
+		updateFrame();
+	}
+
+	private function updateFrame():Void {
+		// 设置间隔帧
+		var frameData:FrameData = _animation.getFrame(currentFrame);
 		if (frameData != null) {
 			_delayFrame = frameData.delayFrame;
 			frameData.tryCall();
 			super.dataProvider = frameData.bitmapData;
 		}
-		if (frame == this.timeline.maxFrame - 1) {
-			if (this.hasEventListener(Event.COMPLETE))
-				this.dispatchEvent(new Event(Event.COMPLETE));
-		}
 	}
 
-	/**
-	 * 下一帧
-	 */
-	// public function nextFrame():Void {
-	// currentFrame++;
-	// if (currentFrame >= _animation.frames.length) {
-	// 	if (loop > 0)
-	// 		loop--;
-	// 	if (loop > 0) {
-	// 		currentFrame = 0;
-	// 	} else
-	// 		currentFrame = _animation.frames.length - 1;
-	// }
-	// updateFrame();
-	// }
-	// private function updateFrame():Void {
-	// 设置间隔帧
-	// var frameData:FrameData = _animation.getFrame(currentFrame);
-	// if (frameData != null) {
-	// 	_delayFrame = frameData.delayFrame;
-	// 	frameData.tryCall();
-	// 	super.dataProvider = frameData.bitmapData;
-	// }
-	// }
-
 	override public function onFrame():Void {
-		if (_animation == null || !isPlaying)
+		if (_animation == null || !isPlaying || loop == 0)
 			return;
-		this.timeline.advanceTime(this.delay);
-		// if (_animation.update()) {
-		// 	if (_delayFrame > 0) {
-		// 		_delayFrame--;
-		// 		return;
-		// 	}
-		// 	nextFrame();
-		// }
+		if (_animation.update()) {
+			if (_delayFrame > 0) {
+				_delayFrame--;
+				return;
+			}
+			nextFrame();
+		}
 	}
 
 	/**
@@ -149,10 +118,6 @@ class ZAnimation extends ZImage {
 
 	private override function set_dataProvider(data:Dynamic):Dynamic {
 		_animation = cast data;
-		if (_animation != null) {
-			this.timeline.fps = _animation.fps;
-			this.timeline.maxFrame = _animation.frames.length;
-		}
 		if (isPlaying)
 			this.gotoAndPlay(0);
 		else
@@ -170,7 +135,7 @@ class ZAnimation extends ZImage {
 	 */
 	public function play(loop:Int = 0):Void {
 		if (loop != 0)
-			this.timeline.loop = loop == 0 ? 1 : loop;
+			this.loop = loop;
 		isPlaying = true;
 	}
 
@@ -181,10 +146,10 @@ class ZAnimation extends ZImage {
 	public function stop(frame:Int = -1):Void {
 		isPlaying = false;
 		if (frame >= 0)
-			timeline.currentFrame = frame;
+			currentFrame = frame;
 		if (_animation != null) {
-			if (_animation.getFrame(timeline.currentFrame) != null)
-				super.dataProvider = _animation.getFrame(timeline.currentFrame).bitmapData;
+			if (_animation.getFrame(currentFrame) != null)
+				super.dataProvider = _animation.getFrame(currentFrame).bitmapData;
 		}
 	}
 
@@ -205,12 +170,11 @@ class ZAnimation extends ZImage {
 	 */
 	public function gotoAndPlay(frame:Int, loop:Int = 0):Void {
 		if (_animation != null) {
-			this.timeline.loop = loop == 0 ? 1 : loop;
 			isPlaying = true;
 			if (frame >= 0)
-				timeline.currentFrame = frame;
-			if (_animation.getFrame(timeline.currentFrame) != null)
-				super.dataProvider = _animation.getFrame(timeline.currentFrame).bitmapData;
+				currentFrame = frame;
+			if (_animation.getFrame(currentFrame) != null)
+				super.dataProvider = _animation.getFrame(currentFrame).bitmapData;
 		}
 	}
 

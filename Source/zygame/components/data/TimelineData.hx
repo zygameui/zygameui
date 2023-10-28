@@ -89,6 +89,8 @@ class TimelineData {
 	 * @param dt 
 	 */
 	public function advanceTime(dt:Float):Void {
+		if (loop == 0)
+			return;
 		var oldFrame = currentFrame;
 		__frameCurrentDt += dt;
 		var frame = currentFrame + Math.floor(__frameCurrentDt / __frameDtSetp);
@@ -100,8 +102,12 @@ class TimelineData {
 				for (i in oldFrame...maxFrame) {
 					__frameScriptExecute(i);
 				}
-				oldFrame = 0;
-				currentFrame = frame % maxFrame;
+				if (loop == 0) {
+					currentFrame = maxFrame;
+				} else {
+					oldFrame = 0;
+					currentFrame = frame % maxFrame;
+				}
 			}
 		} else {
 			currentFrame = frame;
@@ -116,10 +122,43 @@ class TimelineData {
 	 * @param frame 
 	 */
 	private function __frameScriptExecute(frame:Int):Void {
+		this.onFrame(frame);
 		if (__frameScript.exists(frame)) {
 			for (call in __frameScript.get(frame)) {
 				call();
 			}
 		}
+	}
+
+	/**
+	 * 帧事件自定义回调
+	 * @param frame 
+	 */
+	dynamic public function onFrame(frame:Int):Void {}
+
+	/**
+	 * 进入下一帧
+	 */
+	public function nextFrame():Void {
+		var oldFrame = currentFrame;
+		currentFrame++;
+		if (currentFrame >= maxFrame) {
+			currentFrame = maxFrame;
+		}
+		if (oldFrame != currentFrame)
+			__frameScriptExecute(currentFrame);
+	}
+
+	/**
+	 * 回到上一帧
+	 */
+	public function lastFrame():Void {
+		var oldFrame = currentFrame;
+		currentFrame--;
+		if (currentFrame < 0) {
+			currentFrame = 0;
+		}
+		if (oldFrame != currentFrame)
+			__frameScriptExecute(currentFrame);
 	}
 }

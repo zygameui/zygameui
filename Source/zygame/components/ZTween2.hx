@@ -1,6 +1,5 @@
 package zygame.components;
 
-import zygame.components.data.TimelineData;
 import zygame.display.DisplayObjectContainer;
 import zygame.core.Start;
 import zygame.core.Refresher;
@@ -16,10 +15,13 @@ class ZTween implements Refresher {
 
 	private var _baseFrames:Array<TweenFrame>;
 
-	/**
-	 * 时间戳
-	 */
-	public var timeline:TimelineData = new TimelineData(0, 60);
+	#if (zygameui13 || zygameui >= '14.0.0')
+	private var _dt:Float = 0;
+	#end
+
+	private var _crrentFrame:Int = 0;
+
+	private var _maxFrame:Int = 0;
 
 	private var _isPlay:Bool = false;
 
@@ -31,6 +33,13 @@ class ZTween implements Refresher {
 		return _isPlay;
 	}
 
+	private var _onFrameId:Int = -1;
+
+	/**
+	 * 循环次数
+	 */
+	public var loop:Int = 0;
+
 	/**
 	 * 需要根据XML定义的动画配置进行播放动画
 	 * @param xml 动画配置
@@ -40,8 +49,6 @@ class ZTween implements Refresher {
 			_baseXml = xml.firstElement();
 		else
 			_baseXml = xml;
-		this.timeline.onFrame = __updateFrame;
-		this.timeline.loop = 1;
 	}
 
 	public function bindDisplayObject(display:DisplayObjectContainer):Void {
@@ -50,9 +57,7 @@ class ZTween implements Refresher {
 			play();
 		}
 		if (_baseXml.exists("loop")) {
-			timeline.loop = Std.parseInt(_baseXml.get("loop"));
-			if (timeline.loop == 0)
-				timeline.loop = 1;
+			loop = Std.parseInt(_baseXml.get("loop"));
 		}
 		// 解析帧动画
 		var frames = _baseXml.elements();
@@ -63,8 +68,14 @@ class ZTween implements Refresher {
 			if (!xml.exists("start"))
 				tw.start = lastStart;
 			lastStart = tw.end + 1;
-			if (tw.end > timeline.maxFrame)
-				timeline.maxFrame = tw.end;
+			// if (xml.exists("onend"))
+			// 	tw.onend = builder.getFunction(xml.get("onend"));
+			// if (xml.exists("onstart"))
+			// 	tw.onstart = builder.getFunction(xml.get("onstart"));
+			// if (xml.exists("onframe"))
+			// 	tw.onframe = builder.getFunction(xml.get("onframe"));
+			if (tw.end > _maxFrame)
+				_maxFrame = tw.end;
 			pushTweenFrame(tw);
 		}
 	}
@@ -109,9 +120,7 @@ class ZTween implements Refresher {
 			play();
 		}
 		if (_baseXml.exists("loop")) {
-			timeline.loop = Std.parseInt(_baseXml.get("loop"));
-			if (timeline.loop == 0)
-				timeline.loop = 1;
+			loop = Std.parseInt(_baseXml.get("loop"));
 		}
 		// 解析帧动画
 		var frames = _baseXml.elements();
@@ -131,32 +140,41 @@ class ZTween implements Refresher {
 				tw.onstart = builder.getFunction(xml.get("onstart"));
 			if (xml.exists("onframe"))
 				tw.onframe = builder.getFunction(xml.get("onframe"));
-			if (tw.end > timeline.maxFrame)
-				timeline.maxFrame = tw.end;
+			if (tw.end > _maxFrame)
+				_maxFrame = tw.end;
 			_baseFrames.push(tw);
 		}
 	}
 
 	public function nextFrame():Void {
-		timeline.nextFrame();
+		_crrentFrame++;
+		if (_crrentFrame > _maxFrame)
+			_crrentFrame = _maxFrame;
+		update();
 	}
 
 	public function lastFrame():Void {
-		timeline.lastFrame();
+		_crrentFrame--;
+		if (_crrentFrame < 0)
+			_crrentFrame = 0;
+		update();
 	}
 
 	/**
 	 * 触发播放
 	 */
 	public function play(frame:Int = -1):Void {
-		if (frame >= 0) {
-			timeline.currentFrame = frame;
+		if (frame >= 0)
+			_crrentFrame = frame;
+		if (!_isPlay) {
+			_isPlay = true;
+			if (_crrentFrame >= _maxFrame || _crrentFrame < 0)
+				_crrentFrame = 0;
 		}
-		_isPlay = true;
 		Start.current.addToUpdate(this);
-		for (f in _baseFrames) {
-			if (f.getNodeName() == "tween")
-				f.update(frame);
+		for (frame in _baseFrames) {
+			if (frame.getNodeName() == "tween")
+				frame.update(_crrentFrame);
 		}
 	}
 
@@ -167,17 +185,52 @@ class ZTween implements Refresher {
 	public function onFrame():Void {
 		if (!_isPlay)
 			return;
-		timeline.advanceTime(Start.current.frameDt);
+		#if (zygameui13 || zygameui >= '14.0.0')
+		_dt += Start.current.frameDt;
+		var add_frame = Std.int(_dt / Start.FRAME_DT_STEP);
+		_dt -= add_frame * Start.FRAME_DT_STEP;
+		// 过渡兼容
+		for (i in 0...add_frame) {
+			_crrentFrame++;
+			if (_crrentFrame > _maxFrame) {
+				if (_isPlay) {
+					_crrentFrame = _maxFrame;
+					if (loop < 0) {
+						// 无限循环
+					} else if (loop == 0) {
+						stop();
+						return;
+					} else {
+						loop--;
+					}
+				}
+				_crrentFrame = 0;
+			}
+			update();
+		}
+		#else
+		_crrentFrame++;
+		if (_crrentFrame > _maxFrame) {
+			if (_isPlay) {
+				_crrentFrame = _maxFrame;
+				if (loop < 0) {
+					// 无限循环
+				} else if (loop == 0) {
+					stop();
+					return;
+				} else {
+					loop--;
+				}
+			}
+			_crrentFrame = 0;
+		}
+		update();
+		#end
 	}
 
 	public function update():Void {
-		__updateFrame(timeline.currentFrame);
-	}
-
-	private function __updateFrame(frame:Int):Void {
-		trace("__updateFrame=", frame);
-		for (f in _baseFrames) {
-			f.update(frame);
+		for (frame in _baseFrames) {
+			frame.update(_crrentFrame);
 		}
 	}
 

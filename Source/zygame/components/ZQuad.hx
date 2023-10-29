@@ -96,6 +96,7 @@ class ZQuad extends ZBox {
 		return value;
 	}
 
+	#if (zygameui < '14.0.0')
 	#if (qq || wechat)
 	override private function __hitTestMask(x:Float, y:Float):Bool {
 		if (Std.isOfType(this.parent, zygame.components.ZScroll)) {
@@ -108,6 +109,7 @@ class ZQuad extends ZBox {
 		}
 		return super.__hitTestMask(x, y);
 	}
+	#end
 	#end
 
 	/**

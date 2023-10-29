@@ -17,9 +17,17 @@ import openfl.filters.ShaderFilter;
  * ```
  */
 class ZQuad extends ZBox {
-	public var ellipseWidth:Float = 0;
+	/**
+	 * 颜色着色器
+	 */
+	private static var __colorShader:ColorShader = new ColorShader(0x0);
 
-	public var ellipseHeight:Float = 0;
+	/**
+	 * 图块的渲染纹理对象
+	 */
+	public static var quadBitmapData:BitmapData;
+
+	private var display:Bitmap;
 
 	/**
 	 * 构造一个色块渲染对象
@@ -29,41 +37,44 @@ class ZQuad extends ZBox {
 	 */
 	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
+		display = new Bitmap(quadBitmapData);
+		display.shader = __colorShader;
 		this.width = width;
 		this.height = height;
 		this.color = color;
 		this.addEventListener(RenderEvent.RENDER_OPENGL, onRenderOpenGL);
 	}
 
-	private function __draw():Void {
-		this.graphics.beginFill(color);
-		this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
+	private function onRenderOpenGL(e:RenderEvent):Void {
+		cast(display.shader, ColorShader).updateColor(color);
 	}
-
-	private function onRenderOpenGL(e:RenderEvent):Void {}
 
 	override public function initComponents():Void {
 		super.initComponents();
+		this.addChildAt(display, 0);
 		updateComponents();
 	}
 
 	override public function updateComponents():Void {
-		__draw();
+		display.width = this.width == 0 ? 0 : this.width + 1;
+		display.height = this.height == 0 ? 0 : this.height + 1;
 	}
+
+	private var _color:UInt = 0x0;
 
 	/**
 	 * 设置色块的颜色
 	 */
-	public var color(default, set):UInt = 0x0;
+	public var color(get, set):UInt;
 
 	private function set_color(value:UInt):UInt {
-		this.color = value;
+		_color = value;
 		this.updateComponents();
 		return value;
 	}
 
 	private function get_color():UInt {
-		return color;
+		return _color;
 	}
 
 	#if flash

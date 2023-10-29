@@ -386,7 +386,9 @@ class Start extends ZScene {
 	 * @param e
 	 */
 	override public function onInitEvent(e:Event):Void {
-		#if !api
+		#if (zygameui >= '14.0.0')
+		superInitEvent(e);
+		#elseif !api
 		if (ZQuad.quadBitmapData == null) {
 			#if (mgc || base64quad)
 			var px1base64:String = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAAA1BMVEUAAACnej3aAAAACklEQVQYlWNgAAAAAgABNesWWgAAAABJRU5ErkJggg==";
@@ -397,7 +399,7 @@ class Start extends ZScene {
 			#elseif qqquick
 			ZQuad.quadBitmapData = new BitmapData(1, 1, false, 0xffffff);
 			superInitEvent(e);
-			#else
+			#elseif (zygameui < '14.0.0')
 			ZQuad.quadBitmapData = new BitmapData(1, 1, false, 0xffffff);
 			superInitEvent(e);
 			#end

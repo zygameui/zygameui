@@ -50,7 +50,16 @@ class ZAnimation extends ZImage {
 	/**
 	 *  当前帧
 	 */
-	// public var currentFrame:Int;
+	public var currentFrame(get, set):Int;
+
+	private function get_currentFrame():Int {
+		return timeline.currentFrame;
+	}
+
+	private function set_currentFrame(f:Int):Int {
+		timeline.currentFrame = f;
+		return f;
+	}
 
 	/**
 	 *  延迟计算

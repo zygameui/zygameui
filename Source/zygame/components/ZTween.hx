@@ -168,8 +168,9 @@ class ZTween implements Refresher {
 	/**
 	 * 触发播放
 	 */
-	public function play(frame:Int = -1):Void {
+	public function play(frame:Int = -1, loop:Int = 1):Void {
 		if (frame >= 0) {
+			timeline.loop = loop;
 			timeline.currentFrame = frame;
 		}
 		_isPlay = true;
@@ -204,7 +205,7 @@ class ZTween implements Refresher {
 	private function __updateFrame(frame:Int):Void {
 		trace("__updateFrame=", frame);
 		for (f in _baseFrames) {
-			f.update(frame);
+			f.update(frame + 1);
 		}
 	}
 

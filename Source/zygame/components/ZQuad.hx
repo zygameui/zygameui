@@ -21,6 +21,8 @@ class ZQuad extends ZBox {
 
 	public var ellipseHeight:Float = 0;
 
+	private var __changed:Bool = false;
+
 	/**
 	 * 构造一个色块渲染对象
 	 * @param width 宽度
@@ -36,11 +38,18 @@ class ZQuad extends ZBox {
 	}
 
 	private function __draw():Void {
+		this.graphics.clear();
 		this.graphics.beginFill(color);
-		this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
+		this.graphics.drawRect(0, 0, width, height);
+		this.graphics.endFill();
 	}
 
-	private function onRenderOpenGL(e:RenderEvent):Void {}
+	private function onRenderOpenGL(e:RenderEvent):Void {
+		if (__changed) {
+			__changed = false;
+			this.updateComponents();
+		}
+	}
 
 	override public function initComponents():Void {
 		super.initComponents();
@@ -66,31 +75,17 @@ class ZQuad extends ZBox {
 		return color;
 	}
 
-	#if flash
-	override public function set_width(value:Float):Float {
-		super.width = value;
-		this.updateComponents();
-		return value;
-	}
-
-	override public function set_height(value:Float):Float {
-		super.height = value;
-		this.updateComponents();
-		return value;
-	}
-	#else
 	override private function set_width(value:Float):Float {
 		super.width = value;
-		this.updateComponents();
+		this.__changed = true;
 		return value;
 	}
 
 	override private function set_height(value:Float):Float {
 		super.height = value;
-		this.updateComponents();
+		this.__changed = true;
 		return value;
 	}
-	#end
 
 	#if (qq || wechat)
 	override private function __hitTestMask(x:Float, y:Float):Bool {

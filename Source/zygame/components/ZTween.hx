@@ -203,7 +203,6 @@ class ZTween implements Refresher {
 	}
 
 	private function __updateFrame(frame:Int):Void {
-		trace("__updateFrame=", frame);
 		for (f in _baseFrames) {
 			f.update(frame + 1);
 		}

@@ -1,14 +1,7 @@
 package zygame.components;
 
-// import openfl.display.Shape;
 import openfl.events.RenderEvent;
-import openfl.display.Bitmap;
 import zygame.components.ZBox;
-import openfl.geom.Point;
-import openfl.geom.Rectangle;
-import openfl.display.BitmapData;
-import zygame.shader.ColorShader;
-import openfl.filters.ShaderFilter;
 
 /**
  * 生成一个矩形可更改颜色的色块，默认允许XML中使用。
@@ -17,9 +10,21 @@ import openfl.filters.ShaderFilter;
  * ```
  */
 class ZQuad extends ZBox {
-	public var ellipseWidth:Float = 0;
+	public var ellipseWidth(default, set):Float = 0;
 
-	public var ellipseHeight:Float = 0;
+	private function set_ellipseWidth(e:Float):Float {
+		this.ellipseWidth = e;
+		__changed = true;
+		return e;
+	}
+
+	public var ellipseHeight(default, set):Float = 0;
+
+	private function set_ellipseHeight(e:Float):Float {
+		this.ellipseHeight = e;
+		__changed = true;
+		return e;
+	}
 
 	private var __changed:Bool = false;
 
@@ -40,7 +45,11 @@ class ZQuad extends ZBox {
 	private function __draw():Void {
 		this.graphics.clear();
 		this.graphics.beginFill(color);
-		this.graphics.drawRect(0, 0, width, height);
+		if (ellipseWidth != 0 || ellipseHeight != 0) {
+			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
+		} else {
+			this.graphics.drawRect(0, 0, width, height);
+		}
 		this.graphics.endFill();
 	}
 

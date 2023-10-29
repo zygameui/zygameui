@@ -72,7 +72,6 @@ class DebugMacro {
 			case EThrow(e):
 			case ECast(e, t):
 			case EDisplay(e, displayKind):
-			case EDisplayNew(t):
 			case ETernary(econd, eif, eelse):
 			case ECheckType(e, t):
 			case EMeta(s, e):

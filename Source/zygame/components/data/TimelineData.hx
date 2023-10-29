@@ -3,7 +3,13 @@ package zygame.components.data;
 import haxe.Rest;
 
 /**
- * 时间戳数据
+ * 时间轴数据，适用于自定义对象搭配时间轴数据：
+ * ```haxe
+ * var timelineData = new TimelineData(100,60);
+ * timelineData.advanceTime(Start.current.frameDt);
+ * // 获得当前帧，或帧进度
+ * trace(timelineData.currentFrame, timelineData.currentFrameRate);
+ * ```
  */
 class TimelineData {
 	/**

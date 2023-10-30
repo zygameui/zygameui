@@ -9,6 +9,8 @@
 ### 14.0.0
 - [新增] 新增`TimelineData`时间轴数据；
 - [改进] 改进`ZTween`、`ZAnimation`、`BAnimation`使用`TimelineData`实现动画；
+- [改进] 改进`ZQuad`使用`graphics`绘图实现；
+- [新增] 新增`ZQuad`的圆角参数：`ellipseWidth`/`ellipseHeight`；
 
 ### 13.0.53
 - [修复] 修复`ZLabel`的`wordWarp`如果为true的时候，文本又是null的时候，会发生错误；

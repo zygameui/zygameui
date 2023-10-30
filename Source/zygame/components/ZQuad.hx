@@ -16,8 +16,10 @@ class ZQuad extends ZBox {
 	public var ellipseWidth(default, set):Null<Float> = 0;
 
 	private function set_ellipseWidth(e:Float):Float {
-		this.ellipseWidth = e;
-		__changed = true;
+		if (ellipseWidth != e) {
+			this.ellipseWidth = e;
+			__changed = true;
+		}
 		return e;
 	}
 
@@ -27,8 +29,10 @@ class ZQuad extends ZBox {
 	public var ellipseHeight(default, set):Null<Float> = 0;
 
 	private function set_ellipseHeight(e:Float):Float {
-		this.ellipseHeight = e;
-		__changed = true;
+		if (ellipseHeight != e) {
+			this.ellipseHeight = e;
+			__changed = true;
+		}
 		return e;
 	}
 
@@ -81,8 +85,10 @@ class ZQuad extends ZBox {
 	public var color(default, set):UInt = 0x0;
 
 	private function set_color(value:UInt):UInt {
-		this.color = value;
-		this.updateComponents();
+		if (this.color != value) {
+			this.color = value;
+			this.updateComponents();
+		}
 		return value;
 	}
 
@@ -91,14 +97,18 @@ class ZQuad extends ZBox {
 	}
 
 	override private function set_width(value:Float):Float {
-		super.width = value;
-		this.__changed = true;
+		if (super.width != value) {
+			super.width = value;
+			this.__changed = true;
+		}
 		return value;
 	}
 
 	override private function set_height(value:Float):Float {
-		super.height = value;
-		this.__changed = true;
+		if (super.height != value) {
+			super.height = value;
+			this.__changed = true;
+		}
 		return value;
 	}
 

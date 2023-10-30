@@ -112,8 +112,10 @@ class ZQuad extends ZBox {
 	}
 
 	private function onRenderOpenGL(e:RenderEvent):Void {
+		#if zquad_use_bitmap
 		if (display.parent != null)
 			__colorShader.updateColor(color);
+		#end
 		if (__changed) {
 			__changed = false;
 			this.updateComponents();

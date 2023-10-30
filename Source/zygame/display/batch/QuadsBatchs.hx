@@ -8,7 +8,7 @@ import openfl.display.TileContainer;
 import openfl.display.Shape;
 
 /**
- * 可将ImageBatchs，通过`drawQuads`进行渲染出来，请注意，不支持`旋转`/`透明度`
+ * 可将ImageBatchs，通过`drawQuads`进行渲染出来，请注意，不支持透明度
  */
 class QuadsBatchs extends Shape {
 	private var _tileset:Tileset;

@@ -1,5 +1,8 @@
 package zygame.components;
 
+import openfl.display.Bitmap;
+import zygame.shader.ColorShader;
+import openfl.display.BitmapData;
 import openfl.events.RenderEvent;
 import zygame.components.ZBox;
 
@@ -11,9 +14,33 @@ import zygame.components.ZBox;
  */
 class ZQuad extends ZBox {
 	/**
+	 * 颜色着色器
+	 */
+	private static var __colorShader:ColorShader = new ColorShader(0x0);
+
+	/**
+	 * 图块的渲染纹理对象
+	 */
+	public static var quadBitmapData(get, never):BitmapData;
+
+	private static var __quadBitmapData:BitmapData;
+
+	private static function get_quadBitmapData():BitmapData {
+		if (__quadBitmapData == null) {
+			__quadBitmapData = new BitmapData(1, 1, true, 0xffffffff);
+		}
+		return __quadBitmapData;
+	}
+
+	/**
+	 * 非圆角的显示对象仍然支持Bitmap
+	 */
+	private var display:Bitmap;
+
+	/**
 	 * 圆角的宽度
 	 */
-	public var ellipseWidth(default, set):Null<Float> = 0;
+	public var ellipseWidth(default, set):Null<Float> = null;
 
 	private function set_ellipseWidth(e:Float):Float {
 		if (ellipseWidth != e) {
@@ -26,7 +53,7 @@ class ZQuad extends ZBox {
 	/**
 	 * 圆角的高度
 	 */
-	public var ellipseHeight(default, set):Null<Float> = 0;
+	public var ellipseHeight(default, set):Null<Float> = null;
 
 	private function set_ellipseHeight(e:Float):Float {
 		if (ellipseHeight != e) {
@@ -46,6 +73,8 @@ class ZQuad extends ZBox {
 	 */
 	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
+		display = new Bitmap(quadBitmapData);
+		display.shader = __colorShader;
 		this.width = width;
 		this.height = height;
 		this.color = color;
@@ -53,17 +82,23 @@ class ZQuad extends ZBox {
 	}
 
 	private function __draw():Void {
-		this.graphics.clear();
-		this.graphics.beginFill(color);
-		if (ellipseWidth != null) {
-			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
+		if (ellipseWidth == null) {
+			this.addChildAt(display, 0);
+			display.width = this.width == 0 ? 0 : this.width + 1;
+			display.height = this.height == 0 ? 0 : this.height + 1;
+			trace("display=", display.width, display.height, this.width, this.height);
 		} else {
-			this.graphics.drawRect(0, 0, width, height);
+			display.parent?.removeChild(display);
+			this.graphics.clear();
+			this.graphics.beginFill(color);
+			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
+			this.graphics.endFill();
 		}
-		this.graphics.endFill();
 	}
 
 	private function onRenderOpenGL(e:RenderEvent):Void {
+		if (display.parent != null)
+			__colorShader.updateColor(color);
 		if (__changed) {
 			__changed = false;
 			this.updateComponents();
@@ -72,6 +107,7 @@ class ZQuad extends ZBox {
 
 	override public function initComponents():Void {
 		super.initComponents();
+		this.addChildAt(display, 0);
 		updateComponents();
 	}
 

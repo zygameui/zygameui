@@ -125,6 +125,8 @@ class ZLabel extends DataProviderComponent {
 			value = "";
 		if (_defaultDisplay == null)
 			updatedefaultText();
+		if (_defaultDisplay.text == value)
+			return value;
 		if (ZLabel.onGlobalCharFilter != null)
 			_defaultDisplay.text = ZLabel.onGlobalCharFilter(value);
 		else
@@ -167,6 +169,8 @@ class ZLabel extends DataProviderComponent {
 	private function set_defaultColor(value:UInt):UInt {
 		if (_defaultDisplay == null)
 			updatedefaultText();
+		if (_defaultDisplay.textColor == value)
+			return value;
 		this.__changed = true;
 		_defaultDisplay.textColor = value;
 		return value;
@@ -408,6 +412,9 @@ class ZLabel extends DataProviderComponent {
 			value = _restrictEreg.replace(value, "");
 		}
 
+		if (super.dataProvider == value)
+			return value;
+
 		super.dataProvider = value;
 
 		// 刷新内容
@@ -493,6 +500,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function set_width(value:Float):Float {
+		if (_width == value)
+			return value;
 		_width = value #if quickgame_scale * _getCurrentScale() #end;
 		this.__changed = true;
 		return value;
@@ -508,6 +517,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function set_height(value:Float):Float {
+		if (_height == value)
+			return value;
 		_height = value #if quickgame_scale * _getCurrentScale() #end;
 		__height = value;
 		this.__changed = true;
@@ -564,6 +575,8 @@ class ZLabel extends DataProviderComponent {
 	 * @param font 文本大小
 	 */
 	public function setFontSize(font:Int):Void {
+		if (_font.size == font)
+			return;
 		#if (quickgame_scale)
 		// 快游戏兼容,OPPO新版本已修复这个问题。
 		font = Std.int(font * zygame.core.Start.currentScale);
@@ -580,6 +593,8 @@ class ZLabel extends DataProviderComponent {
 	 * @param color 文本颜色
 	 */
 	public function setFontColor(color:UInt):Void {
+		if (_font.color == color)
+			return;
 		_font.color = color;
 		zquad.color = color;
 		_display.textColor = color;
@@ -750,6 +765,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	private function setSelectQuadVisible(b:Bool = false) {
+		if (zquad.visible == b)
+			return;
 		zquad.visible = b;
 		zquad.alpha = 1;
 		setFrameEvent(b);

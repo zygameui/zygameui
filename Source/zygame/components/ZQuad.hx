@@ -10,7 +10,10 @@ import zygame.components.ZBox;
  * ```
  */
 class ZQuad extends ZBox {
-	public var ellipseWidth(default, set):Float = 0;
+	/**
+	 * 圆角的宽度
+	 */
+	public var ellipseWidth(default, set):Null<Float> = 0;
 
 	private function set_ellipseWidth(e:Float):Float {
 		this.ellipseWidth = e;
@@ -18,7 +21,10 @@ class ZQuad extends ZBox {
 		return e;
 	}
 
-	public var ellipseHeight(default, set):Float = 0;
+	/**
+	 * 圆角的高度
+	 */
+	public var ellipseHeight(default, set):Null<Float> = 0;
 
 	private function set_ellipseHeight(e:Float):Float {
 		this.ellipseHeight = e;
@@ -45,7 +51,7 @@ class ZQuad extends ZBox {
 	private function __draw():Void {
 		this.graphics.clear();
 		this.graphics.beginFill(color);
-		if (ellipseWidth != 0 || ellipseHeight != 0) {
+		if (ellipseWidth != null) {
 			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
 		} else {
 			this.graphics.drawRect(0, 0, width, height);

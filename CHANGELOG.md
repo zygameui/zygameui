@@ -6,6 +6,9 @@
 
 # ZYGameUI 更新日志
 
+### 14.0.1
+- [改进] 改进`ZQuad`在普通渲染模式下，仍然使用`Bitmap`渲染。
+
 ### 14.0.0
 - [新增] 新增`TimelineData`时间轴数据；
 - [改进] 改进`ZTween`、`ZAnimation`、`BAnimation`使用`TimelineData`实现动画；

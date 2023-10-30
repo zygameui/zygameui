@@ -86,7 +86,6 @@ class ZQuad extends ZBox {
 			this.addChildAt(display, 0);
 			display.width = this.width == 0 ? 0 : this.width + 1;
 			display.height = this.height == 0 ? 0 : this.height + 1;
-			trace("display=", display.width, display.height, this.width, this.height);
 		} else {
 			display.parent?.removeChild(display);
 			this.graphics.clear();

@@ -32,12 +32,12 @@ class ZQuad extends ZBox {
 		}
 		return __quadBitmapData;
 	}
-	#end
 
 	/**
 	 * 非圆角的显示对象仍然支持Bitmap
 	 */
 	private var display:Bitmap;
+	#end
 
 	/**
 	 * 圆角的宽度，该参数默认为`null`，设置值后，将会渲染圆角，请注意，圆角渲染为`软件渲染`。
@@ -99,7 +99,6 @@ class ZQuad extends ZBox {
 			this.graphics.endFill();
 		}
 		#else
-		display.parent?.removeChild(display);
 		this.graphics.clear();
 		this.graphics.beginFill(color);
 		if (ellipseWidth == null) {
@@ -124,7 +123,9 @@ class ZQuad extends ZBox {
 
 	override public function initComponents():Void {
 		super.initComponents();
+		#if zquad_use_bitmap
 		this.addChildAt(display, 0);
+		#end
 		updateComponents();
 	}
 

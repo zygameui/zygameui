@@ -13,6 +13,7 @@ import zygame.components.ZBox;
  * ```
  */
 class ZQuad extends ZBox {
+	#if zquad_use_bitmap
 	/**
 	 * 颜色着色器
 	 */
@@ -31,6 +32,7 @@ class ZQuad extends ZBox {
 		}
 		return __quadBitmapData;
 	}
+	#end
 
 	/**
 	 * 非圆角的显示对象仍然支持Bitmap
@@ -38,7 +40,7 @@ class ZQuad extends ZBox {
 	private var display:Bitmap;
 
 	/**
-	 * 圆角的宽度
+	 * 圆角的宽度，该参数默认为`null`，设置值后，将会渲染圆角，请注意，圆角渲染为`软件渲染`。
 	 */
 	public var ellipseWidth(default, set):Null<Float> = null;
 
@@ -51,7 +53,7 @@ class ZQuad extends ZBox {
 	}
 
 	/**
-	 * 圆角的高度
+	 * 圆角的高度，该参数默认为`null`，设置值后，将会渲染圆角，请注意，圆角渲染为`软件渲染`。当不存在`ellipseHeight`值时，则会使用`ellipseWidth`值
 	 */
 	public var ellipseHeight(default, set):Null<Float> = null;
 
@@ -73,8 +75,10 @@ class ZQuad extends ZBox {
 	 */
 	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
+		#if zquad_use_bitmap
 		display = new Bitmap(quadBitmapData);
 		display.shader = __colorShader;
+		#end
 		this.width = width;
 		this.height = height;
 		this.color = color;
@@ -82,6 +86,7 @@ class ZQuad extends ZBox {
 	}
 
 	private function __draw():Void {
+		#if zquad_use_bitmap
 		if (ellipseWidth == null) {
 			this.addChildAt(display, 0);
 			display.width = this.width == 0 ? 0 : this.width + 1;
@@ -93,6 +98,17 @@ class ZQuad extends ZBox {
 			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
 			this.graphics.endFill();
 		}
+		#else
+		display.parent?.removeChild(display);
+		this.graphics.clear();
+		this.graphics.beginFill(color);
+		if (ellipseWidth == null) {
+			this.graphics.drawRect(0, 0, width, height);
+		} else {
+			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
+		}
+		this.graphics.endFill();
+		#end
 	}
 
 	private function onRenderOpenGL(e:RenderEvent):Void {

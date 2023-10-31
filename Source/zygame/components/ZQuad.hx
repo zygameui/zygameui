@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.display.DisplayObject;
 import openfl.display.Bitmap;
 import zygame.shader.ColorShader;
 import openfl.display.BitmapData;
@@ -195,4 +196,39 @@ class ZQuad extends ZBox {
 		}
 		return value;
 	}
+
+	#if !flash
+	/**
+	 * 重写触摸事件，用于实现在TouchImageBatchsContainer状态中，允许穿透点击
+	 * @param x 
+	 * @param y 
+	 * @param shapeFlag 
+	 * @param stack 
+	 * @param interactiveOnly 
+	 * @param hitObject 
+	 * @return Bool
+	 */
+	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
+		if (!hitObject.visible || width == 0 || height == 0)
+			return false;
+		if (mask != null && !mask.__hitTestMask(x, y))
+			return false;
+		__getRenderTransform();
+		var px = @:privateAccess __renderTransform.__transformInverseX(x, y);
+		var py = @:privateAccess __renderTransform.__transformInverseY(x, y);
+		if (px > 0 && py > 0 && px <= this.width && py <= this.height) {
+			if (__scrollRect != null && !__scrollRect.contains(px, py)) {
+				return false;
+			}
+
+			if (stack != null) {
+				stack.push(this);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+	#end
 }

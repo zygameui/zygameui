@@ -1,5 +1,8 @@
 package zygame.utils;
 
+/**
+ * 颜色工具
+ */
 class ColorUtils {
 	public static function toShaderColor(color:UInt):Color {
 		var r = (color >> 16) & 0xFF;

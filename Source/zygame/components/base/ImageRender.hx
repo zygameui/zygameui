@@ -1,16 +1,14 @@
 package zygame.components.base;
 
+import zygame.display.ZBitmap;
 import openfl.geom.Rectangle;
-import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
-import haxe.Exception;
 import openfl.display.Sprite;
 import openfl.display.GraphicsShader;
 import openfl.geom.Matrix;
 import openfl.Vector;
 import zygame.utils.load.Frame;
 import openfl.display.BitmapData;
-import openfl.geom.Point;
 
 /**
  * 图片渲染器
@@ -30,7 +28,7 @@ class ImageRender extends Sprite {
 	public var isBitmapDraw:Bool = false;
 
 	#if !zimage_v2_use_sprite_draw
-	private var __bitmapRender:Bitmap;
+	private var __bitmapRender:ZBitmap;
 	#end
 
 	/**
@@ -78,7 +76,7 @@ class ImageRender extends Sprite {
 			#if !zimage_v2_use_sprite_draw
 			isBitmapDraw = true;
 			if (__bitmapRender == null) {
-				__bitmapRender = new Bitmap();
+				__bitmapRender = new ZBitmap();
 			}
 			this.addChild(__bitmapRender);
 			__bitmapRender.bitmapData = bitmap;
@@ -239,7 +237,7 @@ class ImageRender extends Sprite {
 				#if !zimage_v2_use_sprite_draw
 				isBitmapDraw = true;
 				if (__bitmapRender == null) {
-					__bitmapRender = new Bitmap();
+					__bitmapRender = new ZBitmap();
 				}
 				this.addChild(__bitmapRender);
 				__bitmapRender.bitmapData = frame.parent.getRootBitmapData();

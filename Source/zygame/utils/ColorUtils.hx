@@ -4,7 +4,16 @@ package zygame.utils;
  * 颜色工具
  */
 class ColorUtils {
-	public static function toShaderColor(color:UInt):Color {
+	/**
+	 * 转换为Shader使用的-1~1的浮点数值，支持`0xFFFFFF`、`#FFFFFF`等颜色格式。
+	 * @param color 
+	 * @return Color
+	 */
+	public static function toShaderColor(color:Dynamic):Color {
+		if (color is String) {
+			var value = StringTools.replace(color, "#", "0x");
+			color = Std.parseInt(value);
+		}
 		var r = (color >> 16) & 0xFF;
 		var g = (color >> 8) & 0xFF;
 		var b = color & 0xFF;

@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.components.base.IBuilder;
 import zygame.components.style.XmlStyle;
 #if feathersui
 import zygame.feathersui.FListView;
@@ -826,6 +827,13 @@ class ZBuilder {
 		// 使用副本
 		xml = Xml.parse(xml.toString());
 		var builder:Builder = new Builder();
+		if (parent is IBuilder) {
+			var map = cast(parent, IBuilder).onDefineValues();
+			if (map != null)
+				for (key => value in map) {
+					builder.defineValue(key, value);
+				}
+		}
 		#if openfl_console
 		Cc.watch(builder, xmlfileName);
 		#end
@@ -853,6 +861,13 @@ class ZBuilder {
 			bindAssets(assets);
 		var xml = assets.getXml(xmlfileName);
 		var builder:Builder = new Builder();
+		if (parent is IBuilder) {
+			var map = cast(parent, IBuilder).onDefineValues();
+			if (map != null)
+				for (key => value in map) {
+					builder.defineValue(key, value);
+				}
+		}
 		buildui(xml.firstElement(), parent, builder);
 		builder.bindBuilder();
 		if (Std.isOfType(builder.display, BuilderRootDisplay)) {
@@ -872,6 +887,13 @@ class ZBuilder {
 	 */
 	public static function build(xml:Xml, parent:Dynamic = null, superInit:ZBuilder->Void = null, defalutArgs:Array<Dynamic> = null):Builder {
 		var builder:Builder = new Builder();
+		if (parent is IBuilder) {
+			var map = cast(parent, IBuilder).onDefineValues();
+			if (map != null)
+				for (key => value in map) {
+					builder.defineValue(key, value);
+				}
+		}
 		buildui(xml.firstElement(), parent, builder, superInit, defalutArgs);
 		builder.bindBuilder();
 		if (Std.isOfType(builder.display, BuilderRootDisplay)) {
@@ -964,7 +986,7 @@ class ZBuilder {
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("if").split(" ");
 			for (ifstr in array) {
-				if (defineMaps.exists(ifstr)) {
+				if (defineMaps.exists(ifstr) || @:privateAccess builder.defines.exists(ifstr)) {
 					isExists = true;
 					break;
 				}
@@ -976,7 +998,7 @@ class ZBuilder {
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("unless").split(" ");
 			for (ifstr in array) {
-				if (!defineMaps.exists(ifstr)) {
+				if (!defineMaps.exists(ifstr) || @:privateAccess builder.defines.exists(ifstr)) {
 					isExists = true;
 					break;
 				}
@@ -1665,6 +1687,28 @@ class Builder {
 	 * 构造配置中的允许访问的id映射
 	 */
 	public var ids:Map<String, Dynamic>;
+
+	/**
+	 * 定义列表
+	 */
+	private var defines:Map<String, String> = [];
+
+	/**
+	 * 定义参数
+	 * @param key 
+	 * @param value 
+	 */
+	public function defineValue(key:String, ?value:String):Void {
+		this.defines.set(key, value);
+	}
+
+	/**
+	 * 取消定义
+	 * @param key 
+	 */
+	public function undefine(key:String):Void {
+		this.defines.remove(key);
+	}
 
 	/**
 	 * 构造一个建造显示对象

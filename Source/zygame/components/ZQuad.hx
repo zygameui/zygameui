@@ -221,11 +221,11 @@ class ZQuad extends ZBox {
 				return false;
 			}
 
-			if (stack != null) {
-				stack.push(this);
+			if (stack != null && !interactiveOnly) {
+				stack.push(hitObject);
 			}
 
-			return true;
+			return super.__hitTest(x, y, false, stack, interactiveOnly, hitObject);
 		}
 
 		return false;

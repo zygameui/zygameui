@@ -1,5 +1,7 @@
 package zygame.components;
 
+import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
 import openfl.display.DisplayObject;
 import openfl.display.Bitmap;
 import zygame.shader.ColorShader;
@@ -13,6 +15,7 @@ import zygame.components.ZBox;
  * <ZQuad width="300" height="300" color="0xff0000"/>
  * ```
  */
+@:privateAccess(game.geom.Rectangle)
 class ZQuad extends ZBox {
 	#if zquad_use_bitmap
 	/**
@@ -237,4 +240,13 @@ class ZQuad extends ZBox {
 		return false;
 	}
 	#end
+
+	private static var __rect:Rectangle = new Rectangle();
+
+	@:noCompletion private override function __getBounds(rect:Rectangle, matrix:Matrix):Void {
+		var bounds = __rect;
+		bounds.setTo(0, 0, this._componentWidth, this._componentHeight);
+		@:privateAccess bounds.__transform(bounds, matrix);
+		@:privateAccess rect.__expand(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
 }

@@ -335,4 +335,11 @@ class ImageRender extends Sprite {
 		return false;
 	}
 	#end
+
+	override function invalidate() {
+		super.invalidate();
+		if (__bitmapRender != null) {
+			__bitmapRender.invalidate();
+		}
+	}
 }

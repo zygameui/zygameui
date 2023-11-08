@@ -20,4 +20,16 @@ class System {
 		untyped wx.vibrateShort();
 		#end
 	}
+
+	/**
+	 * 获得平台目标，存在`null`的情况，它并不是必然可以获得目标。
+	 * @return String
+	 */
+	public static function getPlatfrom():String {
+		#if wechat
+		return untyped window.platform;
+		#else
+		return null;
+		#end
+	}
 }

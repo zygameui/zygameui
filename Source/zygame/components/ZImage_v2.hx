@@ -297,4 +297,10 @@ class ZImage_v2 extends DataProviderBox {
 	override function get_shader():Shader {
 		return _shader;
 	}
+
+	override function invalidate() {
+		super.invalidate();
+		if(display != null)
+			display.invalidate();
+	}
 } // #end

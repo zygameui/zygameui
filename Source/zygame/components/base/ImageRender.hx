@@ -36,8 +36,12 @@ class ImageRender extends Sprite {
 	 */
 	public function getFrameSize():{width:Float, height:Float} {
 		if (__data is Frame) {
-			var frameData:Frame = cast __data;
-			return {width: Math.max(frameData.frameWidth, frameData.width), height: Math.max(frameData.frameHeight, frameData.height)};
+			if (__isS9Draw) {
+				return {width: __width, height: __height};
+			} else {
+				var frameData:Frame = cast __data;
+				return {width: Math.max(frameData.frameWidth, frameData.width), height: Math.max(frameData.frameHeight, frameData.height)};
+			}
 		} else if (__data is BitmapData) {
 			return {width: cast(__data, BitmapData).width, height: cast(__data, BitmapData).height};
 		}

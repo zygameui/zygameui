@@ -312,7 +312,7 @@ class ImageRender extends Sprite {
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		if (!hitObject.visible || __data == null)
+		if (!hitObject.visible || __data == null || !this.mouseEnabled)
 			return false;
 		if (mask != null && !mask.__hitTestMask(x, y))
 			return false;

@@ -209,7 +209,7 @@ class ZQuad extends ZBox {
 	 * @return Bool
 	 */
 	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
-		if (!hitObject.visible || width == 0 || height == 0)
+		if (!hitObject.visible || width == 0 || height == 0 || !this.mouseEnabled)
 			return false;
 		if (mask != null && !mask.__hitTestMask(x, y))
 			return false;
@@ -225,7 +225,13 @@ class ZQuad extends ZBox {
 				stack.push(hitObject);
 			}
 
-			return super.__hitTest(x, y, false, stack, interactiveOnly, hitObject);
+			var childTouch = super.__hitTest(x, y, false, stack, interactiveOnly, hitObject);
+			if (!childTouch) {
+				if (stack != null)
+					stack.push(this);
+				return true;
+			}
+			return childTouch;
 		}
 
 		return false;

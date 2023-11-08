@@ -10,7 +10,7 @@ import openfl.geom.Matrix;
 /**
  * 轻量化的ImageBitmap显示对象
  */
-class ImageBitmap extends Bitmap {
+class ImageBitmap extends ZBitmap {
 	public var mouseEnabled:Bool = false;
 
 	private var _data:Dynamic = null;
@@ -65,8 +65,6 @@ class ImageBitmap extends Bitmap {
 			this.scrollRect = _rect;
 			if (frame.scale9rect != null)
 				this.scale9Grid = frame.scale9rect;
-			// this.scaleX = this.bitmapData.width / frame.width;
-			// this.scaleY = this.bitmapData.height / frame.height;
 		}
 		return _data;
 	}

@@ -86,9 +86,9 @@ class Start extends ZScene {
 	public inline static var FRAME_DT_STEP:Float = 0.016;
 
 	/**
-	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为true
+	 * 动态FPS，如果开启动态FPS，在CPU超过负荷的情况下，会自动调为低频渲染，但主帧逻辑仍然使用60FPS运行，默认为`false`
 	 */
-	public var dynamicFps:Bool = #if (disable_dynamic_fps || cpp) false #else true #end;
+	public var dynamicFps:Bool = #if (disable_dynamic_fps || cpp) false #else false #end;
 
 	/**
 	 * 低频模式

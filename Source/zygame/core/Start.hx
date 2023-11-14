@@ -8,7 +8,9 @@ import com.junkbyte.console.addons.memorytracker.MemoryTrackerAddon;
 import zygame.macro.performance.PerformanceAnalysis;
 #end
 import zygame.utils.ScaleUtils;
+#if lime
 import lime.graphics.RenderContext;
+#end
 import haxe.Timer;
 import openfl.events.RenderEvent;
 import zygame.utils.FPSUtil;
@@ -440,6 +442,7 @@ class Start extends ZScene {
 	 */
 	public var rendering:Bool = true;
 
+	#if lime
 	private function onGameRender(context:RenderContext):Void {
 		var newTime = Timer.stamp();
 		_dt = Std.int((newTime - _lastTime) * 1000);
@@ -474,10 +477,13 @@ class Start extends ZScene {
 		PerformanceAnalysis.onFrame();
 		#end
 	}
+	#end
 
 	override public function onInit():Void {
+		#if lime
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
+		#end
 
 		#if performance_analysis
 		PerformanceAnalysis.init();

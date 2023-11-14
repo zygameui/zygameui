@@ -56,6 +56,11 @@ class SaveObject<T:SaveObjectData> {
 	private var _isReadData:Bool = false;
 
 	/**
+	 * 本地数据储存，默认为`true`，当启动时，用户数据会保存一份到本地，为`false`时，用户数据将不会储存到本地。
+	 */
+	public var localDataEnable = true;
+
+	/**
 	 * 丢失的存档key，当发生丢失的存档key，则从线上存档中读取
 	 */
 	private var lossKey:Array<String> = [];
@@ -73,18 +78,36 @@ class SaveObject<T:SaveObjectData> {
 		// threadPool.onError.add(threadPool_onError);
 		#end
 		this.data = cast Type.createInstance(c, []);
-		try {
-			// 读取本地的数据进行写入
-			#if js
-			var storage = Browser.getLocalStorage();
-			if (storage != null) {
+		if (localDataEnable) {
+			try {
+				// 读取本地的数据进行写入
+				#if js
+				var storage = Browser.getLocalStorage();
+				if (storage != null) {
+					var keys = Reflect.fields(data);
+					var localData = {};
+					for (k in keys) {
+						var id = _id + "." + k;
+						var value = storage.getItem(id);
+						if (value != null) {
+							value = Encryption.decode(value);
+							Reflect.setProperty(localData, k, value);
+						} else {
+							// Key丢失
+							// trace("存档key丢失：", id);
+							lossKey.push(k);
+						}
+					}
+					this.updateUserData(localData);
+				}
+				#elseif cpp
 				var keys = Reflect.fields(data);
 				var localData = {};
 				for (k in keys) {
 					var id = _id + "." + k;
-					var value = storage.getItem(id);
+					var shared = openfl.net.SharedObject.getLocal(id);
+					var value = shared.data.data;
 					if (value != null) {
-						value = Encryption.decode(value);
 						Reflect.setProperty(localData, k, value);
 					} else {
 						// Key丢失
@@ -93,27 +116,11 @@ class SaveObject<T:SaveObjectData> {
 					}
 				}
 				this.updateUserData(localData);
+				#end
+			} catch (e:Exception) {
+				var msg = haxe.CallStack.toString(haxe.CallStack.exceptionStack());
+				trace(msg);
 			}
-			#elseif cpp
-			var keys = Reflect.fields(data);
-			var localData = {};
-			for (k in keys) {
-				var id = _id + "." + k;
-				var shared = openfl.net.SharedObject.getLocal(id);
-				var value = shared.data.data;
-				if (value != null) {
-					Reflect.setProperty(localData, k, value);
-				} else {
-					// Key丢失
-					// trace("存档key丢失：", id);
-					lossKey.push(k);
-				}
-			}
-			this.updateUserData(localData);
-			#end
-		} catch (e:Exception) {
-			var msg = haxe.CallStack.toString(haxe.CallStack.exceptionStack());
-			trace(msg);
 		}
 		return cast this;
 	}
@@ -535,6 +542,9 @@ class SaveObject<T:SaveObjectData> {
 			Reflect.setProperty(_changedData, key, value);
 		}
 		// trace("保存数据", key, value);
+		if (!this.localDataEnable) {
+			return;
+		}
 		#if js
 		var storage = Browser.getLocalStorage();
 		if (storage != null) {
@@ -576,6 +586,8 @@ class SaveObject<T:SaveObjectData> {
 	 */
 	public function getData(data:Dynamic = null):Dynamic {
 		data = data == null ? {} : data;
+		if (this.data == null)
+			return {};
 		this.data.getData(data);
 		return data;
 	}

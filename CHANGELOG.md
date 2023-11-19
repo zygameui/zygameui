@@ -13,6 +13,7 @@
 - [新增] 新增`IBuilder`接口，可实现界面自定义宏Defines功能；
 - [新增] 新增`CirclrCDShader`圆形进度条着色器支持；
 - [修复] 修复`ZQuad`的触摸异常的问题；
+- [修复] 修复`ZBuilder.buildui`会发生`parent`为`null`的情况，引起渲染异常；
 
 ### 14.0.1
 - [改进] 改进`ZQuad`在渲染矩形的时候使用`硬件加速`渲染。

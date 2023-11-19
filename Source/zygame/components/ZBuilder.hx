@@ -1367,6 +1367,9 @@ class ZBuilder {
 
 	private static function getProperty(data:Dynamic, key:String):Dynamic {
 		#if html5
+		if (data == null) {
+			throw "data is null,fieds is " + key;
+		}
 		if (untyped data["get_" + key] != null)
 			return untyped data["get_" + key]();
 		else
@@ -1588,6 +1591,8 @@ class AssetsBuilder extends Builder {
 		return this;
 	}
 
+	private var __created:Bool = false;
+
 	private function buildAllAssets(isNewXmlPath:Bool, existXml:Xml, cb:Bool->Void, onloaded:Void->Void = null):Void {
 		var viewxml = assets.getXml(StringUtils.getName(viewXmlPath)) ?? existXml;
 		if (viewxml == null) {
@@ -1624,6 +1629,9 @@ class AssetsBuilder extends Builder {
 		assets.start((f) -> {
 			onProgress(f);
 			if (f == 1) {
+				if (__created) {
+					throw "已经被创建过了！";
+				}
 				ZBuilder.bindAssets(assets);
 				if (onloaded != null)
 					onloaded();
@@ -1640,6 +1648,7 @@ class AssetsBuilder extends Builder {
 					onSizeChange(Std.parseFloat(viewxml.firstElement().get("hdwidth")), Std.parseFloat(viewxml.firstElement().get("hdheight")), true);
 				}
 				@:privateAccess ZBuilder.buildui(viewxml.firstElement(), _viewParent, this);
+				__created = true;
 				_viewParent = null;
 				ZBuilder.unbindAssets(assets);
 				cb(true);

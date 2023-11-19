@@ -514,7 +514,7 @@ class ZAssets {
 		if (_parsers.length <= currentLoadIndex || _loadStop) {
 			// 检查是否已载入完毕
 			var curprogress = getProgress();
-			if (curprogress == 1) {
+			if (curprogress == 1 && !_loadStop) {
 				this._parsers = [];
 				this._loadfilelist = [];
 				#if debug

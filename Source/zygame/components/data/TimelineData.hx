@@ -110,6 +110,7 @@ class TimelineData {
 				}
 				if (loop == 0) {
 					currentFrame = maxFrame;
+					onComplete();
 				} else {
 					oldFrame = 0;
 					currentFrame = frame % maxFrame;
@@ -141,6 +142,11 @@ class TimelineData {
 	 * @param frame 
 	 */
 	dynamic public function onFrame(frame:Int):Void {}
+
+	/**
+	 * 播放结束时
+	 */
+	dynamic public function onComplete():Void {}
 
 	/**
 	 * 进入下一帧

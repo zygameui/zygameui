@@ -47,6 +47,7 @@ class ZTween implements Refresher {
 		else
 			_baseXml = xml;
 		this.timeline.onFrame = __updateFrame;
+		this.timeline.onComplete = this.stop;
 		this.timeline.loop = 1;
 	}
 

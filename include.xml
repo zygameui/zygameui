@@ -150,4 +150,6 @@
 	<!-- 默认启动GPU粒子 -->
 	<haxedef name="gpu_particles" unless="cpu_particles" />
 
+	<haxedef name="unshape_flag" if="wechat"/>
+
 </project>

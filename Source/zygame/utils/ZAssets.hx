@@ -471,8 +471,7 @@ class ZAssets {
 			_loadStop = true;
 			if (func != null)
 				func(1);
-			_callBack = null;
-			_errorCallBack = null;
+			__clearCallBack();
 			return;
 		}
 		if (timeout != -1) {
@@ -522,7 +521,9 @@ class ZAssets {
 				#end
 				_loadStop = true;
 				if (_callBack != null) {
-					_callBack(curprogress);
+					var cb = _callBack;
+					__clearCallBack();
+					cb(curprogress);
 				}
 				if (timer != null)
 					timer.stop();
@@ -584,9 +585,16 @@ class ZAssets {
 			if (_errorCallBack != null) {
 				_errorCallBack(msg);
 			}
-			_callBack = null;
-			_errorCallBack = null;
+			__clearCallBack();
 		}
+	}
+
+	/**
+	 * 将回调进行清空
+	 */
+	private function __clearCallBack():Void {
+		_errorCallBack = null;
+		_callBack = null;
 	}
 
 	/**
@@ -1359,8 +1367,7 @@ class ZAssets {
 	 */
 	public function unloadAll():Void {
 		__unloadAll();
-		_callBack = null;
-		_errorCallBack = null;
+		__clearCallBack();
 	}
 
 	private function __unloadAll(name:String = null):Void {

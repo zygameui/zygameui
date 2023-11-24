@@ -34,6 +34,7 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 
 	public function new(batchSprites:Atlas, pwidth:Int = -1, pheight:Int = -1) {
 		super();
+		this.__lastTouch = true;
 		if (pwidth == -1)
 			pwidth = zygame.core.Start.stageWidth;
 		if (pheight == -1)
@@ -41,7 +42,6 @@ class TouchImageBatchsContainer extends TouchDisplayObjectContainer {
 		var _imageBatchs:ImageBatchs = new ImageBatchs(batchSprites, pwidth, pheight);
 		super.addChildAt(_imageBatchs, 0);
 		this.mouseChildren = false;
-		setTouchEvent(true);
 	}
 
 	#if flash

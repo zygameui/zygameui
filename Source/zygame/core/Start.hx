@@ -1,5 +1,7 @@
 package zygame.core;
 
+import zygame.display.TouchDisplayObjectContainer;
+import openfl.events.TouchEvent;
 #if openfl_console
 import com.junkbyte.console.Cc;
 import com.junkbyte.console.addons.memorytracker.MemoryTrackerAddon;
@@ -511,6 +513,8 @@ class Start extends ZScene {
 		// 	@:privateAccess stage.__resize();
 		// }
 		// #end
+		stage.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
+		stage.addEventListener(TouchEvent.TOUCH_END, onTouchEventEnd);
 		stage.addEventListener(MouseEvent.CLICK, onStageMouseClick);
 		stage.addEventListener(RenderEvent.RENDER_CAIRO, onRender);
 		stage.addEventListener(RenderEvent.RENDER_OPENGL, onRender);
@@ -537,6 +541,39 @@ class Start extends ZScene {
 		// 	event.preventDefault();
 		// 	trace("发生异常错误：",event.toString());
 		// });
+	}
+
+	/**
+	 * 点击事件侦听器
+	 */
+	@:noCompletion private var __touchEvents:Array<TouchDisplayObjectContainer> = [];
+
+	public function addToMouseTouchEvents(touch:TouchDisplayObjectContainer):Void {
+		if (__touchEvents.indexOf(touch) == -1) {
+			trace("侦听：", touch, touch.parent);
+			__touchEvents.push(touch);
+		}
+	}
+
+	public function removeToMouseTouchEvents(touch:TouchDisplayObjectContainer):Void {
+		trace("移除侦听：", touch, touch.parent);
+		__touchEvents.remove(touch);
+	}
+
+	@:noCompletion private function onStageMouseUp(e:MouseEvent):Void {
+		for (container in __touchEvents) {
+			if (container.mouseEvent) {
+				container.onMouseUp(e);
+			}
+		}
+	}
+
+	@:noCompletion private function onTouchEventEnd(e:TouchEvent):Void {
+		for (container in __touchEvents) {
+			if (container.mouseEvent) {
+				container.onTouchEnd(e);
+			}
+		}
 	}
 
 	/**

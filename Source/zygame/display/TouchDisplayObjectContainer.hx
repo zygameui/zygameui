@@ -1,5 +1,6 @@
 package zygame.display;
 
+import zygame.core.Start;
 import zygame.utils.Lib;
 import zygame.display.DisplayObjectContainer;
 import openfl.events.TouchEvent;
@@ -26,12 +27,14 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 	 * @param listen - 是否侦听，false则清理所有事件
 	 */
 	public function setTouchEvent(listen:Bool, userCapture:Bool = false, priority:Int = 0, stageMove:Bool = false):Void {
+		if (isTouch == listen)
+			return;
 		isTouch = listen;
 		Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 		if (listen) {
 			#if (mac || window || ios)
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, userCapture, priority);
-			openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			// openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			if (stageMove)
 				openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 			else
@@ -41,7 +44,7 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 			#else
 			if (mouseEvent) {
 				this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, userCapture, priority);
-				openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				// openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				if (stageMove)
 					openfl.Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, userCapture, priority);
 				else
@@ -50,14 +53,15 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 				this.addEventListener(MouseEvent.MOUSE_OVER, onTouchOver, userCapture, priority);
 			} else {
 				this.addEventListener(TouchEvent.TOUCH_BEGIN, onTouchBegin);
-				openfl.Lib.current.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
+				// openfl.Lib.current.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
 				this.addEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
 			}
 			#end
+			Start.current.addToMouseTouchEvents(this);
 		} else {
 			#if (mac || window || ios)
 			this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			// openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 			if (stageMove)
 				openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 			else
@@ -67,7 +71,7 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 			#else
 			if (mouseEvent) {
 				this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-				openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				// openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				if (stageMove)
 					openfl.Lib.current.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 				else
@@ -76,10 +80,11 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 				this.removeEventListener(MouseEvent.MOUSE_OVER, onTouchOver);
 			} else {
 				this.removeEventListener(TouchEvent.TOUCH_BEGIN, onTouchBegin);
-				openfl.Lib.current.stage.removeEventListener(TouchEvent.TOUCH_END, onTouchEnd);
+				// openfl.Lib.current.stage.removeEventListener(TouchEvent.TOUCH_END, onTouchEnd);
 				this.removeEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
 			}
 			#end
+			Start.current.removeToMouseTouchEvents(this);
 		}
 	}
 
@@ -146,13 +151,18 @@ class TouchDisplayObjectContainer extends DisplayObjectContainer {
 
 	override public function onInitEvent(e:Event):Void {
 		super.onInitEvent(e);
-		setTouchEvent(isTouch);
+	}
+
+	private var __lastTouch:Bool = false;
+
+	override function onAddToStage() {
+		super.onAddToStage();
+		setTouchEvent(__lastTouch);
 	}
 
 	override public function onRemoveEvent(e:Event):Void {
 		super.onRemoveEvent(e);
-		var _isTouch:Bool = isTouch;
+		__lastTouch = isTouch;
 		setTouchEvent(false);
-		isTouch = _isTouch;
 	}
 }

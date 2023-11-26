@@ -99,11 +99,11 @@ haxelib git openfl-console https://github.com/barisyild/openfl-console
 在HTML5等平台上，游戏将使用JavaScript运行游戏；并支持不同渠道的小游戏兼容。
 
 # 硬件API
-1、基础硬件加速支持：
+##### 1、基础硬件加速支持：
 - `beginBitmapFill`
 - `beginFill`
 - `beginShaderFill`
-2、综合API硬件加速：
+##### 2、综合API硬件加速：
 - `drawQuads`：当使用`beginShaderFill`或者`beginBitmapFill`使用可以硬件加速
 - `drawRect`：当使用`beginFill`搭配使用可硬件加速
 - `drawTriangles`：当使用`beginShaderFill`或者`beginBitmapFill`使用可以硬件加速

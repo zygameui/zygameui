@@ -223,6 +223,8 @@ class TextureAtlas extends Atlas {
 	 * @return Frame
 	 */
 	public function getBitmapDataFrameAt(id:Int):Frame {
+		if (_tileRects == null)
+			return null;
 		var frames:Iterator<Frame> = _tileRects.each();
 		while (frames.hasNext()) {
 			var frame:Frame = frames.next();

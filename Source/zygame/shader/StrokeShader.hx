@@ -18,8 +18,8 @@ class StrokeShader extends OpenFLShader {
 	 * @param offestY 
 	 * @return Bool
 	 */
-	@:glsl public function inAlpha(v2:Vec2, offestX:Float, offestY:Float):Bool {
-		return texture2D(gl_openfl_Texture, v2 + vec2(offestX, offestY)).a > 0;
+	@:glsl public function getAlpha(v2:Vec2, offestX:Float, offestY:Float):Float {
+		return texture2D(gl_openfl_Texture, v2 + vec2(offestX, offestY)).a;
 	}
 
 	/**
@@ -27,26 +27,28 @@ class StrokeShader extends OpenFLShader {
 	 * @param v2 
 	 * @return Bool
 	 */
-	@:glsl public function circleCheck(v2:Vec2, len:Float):Bool {
+	@:glsl public function circleCheck(v2:Vec2, len:Float):Float {
 		var setpX:Float = 1 / gl_openfl_TextureSize.x * len;
 		var setpY:Float = 1 / gl_openfl_TextureSize.y * len;
 		var checkTimes = 36.;
-		var setp:Float = 3.14 / checkTimes;
+		var setp:Float = 6.28 / checkTimes;
+		var allAlpha:Float = 0.;
 		for (i in 0...36) {
 			var r:Float = setp * float(i);
-			if (inAlpha(v2, setpX * sin(r), setpY * cos(r)) || inAlpha(v2, setpX * -sin(r), setpY * -cos(r)))
-				return true;
+			var alpha:Float = getAlpha(v2, setpX * sin(r), setpY * cos(r));
+			allAlpha += alpha;
 		}
-		return false;
+		return clamp(allAlpha / (checkTimes * 0.5) * 2, 0., 1.);
 	}
 
 	override function fragment() {
 		super.fragment();
-		for (i in 0...5) {
-			if (float(i) > storksize)
+		for (i in 0...6) {
+			if (float(i) > (storksize + 1.))
 				break;
-			if (circleCheck(gl_openfl_TextureCoordv, float(i))) {
-				gl_FragColor = vec4(textcolor, 1.);
+			var alpha:Float = circleCheck(gl_openfl_TextureCoordv, float(i));
+			if (alpha > 0.) {
+				gl_FragColor = vec4(textcolor, 1) * alpha;
 				if (color.a > 0.) {
 					gl_FragColor = vec4(color.rgb, 1);
 				}

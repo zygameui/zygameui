@@ -12,6 +12,7 @@
 ### 14.0.8
 - [改进] 修复`StorkeShader`的描边锯齿的问题；
 - [新增] 新增`FListView`计数器多选支持`countsField`;
+- [修复] 修复`ZLabel.setFontSelectColor`不及时的问题；
 
 ### 14.0.5
 - [新增] 新增`IBuilder`接口，可实现界面自定义宏Defines功能；

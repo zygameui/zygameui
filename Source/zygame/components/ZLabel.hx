@@ -247,6 +247,20 @@ class ZLabel extends DataProviderComponent {
 			}
 			this.updateComponents();
 		}
+		try {
+			var rootColor = _font.color;
+			var textLength = _display.text != null ? _display.text.length : 0;
+			for (data in __setFontSelectColor) {
+				if (data.endIndex > textLength || data.startIndex == -1) {
+					continue;
+				}
+				_font.color = data.color;
+				_display.setTextFormat(_font, data.startIndex, data.endIndex);
+			}
+			_font.color = rootColor;
+		} catch (e:Exception) {}
+		if (__setFontSelectColor.length > 0)
+			__setFontSelectColor = [];
 	}
 
 	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
@@ -602,6 +616,12 @@ class ZLabel extends DataProviderComponent {
 		__changed = true;
 	}
 
+	private var __setFontSelectColor:Array<{
+		startIndex:Int,
+		endIndex:Int,
+		color:UInt
+	}> = [];
+
 	/**
 	 * 设置颜色
 	 * @param start 开始位置
@@ -610,16 +630,11 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
-		try {
-			if (len <= 0 || startIndex == -1) {
-				return;
-			}
-			var endIndex:Int = startIndex + len;
-			var rootColor = _font.color;
-			_font.color = color;
-			_display.setTextFormat(_font, startIndex, endIndex);
-			_font.color = rootColor;
-		} catch (e:Exception) {}
+		__setFontSelectColor.push({
+			startIndex: startIndex,
+			endIndex: startIndex + len,
+			color: color
+		});
 	}
 
 	/**

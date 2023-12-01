@@ -9,6 +9,10 @@
 
 # ZYGameUI 更新日志
 
+### 14.0.8
+- [改进] 修复`StorkeShader`的描边锯齿的问题；
+- [新增] 新增`FListView`计数器多选支持`countsField`;
+
 ### 14.0.5
 - [新增] 新增`IBuilder`接口，可实现界面自定义宏Defines功能；
 - [新增] 新增`CirclrCDShader`圆形进度条着色器支持；

@@ -26,6 +26,11 @@ class FListView extends ListView {
 	 */
 	public var allowScrollClickItemRenderer(default, set):Bool;
 
+	/**
+	 * 计数器键值
+	 */
+	public var countsField:String = null;
+
 	private function set_allowScrollClickItemRenderer(v:Bool):Bool {
 		if (v) {
 			this.addEventListener(MouseEvent.MOUSE_DOWN, onItemCheckDown);
@@ -89,6 +94,20 @@ class FListView extends ListView {
 	override function handleSelectionChange(item:Dynamic, index:Int, ctrlKey:Bool, shiftKey:Bool) {
 		if (autoCtrlKey)
 			ctrlKey = true;
+		// 这是计数器功能
+		if (countsField != null) {
+			var changed = false;
+			var counts = Reflect.getProperty(item, countsField);
+			var itemRender = this.itemToItemRenderer(item);
+			var selected = Reflect.getProperty(itemRender, "selected");
+			if (selected && counts == 0) {
+				changed = true;
+			} else if (!selected && counts == 1) {
+				changed = true;
+			}
+			if (!changed)
+				return;
+		}
 		if (maxSelectCounts <= 0 || maxSelectCounts > this.selectedItems.length || this.selectedItems.indexOf(item) != -1)
 			super.handleSelectionChange(item, index, ctrlKey, shiftKey);
 	}

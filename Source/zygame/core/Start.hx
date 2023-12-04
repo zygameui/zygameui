@@ -559,13 +559,11 @@ class Start extends ZScene {
 
 	public function addToMouseTouchEvents(touch:TouchDisplayObjectContainer):Void {
 		if (__touchEvents.indexOf(touch) == -1) {
-			trace("侦听：", touch, touch.parent);
 			__touchEvents.push(touch);
 		}
 	}
 
 	public function removeToMouseTouchEvents(touch:TouchDisplayObjectContainer):Void {
-		trace("移除侦听：", touch, touch.parent);
 		__touchEvents.remove(touch);
 	}
 

@@ -197,6 +197,15 @@ class Start extends ZScene {
 	}
 
 	/**
+	 * 根据索引获得对应的TopView层级
+	 * @param index 
+	 * @return Screen
+	 */
+	public function getTopViewAt(index:Int):Screen {
+		return screens[index];
+	}
+
+	/**
 	 * 添加一层顶层显示
 	 * @param screen 新的顶层显示对象
 	 */

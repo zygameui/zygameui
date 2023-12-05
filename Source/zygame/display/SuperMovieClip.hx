@@ -1,4 +1,4 @@
-package zygame.utils;
+package zygame.display;
 
 import openfl.display.DisplayObject;
 import openfl.display.MovieClip;

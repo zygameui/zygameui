@@ -417,6 +417,9 @@ class ZLabel extends DataProviderComponent {
 	// }
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
+		if (__setFontSelectColor.length > 0)
+			__setFontSelectColor = [];
+		
 		if (value == null) {
 			value = "";
 		}

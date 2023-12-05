@@ -90,7 +90,6 @@ class ZGC {
 	public static function disposeBitmapData(bitmapData:BitmapData):Void {
 		if (bitmapData == null)
 			return;
-		GPUUtils.removeBitmapData(bitmapData);
 		#if js
 		// var getImage:Image = @:privateAccess bitmapData.image;
 		// if(getImage != null && getImage.buffer != null && untyped getImage.buffer.__srcImage != null && untyped getImage.buffer.__srcImage.disposeImage != null)

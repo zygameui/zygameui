@@ -98,9 +98,6 @@ class ZSceneManager {
 	 * @param zScene - 指定场景
 	 */
 	public function releaseScene(zScene:ZScene, onSceneRelease:Bool = true):Void {
-		#if debug
-		trace("releaseScene:", zScene);
-		#end
 		if (zScene == null)
 			return;
 		if (onSceneRelease) {
@@ -115,6 +112,24 @@ class ZSceneManager {
 		if (zScene.parent != null) {
 			zScene.parent.removeChild(zScene);
 		}
+		// 调用一次GC释放
+		if (!__gcing) {
+			__gcing = true;
+			Lib.nextFrameCall(__gc);
+		}
+		#if debug
+		trace("releaseScene:", zScene);
+		#end
+	}
+
+	private var __gcing:Bool = false;
+
+	private function __gc():Void {
+		__gcing = false;
+		openfl.system.System.gc();
+		#if cpp
+		trace("[call gc...]");
+		#end
 	}
 
 	/**

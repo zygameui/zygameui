@@ -25,6 +25,9 @@ class ZLockScene extends ZScene {
 		if (_lockBitmap == null) {
 			_lockBitmap = new Bitmap();
 			_lockBitmapData = new BitmapData(Std.int(Start.current.getStageWidth()), Std.int(Start.current.getStageHeight()));
+			#if memory_monitor
+			zygame.core.Start.current.watch(_lockBitmapData);
+			#end
 			@:privateAccess _lockBitmapData.readable = false;
 			_lockBitmapData.draw(display);
 			_lockBitmap.bitmapData = _lockBitmapData;
@@ -50,7 +53,7 @@ class ZLockScene extends ZScene {
 		}
 		_scene = null;
 	}
-	
+
 	override function lockScene(display:DisplayObject = null) {}
 
 	override function unlockScene() {}

@@ -475,6 +475,9 @@ class BitmapDataLoader extends BaseLoader {
 					var texture:Texture = zygame.core.Start.current.stage.context3D.createTexture(2048, 2048, Context3DTextureFormat.COMPRESSED_ALPHA, false);
 					texture.uploadCompressedTextureFromByteArray(bytes, 0);
 					var bitmapData = BitmapData.fromTexture(cast untyped texture);
+					#if memory_monitor
+					zygame.core.Start.current.watch(bitmapData);
+					#end
 					if (call != null)
 						call(bitmapData);
 					call = null;
@@ -496,6 +499,9 @@ class BitmapDataLoader extends BaseLoader {
 						if (callError != null)
 							callError("无法加载" + path);
 					} else {
+						#if memory_monitor
+						zygame.core.Start.current.watch(bitmapData);
+						#end
 						bitmapData.path = path;
 						if (call != null)
 							call(bitmapData);
@@ -527,6 +533,9 @@ class BitmapDataLoader extends BaseLoader {
 					if (callError != null)
 						callError("无法加载" + path);
 				} else {
+					#if memory_monitor
+					zygame.core.Start.current.watch(bitmapData);
+					#end
 					bitmapData.path = path;
 					// if (call != null)
 					// 	call(bitmapData);

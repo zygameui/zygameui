@@ -138,7 +138,8 @@ class ZSound implements zygame.core.Refresher {
 	 */
 	public function stop():Void {
 		for (channel in _channels) {
-			channel.stop();
+			if (channel != null)
+				channel.stop();
 		}
 		_channels = [];
 		Start.current.removeToUpdate(this);

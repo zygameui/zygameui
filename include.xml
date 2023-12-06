@@ -152,4 +152,6 @@
 
 	<haxedef name="unshape_flag" if="wechat"/>
 
+	<haxeflag name="--debug" if="test" />
+
 </project>

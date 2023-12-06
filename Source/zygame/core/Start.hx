@@ -801,7 +801,7 @@ class Start extends ZScene {
 				zygame.core.Start3D.current.onRender();
 			#end
 			#if memory_monitor
-			MemoryMonitor.run();
+			this.memoryMonitor.run();
 			#end
 			// #if !cpp
 		}

@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import openfl.display.GraphicsShader;
 import openfl.Vector;
 import openfl.display.BitmapData;
 import openfl.display.Tileset;
@@ -28,13 +29,28 @@ class QuadsBatchs extends Shape {
 		_quads = new Vector(0, false);
 		_transform = new Vector(0, false);
 		this.graphics.clear();
-		this.graphics.beginBitmapFill(_tileset.bitmapData);
+		if (this.shader != null) {
+			cast(shader, GraphicsShader).bitmap.input = _tileset.bitmapData;
+			this.graphics.beginShaderFill(shader);
+		} else {
+			this.graphics.beginBitmapFill(_tileset.bitmapData);
+		}
 		for (i in 0...batch.numTiles) {
 			var tile = batch.getTileAt(i);
 			renderTileContainer(tile, 0, 0);
 		}
+		this.render();
+	}
+
+	public function render():Void {
+		this.graphics.clear();
+		if (this.shader != null) {
+			cast(shader, GraphicsShader).bitmap.input = _tileset.bitmapData;
+			this.graphics.beginShaderFill(shader);
+		} else {
+			this.graphics.beginBitmapFill(_tileset.bitmapData);
+		}
 		this.graphics.drawQuads(_quads, null, _transform);
-		_tileset = null;
 	}
 
 	/**

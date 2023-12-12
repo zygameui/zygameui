@@ -3,7 +3,7 @@
 	<!-- 原始实现 -->
 	<source path="Source" />
 	<haxelib name="openfl" />
-	<haxeflag name="--debug" if="debug"/>
+	<haxeflag name="--debug" if="debug" />
 	<!-- DPI自动感知行为，9.2.1的新DPI如果不开启会导致显示异常，开启后，可能会使内存增加 -->
 	<!-- <haxedef name="openfl_dpi_aware" if="meituan"/> -->
 	<!-- <define name="openfl_dpi_aware" if="${openfl >= 9.2.0} || focre_openfl_dpi_aware"/> -->
@@ -35,8 +35,8 @@
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
 
-	<define name="message.reporting" value="pretty" unless="ios"/>
-	<define name="message.log-format" value="pretty" unless="ios"/>
+	<define name="message.reporting" value="pretty" unless="ios" />
+	<define name="message.log-format" value="pretty" unless="ios" />
 
 	<!-- 无物理系统碰撞类 -->
 	<haxelib name="differ" />
@@ -83,7 +83,8 @@
 	<haxedef name="smoothing" if="cpp" unless="unsmoothing" />
 
 	<!-- 禁止图形使用软件刷新，使用OpenFL9将不再限制，但是在Android和IOS上遇到了一些布局错误的问题 -->
-	<!-- <define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios" /> -->
+	<!-- <define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios"
+	/> -->
 
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf" />
@@ -92,7 +93,9 @@
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->
-	<template path="template-html5/template/index.html" rename="index.html" unless="minigame" />
+	<template path="template-html5/template/index.html" rename="index.html"
+		unless="minigame || utest" />
+	<template path="template-html5/template/utest.html" rename="index.html" unless="utest" />
 
 	<!-- IOS以及Android进行64位支持 -->
 	<architecture name="arm64" exclude="armv7" if="ios" />
@@ -145,12 +148,12 @@
 	<haxeflag name="-D" value="hl-check" if="hl" />
 
 	<!-- 开启ES6 -->
-	<define name="es" value="6" if="js"/>
+	<define name="es" value="6" if="js" />
 
 	<!-- 默认启动GPU粒子 -->
 	<haxedef name="gpu_particles" unless="cpu_particles" />
 
-	<haxedef name="unshape_flag" if="wechat"/>
+	<haxedef name="unshape_flag" if="wechat" />
 
 	<haxeflag name="--debug" if="test" />
 

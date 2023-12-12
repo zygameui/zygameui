@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.components.data.MixColorData;
 import zygame.components.base.IBuilder;
 import zygame.components.style.XmlStyle;
 #if feathersui
@@ -313,12 +314,20 @@ class ZBuilder {
 		bindParsing(ZButton, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZButton).setTextStroke(Std.parseInt(value));
 		});
+		bindParsing(ZLabel, "mixData", function(ui:Dynamic, name:String, value:String):Void {
+			var array = value.split(",");
+			cast(ui, ZButton).mixColor = new MixColorData(Std.parseInt(array[0]), Std.parseInt(array[1]));
+		});
 		bindParsing(ZButton, "offest", function(ui:Dynamic, name:String, value:String):Void {
 			var args = value.split(",");
 			cast(ui, ZButton).setTextPos(Std.parseInt(args[0]), Std.parseInt(args[1]));
 		});
 		bindParsing(ZLabel, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).stroke(Std.parseInt(value));
+		});
+		bindParsing(ZLabel, "mixData", function(ui:Dynamic, name:String, value:String):Void {
+			var array = value.split(",");
+			cast(ui, ZLabel).mixColor = new MixColorData(Std.parseInt(array[0]), Std.parseInt(array[1]));
 		});
 		bindParsing(ZLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).dataProvider = value;

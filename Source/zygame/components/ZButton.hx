@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.components.data.MixColorData;
 import haxe.Timer;
 import openfl.events.TouchEvent;
 import zygame.media.SoundChannelManager;
@@ -262,6 +263,23 @@ class ZButton extends ToggleButton {
 	public function setTextSize(size:Int):Void {
 		initText();
 		_text.setFontSize(size);
+	}
+
+	/**
+	 * 设置文本的过渡色
+	 */
+	public var mixColor(get, set):MixColorData;
+
+	private function set_mixColor(v:MixColorData):MixColorData {
+		initText();
+		_text.mixColor = v;
+		return v;
+	}
+
+	private function get_mixColor():MixColorData {
+		if (_text == null)
+			return null;
+		return _text.mixColor;
 	}
 
 	/**

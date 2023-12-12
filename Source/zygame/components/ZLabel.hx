@@ -252,6 +252,8 @@ class ZLabel extends DataProviderComponent {
 			__textFieldStrokeShader.updateParam(__blur, __color);
 			if (mixColor != null)
 				__textFieldStrokeShader.updateMixColor(mixColor.startColor, mixColor.endColor);
+			else
+				__textFieldStrokeShader.updateMixColor(_font.color, _font.color);
 		}
 		this.__updateLabel();
 	}

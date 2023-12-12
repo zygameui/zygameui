@@ -314,7 +314,7 @@ class ZBuilder {
 		bindParsing(ZButton, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZButton).setTextStroke(Std.parseInt(value));
 		});
-		bindParsing(ZLabel, "mixData", function(ui:Dynamic, name:String, value:String):Void {
+		bindParsing(ZLabel, "mixColor", function(ui:Dynamic, name:String, value:String):Void {
 			var array = value.split(",");
 			cast(ui, ZButton).mixColor = new MixColorData(Std.parseInt(array[0]), Std.parseInt(array[1]));
 		});
@@ -325,7 +325,7 @@ class ZBuilder {
 		bindParsing(ZLabel, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).stroke(Std.parseInt(value));
 		});
-		bindParsing(ZLabel, "mixData", function(ui:Dynamic, name:String, value:String):Void {
+		bindParsing(ZLabel, "mixColor", function(ui:Dynamic, name:String, value:String):Void {
 			var array = value.split(",");
 			cast(ui, ZLabel).mixColor = new MixColorData(Std.parseInt(array[0]), Std.parseInt(array[1]));
 		});

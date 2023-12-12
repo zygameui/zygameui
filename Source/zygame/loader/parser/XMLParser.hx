@@ -19,6 +19,7 @@ class XMLParser extends ParserBase {
 				this.finalAssets(XML, Xml.parse(text), 1);
 			} catch (e:Exception) {
 				// 无效XML配置
+				trace(e.message, e.stack.toString());
 				this.sendError("无法加载：" + getData());
 			}
 		}).onError(function(err) {

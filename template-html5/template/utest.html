@@ -3,6 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title>::APP_TITLE::</title>
+    ::if linkedLibraries::::foreach (linkedLibraries)::
+	<script type="text/javascript" src="::__current__::"></script>::end::::end::
 	<script type="text/javascript" src="./::APP_FILE::.js"></script>
 </head>
 <body>

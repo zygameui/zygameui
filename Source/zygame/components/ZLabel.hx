@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.components.data.MixColorData;
 import openfl.events.RenderEvent;
 import openfl.geom.Matrix;
 import haxe.Exception;
@@ -232,9 +233,25 @@ class ZLabel extends DataProviderComponent {
 		this.addEventListener(RenderEvent.RENDER_OPENGL, __onRender);
 	}
 
+	/**
+	 * 过渡颜色支持
+	 */
+	public var mixColor(default, set):MixColorData;
+
+	private function set_mixColor(v:MixColorData):MixColorData {
+		this.mixColor = v;
+		if (__blur == 0 && this.mixColor == null)
+			this.getDisplay().shader = null;
+		else
+			this.getDisplay().shader = __textFieldStrokeShader;
+		return v;
+	}
+
 	private function __onRender(e:RenderEvent):Void {
 		if (this.getDisplay().shader != null) {
 			__textFieldStrokeShader.updateParam(__blur, __color);
+			if (mixColor != null)
+				__textFieldStrokeShader.updateMixColor(mixColor.startColor, mixColor.endColor);
 		}
 		this.__updateLabel();
 	}
@@ -408,18 +425,10 @@ class ZLabel extends DataProviderComponent {
 		}
 	}
 
-	// override private function get_dataProvider():Dynamic {
-	// 	if (_isHtml)
-	// 		return _display.htmlText;
-	// 	else {
-	// 		return _display.text;
-	// 	}
-	// }
-
 	override private function set_dataProvider(value:Dynamic):Dynamic {
 		if (__setFontSelectColor.length > 0)
 			__setFontSelectColor = [];
-		
+
 		if (value == null) {
 			value = "";
 		}
@@ -747,7 +756,7 @@ class ZLabel extends DataProviderComponent {
 	public function stroke(color:UInt, blur:Float = 1):Void {
 		__blur = blur;
 		__color = color;
-		if (blur == 0) {
+		if (blur == 0 && this.mixColor == null) {
 			this.getDisplay().shader = null;
 		} else {
 			this.getDisplay().shader = __textFieldStrokeShader;

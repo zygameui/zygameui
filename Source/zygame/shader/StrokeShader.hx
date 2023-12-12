@@ -1,5 +1,6 @@
 package zygame.shader;
 
+import zygame.utils.ColorUtils;
 import glsl.OpenFLShader;
 import VectorMath;
 import glsl.GLSL;
@@ -8,8 +9,25 @@ import glsl.GLSL;
  * 描边着色器
  */
 class StrokeShader extends OpenFLShader {
+	/**
+	 * 描边的大小
+	 */
 	@:uniform public var storksize:Float;
-	@:uniform public var textcolor:Vec3;
+
+	/**
+	 * 描边的颜色
+	 */
+	@:uniform public var storkcolor:Vec4;
+
+	/**
+	 * 字体开始的颜色（顶部）
+	 */
+	@:uniform public var startcolor:Vec4;
+
+	/**
+	 * 字体结束的颜色（底部）
+	 */
+	@:uniform public var endcolor:Vec4;
 
 	/**
 	 * 检测当前这个点的偏移位置是否包含透明度
@@ -43,12 +61,14 @@ class StrokeShader extends OpenFLShader {
 
 	override function fragment() {
 		super.fragment();
+		// 渐变色支持
+		color = mix(startcolor, endcolor, gl_openfl_TextureCoordv.y) * color.a;
 		for (i in 0...6) {
-			if (float(i) > (storksize + 1.))
+			if (float(i) > (storksize))
 				break;
 			var alpha:Float = circleCheck(gl_openfl_TextureCoordv, float(i));
 			if (alpha > 0.) {
-				gl_FragColor = vec4(textcolor, 1) * alpha;
+				gl_FragColor = storkcolor * alpha;
 				if (color.a > 0.) {
 					gl_FragColor = vec4(color.rgb, 1);
 				}
@@ -57,16 +77,25 @@ class StrokeShader extends OpenFLShader {
 		gl_FragColor *= gl_openfl_Alphav;
 	}
 
-	public function new(size:Float = 1.5, color:UInt = 0x0) {
+	public function new(size:Float = 1.5, color:UInt = 0x0, scolor:UInt = 0, ecolor:UInt = 0) {
 		super();
+		// 初始化渐变色
+		u_startcolor.value = [0, 0, 0, 1];
+		u_endcolor.value = [0, 0, 0, 1];
 		updateParam(size, color);
+		updateMixColor(scolor, ecolor);
 	}
 
 	public function updateParam(size:Float, color:UInt):Void {
-		u_storksize.value = [size];
-		var r = (color >> 16) & 0xFF;
-		var g = (color >> 8) & 0xFF;
-		var b = color & 0xFF;
-		u_textcolor.value = [r / 255, g / 255, b / 255];
+		u_storksize.value = [size > 0 ? size + 1 : size];
+		var scolor = ColorUtils.toShaderColor(color);
+		u_storkcolor.value = [scolor.r, scolor.g, scolor.b, 1];
+	}
+
+	public function updateMixColor(start:Float, end:Float):Void {
+		var scolor = ColorUtils.toShaderColor(start);
+		var ecolor = ColorUtils.toShaderColor(end);
+		u_startcolor.value = [scolor.r, scolor.g, scolor.b, 1];
+		u_endcolor.value = [ecolor.r, ecolor.g, ecolor.b, 1];
 	}
 }

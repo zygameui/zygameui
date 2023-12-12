@@ -93,9 +93,12 @@
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->
-	<template path="template-html5/template/index.html" rename="index.html"
+	<!-- <template path="template-html5/template/index.html" rename="index.html"
 		unless="minigame || utest" />
-	<template path="template-html5/template/utest.html" rename="index.html" if="utest" />
+	<template path="template-html5/template/utest.html" rename="index.html" if="utest" /> -->
+
+	<template path="template-html5/template/index.html" rename="index.html"
+		unless="minigame" />
 
 	<!-- IOS以及Android进行64位支持 -->
 	<architecture name="arm64" exclude="armv7" if="ios" />

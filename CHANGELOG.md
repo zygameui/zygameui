@@ -9,6 +9,9 @@
 
 # ZYGameUI 更新日志
 
+### 14.0.14
+- [新增] 新增`ZLabel`和`ZButton`的`mixColor`过渡色支持；
+
 ### 14.0.9
 - [改进] 修复`StorkeShader`的描边锯齿的问题；
 - [新增] 新增`FListView`计数器多选支持`countsField`；

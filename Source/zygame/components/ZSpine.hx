@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.ZLog;
 import haxe.Exception;
 import openfl.display.Shader;
 import zygame.utils.SpineManager;
@@ -102,7 +103,7 @@ class ZSpine extends ZBox {
 				}
 			}
 		} catch (e:Exception) {
-			// trace("异常，无法找到皮肤：" + name);
+			ZLog.warring("皮肤不存在：" + name);
 		}
 		return name;
 	}
@@ -150,7 +151,7 @@ class ZSpine extends ZBox {
 				spine.playForce(v, isLoop);
 		} catch (e:Exception) {
 			#if !final
-			trace("异常：动作" + v + "不存在");
+			ZLog.error("异常：动作" + v + "不存在");
 			#end
 		}
 		return v;
@@ -220,7 +221,7 @@ class ZSpine extends ZBox {
 			}
 			spine = ZBuilder.createSpineSpriteSkeleton(atlasName, skeletionName);
 			if (spine == null)
-				trace("Error:" + atlasName + ":" + skeletionName + " spine is not create");
+				ZLog.error("Error:" + atlasName + ":" + skeletionName + " spine is not create");
 			// spine.isNative = native;
 			if (spine != null) {
 				this.addChild(spine);

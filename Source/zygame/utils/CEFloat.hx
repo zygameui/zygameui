@@ -147,8 +147,6 @@ abstract CEFloat(CEData) to CEData from CEData {
 	};
 }
 
-// 默认启动cebytes
-#if true
 /**
  * 一种防止内存修改器进行修改的简易方案
  * 使用`cebytes`可使用该模式，所有的数值都需要经过加密解密得到
@@ -187,43 +185,6 @@ class CEData {
 		for (i in 0...bytes.length) {
 			bytes.set(i, bytes.get(i) ^ random);
 		}
-		// trace("加密后：", value, bytes.toString());
 		return value;
 	}
 }
-#else
-
-/**
- * 一种防止内存修改器进行修改的简易方案
- */
-class CEData {
-	/**
-	 * 签名值
-	 */
-	public var sign:String = null;
-
-	public function new(value:Float) {
-		this.value = value;
-	}
-
-	public var value(get, set):Float;
-
-	public var values:Array<String> = [];
-
-	public function toString():String {
-		return Std.string(value);
-	}
-
-	function get_value():Float {
-		if (sign != values.join(""))
-			throw "游戏内存被修改";
-		return Std.parseFloat(sign.substr(1));
-	}
-
-	function set_value(value:Float):Float {
-		sign = Std.string(value);
-		values = sign.split("");
-		return value;
-	}
-}
-#end

@@ -39,7 +39,6 @@ class JSONData {
 		var rootJsonPath = jsonPath;
 		var project:ZProjectData = AutoBuilder.firstProjectData;
 		jsonPath = project.assetsPath.get(StringUtils.getName(jsonPath) + ".json");
-		// trace("jsonPath=", jsonPath);
 		if (jsonPath == null)
 			jsonPath = rootJsonPath;
 		var data:Dynamic = haxe.Json.parse(File.getContent(jsonPath));
@@ -81,23 +80,6 @@ class JSONData {
 					if (t == null) {
 						var getData:Dynamic = keyValue[0];
 						t = getType(getData, Context.currentPos(), doc);
-						// switch t {
-						// 	case TAnonymous(a):
-						// 		// Context.onAfterInitMacros(() -> {
-						// 		var typedefName = 'JSON${className}Typedef';
-						// 		trace("t=", typedefName);
-						// 		Context.defineModule("JSONDataType", [
-						// 			{
-						// 				name: typedefName,
-						// 				pack: [],
-						// 				pos: Context.currentPos(),
-						// 				fields: a,
-						// 				kind: TDAlias(t)
-						// 			}
-						// 		]);
-						// 	// });
-						// 	default:
-						// }
 					}
 					// var t2 = haxe.macro.Type.TType({
 					// 	name: "Test1",

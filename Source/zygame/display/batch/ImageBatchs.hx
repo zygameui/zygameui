@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import zygame.utils.ZLog;
 import haxe.Exception;
 import openfl.display.Tilemap;
 import zygame.utils.load.Atlas;
@@ -121,7 +122,7 @@ class ImageBatchs extends Tilemap {
 			if (tile != null)
 				return true;
 		} catch (e:Exception) {
-			trace("[Tilemap hitTest Exception:" + e.message + "]");
+			ZLog.exception(e);
 		}
 		return false;
 	}

@@ -8,7 +8,7 @@ import haxe.Rest;
  * var timelineData = new TimelineData(100,60);
  * timelineData.advanceTime(Start.current.frameDt);
  * // 获得当前帧，或帧进度
- * trace(timelineData.currentFrame, timelineData.currentFrameRate);
+ * ZLog.log(timelineData.currentFrame, timelineData.currentFrameRate);
  * ```
  */
 class TimelineData {

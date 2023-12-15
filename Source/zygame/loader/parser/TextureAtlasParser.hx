@@ -1,5 +1,6 @@
 package zygame.loader.parser;
 
+import zygame.utils.ZLog;
 import haxe.Exception;
 import zygame.utils.Lib;
 import zygame.utils.load.TextureLoader.TextureAtlas;
@@ -75,9 +76,7 @@ class TextureAtlasParser extends ParserBase {
 					try {
 						xmlContext = Xml.parse(xmldata);
 					} catch (e:Exception) {
-						// #if !final
-						trace("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path, e.message);
-						// #end
+						ZLog.exception(e);
 						sendError("TextureAtlas Xml.Parser.Error XML无法加载路径：" + getData().path);
 						return;
 					}

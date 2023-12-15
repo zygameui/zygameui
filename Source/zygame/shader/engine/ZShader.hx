@@ -1,5 +1,6 @@
 package zygame.shader.engine;
 
+import zygame.utils.ZLog;
 import haxe.Exception;
 import zygame.utils.load.Frame;
 import zygame.core.Start;
@@ -139,7 +140,7 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 	public function setValue(key:String, data:Dynamic):Void {
 		var value:Dynamic = Reflect.getProperty(this, key);
 		if (value == null) {
-			trace("key '" + key + "' is null");
+			ZLog.warring("key '" + key + "' is null");
 			return;
 		}
 		value.value = Std.isOfType(data, Array) ? data : [data];
@@ -177,7 +178,7 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 		try {
 			super.__updateGL();
 		} catch (e:Exception) {
-			trace("Shader.__updateGL:" + e.message);
+			ZLog.exception(e);
 		}
 	}
 
@@ -186,7 +187,7 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 			super.__init();
 		} catch (e:Exception) {
 			this.dipose();
-			trace("Shader.__init:" + e.message);
+			ZLog.exception(e);
 		}
 	}
 
@@ -194,7 +195,7 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 		try {
 			super.__enable();
 		} catch (e:Exception) {
-			trace("Shader.__enable:" + e.message);
+			ZLog.exception(e);
 		}
 	}
 }

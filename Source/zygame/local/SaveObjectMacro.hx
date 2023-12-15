@@ -38,7 +38,6 @@ class SaveObjectMacro {
 		if (newfunc != null) {
 			switch newfunc.kind {
 				case FFun(f):
-					trace(f);
 					switch f.expr.expr {
 						case EBlock(exprs):
 							exprs.push(macro ce = $v{cenames});

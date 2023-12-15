@@ -1,5 +1,6 @@
 package zygame.mini;
 
+import zygame.utils.ZLog;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
 import zygame.utils.AssetsUtils.BytesSoundLoader;
 import zygame.script.ZHaxe;
@@ -70,16 +71,15 @@ class MiniEngineAssets extends ZAssets {
 		}
 		var zip = this.getZip(StringUtils.getName(path));
 		var id = entryKeys.next();
-		if(id.indexOf(".") == 0){
-			//隐藏文件
+		if (id.indexOf(".") == 0) {
+			// 隐藏文件
 			nextLoad();
 			return;
 		}
 		var pngid:String = StringUtils.getName(id);
-		if (zip.getJson(pngid) != null)
-		{
-			//默认写入
-			this.setObject(pngid,zip.getJson(pngid));
+		if (zip.getJson(pngid) != null) {
+			// 默认写入
+			this.setObject(pngid, zip.getJson(pngid));
 		}
 		if (StringTools.endsWith(id, "png") || StringTools.endsWith(id, "jpg")) {
 			// 开始加载png/jpg
@@ -105,7 +105,7 @@ class MiniEngineAssets extends ZAssets {
 			var hxid = StringUtils.getName(id);
 			var main = zip.getHScript(hxid);
 			var minihaxe = MiniEngine.parseMiniHaxe(main);
-			trace("minihaxe=",minihaxe.xml.toString());
+			ZLog.log("minihaxe:\n" + minihaxe.xml.toString());
 			this.setXml(hxid, this.onParsingHaxeData(hxid, minihaxe.xml));
 			haxeMaps.set(hxid, minihaxe);
 			for (key => value in minihaxe.vars) {

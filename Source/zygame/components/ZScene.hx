@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.ZLog;
 import openfl.display.DisplayObject;
 import zygame.core.Start;
 import zygame.components.ZBox;
@@ -113,7 +114,7 @@ class ZScene extends ZBox {
 			display = cast(this, ZBuilderScene).assetsBuilder.display;
 		}
 		if (display == null || display.parent != this) {
-			trace("lockScene Error:Display's parent not is this.");
+			ZLog.error("lockScene Error:Display's parent not is this.");
 			return;
 		}
 		_lockScene = new ZLockScene();

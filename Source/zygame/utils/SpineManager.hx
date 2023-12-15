@@ -82,25 +82,6 @@ class SpineManager {
 	}
 
 	/**
-	 * 输出调试信息
-	 */
-	// public static function echoDebugInfo():Void {
-	// 	var spineUpdateList:Array<Dynamic> = [];
-	// 	for (display in spineOnFrames) {
-	// 		if (!display.isHidden() && display.isPlay) {
-	// 			if (Std.isOfType(display, SkeletonSprite)) {
-	// 				var spine = cast(display, SkeletonSprite);
-	// 				spineUpdateList.push({
-	// 					action: spine.assetsId,
-	// 					isCache: spine.isCache
-	// 				});
-	// 			}
-	// 		}
-	// 	}
-	// 	trace(spineUpdateList.length, spineUpdateList);
-	// }
-
-	/**
 	 * 更新过滤器，如果返回的是true，则进行渲染，否则则不渲染
 	 */
 	public static var onSpineUpdateFilter:SpineBaseDisplay->Bool;

@@ -1,5 +1,6 @@
 package zygame.loader.parser;
 
+import zygame.utils.ZLog;
 import haxe.Exception;
 import zygame.utils.AssetsUtils;
 
@@ -19,7 +20,7 @@ class XMLParser extends ParserBase {
 				this.finalAssets(XML, Xml.parse(text), 1);
 			} catch (e:Exception) {
 				// 无效XML配置
-				trace(e.message, e.stack.toString());
+				ZLog.exception(e);
 				this.sendError("无法加载：" + getData());
 			}
 		}).onError(function(err) {

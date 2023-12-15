@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.ZLog;
 import zygame.core.Start;
 import zygame.media.base.Sound;
 import zygame.media.base.SoundChannel;
@@ -88,7 +89,7 @@ class ZSound implements zygame.core.Refresher {
 		var sound:Sound = ZBuilder.getBaseSound(src);
 		if (sound != null) {
 			// 开始播放
-			trace("[Warring]ZSound:" + src + "播放");
+			ZLog.warring("ZSound:" + src + "播放");
 			_channels.push(sound.play(0, loop));
 			_currentFrame = 0;
 			_soundIndex++;
@@ -101,7 +102,7 @@ class ZSound implements zygame.core.Refresher {
 				}
 			}
 		} else {
-			trace("[Warring]ZSound:" + src + "不存在");
+			ZLog.warring("ZSound:" + src + "不存在");
 			// 已成为无效音频，直接停止
 			stop();
 		}

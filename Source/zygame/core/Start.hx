@@ -6,9 +6,6 @@ import openfl.events.TouchEvent;
 import com.junkbyte.console.Cc;
 import com.junkbyte.console.addons.memorytracker.MemoryTrackerAddon;
 #end
-#if performance_analysis
-import zygame.macro.performance.PerformanceAnalysis;
-#end
 import zygame.utils.ScaleUtils;
 #if lime
 import lime.graphics.RenderContext;
@@ -382,7 +379,7 @@ class Start extends ZScene {
 
 	private function superInitEvent(e:Event):Void {
 		super.onInitEvent(e);
-		trace("[zygameui stage size]", "width:", this.getStageWidth(), "height:", this.getStageHeight());
+		ZLog.log("[zygameui stage size]" + "width:" + this.getStageWidth() + " height:" + this.getStageHeight());
 	}
 
 	/**
@@ -483,9 +480,6 @@ class Start extends ZScene {
 		}
 		var cpu = Timer.stamp();
 		_cpuDt = Std.int((cpu - newTime) * 1000);
-		#if performance_analysis
-		PerformanceAnalysis.onFrame();
-		#end
 	}
 	#end
 
@@ -493,10 +487,6 @@ class Start extends ZScene {
 		#if lime
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);
-		#end
-
-		#if performance_analysis
-		PerformanceAnalysis.init();
 		#end
 
 		#if cpp

@@ -18,7 +18,6 @@ class AutoBuilder {
 
 	static function get_firstProjectData():ZProjectData {
 		if (_firstProjectData == null) {
-			trace("first create project data.");
 			_firstProjectData = new ZProjectData();
 		}
 		return _firstProjectData;
@@ -38,15 +37,8 @@ class AutoBuilder {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
 
-		// var jsonPath = project.assetsPath.get("material.json");
-		// Json.parse(File.getContent(jsonPath));
-
-		// trace("parser", path);
-
 		var fields = Context.getBuildFields();
-		// return fields;
 
-		// Context.registerModuleDependency(Context.getLocalModule(), path);
 		var builder:ZBuilderData = new ZBuilderData(path, project);
 
 		bindBuilder = bindBuilder == null ? "assetsBuilder" : bindBuilder;
@@ -153,7 +145,6 @@ class AutoBuilder {
 						if ($v{embed}) {
 							this.$bindBuilder = zygame.components.ZBuilder.build(Xml.parse($v{builder.content}), this);
 						} else {
-							// trace("build:",$v{path});
 							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName($v{path}), this);
 						}
 					}

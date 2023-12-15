@@ -1,8 +1,5 @@
 package zygame.utils;
 
-#if performance_analysis
-import zygame.macro.performance.PerformanceAnalysis;
-#end
 import zygame.components.ZBox;
 import zygame.components.ZQuad;
 import zygame.core.Start;
@@ -99,8 +96,7 @@ class FPSDebug extends ZBox {
 				var msg = "CPU:" + getCpu() + "\nMODE:" + Lib.getRenderMode() + "\nMEM:" + mem + "MB\nMaxMEN:" + memPeak + "MB\nUPDATES:"
 					+ zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count() + "\nS_RUNING:" + SpineManager.playingCount
 					+ "\nFPS:" + Std.int(16 / fps * 60) + "_" + Start.current.renderFps + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:"
-					+ Start.currentScale + "\nRETAIN:" + GC.getRetainCounts() #if performance_analysis + "\nGL_BIND:" +
-				PerformanceAnalysis.glBindTextureCounts; #else; #end
+					+ Start.currentScale + "\nRETAIN:" + GC.getRetainCounts();
 				_text.dataProvider = msg;
 				if (_alltimes > 60) {
 					_alldt = 0;

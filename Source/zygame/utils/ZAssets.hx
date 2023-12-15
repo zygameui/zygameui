@@ -358,7 +358,7 @@ class ZAssets {
 		for (base in _parsers) {
 			if (base.equal(parser)) {
 				// 队列已存在
-				// trace("队列已存在相同的加载资源：", parser);
+				ZLog.warring(["队列已经存在相同的加载资源：", parser.getName()]);
 				return;
 			}
 		}
@@ -367,7 +367,7 @@ class ZAssets {
 		if (getBitmapData(name) != null)
 			return;
 		#if assets_debug
-		trace("[push pasrers]", parser.getName());
+		ZLog.log("[push pasrers]", parser.getName());
 		#end
 		_parsers.push(parser);
 	}
@@ -464,7 +464,7 @@ class ZAssets {
 		// 加载循序排序，优先加载zip资源
 		_parsers.sort((a, b) -> Std.isOfType(a, ZIPAssetsParser) ? -1 : 0);
 		#if assets_debug
-		trace("PARSER LOAD START:", _parsers);
+		ZLog.log("PARSER LOAD START:", _parsers);
 		#end
 		if (_parsers.length == 0) {
 			// 没有任何加载资源，直接成功
@@ -517,7 +517,7 @@ class ZAssets {
 				this._parsers = [];
 				this._loadfilelist = [];
 				#if assets_debug
-				trace("载入进度：" + Std.int(curprogress * 100) + "%");
+				ZLog.log("载入进度：" + Std.int(curprogress * 100) + "%");
 				#end
 				_loadStop = true;
 				if (_callBack != null) {
@@ -539,7 +539,7 @@ class ZAssets {
 		}
 
 		#if assets_debug
-		trace("载入进度：" + currentLoadIndex, currentLoadNumber, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
+		ZLog.log("载入进度：" + currentLoadIndex, currentLoadNumber, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
 		#end
 		parser.out = onAssetsOut;
 		parser.done = loadDone;
@@ -556,7 +556,7 @@ class ZAssets {
 	}
 
 	private function loadError(msg:String):Void {
-		trace("载入发生异常，错误：" + msg);
+		ZLog.error("载入发生异常：" + msg);
 		if (_loadStop) {
 			return;
 		}
@@ -610,18 +610,6 @@ class ZAssets {
 	 * @return Float
 	 */
 	public function getProgress():Float {
-		// if (_parsers.length == 0)
-		// return 1;
-		// trace("currentLoadNumber=", currentLoadNumber, currentLoadedCount);
-		// var progress:Float = 0;
-		// for (base in _loadingParsers) {
-		// 	progress += base.progress;
-		// }
-		// if (progress > 0 && _loadingParsers.length > 0) {
-		// 	progress /= _loadingParsers.length;
-		// 	progress = _loadingParsers.length / getNowLoadCount() * progress;
-		// }
-		// return this.currentLoadedCount / getNowLoadCount() + progress;
 		return currentLoadedCount / currentLoadNumber;
 	}
 
@@ -676,9 +664,6 @@ class ZAssets {
 				this._dynamicAtlas.set(parser.getName(), data);
 			case SWF:
 				#if (openfl_swf && swf)
-				#if assets_debug
-				trace("Swf set ", parser.getName(), data);
-				#end
 				this._swflites.set(parser.getName(), data);
 				#end
 			case FNT:
@@ -723,7 +708,7 @@ class ZAssets {
 		if (_callBack != null)
 			_callBack(getProgress());
 		#if assets_debug
-		trace(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
+		ZLog.log(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
 		#end
 		// 如果已经加载停止了，则直接释放已有的资源
 		if (_loadStop) {
@@ -1067,7 +1052,6 @@ class ZAssets {
 			fontName = ZConfig.fontName;
 		var t:ZCacheTextField = _textcache.get(id);
 		if (t == null) {
-			trace("cacheText id(" + id + ")无纹理对象");
 			t = new ZCacheTextField(id, fontName, size, color);
 			// 是否自动换行
 			t.cacheAutoWrap = autoWarp;
@@ -1075,7 +1059,6 @@ class ZAssets {
 			_textcache.set(id, t);
 		} else {
 			// 是否自动换行
-			trace("cacheText id(" + id + ")已存在旧纹理对象");
 			t.cacheAutoWrap = autoWarp;
 			t.text = text;
 		}
@@ -1415,9 +1398,7 @@ class ZAssets {
 	 * @param id
 	 */
 	public function removeTextCache(id:String):Void {
-		trace("cacheText id(" + id + ")移除纹理缓存");
 		if (_textcache.exists(id)) {
-			trace("cacheText id(" + id + ")移除成功");
 			_textcache.get(id).dispose();
 			_textcache.remove(id);
 		}

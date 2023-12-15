@@ -61,7 +61,7 @@ class ZSceneManager {
 					Reflect.setProperty(scene, value, Reflect.getProperty(parameter, value));
 				}
 			} catch (e:Exception) {
-				trace("无法赋值");
+				ZLog.exception(e);
 			}
 		}
 	}
@@ -117,9 +117,6 @@ class ZSceneManager {
 			__gcing = true;
 			Lib.nextFrameCall(__gc);
 		}
-		#if debug
-		trace("releaseScene:", zScene);
-		#end
 	}
 
 	private var __gcing:Bool = false;
@@ -127,9 +124,6 @@ class ZSceneManager {
 	private function __gc():Void {
 		__gcing = false;
 		openfl.system.System.gc();
-		#if cpp
-		trace("[call gc...]");
-		#end
 	}
 
 	/**
@@ -177,9 +171,6 @@ class ZSceneManager {
 				_history.shift();
 			}
 		}
-		#if debug
-		trace("replaceScene:", cName);
-		#end
 		// 如果是释放，则提前将ZAssets释放掉
 		if (isReleaseScene && Std.isOfType(zscene, ZBuilderScene)) {
 			ZBuilder.unbindAssets(cast(zscene, ZBuilderScene).assetsBuilder.assets);
@@ -218,17 +209,10 @@ class ZSceneManager {
 				newscene.addEventListener(Event.COMPLETE, _eventComplete);
 			}
 		}
-		#if debug
-		trace("replaceScene addChild:", cName);
-		#end
 		if (newscene.parent == null)
 			Start.current.addChild(newscene);
 		else
 			newscene.visible = true;
-		#if performance_analysis
-		// 切换场景时更新一下
-		PerformanceAnalysis.log();
-		#end
 		onReplaceScene();
 		return newscene;
 	}

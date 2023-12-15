@@ -1,5 +1,7 @@
 package zygame.media;
 
+import zygame.utils.ZLog;
+import haxe.Exception;
 import zygame.events.SoundChannelManagerEvent;
 import openfl.events.EventDispatcher;
 import openfl.events.Event;
@@ -71,8 +73,8 @@ class SoundChannelManager extends EventDispatcher {
 					});
 					return c;
 				}
-			} catch (e:Dynamic) {
-				trace("音频播放异常：", e);
+			} catch (e:Exception) {
+				ZLog.exception(e);
 			}
 			return null;
 		}
@@ -84,9 +86,8 @@ class SoundChannelManager extends EventDispatcher {
 	 * @param sound
 	 */
 	private function playMusic(sound:Music):Void {
-		// trace("[背景音乐]playMusic");
 		if (_musicChannel != null && sound == _music) {
-			trace("[背景音乐]不能重复播放");
+			ZLog.warring("[背景音乐]不能重复播放");
 			return;
 		}
 		this.stopMusic();
@@ -94,12 +95,11 @@ class SoundChannelManager extends EventDispatcher {
 		try {
 			if (_musicAvailable) {
 				if (_music != null) {
-					trace("[背景音乐]开始播放");
 					_musicChannel = _music.play(99999);
 				}
 			}
-		} catch (e:Dynamic) {
-			trace("音频播放异常：", e);
+		} catch (e:Exception) {
+			ZLog.exception(e);
 		}
 	}
 
@@ -107,7 +107,6 @@ class SoundChannelManager extends EventDispatcher {
 	 * 停止背景音效
 	 */
 	public function stopMusic(canResume:Bool = false):Void {
-		// trace("[背景音乐]stopMusic");
 		if (_musicChannel != null) {
 			_musicChannel.stop();
 			_musicChannel = null;
@@ -122,7 +121,6 @@ class SoundChannelManager extends EventDispatcher {
 	 * @param force 是否强制恢复
 	 */
 	public function resumeMusic(force:Bool = false):Void {
-		// trace("[背景音乐]resumeMusic:force=" + force);
 		if (force) {
 			stopMusic(true);
 		}

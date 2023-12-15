@@ -100,7 +100,7 @@ class AssetsUtils {
 		// 将缓存清理
 		var md5path:String = haxe.crypto.Md5.encode(url);
 		if (sys.FileSystem.exists(lime.system.System.applicationStorageDirectory + md5path)) {
-			trace("缓存异常，删除：", lime.system.System.applicationStorageDirectory + md5path);
+			zygame.utils.ZLog.warring("缓存异常，删除：", lime.system.System.applicationStorageDirectory + md5path);
 			sys.FileSystem.deleteFile(lime.system.System.applicationStorageDirectory + md5path);
 			return true;
 		}
@@ -290,7 +290,7 @@ class BytesLoader extends BaseLoader {
 			var responseBytes = new haxe.io.BytesOutput();
 			req.onError = function(err) {
 				// 超时会走这里
-				trace("http.onError status = ", err, AssetsUtils.ofPath(path));
+				ZLog.error(["http.onError status = ", err, AssetsUtils.ofPath(path)]);
 				if (isError)
 					return;
 				isError = true;
@@ -552,7 +552,7 @@ class BitmapDataLoader extends BaseLoader {
 				__listeners.remove(path);
 				if (loadTimes < AssetsUtils.failTryLoadTimes) {
 					// 重试
-					trace("重载：" + path + "," + loadTimes);
+					ZLog.warring("重载：" + path + "," + loadTimes);
 					loadTimes++;
 					onComplete2(call);
 				} else if (callError != null)
@@ -609,7 +609,7 @@ class TextLoader extends BaseLoader {
 		data.addEventListener(IOErrorEvent.IO_ERROR, function(e):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
-				trace("重载：" + path + "," + loadTimes);
+				ZLog.warring("重载：" + path + "," + loadTimes);
 				loadTimes++;
 				onComplete(_onCompleteCall);
 			} else
@@ -646,7 +646,7 @@ class SoundLoader extends BaseLoader {
 		sound.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):Void {
 			if (loadTimes < AssetsUtils.failTryLoadTimes) {
 				// 重试
-				trace("重载：" + path + "," + loadTimes);
+				ZLog.warring("重载：" + path + "," + loadTimes);
 				loadTimes++;
 				onComplete(_onCompleteCall);
 			} else

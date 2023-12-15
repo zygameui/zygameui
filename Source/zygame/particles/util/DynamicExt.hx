@@ -6,7 +6,7 @@ package zygame.particles.util;
  * var data:DynamicExt = {
  *  a:"data"
  * };
- * trace(data["a"]);
+ * ZLog.log(data["a"]);
  * ```
  */
 abstract DynamicExt(Dynamic) from Dynamic to Dynamic {

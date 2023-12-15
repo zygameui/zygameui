@@ -19,11 +19,9 @@ class Lazy {
 				// 改造成异步调用
 				switch (item.kind) {
 					case FVar(t, e):
-						// fields.remove(item);
 						// 构造一个get/set变量
 						var prop:FieldType = FieldType.FProp("get", "never", t);
 						item.kind = prop;
-                        // trace(ExprTools.toString(e));
 						var getfunc:Field = {
 							name: "get_" + item.name,
 							meta: [],

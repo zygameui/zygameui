@@ -19,7 +19,6 @@ class DebugMacro {
 		if (cname.indexOf("_Fields_") != -1) {
 			return array;
 		}
-		trace("处理", cname);
 		for (item in array) {
 			if (item.access.indexOf(AInline) != -1)
 				continue;

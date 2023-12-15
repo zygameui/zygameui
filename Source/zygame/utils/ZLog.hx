@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.Exception;
 #if js
 import js.html.Console;
 #end
@@ -35,6 +36,16 @@ class ZLog {
 		#elseif sys
 		Sys.println(str);
 		#end
+	}
+
+	/**
+	 * 将`Exception`输出
+	 * @param e 
+	 */
+	public static function exception(e:Exception, ?infos:PosInfos):Void {
+		var message = e.message + "\n" + e.stack.toString();
+		var str = haxe.Log.formatOutput(message, infos);
+		error(str, infos);
 	}
 
 	/**

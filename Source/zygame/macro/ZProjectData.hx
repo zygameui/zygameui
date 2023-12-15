@@ -1,5 +1,6 @@
 package zygame.macro;
 
+import zygame.utils.ZLog;
 #if macro
 import sys.io.Process;
 import sys.io.File;
@@ -59,7 +60,6 @@ class ZProjectData {
 							proess.kill();
 						}
 						var array = haxelibPath.get(item.get("name")).split(" ");
-						trace("array", item.get("name"), array);
 						var haxepath = null;
 						for (s in array) {
 							var low = s.toLowerCase();
@@ -69,7 +69,7 @@ class ZProjectData {
 								break;
 							}
 						}
-						trace("读取路径：", haxepath + "../include.xml");
+						ZLog.log("读取路径：" + haxepath + "../include.xml");
 						readXml(haxepath + "../include.xml", haxepath + "../");
 					}
 			}
@@ -111,9 +111,7 @@ class ZProjectData {
 			if (id.indexOf(".") != 0) {
 				assetsRenamePath.set(id, rename);
 				var curPath = assetsPath.get(id);
-				if (assetsPath.exists(id) && curPath != path) {
-					// trace("File duplicate:" + path + " in (" + curPath + ")");
-				} else {
+				if (assetsPath.exists(id) && curPath != path) {} else {
 					assetsPath.set(id, path);
 				}
 			}

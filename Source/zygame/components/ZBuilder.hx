@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.ZLog;
 import zygame.components.data.MixColorData;
 import zygame.components.base.IBuilder;
 import zygame.components.style.XmlStyle;
@@ -1089,7 +1090,7 @@ class ZBuilder {
 						cast(parent, Tile).shader = ui;
 					}
 				} catch (e:Exception) {
-					trace("异常：", e.message + "\n" + e.stack);
+					ZLog.exception(e);
 					if (Std.isOfType(parent, DisplayObject)) {
 						cast(parent, DisplayObject).shader = null;
 					} else if (Std.isOfType(parent, Tile)) {
@@ -1205,9 +1206,7 @@ class ZBuilder {
 				}
 			} else if (name == "tween") {
 				// 过渡动画实现
-				// trace("过渡动画实现：", parsingName);
 				tween = value;
-				// setProperty(ui, name, new ZTween(ZBuilder.getBaseXml(value)));
 			} else if (parsingMaps.exists(parsingName)) {
 				parsingMaps.get(parsingName)(ui, name, value);
 			} else if (Std.isOfType(att, Float) && value.indexOf("0x") == -1) {
@@ -1364,9 +1363,7 @@ class ZBuilder {
 		#if (cpp || hl)
 		try {
 			Reflect.setProperty(data, key, value);
-		} catch (e:Dynamic) {
-			// trace(data,"set fail:",key,value);
-		}
+		} catch (e:Dynamic) {}
 		#else
 		Reflect.setProperty(data, key, value);
 		#end
@@ -1601,7 +1598,7 @@ class AssetsBuilder extends Builder {
 	private function buildAllAssets(isNewXmlPath:Bool, existXml:Xml, cb:Bool->Void, onloaded:Void->Void = null):Void {
 		var viewxml = assets.getXml(StringUtils.getName(viewXmlPath)) ?? existXml;
 		if (viewxml == null) {
-			trace("无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。");
+			ZLog.error("无法解析XML资源：" + viewXmlPath + ", 一般可能是加载此资源的时候`ZBuilder.existFile`判断存在，后被释放掉；同时可能是因为`ZBuilder.bindAssets`错误绑定的原因导致的错误。");
 			cb(false);
 			return;
 		}

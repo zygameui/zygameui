@@ -117,7 +117,7 @@ class ZButton extends ToggleButton {
 	 * 点击事件，通过简易的方法对它侦听点击事件：
 	 * ```haxe
 	 * btn.clickEvent = function(){
-	 * 	trace("点击成功");
+	 * 	ZLog.log("点击成功");
 	 * }
 	 * ```
 	 */

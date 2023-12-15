@@ -1,5 +1,6 @@
 package zygame.local;
 
+import zygame.utils.ZLog;
 import haxe.Exception;
 import haxe.io.Error;
 import zygame.utils.Lib;
@@ -93,8 +94,6 @@ class SaveObject<T:SaveObjectData> {
 							value = Encryption.decode(value);
 							Reflect.setProperty(localData, k, value);
 						} else {
-							// Key丢失
-							// trace("存档key丢失：", id);
 							lossKey.push(k);
 						}
 					}
@@ -110,16 +109,13 @@ class SaveObject<T:SaveObjectData> {
 					if (value != null) {
 						Reflect.setProperty(localData, k, value);
 					} else {
-						// Key丢失
-						// trace("存档key丢失：", id);
 						lossKey.push(k);
 					}
 				}
 				this.updateUserData(localData);
 				#end
 			} catch (e:Exception) {
-				var msg = haxe.CallStack.toString(haxe.CallStack.exceptionStack());
-				trace(msg);
+				ZLog.exception(e);
 			}
 		}
 		return cast this;
@@ -140,7 +136,8 @@ class SaveObject<T:SaveObjectData> {
 				shared.data.data = Json.stringify(v);
 			}
 		} catch (e:haxe.Exception) {
-			trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+			ZLog.error("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+			ZLog.exception(e);
 		}
 		shared.flush();
 		threadPool.sendComplete({});
@@ -171,14 +168,14 @@ class SaveObject<T:SaveObjectData> {
 						_isReadData = true;
 						var onlineVersion = data != null ? data.version : 0;
 						var localVersion:Float = this.data.version;
-						trace("同步线上数据：onlineVersion=", onlineVersion, "localVersion=", localVersion);
+						ZLog.log("同步线上数据：onlineVersion:" + onlineVersion + " localVersion:" + localVersion);
 						var onlineDevice = data != null ? data.deviceid : "";
 						var localDevice = this.data.deviceid.toString();
-						trace("同步设备比较", onlineDevice, localDevice);
+						ZLog.log("同步设备比较：" + onlineDevice + "," + localDevice);
 						isNewVersion = onlineVersion > this.data.version;
 						if (!isNewVersion) {
 							if (onlineDevice != localDevice) {
-								trace("### 同步因设备不一致，需要强制更新线上数据 ###");
+								ZLog.warring("### 同步因设备不一致，需要强制更新线上数据 ###");
 								isNewVersion = true;
 							}
 						}
@@ -205,9 +202,6 @@ class SaveObject<T:SaveObjectData> {
 							// 这里做立即上报处理
 							this.invalidInterval();
 							this.flush(false);
-							#if test
-							trace("立即同步版本数据", _changedData);
-							#end
 							this.saveSaveAgent(cb);
 						}
 					} else {
@@ -223,10 +217,6 @@ class SaveObject<T:SaveObjectData> {
 	}
 
 	private function saveSaveAgent(cb:Bool->Void):Void {
-		#if test
-		// trace("saveSaveAgent=",saveSaveAgent);
-		// throw 1;
-		#end
 		if (saveAgent != null) {
 			var now = Timer.stamp();
 			if (now - _lastTime >= saveInterval) {
@@ -255,10 +245,8 @@ class SaveObject<T:SaveObjectData> {
 	 * @param data 
 	 */
 	public function checkOnlineUserData(data:Dynamic):Void {
-		// trace("开始处理lossKey:", lossKey);
 		var keys = Reflect.fields(this.data);
 		for (key in keys) {
-			// trace("比对", key);
 			var content:Dynamic = Reflect.getProperty(this.data, key);
 			var compareContent:Dynamic = Reflect.getProperty(data, key);
 			if (content == null) {
@@ -268,7 +256,6 @@ class SaveObject<T:SaveObjectData> {
 				// 丢失key还原
 				var obj = {};
 				Reflect.setProperty(obj, key, compareContent);
-				// trace("key还原：", key, obj);
 				this.updateUserData(obj);
 			}
 			var allin = false;
@@ -279,7 +266,6 @@ class SaveObject<T:SaveObjectData> {
 			if (content is SaveArrayDataContent) {
 				// 数组写入
 				var array:SaveArrayDataContent<Dynamic> = content;
-				// trace("数组比对：", compareContent, "\n本地储存：", array.data);
 				for (index => dataB in array.data) {
 					var id = Std.string(index);
 					var dataA = allin ? null : Reflect.getProperty(compareContent, id);
@@ -287,13 +273,11 @@ class SaveObject<T:SaveObjectData> {
 						var cedata:SaveArrayDataContent<CEFloat> = content;
 						var dataC = cedata.getValue(index).toFloat();
 						if (allin || compare(dataA, dataC)) {
-							// trace("比对不一致，更新");
 							cedata.setValue(index, dataC);
 						}
 					} else {
 						// 比对不一致时，刷新
 						if (allin || compare(dataA, dataB)) {
-							// trace("比对不一致，更新");
 							array.setValue(index, dataB);
 						}
 					}
@@ -301,9 +285,6 @@ class SaveObject<T:SaveObjectData> {
 			} else if (content is SaveFloatDataContent) {
 				// 浮点写入
 				var contentData:SaveFloatDataContent = content;
-				#if cpp
-				// trace("比对：", key, contentData.data.toFloat(), compareContent);
-				#end
 				if (allin || compare(contentData.data.toFloat(), compareContent)) {
 					contentData.changed = true;
 				}
@@ -318,20 +299,17 @@ class SaveObject<T:SaveObjectData> {
 				var contentData:SaveDynamicDataContent<Dynamic> = content;
 				var dataKeys = Reflect.fields(contentData.data);
 				for (k in dataKeys) {
-					// trace("开始比对：", key, k);
 					if (this.data.ce.exists(key)) {
 						var contentData2:SaveDynamicDataContent<CEFloat> = content;
 						var dataA = contentData2.getValue(k).toFloat();
 						var dataB = allin ? null : Reflect.getProperty(compareContent, k);
 						if (allin || compare(dataA, dataB)) {
-							// trace("比对不一致，更新", k, dataA, dataB);
 							contentData2.setValue(k, dataA);
 						}
 					} else {
 						var dataA = Reflect.getProperty(contentData, k);
 						var dataB = allin ? null : Reflect.getProperty(compareContent, k);
 						if (allin || compare(dataA, dataB)) {
-							// trace("比对不一致，更新", k, dataA, dataB);
 							contentData.setValue(k, dataA);
 						}
 					}
@@ -423,9 +401,6 @@ class SaveObject<T:SaveObjectData> {
 
 	private function _onSaveData(data:Dynamic):Void {
 		// todo 这里要处理变更的数据，同步
-		#if test
-		trace("存档成功：", data, _changedData);
-		#end
 		if (data != null) {
 			#if false
 			// 回退版本
@@ -491,15 +466,6 @@ class SaveObject<T:SaveObjectData> {
 	 * 清空用户数据
 	 */
 	public function clear():Void {
-		#if v3apisave
-		// zygame.cmnt.v3.V3Api.setData({}, function(data) {
-		// 	if (data.code == 0) {
-		// 		trace("重置成功");
-		// 	} else {
-		// 		trace("重置失败");
-		// 	}
-		// });
-		#end
 		var retdata = this.getData();
 		var keys = Reflect.fields(retdata);
 		for (key in keys) {
@@ -541,7 +507,6 @@ class SaveObject<T:SaveObjectData> {
 			Reflect.setProperty(_localSaveData, key, value);
 			Reflect.setProperty(_changedData, key, value);
 		}
-		// trace("保存数据", key, value);
 		if (!this.localDataEnable) {
 			return;
 		}
@@ -556,27 +521,14 @@ class SaveObject<T:SaveObjectData> {
 				} else
 					storage.setItem(saveid, Encryption.encode(Json.stringify(v)));
 			} catch (e:haxe.Exception) {
-				trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+				ZLog.error("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
+				ZLog.exception(e);
 			}
 		}
 		#elseif cpp
 		var saveid = _id + "." + key;
-
 		// 异步存档似乎有问题，暂不使用
 		threadPool.queue({saveid: saveid, key: key, _localSaveData: _localSaveData});
-
-		// var shared = openfl.net.SharedObject.getLocal(saveid);
-		// try {
-		// 	var v = Reflect.getProperty(_localSaveData, key);
-		// 	if (v is Float || v is String) {
-		// 		shared.data.data = v;
-		// 	} else {
-		// 		shared.data.data = Json.stringify(v);
-		// 	}
-		// } catch (e:haxe.Exception) {
-		// 	trace("storage.setItem, Key is [" + saveid + "] Error:" + e.message);
-		// }
-		// shared.flush();
 		#end
 	}
 

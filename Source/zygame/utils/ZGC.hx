@@ -50,10 +50,6 @@ class ZGC {
 		}
 
 		// 卸载cacheBitmapData缓存对象
-		// //trace(@:privateAccess display.__cacheBitmap);
-		// //trace(@:privateAccess display.__cacheBitmapData);
-		// //trace(@:privateAccess display.__cacheBitmapData2);
-		// //trace(@:privateAccess display.__cacheBitmapData3);
 		disposeBitmap(@:privateAccess display.__cacheBitmap);
 		disposeBitmapData(@:privateAccess display.__cacheBitmapData);
 		disposeBitmapData(@:privateAccess display.__cacheBitmapData2);

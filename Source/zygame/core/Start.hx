@@ -29,7 +29,7 @@ import zygame.utils.FPSDebug;
 import openfl.Vector;
 import openfl.events.Event;
 import zygame.components.ZScene;
-import zygame.utils.Log;
+import zygame.utils.ZLog;
 import zygame.components.ZBuilder;
 import zygame.macro.ZMacroUtils;
 import openfl.events.MouseEvent;
@@ -302,13 +302,12 @@ class Start extends ZScene {
 		// RES资源绑定
 		// zygame.net.UDP.init();
 		ZBuilder.init();
-		Log.clear();
 		this.HDHeight = HDHeight;
 		this.HDWidth = HDWidth;
 		this.isDebug = isDebug;
 		updates = new Vector<Refresher>(0, false);
-		log('[zygameui] build time:${zygame.utils.System.buildTime}');
-		log("[zygameui] channel=" + Lib.getChannel() + " render=" + Lib.getRenderMode());
+		ZLog.log('[zygameui] build time:${zygame.utils.System.buildTime}');
+		ZLog.log("[zygameui] channel=" + Lib.getChannel() + " render=" + Lib.getRenderMode());
 
 		#if cmnt
 		// 默认优先初始化用户数据信息
@@ -322,7 +321,7 @@ class Start extends ZScene {
 
 		// ZBuilder定义宏自动处理
 		var defines:Dynamic = Json.parse(ZMacroUtils.getDefines());
-		log(defines);
+		ZLog.log(defines);
 		var keys:Array<String> = Reflect.fields(defines);
 		for (key in keys) {
 			ZBuilder.defineValue(key, Reflect.getProperty(defines, key));
@@ -544,12 +543,6 @@ class Start extends ZScene {
 		#end
 		stage.addEventListener(Event.ACTIVATE, onActivate);
 		stage.addEventListener(Event.DEACTIVATE, onDeActivate);
-
-		// 异常错误过滤
-		// openfl.Lib.current.loaderInfo.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR,function(event){
-		// 	event.preventDefault();
-		// 	trace("发生异常错误：",event.toString());
-		// });
 	}
 
 	/**
@@ -605,7 +598,6 @@ class Start extends ZScene {
 	 */
 	public function onDeActivate(e:Event):Void {
 		isActivate = false;
-		// trace("返回至后台");
 		SoundChannelManager.current.stopAllEffectAndMusic(true);
 	}
 
@@ -615,7 +607,6 @@ class Start extends ZScene {
 	 */
 	public function onActivate(e:Event):Void {
 		isActivate = true;
-		// trace("返回至前台");
 		zygame.utils.Lib.onResume();
 		#if qqquick
 		#else
@@ -680,7 +671,7 @@ class Start extends ZScene {
 		Cc.instance.height = Start.stageHeight / 3 - 50;
 		#end
 
-		log("适配" + HDHeight + "x" + HDWidth, stage.stageHeight + "x" + stage.stageWidth, currentScale);
+		ZLog.log("适配" + HDHeight + "x" + HDWidth + ", " + stage.stageHeight + "x" + stage.stageWidth + ", " + currentScale);
 	}
 
 	/**

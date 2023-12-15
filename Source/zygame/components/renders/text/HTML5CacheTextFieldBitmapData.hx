@@ -203,8 +203,6 @@ class HTML5CacheTextFieldBitmapData {
             command.draw(context2d);
         }
         _fillTextCommand = null;
-        // zygame.core.Start.current.getTopView().addChild(new openfl.display.Bitmap(bitmapData));
-        // trace("HTMLCacheText ID \""+id+"\" ratio:" + ratio + "% chars:" + _text.length + " drawtime:" + drawTime);
     }
 
     private function flushText():Void

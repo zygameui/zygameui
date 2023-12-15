@@ -316,17 +316,6 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	}
 
 	/**
-	 *  输出log
-	 */
-	public function log(a:Dynamic, b:Dynamic = "", c:Dynamic = "", d:Dynamic = "", e:Dynamic = "", f:Dynamic = ""):Void {
-		// #if (mac && !hl)
-		// Log.log(a + " " + b + " " + c + " " + d + " " + e + " " + f);
-		// #else
-		trace(a, b, c, d, e, f);
-		// #end
-	}
-
-	/**
 	 *  释放接口实现
 	 */
 	public function destroy():Void {

@@ -1130,7 +1130,6 @@ class ZBuilder {
 				var parsingName:String = className + "." + name;
 				if (name == "tween") {
 					// 过渡动画实现
-					trace("过渡动画实现：", parsingName);
 				} else if (parsingMaps.exists(parsingName)) {
 					parsingMaps.get(parsingName)(ui, name, value);
 				} else if (Std.isOfType(att, Float) && value.indexOf("0x") == -1) {
@@ -1459,9 +1458,6 @@ class AssetsBuilder extends Builder {
 		var name = StringUtils.getName(id);
 		if (needAssetsList.exists(name)) {
 			if (!needAssetsList.get(name)) {
-				#if test
-				trace("忽略载入文件:", id);
-				#end
 				return false;
 			}
 		}
@@ -1610,13 +1606,6 @@ class AssetsBuilder extends Builder {
 			return;
 		}
 		this.parserNeedAssets(viewxml);
-		#if test
-		for (key => value in needAssetsList) {
-			if (!value) {
-				trace("不需要加载的资源：", key);
-			}
-		}
-		#end
 		if (readFiles != null)
 			for (f in readFiles) {
 				if (hasLoad(f) && !zygame.components.ZBuilder.existFile(f)) {

@@ -11,6 +11,8 @@
 
 ### 14.0.14
 - [新增] 新增`ZLabel`和`ZButton`的`mixColor`过渡色支持；
+- [新增] 新增`ZBuilderScene.onBuildedAfterEvent`事件支持；
+- [改进] 将`ZAssets`的输出删除，使用`assets_debug`可以重新打开；
 
 ### 14.0.9
 - [改进] 修复`StorkeShader`的描边锯齿的问题；

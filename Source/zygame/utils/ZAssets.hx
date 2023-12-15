@@ -366,7 +366,7 @@ class ZAssets {
 		var name = StringUtils.getName(parser.getName());
 		if (getBitmapData(name) != null)
 			return;
-		#if debug
+		#if assets_debug
 		trace("[push pasrers]", parser.getName());
 		#end
 		_parsers.push(parser);
@@ -463,7 +463,7 @@ class ZAssets {
 		this.currentLoadNumber = 0;
 		// 加载循序排序，优先加载zip资源
 		_parsers.sort((a, b) -> Std.isOfType(a, ZIPAssetsParser) ? -1 : 0);
-		#if debug
+		#if assets_debug
 		trace("PARSER LOAD START:", _parsers);
 		#end
 		if (_parsers.length == 0) {
@@ -516,7 +516,7 @@ class ZAssets {
 			if (curprogress == 1 && !_loadStop) {
 				this._parsers = [];
 				this._loadfilelist = [];
-				#if debug
+				#if assets_debug
 				trace("载入进度：" + Std.int(curprogress * 100) + "%");
 				#end
 				_loadStop = true;
@@ -538,7 +538,7 @@ class ZAssets {
 			return;
 		}
 
-		#if debug
+		#if assets_debug
 		trace("载入进度：" + currentLoadIndex, currentLoadNumber, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
 		#end
 		parser.out = onAssetsOut;
@@ -558,7 +558,6 @@ class ZAssets {
 	private function loadError(msg:String):Void {
 		trace("载入发生异常，错误：" + msg);
 		if (_loadStop) {
-			trace("已经暂停");
 			return;
 		}
 		if (canError) {
@@ -677,7 +676,7 @@ class ZAssets {
 				this._dynamicAtlas.set(parser.getName(), data);
 			case SWF:
 				#if (openfl_swf && swf)
-				#if debug
+				#if assets_debug
 				trace("Swf set ", parser.getName(), data);
 				#end
 				this._swflites.set(parser.getName(), data);
@@ -723,7 +722,7 @@ class ZAssets {
 		// 进度反馈
 		if (_callBack != null)
 			_callBack(getProgress());
-		#if debug
+		#if assets_debug
 		trace(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
 		#end
 		// 如果已经加载停止了，则直接释放已有的资源

@@ -131,7 +131,7 @@ import zygame.utils.Lib;
 	 * @param pro 解析进度，如果当前解析已结束，请传递1，否则请传递少于1的值。
 	 */
 	public function finalAssets(type:AssetsType, assetsData:Dynamic, pro:Float = 0):Void {
-		#if debug
+		#if assets_debug
 		trace("finalAssets:", type, pro);
 		#end
 		this.progress = pro;
@@ -139,8 +139,6 @@ import zygame.utils.Lib;
 		if (pro == 1) {
 			this.done();
 			this._assets = null;
-			// TODO 忽略处理
-			// this._data = null;
 		}
 	}
 }

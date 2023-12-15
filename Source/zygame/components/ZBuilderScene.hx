@@ -87,6 +87,7 @@ class ZBuilderScene extends ZScene {
 				_loaded = true;
 				this.onBuildedEvent();
 				onBuilded();
+				this.onBuildedAfterEvent();
 				postCompleteEvent();
 			} else {
 				if (onBuildError()) {
@@ -144,9 +145,14 @@ class ZBuilderScene extends ZScene {
 	public function onBuilded() {}
 
 	/**
-	 * 对象构造成功的额外回调
+	 * 对象构造成功的额外回调，它会在`onBuilded`之前执行
 	 */
 	dynamic public function onBuildedEvent():Void {}
+
+	/**
+	 * 对象构造完成之后的额外回调，它会在`onBuilded`之后执行
+	 */
+	dynamic public function onBuildedAfterEvent():Void {}
 
 	/**
 	 * 构造失败，一般为加载失败时触发，当返回true时，该窗口会自动移除，返回false可自行处理。

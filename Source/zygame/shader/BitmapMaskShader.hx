@@ -14,6 +14,7 @@ class BitmapMaskShader extends OpenFLShader {
 	public function new(bitmapData:BitmapData) {
 		super();
 		this.u_bitmapData.input = bitmapData;
+		this.u_bitmapData.filter = LINEAR;
 	}
 
 	override function fragment() {

@@ -100,7 +100,7 @@ class AssetsUtils {
 		// 将缓存清理
 		var md5path:String = haxe.crypto.Md5.encode(url);
 		if (sys.FileSystem.exists(lime.system.System.applicationStorageDirectory + md5path)) {
-			zygame.utils.ZLog.warring("缓存异常，删除：", lime.system.System.applicationStorageDirectory + md5path);
+			zygame.utils.ZLog.warring(["缓存异常，删除：", lime.system.System.applicationStorageDirectory + md5path]);
 			sys.FileSystem.deleteFile(lime.system.System.applicationStorageDirectory + md5path);
 			return true;
 		}

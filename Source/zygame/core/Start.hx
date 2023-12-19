@@ -338,6 +338,7 @@ class Start extends ZScene {
 				deleteTextureCall(texture);
 			}
 		}
+		#if minigame
 		untyped window.URL2 = untyped window.URL;
 		untyped window.Blob2 = untyped window.Blob;
 		if (untyped window.URL == null) {
@@ -355,6 +356,7 @@ class Start extends ZScene {
 		// 优化储存可能会丢失的问题
 		if (untyped window.localStorage != null)
 			untyped window.localStorage.removeItem = function() {};
+		#end
 		#end
 		this.updateScreens();
 		this.onStageSizeChange();

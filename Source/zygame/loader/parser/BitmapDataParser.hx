@@ -1,5 +1,8 @@
 package zygame.loader.parser;
 
+import openfl.display3D.Context3DTextureFormat;
+import openfl.Lib;
+import openfl.display3D.textures.Texture;
 import openfl.display.BitmapData;
 import zygame.utils.StringUtils;
 import zygame.utils.AssetsUtils;

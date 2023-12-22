@@ -388,6 +388,7 @@ class BitmapDataLoader extends BaseLoader {
 	private var _onCompleteAssetsCall:String->BitmapData->Void;
 
 	private var _onCompleteCall:BitmapData->Void;
+	private var _onRootCompleteCall:BitmapData->Void;
 
 	public function new(path:String, isAtf:Bool) {
 		super(path);
@@ -410,7 +411,19 @@ class BitmapDataLoader extends BaseLoader {
 	}
 
 	public function onComplete(call:BitmapData->Void):BitmapDataLoader {
-		_onCompleteCall = call;
+		_onRootCompleteCall = call;
+		_onCompleteCall = (data) -> {
+			#if (discard_pixels)
+			var texture:Texture = openfl.Lib.current.stage.context3D.createTexture(data.width, data.height, Context3DTextureFormat.BGRA_PACKED, true);
+			texture.uploadFromBitmapData(data, 0);
+			data = BitmapData.fromTexture(texture);
+			this._onRootCompleteCall(data);
+			#else
+			this._onRootCompleteCall(data);
+			#end
+			_onRootCompleteCall = null;
+		}
+
 		#if atf
 		AssetsUtils.loadBytes(path, false).onComplete(function(bytes:Bytes):Void {
 			var h = bytes.getInt32(0);

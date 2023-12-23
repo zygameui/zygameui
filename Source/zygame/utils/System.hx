@@ -43,15 +43,17 @@ class System {
 	public static function getMemoryUsage():Float {
 		#if ios
 		untyped __cpp__("
-         struct task_basic_info info;
-        mach_msg_type_number_t size = TASK_BASIC_INFO_COUNT;
-        kern_return_t kerr = task_info(mach_task_self(),
-                                       TASK_BASIC_INFO,
-                                       (task_info_t)&info,
-                                       &size);
-        if (kerr == KERN_SUCCESS) {
-            return info.resident_size;
-        }");
+        task_vm_info_data_t info;
+		mach_msg_type_number_t count = TASK_VM_INFO_COUNT;
+
+		const auto status = task_info(mach_task_self(), TASK_VM_INFO, (task_info_t)&info, &count);
+		if (status != KERN_SUCCESS) {
+			return 0;
+		}
+
+		if (count >= TASK_VM_INFO_REV1_COUNT) {
+			return info.phys_footprint;
+		}");
 		#elseif cpp
 		return cpp.vm.Gc.memUsage();
 		#end

@@ -9,7 +9,11 @@ import lime.utils.UInt8Array;
 import zygame.utils.AssetsUtils;
 
 /**
- * 支持ASTC压缩纹理加载，目前该格式，在IOS上支持使用
+ * 支持ASTC压缩纹理加载
+ * ```haxe
+ * var assets = new ZAssets();
+ * assets.loadFile("./texture.astc");
+ * ```
  */
 @:access(openfl.display3D.textures.RectangleTexture)
 class ASTCBitmapDataParser extends ParserBase {

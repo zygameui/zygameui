@@ -23,15 +23,18 @@ class LoaderAssets {
 	 */
 	public static var fileparser:Array<Class<ParserBase>> = [
 		SparticleParser,
+		#if true
+		zygame.loader.parser.ASTCBitmapDataParser,
+		#end
 		MP3Parser,
 		TextParser,
-		#if castle CDBParser,
+		#if castle
+		CDBParser,
 		#end
 		XMLParser,
 		JSONParser,
 		BitmapDataParser
-		#if (ldtk), LDTKParser
-		#end
+		#if (ldtk), LDTKParser #end
 	];
 
 	public static function createParserBase(data:Dynamic, extPasrer:Map<String, String>):ParserBase {

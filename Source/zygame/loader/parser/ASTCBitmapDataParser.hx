@@ -1,5 +1,7 @@
 package zygame.loader.parser;
 
+import openfl.utils.ByteArray;
+import haxe.io.Bytes;
 import openfl.display.BitmapData;
 import openfl.display3D.textures.RectangleTexture;
 import zygame.core.Start;
@@ -21,8 +23,26 @@ class ASTCBitmapDataParser extends ParserBase {
 		return StringTools.endsWith(data, ".astc");
 	}
 
+	private function isZlibFile(bytes:Bytes):Bool {
+		var v1 = bytes.get(0);
+		var v2 = bytes.get(1);
+		trace(v1, v2);
+		if (v1 == 120) {
+			switch (v2) {
+				case 218:
+					return true;
+			}
+		}
+		return false;
+	}
+
 	override function process() {
 		AssetsUtils.loadBytes(getData()).onComplete(function(bytes) {
+			// 检测是否为zlib压缩
+			if (isZlibFile(bytes)) {
+				var byteArray = ByteArray.fromBytes(bytes);
+				byteArray.uncompress();
+			}
 			// 读取ASTC纹理的格式 4x4 6x6等信息
 			var blockX:Int = bytes.get(0x4);
 			var blockY:Int = bytes.get(0x5);
@@ -33,7 +53,8 @@ class ASTCBitmapDataParser extends ParserBase {
 			var width:Int = bytes.getUInt16(0x7);
 			var height:Int = bytes.getUInt16(0xA);
 			// 图片压缩纹理内容，头信息永远为16位，因此只需要偏移16位后的二进制
-			var uint8Array:UInt8Array = UInt8Array.fromBytes(bytes, 16);
+			var bodyBytes = bytes.sub(16, bytes.length - 16);
+			var uint8Array:UInt8Array = UInt8Array.fromBytes(bodyBytes);
 			// WEBGL 检查是否支持压缩配置
 			var ext:Dynamic = GL.getExtension(#if (lime_opengl || lime_opengles) "KHR_texture_compression_astc_ldr" #else "WEBGL_compressed_texture_astc" #end);
 			if (ext == null) {

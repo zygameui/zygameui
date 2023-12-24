@@ -7,6 +7,9 @@ import openfl.display3D.Context3D;
 import lime.graphics.opengl.GL;
 import lime.utils.UInt8Array;
 import zygame.utils.AssetsUtils;
+#if (lime_opengl || lime_opengles)
+import lime.utils.DataPointer;
+#end
 
 /**
  * 支持ASTC压缩纹理加载，目前该格式，在IOS上支持使用
@@ -29,9 +32,8 @@ class ASTCBitmapDataParser extends ParserBase {
 			var height:Int = bytes.getUInt16(0xA);
 			// 图片压缩纹理内容，头信息永远为16位，因此只需要偏移16位后的二进制
 			var uint8Array:UInt8Array = UInt8Array.fromBytes(bytes, 16);
-			#if (lime_webgl)
 			// WEBGL 检查是否支持压缩配置
-			var ext:Dynamic = GL.getExtension("WEBGL_compressed_texture_astc");
+			var ext:Dynamic = GL.getExtension(#if (lime_opengl || lime_opengles) "KHR_texture_compression_astc_ldr" #else "WEBGL_compressed_texture_astc" #end);
 			if (ext == null) {
 				this.sendError("Don't support ASTC extension.");
 				return;
@@ -42,16 +44,7 @@ class ASTCBitmapDataParser extends ParserBase {
 				this.sendError('Don\'t support ASTC$format extension.');
 				return;
 			}
-			GL.INTERNALFORMAT_SUPPORTED;
-			#elseif (lime_opengl || lime_opengles)
-			// OPENGL 检查是否支持压缩配置
-			var compFlag:DataPointer;
-			GL.getInternalformativ(GL.TEXTURE_2D, astcFormat, 0x8A1A, compFlag);
-			if (compFlag != 1) {
-				this.sendError('Don\'t support ASTC$format extension.');
-				return;
-			}
-			#end
+			// trace("extensions:", GL.getSupportedExtensions());
 			var context3D:Context3D = Start.current.stage.context3D;
 			var rectangleTexture:RectangleTexture = new RectangleTexture(context3D, width, height, null, false);
 			GL.bindTexture(GL.TEXTURE_2D, rectangleTexture.__textureID);

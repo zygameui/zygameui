@@ -26,8 +26,9 @@ class ASTCBitmapDataParser extends ParserBase {
 			// 读取ASTC纹理的格式 4x4 6x6等信息
 			var blockX:Int = bytes.get(0x4);
 			var blockY:Int = bytes.get(0x5);
-			var astcFormat = ASTCFormat.getFormat(blockX, blockY);
-			var format = 'COMPRESSED_RGBA_ASTC_${blockX}x${blockY}_KHR';
+			var isSRGBA = false;
+			var astcFormat = ASTCFormat.getFormat(blockX, blockY, 1, isSRGBA);
+			var format = isSRGBA ? 'COMPRESSED_SRGB8_ALPHA8_ASTC_${blockX}x${blockY}_KHR' : 'COMPRESSED_RGBA_ASTC_${blockX}x${blockY}_KHR';
 			// 纹理的尺寸
 			var width:Int = bytes.getUInt16(0x7);
 			var height:Int = bytes.getUInt16(0xA);
@@ -110,35 +111,66 @@ enum abstract ASTCFormat(UInt) to UInt from UInt {
 	 * @param z 
 	 * @return ASTCFormat
 	 */
-	public static function getFormat(x:Int, y:Int, z:Int = 1):ASTCFormat {
-		if (x == 4 && y == 4)
-			return COMPRESSED_RGBA_ASTC_4x4_KHR;
-		else if (x == 5 && y == 4)
-			return COMPRESSED_RGBA_ASTC_5x4_KHR;
-		else if (x == 5 && y == 5)
-			return COMPRESSED_RGBA_ASTC_5x5_KHR;
-		else if (x == 6 && y == 5)
-			return COMPRESSED_RGBA_ASTC_6x5_KHR;
-		else if (x == 6 && y == 6)
-			return COMPRESSED_RGBA_ASTC_6x6_KHR;
-		else if (x == 8 && y == 5)
-			return COMPRESSED_RGBA_ASTC_8x5_KHR;
-		else if (x == 8 && y == 6)
-			return COMPRESSED_RGBA_ASTC_8x6_KHR;
-		else if (x == 8 && y == 8)
-			return COMPRESSED_RGBA_ASTC_8x8_KHR;
-		else if (x == 10 && y == 5)
-			return COMPRESSED_RGBA_ASTC_10x5_KHR;
-		else if (x == 10 && y == 6)
-			return COMPRESSED_RGBA_ASTC_10x6_KHR;
-		else if (x == 10 && y == 8)
-			return COMPRESSED_RGBA_ASTC_10x8_KHR;
-		else if (x == 10 && y == 10)
-			return COMPRESSED_RGBA_ASTC_10x10_KHR;
-		else if (x == 12 && y == 10)
-			return COMPRESSED_RGBA_ASTC_12x10_KHR;
-		else if (x == 12 && y == 12)
-			return COMPRESSED_RGBA_ASTC_12x12_KHR;
+	public static function getFormat(x:Int, y:Int, z:Int = 1, isAlpha8:Bool = false):ASTCFormat {
+		if (isAlpha8) {
+			if (x == 4 && y == 4)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR;
+			else if (x == 5 && y == 4)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR;
+			else if (x == 5 && y == 5)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR;
+			else if (x == 6 && y == 5)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR;
+			else if (x == 6 && y == 6)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR;
+			else if (x == 8 && y == 5)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR;
+			else if (x == 8 && y == 6)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR;
+			else if (x == 8 && y == 8)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR;
+			else if (x == 10 && y == 5)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR;
+			else if (x == 10 && y == 6)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR;
+			else if (x == 10 && y == 8)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR;
+			else if (x == 10 && y == 10)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR;
+			else if (x == 12 && y == 10)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR;
+			else if (x == 12 && y == 12)
+				return COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR;
+		} else {
+			if (x == 4 && y == 4)
+				return COMPRESSED_RGBA_ASTC_4x4_KHR;
+			else if (x == 5 && y == 4)
+				return COMPRESSED_RGBA_ASTC_5x4_KHR;
+			else if (x == 5 && y == 5)
+				return COMPRESSED_RGBA_ASTC_5x5_KHR;
+			else if (x == 6 && y == 5)
+				return COMPRESSED_RGBA_ASTC_6x5_KHR;
+			else if (x == 6 && y == 6)
+				return COMPRESSED_RGBA_ASTC_6x6_KHR;
+			else if (x == 8 && y == 5)
+				return COMPRESSED_RGBA_ASTC_8x5_KHR;
+			else if (x == 8 && y == 6)
+				return COMPRESSED_RGBA_ASTC_8x6_KHR;
+			else if (x == 8 && y == 8)
+				return COMPRESSED_RGBA_ASTC_8x8_KHR;
+			else if (x == 10 && y == 5)
+				return COMPRESSED_RGBA_ASTC_10x5_KHR;
+			else if (x == 10 && y == 6)
+				return COMPRESSED_RGBA_ASTC_10x6_KHR;
+			else if (x == 10 && y == 8)
+				return COMPRESSED_RGBA_ASTC_10x8_KHR;
+			else if (x == 10 && y == 10)
+				return COMPRESSED_RGBA_ASTC_10x10_KHR;
+			else if (x == 12 && y == 10)
+				return COMPRESSED_RGBA_ASTC_12x10_KHR;
+			else if (x == 12 && y == 12)
+				return COMPRESSED_RGBA_ASTC_12x12_KHR;
+		}
 		return 0;
 	}
 }

@@ -7,9 +7,6 @@ import openfl.display3D.Context3D;
 import lime.graphics.opengl.GL;
 import lime.utils.UInt8Array;
 import zygame.utils.AssetsUtils;
-#if (lime_opengl || lime_opengles)
-import lime.utils.DataPointer;
-#end
 
 /**
  * 支持ASTC压缩纹理加载，目前该格式，在IOS上支持使用

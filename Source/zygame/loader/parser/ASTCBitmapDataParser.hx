@@ -26,7 +26,6 @@ class ASTCBitmapDataParser extends ParserBase {
 	private function isZlibFile(bytes:Bytes):Bool {
 		var v1 = bytes.get(0);
 		var v2 = bytes.get(1);
-		trace(v1, v2);
 		if (v1 == 120) {
 			switch (v2) {
 				case 218:

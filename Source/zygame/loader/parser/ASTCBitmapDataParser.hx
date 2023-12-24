@@ -22,22 +22,40 @@ class ASTCBitmapDataParser extends ParserBase {
 			// 读取ASTC纹理的格式 4x4 6x6等信息
 			var blockX:Int = bytes.get(0x4);
 			var blockY:Int = bytes.get(0x5);
+			var astcFormat = ASTCFormat.getFormat(blockX, blockY);
+			var format = 'COMPRESSED_RGBA_ASTC_${blockX}x${blockY}_KHR';
 			// 纹理的尺寸
 			var width:Int = bytes.getUInt16(0x7);
 			var height:Int = bytes.getUInt16(0xA);
 			// 图片压缩纹理内容，头信息永远为16位，因此只需要偏移16位后的二进制
 			var uint8Array:UInt8Array = UInt8Array.fromBytes(bytes, 16);
 			#if (lime_webgl)
+			// WEBGL 检查是否支持压缩配置
 			var ext:Dynamic = GL.getExtension("WEBGL_compressed_texture_astc");
-			// 读取扩展支持
-			trace(ext.getSupportedProfiles());
-			// TODO: 这里要检查是否支持ASTC纹理配置等支持
-			trace(ext.COMPRESSED_RGBA_ASTC_6x6_KHR);
+			if (ext == null) {
+				this.sendError("Don't support ASTC extension.");
+				return;
+			}
+			// 这里要检查是否支持ASTC纹理配置等支持
+			var value = Reflect.getProperty(ext, format);
+			if (value == null) {
+				this.sendError('Don\'t support ASTC$format extension.');
+				return;
+			}
+			GL.INTERNALFORMAT_SUPPORTED;
+			#elseif (lime_opengl || lime_opengles)
+			// OPENGL 检查是否支持压缩配置
+			var compFlag:DataPointer;
+			GL.getInternalformativ(GL.TEXTURE_2D, astcFormat, 0x8A1A, compFlag);
+			if (compFlag != 1) {
+				this.sendError('Don\'t support ASTC$format extension.');
+				return;
+			}
 			#end
 			var context3D:Context3D = Start.current.stage.context3D;
 			var rectangleTexture:RectangleTexture = new RectangleTexture(context3D, width, height, null, false);
 			GL.bindTexture(GL.TEXTURE_2D, rectangleTexture.__textureID);
-			rectangleTexture.__format = ASTCFormat.getFormat(blockX, blockY);
+			rectangleTexture.__format = astcFormat;
 			#if (lime_opengl || lime_opengles)
 			GL.compressedTexImage2D(GL.TEXTURE_2D, 0, rectangleTexture.__format, rectangleTexture.__width, rectangleTexture.__height, 0,
 				uint8Array.byteLength, uint8Array);

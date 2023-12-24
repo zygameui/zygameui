@@ -23,6 +23,11 @@ class ASTCBitmapDataParser extends ParserBase {
 		return StringTools.endsWith(data, ".astc");
 	}
 
+	/**
+	 * 检查是否使用了Zlib压缩
+	 * @param bytes 
+	 * @return Bool
+	 */
 	private function isZlibFile(bytes:Bytes):Bool {
 		var v1 = bytes.get(0);
 		var v2 = bytes.get(1);

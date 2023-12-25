@@ -52,7 +52,7 @@ class AutoBuilder {
 		}
 
 		// 路径移除
-		path = StringTools.replace(project.assetsRenamePath.get(StringUtils.getName(xmlPath) + ".xml"), Sys.getCwd(), "");
+		path = StringTools.replace(project.getAssetsRenamePath(StringUtils.getName(xmlPath) + ".xml"), Sys.getCwd(), "");
 		var textures:Array<{png:String, xml:String}> = [];
 		var spines:Array<{png:String, atlas:String}> = [];
 		var files:Array<String> = [];
@@ -61,38 +61,38 @@ class AutoBuilder {
 		for (file in builder.assetsLoads) {
 			if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".atlas")) {
 				spines.push({
-					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
-					atlas: StringTools.replace(project.assetsRenamePath.get(file + ".atlas"), Sys.getCwd(), "")
+					png: StringTools.replace(project.getAssetsRenamePath(file + ".png"), Sys.getCwd(), ""),
+					atlas: StringTools.replace(project.getAssetsRenamePath(file + ".atlas"), Sys.getCwd(), "")
 				});
 				if (project.assetsPath.exists(file + ".json")) {
-					files.push(StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), ""));
+					files.push(StringTools.replace(project.getAssetsRenamePath(file + ".json"), Sys.getCwd(), ""));
 				}
 			} else if (project.assetsPath.exists(file + ".png") && project.assetsPath.exists(file + ".xml")) {
 				textures.push({
-					png: StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""),
-					xml: StringTools.replace(project.assetsRenamePath.get(file + ".xml"), Sys.getCwd(), "")
+					png: StringTools.replace(project.getAssetsRenamePath(file + ".png"), Sys.getCwd(), ""),
+					xml: StringTools.replace(project.getAssetsRenamePath(file + ".xml"), Sys.getCwd(), "")
 				});
 			} else if (project.assetsPath.exists(file + ".png")) {
 				// 单图加载
-				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".png"), Sys.getCwd(), ""));
+				files.push(StringTools.replace(project.getAssetsRenamePath(file + ".png"), Sys.getCwd(), ""));
 				// 可能包含一个粒子资源
 				if (project.assetsPath.exists(file + ".json")) {
 					// JSON加载
-					files.push(StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), ""));
+					files.push(StringTools.replace(project.getAssetsRenamePath(file + ".json"), Sys.getCwd(), ""));
 				}
 			} else if (project.assetsPath.exists(file + ".jpg")) {
 				// 单图加载
-				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".jpg"), Sys.getCwd(), ""));
+				files.push(StringTools.replace(project.getAssetsRenamePath(file + ".jpg"), Sys.getCwd(), ""));
 			} else if (project.assetsPath.exists(file + ".xml")) {
 				// 单XML加载
-				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".xml"), Sys.getCwd(), ""));
+				files.push(StringTools.replace(project.getAssetsRenamePath(file + ".xml"), Sys.getCwd(), ""));
 			}
 			if (project.assetsPath.exists(file + ".json")) {
 				// 单JSON加载
-				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".json"), Sys.getCwd(), ""));
+				files.push(StringTools.replace(project.getAssetsRenamePath(file + ".json"), Sys.getCwd(), ""));
 			} else if (project.assetsPath.exists(file + ".mp3")) {
 				// 单MP3加载
-				files.push(StringTools.replace(project.assetsRenamePath.get(file + ".mp3"), Sys.getCwd(), ""));
+				files.push(StringTools.replace(project.getAssetsRenamePath(file + ".mp3"), Sys.getCwd(), ""));
 			}
 		}
 

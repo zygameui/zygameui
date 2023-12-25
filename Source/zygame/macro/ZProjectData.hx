@@ -8,6 +8,8 @@ import zygame.utils.StringUtils;
 import sys.FileSystem;
 #end
 
+using StringTools;
+
 /**
  * zproject配置数据
  */
@@ -18,6 +20,26 @@ class ZProjectData {
 	public var assetsPath:Map<String, String> = [];
 	public var assetsRenamePath:Map<String, String> = [];
 	public var nowCwd:String = "";
+
+	/**
+	 * 获得PNG的资源路径
+	 * @param id 
+	 * @return String
+	 */
+	public function getAssetsRenamePath(id:String):String {
+		#if astc
+		var isPNG = id.endsWith(".png");
+		if (isPNG) {
+			var astcid = StringUtils.getName(id) + ".astc";
+			if (assetsRenamePath.exists(astcid)) {
+				return assetsRenamePath.get(astcid);
+			}
+		}
+		return assetsRenamePath.get(id);
+		#else
+		return assetsRenamePath.get(id);
+		#end
+	}
 
 	public function new() {
 		var oldCwd = Sys.getCwd();

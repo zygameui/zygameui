@@ -32,6 +32,9 @@ class Meituan extends BuildSuper {
 		Sys.setCwd(dir + "/../");
 		// 编译流程
 		trace("美团小游戏打包开始");
-		Sys.command("mgc debug");
+		Sys.command("
+		unset http_proxy
+		unset https_proxy
+		mgc debug");
 	}
 }

@@ -539,7 +539,7 @@ class ZBuilder {
 		var filename = StringUtils.getName(file);
 		for (assets in baseAssetsList) {
 			switch (type) {
-				case "png":
+				case "png", "astc":
 					var bitmap = assets.getBitmapData(filename);
 					if (bitmap != null)
 						return true;

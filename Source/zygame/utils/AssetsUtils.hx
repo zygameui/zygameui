@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.utils.load.ASTCBitmapDataLoader;
 import zygame.components.ZBuilder;
 import haxe.Json;
 import haxe.macro.Compiler;
@@ -83,6 +84,10 @@ class AssetsUtils {
 	}
 
 	public static function loadBitmapData(id:String, cache:Bool = false):BitmapDataLoader {
+		var isASTC = StringTools.endsWith(id, ".astc");
+		if (isASTC) {
+			return new ASTCBitmapDataLoader(ofPath(id));
+		}
 		return new BitmapDataLoader(ofPath(id));
 	}
 

@@ -1,5 +1,6 @@
 package zygame.loader.parser;
 
+import zygame.utils.ZLog;
 import openfl.utils.ByteArray;
 import haxe.io.Bytes;
 import openfl.display.BitmapData;
@@ -17,6 +18,7 @@ import zygame.utils.AssetsUtils;
  * assets.loadFile("./texture.astc");
  * ```
  */
+@:keep
 @:access(openfl.display3D.textures.RectangleTexture)
 class ASTCBitmapDataParser extends ParserBase {
 	public static function supportType(data:Dynamic):Bool {
@@ -40,59 +42,77 @@ class ASTCBitmapDataParser extends ParserBase {
 		return false;
 	}
 
+	/**
+	 * 是否支持当前配置
+	 * @param format 
+	 * @return Bool
+	 */
+	public function isSupportASTCConfig():Bool {
+		var ext:Dynamic = GL.getExtension(#if (lime_opengl || lime_opengles) "KHR_texture_compression_astc_ldr" #else "WEBGL_compressed_texture_astc" #end);
+		return ext != null;
+	}
+
 	override function process() {
-		AssetsUtils.loadBytes(getData()).onComplete(function(bytes) {
-			// 检测是否为zlib压缩
-			if (isZlibFile(bytes)) {
-				var byteArray = ByteArray.fromBytes(bytes);
-				byteArray.uncompress();
-			}
-			// 读取ASTC纹理的格式 4x4 6x6等信息
-			var blockX:Int = bytes.get(0x4);
-			var blockY:Int = bytes.get(0x5);
-			var isSRGBA = false;
-			var astcFormat = ASTCFormat.getFormat(blockX, blockY, 1, isSRGBA);
-			var format = isSRGBA ? 'COMPRESSED_SRGB8_ALPHA8_ASTC_${blockX}x${blockY}_KHR' : 'COMPRESSED_RGBA_ASTC_${blockX}x${blockY}_KHR';
-			// 纹理的尺寸
-			var width:Int = bytes.getUInt16(0x7);
-			var height:Int = bytes.getUInt16(0xA);
-			// 图片压缩纹理内容，头信息永远为16位，因此只需要偏移16位后的二进制
-			var bodyBytes = bytes.sub(16, bytes.length - 16);
-			var uint8Array:UInt8Array = UInt8Array.fromBytes(bodyBytes);
-			// WEBGL 检查是否支持压缩配置
-			var ext:Dynamic = GL.getExtension(#if (lime_opengl || lime_opengles) "KHR_texture_compression_astc_ldr" #else "WEBGL_compressed_texture_astc" #end);
-			if (ext == null) {
-				this.sendError("Don't support ASTC extension.");
-				return;
-			}
-			// 这里要检查是否支持ASTC纹理配置等支持
-			var value = Reflect.getProperty(ext, format);
-			if (value == null) {
-				this.sendError('Don\'t support ASTC$format extension.');
-				return;
-			}
-			// trace("extensions:", GL.getSupportedExtensions());
-			var context3D:Context3D = Start.current.stage.context3D;
-			var rectangleTexture:RectangleTexture = new RectangleTexture(context3D, width, height, null, false);
-			GL.bindTexture(GL.TEXTURE_2D, rectangleTexture.__textureID);
-			rectangleTexture.__format = astcFormat;
-			#if (lime_opengl || lime_opengles)
-			GL.compressedTexImage2D(GL.TEXTURE_2D, 0, rectangleTexture.__format, rectangleTexture.__width, rectangleTexture.__height, 0,
-				uint8Array.byteLength, uint8Array);
-			#elseif lime_webgl
-			GL.compressedTexImage2DWEBGL(GL.TEXTURE_2D, 0, rectangleTexture.__format, rectangleTexture.__width, rectangleTexture.__height, 0, uint8Array);
-			#end
-			GL.bindTexture(GL.TEXTURE_2D, null);
-			var bitmapData:BitmapData = BitmapData.fromTexture(rectangleTexture);
-			this.finalAssets(BITMAP, bitmapData, 1);
-		}).onError(function(err) {
-			if (AssetsUtils.cleanCacheId(getData())) {
-				// 可重试
-				process();
-			} else {
-				this.sendError("无法加载：" + getData());
-			}
-		});
+		if (isSupportASTCConfig()) {
+			AssetsUtils.loadBytes(getData()).onComplete(function(bytes) {
+				// 检测是否为zlib压缩
+				if (isZlibFile(bytes)) {
+					var byteArray = ByteArray.fromBytes(bytes);
+					byteArray.uncompress();
+				}
+				// 读取ASTC纹理的格式 4x4 6x6等信息
+				var blockX:Int = bytes.get(0x4);
+				var blockY:Int = bytes.get(0x5);
+				var isSRGBA = false;
+				var astcFormat = ASTCFormat.getFormat(blockX, blockY, 1, isSRGBA);
+				var format = isSRGBA ? 'COMPRESSED_SRGB8_ALPHA8_ASTC_${blockX}x${blockY}_KHR' : 'COMPRESSED_RGBA_ASTC_${blockX}x${blockY}_KHR';
+				// 纹理的尺寸
+				var width:Int = bytes.getUInt16(0x7);
+				var height:Int = bytes.getUInt16(0xA);
+				// 图片压缩纹理内容，头信息永远为16位，因此只需要偏移16位后的二进制
+				var bodyBytes = bytes.sub(16, bytes.length - 16);
+				var uint8Array:UInt8Array = UInt8Array.fromBytes(bodyBytes);
+				// WEBGL 检查是否支持压缩配置
+				var ext:Dynamic = GL.getExtension(#if (lime_opengl || lime_opengles) "KHR_texture_compression_astc_ldr" #else "WEBGL_compressed_texture_astc" #end);
+				if (ext == null) {
+					this.sendError("Don't support ASTC extension.");
+					return;
+				}
+				// 这里要检查是否支持ASTC纹理配置等支持
+				var value = Reflect.getProperty(ext, format);
+				if (value == null) {
+					this.sendError('Don\'t support ASTC $format extension.');
+					return;
+				}
+				var context3D:Context3D = Start.current.stage.context3D;
+				var rectangleTexture:RectangleTexture = new RectangleTexture(context3D, width, height, null, false);
+				GL.bindTexture(GL.TEXTURE_2D, rectangleTexture.__textureID);
+				rectangleTexture.__format = astcFormat;
+				#if (lime_opengl || lime_opengles)
+				GL.compressedTexImage2D(GL.TEXTURE_2D, 0, rectangleTexture.__format, rectangleTexture.__width, rectangleTexture.__height, 0,
+					uint8Array.byteLength, uint8Array);
+				#elseif lime_webgl
+				GL.compressedTexImage2DWEBGL(GL.TEXTURE_2D, 0, rectangleTexture.__format, rectangleTexture.__width, rectangleTexture.__height, 0, uint8Array);
+				#end
+				GL.bindTexture(GL.TEXTURE_2D, null);
+				var bitmapData:BitmapData = BitmapData.fromTexture(rectangleTexture);
+				this.finalAssets(BITMAP, bitmapData, 1);
+			}).onError(function(err) {
+				if (AssetsUtils.cleanCacheId(getData())) {
+					// 可重试
+					process();
+				} else {
+					this.sendError("无法加载：" + getData());
+				}
+			});
+		} else {
+			// 不支持ASTC的情况下，则默认加载png资源
+			AssetsUtils.loadBitmapData(StringTools.replace(this.getData(), ".astc", ".png")).onComplete((bitmapData) -> {
+				this.finalAssets(BITMAP, bitmapData, 1);
+			}).onError((msg) -> {
+				this.sendError("设备不支持ASTC转PNG，加载失败：" + getData());
+			});
+		}
 	}
 }
 

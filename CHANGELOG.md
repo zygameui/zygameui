@@ -9,6 +9,10 @@
 
 # ZYGameUI 更新日志
 
+### 14.0.16
+- 删除：删除`ATF`格式的支持，不再支持；
+- 新增：新增`ASTC`格式的支持；
+
 ### 14.0.15
 - [新增] 新增`discard_pixels`用于丢失像素数据，以便节约更多的内存（Bate测试中，该行为适用于HTML5/HXCPP目标）；  
     当使用`discard_pixels`，将无法直接使用`BitmapData.draw`等功能，因为它们依赖`像素`，但是仍然可以通过`缓冲区`来绘制，例如`BitmapData.disposeImage`后，再重新使用`draw`绘制；

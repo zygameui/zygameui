@@ -82,8 +82,8 @@ class AssetsUtils {
 		return new TextLoader(ofPath(id));
 	}
 
-	public static function loadBitmapData(id:String, cache:Bool = false, isAtf:Bool = false):BitmapDataLoader {
-		return new BitmapDataLoader(ofPath(id), isAtf);
+	public static function loadBitmapData(id:String, cache:Bool = false):BitmapDataLoader {
+		return new BitmapDataLoader(ofPath(id));
 	}
 
 	public static function loadBytes(id:String, cache:Bool = false):BytesLoader {
@@ -383,16 +383,13 @@ class BitmapDataLoader extends BaseLoader {
 	 */
 	private static var __listeners:Map<String, Array<BitmapDataLoaderCall>> = [];
 
-	public var isAtf:Bool = false;
-
 	private var _onCompleteAssetsCall:String->BitmapData->Void;
 
 	private var _onCompleteCall:BitmapData->Void;
 	private var _onRootCompleteCall:BitmapData->Void;
 
-	public function new(path:String, isAtf:Bool) {
+	public function new(path:String) {
 		super(path);
-		this.isAtf = isAtf;
 	}
 
 	/**
@@ -423,47 +420,7 @@ class BitmapDataLoader extends BaseLoader {
 			#end
 			_onRootCompleteCall = null;
 		}
-
-		#if atf
-		AssetsUtils.loadBytes(path, false).onComplete(function(bytes:Bytes):Void {
-			var h = bytes.getInt32(0);
-			if (h == 0x04034B50) {
-				// 属于atf.zip压缩格式，需要进行ATF解析
-				var input:BytesInput = new BytesInput(bytes);
-				var zip:Zip = new Zip(input);
-				var list:List<Entry> = zip.read();
-				var entry:Entry = list.first();
-				if (entry != null) {
-					// 解压
-					var size = entry.fileName.split("x");
-					var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
-					var texture:Texture = zygame.core.Start.current.stage.context3D.createTexture(Std.parseInt(size[1]), Std.parseInt(size[0]),
-						Context3DTextureFormat.COMPRESSED_ALPHA, false);
-					texture.uploadCompressedTextureFromByteArray(bytes, 0);
-					var bitmapData = BitmapData.fromTexture(texture);
-					if (_onCompleteCall != null)
-						_onCompleteCall(bitmapData);
-					_onCompleteCall = null;
-				} else {
-					callError("没有包含atf资源");
-					_onCompleteCall = null;
-				}
-			} else {
-				// 普通的图片格式，正常载入
-				Image.loadFromBytes(bytes).onComplete((img) -> {
-					var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(img);
-					bitmapData.path = path;
-					if (_onCompleteCall != null)
-						_onCompleteCall(bitmapData);
-					_onCompleteCall = null;
-				});
-			}
-		});
-
-		return this;
-		#else
 		return onComplete2(_onCompleteCall);
-		#end
 	}
 
 	private function onComplete2(call:BitmapData->Void):BitmapDataLoader {
@@ -475,73 +432,14 @@ class BitmapDataLoader extends BaseLoader {
 			@:privateAccess zipAssets.loadZipBitmapData(imgname, call);
 			return this;
 		}
-		if (isAtf) {
-			// ATF载入流程分解：需要先将zip加载，然后进行解压，获取到对应imgPath的文件，然后再创建读取Texture
-			AssetsUtils.loadBytes(path, false).onComplete(function(bytes:Bytes):Void {
-				var input:BytesInput = new BytesInput(bytes);
-				var zip:Zip = new Zip(input);
-				var list:List<Entry> = zip.read();
-				var entry:Entry = AssetsUtils.findZipData(list, ".atf");
-				if (entry != null) {
-					// 解压
-					var bytes:Bytes = entry.compressed ? Deflate.decompress(entry.data) : entry.data;
-					var texture:Texture = zygame.core.Start.current.stage.context3D.createTexture(2048, 2048, Context3DTextureFormat.COMPRESSED_ALPHA, false);
-					texture.uploadCompressedTextureFromByteArray(bytes, 0);
-					var bitmapData = BitmapData.fromTexture(cast untyped texture);
-					#if memory_monitor
-					zygame.core.Start.current.watch(bitmapData);
-					#end
-					if (call != null)
-						call(bitmapData);
-					call = null;
-				} else {
-					callError("没有包含atf资源");
-					call = null;
-				}
-			});
-		} else {
-			#if cpp
-			#if ios
-			if (path.indexOf("http") == -1)
-				path = path.substr(7);
-			#end
-			AssetsUtils.loadBytes(path).onComplete((bytes) -> {
-				Image.loadFromBytes(bytes).onComplete((img) -> {
-					var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(img);
-					if (bitmapData == null) {
-						if (callError != null)
-							callError("无法加载" + path);
-					} else {
-						#if memory_monitor
-						zygame.core.Start.current.watch(bitmapData);
-						#end
-						bitmapData.path = path;
-						if (call != null)
-							call(bitmapData);
-					}
-					call = null;
-				});
-			}).onError((msg) -> {
-				if (callError != null)
-					callError("无法加载" + path);
-				call = null;
-			});
-			#else
-			if (__listeners.exists(path)) {
-				// 已存在任务，追加列表
-				__listeners.get(path).push({
-					onCompleteCall: call
-				});
-				return this;
-			}
-			__listeners.set(path, [
-				{
-					onCompleteCall: call
-				}
-			]);
-			var img:Image = new Image();
-			img.__fromFile(path, function(loadedImage:Image):Void {
-				var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(loadedImage);
+		#if cpp
+		#if ios
+		if (path.indexOf("http") == -1)
+			path = path.substr(7);
+		#end
+		AssetsUtils.loadBytes(path).onComplete((bytes) -> {
+			Image.loadFromBytes(bytes).onComplete((img) -> {
+				var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(img);
 				if (bitmapData == null) {
 					if (callError != null)
 						callError("无法加载" + path);
@@ -550,30 +448,63 @@ class BitmapDataLoader extends BaseLoader {
 					zygame.core.Start.current.watch(bitmapData);
 					#end
 					bitmapData.path = path;
-					// if (call != null)
-					// 	call(bitmapData);
-					for (c in __listeners.get(path)) {
-						if (c != null) {
-							c.onCompleteCall(bitmapData.clone());
-						}
-					}
+					if (call != null)
+						call(bitmapData);
 				}
-				__listeners.remove(path);
-				call = null;
-			}, function():Void {
-				// 加载失败，应该移除所有回调，并且重新载入
-				__listeners.remove(path);
-				if (loadTimes < AssetsUtils.failTryLoadTimes) {
-					// 重试
-					ZLog.warring("重载：" + path + "," + loadTimes);
-					loadTimes++;
-					onComplete2(call);
-				} else if (callError != null)
-					callError("无法加载" + path);
 				call = null;
 			});
-			#end
+		}).onError((msg) -> {
+			if (callError != null)
+				callError("无法加载" + path);
+			call = null;
+		});
+		#else
+		if (__listeners.exists(path)) {
+			// 已存在任务，追加列表
+			__listeners.get(path).push({
+				onCompleteCall: call
+			});
+			return this;
 		}
+		__listeners.set(path, [
+			{
+				onCompleteCall: call
+			}
+		]);
+		var img:Image = new Image();
+		img.__fromFile(path, function(loadedImage:Image):Void {
+			var bitmapData:zygame.display.ZBitmapData = zygame.display.ZBitmapData.fromImage(loadedImage);
+			if (bitmapData == null) {
+				if (callError != null)
+					callError("无法加载" + path);
+			} else {
+				#if memory_monitor
+				zygame.core.Start.current.watch(bitmapData);
+				#end
+				bitmapData.path = path;
+				// if (call != null)
+				// 	call(bitmapData);
+				for (c in __listeners.get(path)) {
+					if (c != null) {
+						c.onCompleteCall(bitmapData.clone());
+					}
+				}
+			}
+			__listeners.remove(path);
+			call = null;
+		}, function():Void {
+			// 加载失败，应该移除所有回调，并且重新载入
+			__listeners.remove(path);
+			if (loadTimes < AssetsUtils.failTryLoadTimes) {
+				// 重试
+				ZLog.warring("重载：" + path + "," + loadTimes);
+				loadTimes++;
+				onComplete2(call);
+			} else if (callError != null)
+				callError("无法加载" + path);
+			call = null;
+		});
+		#end
 		return this;
 	}
 }

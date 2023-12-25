@@ -22,12 +22,9 @@ class TextureLoader {
 
 	public var xmlPath:String;
 
-	public var isAtf:Bool = false;
-
-	public function new(img:String, xml:String, isAtf:Bool = false) {
+	public function new(img:String, xml:String) {
 		imgPath = img;
 		xmlPath = xml;
-		this.isAtf = isAtf;
 	}
 
 	/**
@@ -35,7 +32,7 @@ class TextureLoader {
 	 * @param func -
 	 */
 	public function load(func:TextureAtlas->Void, errorCall:String->Void):Void {
-		Assets.loadBitmapData(imgPath, false, isAtf).onComplete(function(bitmapdata:BitmapData):Void {
+		Assets.loadBitmapData(imgPath, false).onComplete(function(bitmapdata:BitmapData):Void {
 			Assets.loadText(xmlPath).onComplete(function(data:String):Void {
 				var xml:Xml = null;
 				try {
@@ -59,11 +56,10 @@ class Base64TextureLoader extends TextureLoader {
 
 	private var _xmlData:String;
 
-	public function new(img:String, xml:String, filename:String, isAtf:Bool = false) {
+	public function new(img:String, xml:String, filename:String) {
 		_base64 = img;
 		_xmlData = xml;
-		this.isAtf = isAtf;
-		super(filename, filename, isAtf);
+		super(filename, filename);
 	}
 
 	/**

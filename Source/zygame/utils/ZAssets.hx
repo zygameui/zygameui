@@ -64,6 +64,11 @@ class ZAssets {
 	public var timeout:Float = -1;
 
 	/**
+	 * 仅加载ASTC压缩纹理
+	 */
+	public var onlyASTCTexture:Bool = false;
+
+	/**
 	 * 最大可同时加载数量，改进默认最大载入数为10
 	 */
 	public var maxLoadNumber:Int = #if MAX_LOAD_COUNT Std.parseInt(Compiler.getDefine("MAX_LOAD_COUNT")) #elseif ios 10 #else 10 #end;
@@ -198,6 +203,21 @@ class ZAssets {
 	}
 
 	/**
+	 * 如果ASTC支持，则转换为ASTC资源路径
+	 * @param path 
+	 * @return String
+	 */
+	private function converToAstc(path:String):String {
+		if (onlyASTCTexture) {
+			var isPNG = StringTools.endsWith(path, ".png");
+			if (isPNG) {
+				path = StringTools.replace(path, ".png", ".astc");
+			}
+		}
+		return path;
+	}
+
+	/**
 	 *  载入单个文件
 	 * @param path -
 	 */
@@ -208,6 +228,7 @@ class ZAssets {
 		}
 		if (Std.isOfType(data, String) && _loadfilelist.indexOf(data) == -1) {
 			// 检查该path可载入的支持
+			data = converToAstc(data);
 			for (base in LoaderAssets.fileparser) {
 				var cheakpath:String = data;
 				var ext:String = StringUtils.getExtType(cheakpath);
@@ -287,6 +308,7 @@ class ZAssets {
 	 * @param config 可传递.xml或者.json文件，如果不传递，则默认使用.xml后缀
 	 */
 	public function loadTextures(img:String, config:String = null, isAtf:Bool = false):Void {
+		img = converToAstc(img);
 		var _config = config != null ? config : img.substr(0, img.lastIndexOf(".")) + ".xml";
 		if (StringTools.endsWith(_config, ".xml"))
 			pushPasrers(new TextureAtlasParser({
@@ -322,6 +344,9 @@ class ZAssets {
 	 * @param texJsonPath 该参数可以传入数组，支持多纹理加载
 	 */
 	public function loadSpineTextAlats(texPaths:Array<String>, texJsonPath:String):Void {
+		for (index => img in texPaths) {
+			texPaths[index] = converToAstc(img);
+		}
 		pushPasrers(new SpineParser({
 			imgs: texPaths,
 			atlas: texJsonPath,
@@ -406,6 +431,7 @@ class ZAssets {
 	 * @param xmlPath
 	 */
 	public function loadFnt(pngPath:String, xmlPath:String):Void {
+		pngPath = converToAstc(pngPath);
 		pushPasrers(new FntParser({
 			imgpath: pngPath,
 			fntpath: xmlPath,

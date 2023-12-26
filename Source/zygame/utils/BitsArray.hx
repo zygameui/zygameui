@@ -1,6 +1,5 @@
 package zygame.utils;
 
-import game.utils.BytesTools;
 import haxe.io.Bytes;
 
 /**

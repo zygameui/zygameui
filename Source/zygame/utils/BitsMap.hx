@@ -6,7 +6,7 @@ import haxe.io.Bytes;
 /**
  * 二进制地图数据，每个点位仅使用0/1表示，可以非常节约性能和内存
  */
-class BytesMap {
+class BitsMap {
 	/**
 	 * 二进制
 	 */
@@ -52,17 +52,6 @@ class BytesMap {
 		}
 		bytes.set(pos, c);
 	}
-
-	// static function getBitString(value:Int):String {
-	// 	var bitString:String = "";
-	// 	for (i in 0...8) {
-	// 		bitString += getBit(value, i);
-	// 	}
-	// 	return bitString;
-	// }
-	// static inline function getBit(value:Int, index:Int):Int {
-	// 	return (value >> 7 - index) & 1;
-	// }
 
 	/**
 	 * 获得坐标数据

@@ -31,6 +31,16 @@ class ZBuilderScene extends ZScene {
 	 */
 	public var loaded(get, never):Bool;
 
+	/**
+	 * 是否加载错误，如果加载错误，则还有一个`errorData`数据提供读取
+	 */
+	public var loadError:Bool = false;
+
+	/**
+	 * 加载错误信息
+	 */
+	public var errorData:Dynamic = null;
+
 	private var _loaded:Bool = false;
 
 	private var preloadDisplay:Preload;
@@ -95,6 +105,8 @@ class ZBuilderScene extends ZScene {
 					ZBuilder.unbindAssets(assetsBuilder.assets);
 					assetsBuilder.dispose();
 					ZSceneManager.current.releaseScene(this, false);
+					errorData = "Load fail";
+					loadError = true;
 				}
 			}
 		}, onLoaded);

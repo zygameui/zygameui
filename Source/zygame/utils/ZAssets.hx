@@ -383,7 +383,7 @@ class ZAssets {
 		for (base in _parsers) {
 			if (base.equal(parser)) {
 				// 队列已存在
-				ZLog.warring(["队列已经存在相同的加载资源：", parser.getName()]);
+				// ZLog.warring(["队列已经存在相同的加载资源：", parser.getName()]);
 				return;
 			}
 		}

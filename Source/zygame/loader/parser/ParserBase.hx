@@ -62,10 +62,17 @@ import zygame.utils.Lib;
 		_data = data;
 	}
 
+	private var __bindName:String = null;
+
 	/**
 	 * 获取解析名
 	 */
 	public function getName():String {
+		if (__bindName != null) {
+			var n = __bindName;
+			__bindName = null;
+			return n;
+		}
 		if (_data == null) {
 			throw "[" + Type.getClassName(Type.getClass(this)) + "]_data is null";
 		}
@@ -130,10 +137,11 @@ import zygame.utils.Lib;
 	 * @param assetsData
 	 * @param pro 解析进度，如果当前解析已结束，请传递1，否则请传递少于1的值。
 	 */
-	public function finalAssets(type:AssetsType, assetsData:Dynamic, pro:Float = 0):Void {
+	public function finalAssets(type:AssetsType, assetsData:Dynamic, pro:Float = 0, fileName:String = null):Void {
 		#if assets_debug
 		zygame.utils.ZLog.log("finalAssets:", type, pro);
 		#end
+		this.__bindName = fileName;
 		this.progress = pro;
 		this.out(this, type, assetsData, pro);
 		if (pro == 1) {

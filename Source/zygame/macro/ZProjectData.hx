@@ -55,6 +55,8 @@ class ZProjectData {
 	}
 
 	public function readXml(xmlpath:String, rootPath:String):Void {
+		if (!FileSystem.exists(xmlpath))
+			return;
 		var xml:Xml = Xml.parse(File.getContent(xmlpath));
 		for (item in xml.firstElement().elements()) {
 			switch (item.nodeName) {

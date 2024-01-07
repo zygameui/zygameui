@@ -15,6 +15,11 @@ class Mp3ToOgg {
 
 	static function main() {
 		toOgg(Sys.args()[0]);
+		while (true) {
+			if (thridCounts == 0) {
+				break;
+			}
+		}
 	}
 
 	public static function toOgg(dir:String):Void {

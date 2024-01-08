@@ -1075,8 +1075,13 @@ class ZBuilder {
 				}
 				ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
 				#end
-			} else
+			} else {
+				#if !igonre_extends_error
 				throw "Class name " + className + " is not define xml assets!";
+				#else
+				return null;
+				#end
+			}
 		} else {
 			ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
 		}

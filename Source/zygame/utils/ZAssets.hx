@@ -523,12 +523,24 @@ class ZAssets {
 	}
 
 	/**
-		重置加载
-	**/
+	 * 清空所有加载状态
+	 */
 	public function reset():Void {
 		_parsers = [];
 		_loadingParsers = [];
 		_loadStop = true;
+		this.currentLoadedCount = 0;
+		this.currentLoadIndex = 0;
+		this.currentLoadNumber = 0;
+	}
+
+	/**
+	 * 当加载失败后，可以通过该接口重新加载
+	 */
+	public function resetLoad():Void {
+		_loadingParsers = [];
+		_loadStop = true;
+		start(_callBack, _errorCallBack);
 	}
 
 	/**
@@ -594,14 +606,20 @@ class ZAssets {
 			GameUtils.reportErrorLog("加载API", "加载失败：" + msg, "无", "API", ErrorLogLevel.ERROR);
 			#end
 
+			_loadStop = true;
+			
 			// 全局加载失败事件
 			if (globalListener != null && globalListener.hasEventListener(GlobalAssetsLoadEvent.LOAD_ERROR)) {
 				var event = new GlobalAssetsLoadEvent(GlobalAssetsLoadEvent.LOAD_ERROR);
 				event.url = msg;
+				event.assets = this;
 				globalListener.dispatchEvent(event);
+				if (event.interceptErrorEvent) {
+					ZLog.warring("Error event is intercept.");
+					return;
+				}
 			}
 
-			_loadStop = true;
 			if (timer != null)
 				timer.stop();
 			_parsers = [];

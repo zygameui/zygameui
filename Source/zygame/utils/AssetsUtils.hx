@@ -504,7 +504,7 @@ class BitmapDataLoader extends BaseLoader {
 				// 重试
 				ZLog.warring("重载：" + path + "," + loadTimes);
 				loadTimes++;
-				onComplete2(call);
+				Lib.setTimeout(onComplete2, 3000, [call]);
 			} else if (callError != null)
 				callError("无法加载" + path);
 			call = null;
@@ -560,7 +560,7 @@ class TextLoader extends BaseLoader {
 				// 重试
 				ZLog.warring("重载：" + path + "," + loadTimes);
 				loadTimes++;
-				onComplete(_onCompleteCall);
+				Lib.setTimeout(onComplete, 3000, [_onCompleteCall]);
 			} else
 				callError("无法加载" + path);
 		});
@@ -597,7 +597,7 @@ class SoundLoader extends BaseLoader {
 				// 重试
 				ZLog.warring("重载：" + path + "," + loadTimes);
 				loadTimes++;
-				onComplete(_onCompleteCall);
+				Lib.setTimeout(onComplete, 3000, [_onCompleteCall]);
 			} else
 				callError("无法加载" + path);
 		});

@@ -18,7 +18,7 @@ class ASTCBitmapDataLoader extends BitmapDataLoader {
 				// 重试
 				ZLog.warring("重载：" + path + "," + loadTimes);
 				loadTimes++;
-				onComplete(call);
+				Lib.setTimeout(onComplete, 3000, [call]);
 			} else if (callError != null)
 				callError("无法加载" + path);
 		}

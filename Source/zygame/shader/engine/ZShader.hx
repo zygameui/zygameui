@@ -98,15 +98,16 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 	 * @param glFragmentSource 
 	 */
 	public function new(xml:Xml) {
+		var version = Std.parseInt(xml.get("version"));
 		var glVertexSource:String = null;
 		var glFragmentSource:String = null;
 		var xmls = xml.elements();
 		for (item in xmls) {
 			switch (item.nodeName) {
 				case "glVertexSource":
-					glVertexSource = item.firstChild().nodeValue;
+					glVertexSource = __converToSource(item.firstChild().nodeValue, version);
 				case "glFragmentSource":
-					glFragmentSource = item.firstChild().nodeValue;
+					glFragmentSource = __converToSource(item.firstChild().nodeValue, version);
 				case "update":
 					haxeScript = new ZHaxe(item.firstChild().nodeValue);
 					#if hscript
@@ -130,6 +131,14 @@ class ZShader extends DisplayObjectShader implements zygame.core.Refresher {
 			this.glFragmentSource = glFragmentSource;
 		}
 		super();
+	}
+
+	private function __converToSource(value:String, version:Int):String {
+		if (version == 2) {
+			// TODO 版本2的特殊处理
+			return value;
+		}
+		return value;
 	}
 
 	/**

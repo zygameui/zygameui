@@ -161,7 +161,7 @@ class ZImage_v2 extends DataProviderBox {
 		} else if (!_setWidth && @:privateAccess !this.__render.__isS9Draw) {
 			var size = this.__render.getFrameSize();
 			var pwidth = size.width;
-			return pwidth * scaleY;
+			return pwidth * scaleX;
 		}
 		return Math.abs(_componentWidth * scaleX);
 	}

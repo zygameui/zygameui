@@ -844,6 +844,20 @@ class ZBuilder {
 					builder.defineValue(key, value);
 				}
 		}
+
+		var parentXml:Xml = Reflect.getProperty(parent, "parentXml");
+		if (parentXml != null) {
+			// 需要绑定
+			var fxml = xml.firstElement();
+			for (key in parentXml.attributes()) {
+				switch (key) {
+					case "id", "centerX", "centerY", "left", "right", "bottom", "top", "y", "x":
+						continue;
+				}
+				fxml.set(key, parentXml.get(key));
+			}
+		}
+
 		#if openfl_console
 		Cc.watch(builder, xmlfileName);
 		#end
@@ -1084,6 +1098,9 @@ class ZBuilder {
 			}
 		} else {
 			ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);
+			try {
+				Reflect.setProperty(ui, "parentXml", xml);
+			} catch (e:Exception) {}
 		}
 		if (!Std.isOfType(ui, DisplayObject) && !Std.isOfType(ui, Tile)) {
 			// 着色器

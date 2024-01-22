@@ -118,6 +118,17 @@ class AutoBuilder {
 			fields.push(assetsBuilder);
 		}
 
+		// 需要额外新增一个parentXml的属性，来绑定父节点参数
+		var parentXml:Field = {
+			name: "parentXml",
+			doc: "当通过`AutoBuilder`构造的UI架构，都会附带一个parentXml，当该对象不为null时，则会将该对象的属性继承到当前组件中",
+			access: [APublic],
+			kind: FVar(macro :Xml),
+			pos: Context.currentPos()
+		}
+
+		fields.push(parentXml);
+
 		if (bindBuilder == "assetsBuilder") {
 			var autoNewBuilder = {
 				name: isZBuilderScene ? "new" : "onInit",

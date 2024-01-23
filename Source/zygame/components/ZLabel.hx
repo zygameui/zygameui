@@ -267,16 +267,18 @@ class ZLabel extends DataProviderComponent {
 			this.updateComponents();
 		}
 		try {
-			var rootColor = _font.color;
-			var textLength = _display.text != null ? _display.text.length : 0;
-			for (data in __setFontSelectColor) {
-				if (data.endIndex > textLength || data.startIndex == -1) {
-					continue;
+			if (__setFontSelectColor.length > 0) {
+				var rootColor = _font.color;
+				var textLength = _display.text != null ? _display.text.length : 0;
+				for (data in __setFontSelectColor) {
+					if (data.endIndex > textLength || data.startIndex == -1) {
+						continue;
+					}
+					_font.color = data.color;
+					_display.setTextFormat(_font, data.startIndex, data.endIndex);
 				}
-				_font.color = data.color;
-				_display.setTextFormat(_font, data.startIndex, data.endIndex);
+				_font.color = rootColor;
 			}
-			_font.color = rootColor;
 		} catch (e:Exception) {}
 		if (__setFontSelectColor.length > 0)
 			__setFontSelectColor = [];

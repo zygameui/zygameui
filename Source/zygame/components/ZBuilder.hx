@@ -845,18 +845,20 @@ class ZBuilder {
 				}
 		}
 
+		#if zygameui15
 		var parentXml:Xml = Reflect.getProperty(parent, "parentXml");
 		if (parentXml != null) {
 			// 需要绑定
 			var fxml = xml.firstElement();
 			for (key in parentXml.attributes()) {
 				switch (key) {
-					case "id", "centerX", "centerY", "left", "right", "bottom", "top", "y", "x", "scaleX", "scaleY", "width", "height":
+					case "id", "centerX", "centerY", "left", "right", "bottom", "top", "y", "x", "scaleX", "scaleY", "width", "height", "alpha", "visible":
 						continue;
 				}
 				fxml.set(key, parentXml.get(key));
 			}
 		}
+		#end
 
 		#if openfl_console
 		Cc.watch(builder, xmlfileName);

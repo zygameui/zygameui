@@ -70,6 +70,8 @@ class SaveObject<T:SaveObjectData> {
 		this._id = id;
 	}
 
+	private var __saveObjectDataClasses:Class<SaveObjectData>;
+
 	@:generic public function make<T:SaveObjectData>(c:Class<SaveObjectData>):SaveObject<T> {
 		#if cpp
 		threadPool = new ThreadPool(0, 1);
@@ -78,6 +80,7 @@ class SaveObject<T:SaveObjectData> {
 		// threadPool.onComplete.add(threadPool_onComplete);
 		// threadPool.onError.add(threadPool_onError);
 		#end
+		this.__saveObjectDataClasses = c;
 		this.data = cast Type.createInstance(c, []);
 		if (localDataEnable) {
 			try {
@@ -466,11 +469,9 @@ class SaveObject<T:SaveObjectData> {
 	 * 清空用户数据
 	 */
 	public function clear():Void {
-		var retdata = this.getData();
-		var keys = Reflect.fields(retdata);
-		for (key in keys) {
-			_setLocal(key, "");
-		}
+		this.data = cast Type.createInstance(__saveObjectDataClasses, []);
+		_changedData = {};
+		_localSaveData = {};
 	}
 
 	private function _flush(data:Dynamic, key:String):Void {

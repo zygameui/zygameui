@@ -110,7 +110,12 @@ class SaveDynamicDataContent<T> extends SaveDynamicDataBaseContent {
 		var newdata = {};
 		var keys = Reflect.fields(data);
 		for (key in keys) {
-			Reflect.setProperty(newdata, key, Reflect.getProperty(data, key));
+			var v = Reflect.getProperty(data, key);
+			if (v is CEData) {
+				Reflect.setProperty(newdata, key, cast(v, CEData).value);
+			} else {
+				Reflect.setProperty(newdata, key, Reflect.getProperty(data, key));
+			}
 		}
 		Reflect.setProperty(backdata, key, newdata);
 	}

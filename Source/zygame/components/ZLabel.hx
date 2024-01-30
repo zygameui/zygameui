@@ -720,7 +720,17 @@ class ZLabel extends DataProviderComponent {
 	 */
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
-		#if minigame
+		#if sxk_game_sdk
+		// SXKSDK键盘支持
+		if (v4.utils.KeyboardInputTools.keyboard != null) {
+			v4.utils.KeyboardInputTools.keyboard.input(this);
+		} else {
+			Lib.nextFrameCall(function() {
+				HTML5TextInput.openInput(this);
+				this.setSelectQuadVisible(true);
+			});
+		}
+		#elseif minigame
 		if (zygame.core.KeyboardManager.keyboard != null) {
 			zygame.core.KeyboardManager.focus(_display);
 			zygame.core.KeyboardManager.keyboard.input(this);

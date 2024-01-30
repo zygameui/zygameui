@@ -326,6 +326,9 @@ class ZBuilder {
 		bindParsing(ZLabel, "stroke", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, ZLabel).stroke(Std.parseInt(value));
 		});
+		bindParsing(ZLabel, "wordWrap", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, ZLabel).setWordWrap(value == "true");
+		});
 		bindParsing(ZLabel, "mixColor", function(ui:Dynamic, name:String, value:String):Void {
 			var array = value.split(",");
 			cast(ui, ZLabel).mixColor = new MixColorData(Std.parseInt(array[0]), Std.parseInt(array[1]));

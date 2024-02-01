@@ -19,21 +19,18 @@ import openfl.display.BitmapData;
 @:access(openfl.text.TextField)
 @:access(openfl.text.TextFormat)
 @:access(openfl.display.BitmapData)
-class ZTextField extends TextField 
-{
+class ZTextField extends TextField {
+	public function new() {
+		super();
+	}
 
-    public function new() {
-        super();
-    }
+	// private static var initTextFieldWindow:Bool = false;
+	// private static var compositionstart:Bool = false;
 
-    // private static var initTextFieldWindow:Bool = false;
-
-    // private static var compositionstart:Bool = false;
-
-    @:noCompletion private override function __cleanup ():Void {
-        #if js
-        //进行深度清理
-        js.Syntax.code("
+	@:noCompletion private override function __cleanup():Void {
+		#if js
+		// 进行深度清理
+		js.Syntax.code("
         if(this.__graphics != null && this.__graphics.__bitmap != null)
         {
             if(this.__graphics.__bitmap.__texture != null)
@@ -45,48 +42,44 @@ class ZTextField extends TextField
         }
         if(this.__graphics != null && this.__graphics.__canvas != null && this.__graphics.__canvas.cleanup != null)
             this.__graphics.__canvas.cleanup();");
-        #end
-		super.__cleanup ();
-
+		#end
+		super.__cleanup();
 	}
-    
-    // /**
-    //  * 优化使用输入法时输入重叠的问题
-    //  */
-    // @:noCompletion override private function __enableInput():Void
+
+	// /**
+	//  * 优化使用输入法时输入重叠的问题
+	//  */
+	// @:noCompletion override private function __enableInput():Void
 	// {
-    //     #if js
-    //     if(!initTextFieldWindow)
-    //     {
-    //         initTextFieldWindow = true;
-    //         untyped window.document.addEventListener("compositionstart",function(e){
+	//     #if js
+	//     if(!initTextFieldWindow)
+	//     {
+	//         initTextFieldWindow = true;
+	//         untyped window.document.addEventListener("compositionstart",function(e){
 	// 			if(compositionstart == false)
 	// 				compositionstart = true;
 	// 		});
-    //     }
-    //     #end
-    //     super.__enableInput();
-    // }
-
-    // /**
-    //  * 优化使用输入法时输入重叠的问题
-    //  */
-    // @:noCompletion override private function window_onTextInput(value:String):Void
+	//     }
+	//     #end
+	//     super.__enableInput();
+	// }
+	// /**
+	//  * 优化使用输入法时输入重叠的问题
+	//  */
+	// @:noCompletion override private function window_onTextInput(value:String):Void
 	// {
 	// 	if(compositionstart){
 	// 		compositionstart = false;
 	// 		return;
 	// 	}
-    //     super.window_onTextInput(value);
+	//     super.window_onTextInput(value);
 	// }
-
-    // override public function set_text(value:String):String
-    // {
-    //     if(text != value)
-    //     {
-    //         super.text = value;
-    //     }
-    //     return value;
-    // }
-
+	// override public function set_text(value:String):String
+	// {
+	//     if(text != value)
+	//     {
+	//         super.text = value;
+	//     }
+	//     return value;
+	// }
 }

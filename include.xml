@@ -86,6 +86,8 @@
 	<!-- <define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl} || android || ios"
 	/> -->
 
+	<define name="openfl-disable-graphics-upscaling" if="${9.0.0 > openfl}"/>
+
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf" />
 

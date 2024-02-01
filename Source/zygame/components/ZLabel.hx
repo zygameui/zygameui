@@ -1,5 +1,7 @@
 package zygame.components;
 
+import openfl.display.BitmapData;
+import openfl.display.Bitmap;
 import zygame.components.data.MixColorData;
 import openfl.events.RenderEvent;
 import openfl.geom.Matrix;
@@ -54,6 +56,11 @@ class ZLabel extends DataProviderComponent {
 	private var _defaultDisplay:ZTextField;
 
 	private var _display:ZTextField;
+
+	/**
+	 * 文本渲染（位图模式）
+	 */
+	private var _bitmap:Bitmap;
 
 	private var _font:TextFormat;
 
@@ -204,6 +211,8 @@ class ZLabel extends DataProviderComponent {
 	public function new() {
 		super();
 		_display = new ZTextField();
+		_bitmap = new Bitmap();
+		_bitmap.smoothing = true;
 		#if ios
 		_font = new TextFormat("assets/" + zygame.components.base.ZConfig.fontName);
 		#else
@@ -241,14 +250,14 @@ class ZLabel extends DataProviderComponent {
 	private function set_mixColor(v:MixColorData):MixColorData {
 		this.mixColor = v;
 		if (__blur == 0 && this.mixColor == null)
-			this.getDisplay().shader = null;
+			this._bitmap.shader = null;
 		else
-			this.getDisplay().shader = __textFieldStrokeShader;
+			this._bitmap.shader = __textFieldStrokeShader;
 		return v;
 	}
 
 	private function __onRender(e:RenderEvent):Void {
-		if (this.getDisplay().shader != null) {
+		if (this._bitmap.shader != null) {
 			__textFieldStrokeShader.updateParam(__blur, __color);
 			if (mixColor != null)
 				__textFieldStrokeShader.updateMixColor(mixColor.startColor, mixColor.endColor);
@@ -264,6 +273,7 @@ class ZLabel extends DataProviderComponent {
 			if (this.dataProvider != null && this.dataProvider != this._display.text) {
 				this.drawText();
 			}
+			__drawTexting = true;
 			this.updateComponents();
 		}
 		try {
@@ -319,7 +329,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override public function initComponents():Void {
-		this.addChild(_display);
+		this.addChild(_bitmap);
+		// _bitmap.y = 20;
+		// this.addChild(_display);
 		this.addChild(zquad);
 	}
 
@@ -427,6 +439,15 @@ class ZLabel extends DataProviderComponent {
 			this.getDisplay().scaleY = this.getDisplay().scaleX = Math.min(1, _width / this.getTextWidth());
 			this.getDisplay().width = _width / this.getDisplay().scaleY;
 		}
+
+		if (__drawTexting) {
+			// 转换成BitmapData数据
+			var bitmapData = new BitmapData(Std.int(this.width), Std.int(this.height), true, 0x0);
+			bitmapData.disposeImage();
+			bitmapData.draw(_display, _display.transform.matrix, null, null, null, true);
+			_bitmap.bitmapData = bitmapData;
+		}
+		__drawTexting = false;
 	}
 
 	override private function set_dataProvider(value:Dynamic):Dynamic {
@@ -462,7 +483,10 @@ class ZLabel extends DataProviderComponent {
 		return value;
 	}
 
+	private var __drawTexting:Bool = false;
+
 	private function drawText():Void {
+		__drawTexting = true;
 		var value:String = this.dataProvider;
 		if (value != null) {
 			if (value.length > _maxChars && _maxChars != 0) {
@@ -771,9 +795,9 @@ class ZLabel extends DataProviderComponent {
 		__blur = blur;
 		__color = color;
 		if (blur == 0 && this.mixColor == null) {
-			this.getDisplay().shader = null;
+			this._bitmap.shader = null;
 		} else {
-			this.getDisplay().shader = __textFieldStrokeShader;
+			this._bitmap.shader = __textFieldStrokeShader;
 		}
 	}
 
@@ -784,7 +808,7 @@ class ZLabel extends DataProviderComponent {
 	public function bold(blur:Float = 1):Void {
 		__blur = blur;
 		__color = _font.color;
-		this.getDisplay().shader = __textFieldStrokeShader;
+		this._bitmap.shader = __textFieldStrokeShader;
 	}
 
 	/**

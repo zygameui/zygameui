@@ -409,7 +409,15 @@ class ZLabel extends DataProviderComponent {
 					zquad.y = (rect.y) / _scale + _font.size * 0.168 / _scale + _display.y;
 				}
 			} else {
-				zquad.x = _display.x;
+				if (_display.x == 0) {
+					switch (hAlign) {
+						case LEFT, RIGHT:
+							zquad.x = _display.x;
+						case CENTER:
+							zquad.x = this.width / 2;
+						default:
+					}
+				}
 				zquad.y = _font.size * 0.168 / _scale + _display.y;
 			}
 		} else {
@@ -837,11 +845,13 @@ class ZLabel extends DataProviderComponent {
 		setFrameEvent(b);
 		if (b) {
 			this.__changed = true;
+			this.addChild(zquad);
 		} else {
 			#if html5
 			HTML5TextInput.closeInput(this);
 			#end
 		}
+		this.updateComponents();
 	}
 
 	override function onAddToStage():Void {

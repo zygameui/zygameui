@@ -11,6 +11,7 @@
 
 ### 15.0.0
 - 改进：改进【ZLabel】自动使用位图缓存，提高性能；
+- 改进：改进`SoundChannelManager.setMusicAvailable`关闭的音乐，允许直接恢复；
 
 ### 14.0.41
 - 改进：为`AutoBuilder`构造的第三方组件，可以支持父节点参数处理；

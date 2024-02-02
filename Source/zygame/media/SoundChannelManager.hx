@@ -165,7 +165,7 @@ class SoundChannelManager extends EventDispatcher {
 		if (bool) {
 			this.resumeMusic();
 		} else {
-			this.stopMusic();
+			this.stopMusic(true);
 		}
 	}
 

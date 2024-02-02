@@ -60,7 +60,9 @@ class ZLabel extends DataProviderComponent {
 	/**
 	 * 文本渲染（位图模式）
 	 */
+	#if !disable_zlabel_cache_bitmap
 	private var _bitmap:Bitmap;
+	#end
 
 	private var _font:TextFormat;
 
@@ -111,7 +113,7 @@ class ZLabel extends DataProviderComponent {
 	/**
 	 * 缩放系数
 	 */
-	private var _scale:Float = #if (html5 && !un_scale_label) 2 #else 1 #end;
+	public static var labelScale:Float = #if (high_label || (html5 && !un_scale_label)) 2 #else 1 #end;
 
 	/**
 	 * 光标色块
@@ -190,10 +192,10 @@ class ZLabel extends DataProviderComponent {
 			this.addChild(_defaultDisplay);
 		}
 		_defaultDisplay.wordWrap = _display.wordWrap;
-		_defaultDisplay.scaleX = 1 / _scale;
-		_defaultDisplay.scaleY = 1 / _scale;
-		_defaultDisplay.width = _display.width * _scale;
-		_defaultDisplay.height = _display.height * _scale;
+		_defaultDisplay.scaleX = 1 / labelScale;
+		_defaultDisplay.scaleY = 1 / labelScale;
+		_defaultDisplay.width = _display.width * labelScale;
+		_defaultDisplay.height = _display.height * labelScale;
 		_defaultDisplay.mouseEnabled = false;
 		var oldColor:UInt = _font.color;
 		_font.color = defaultColor;
@@ -211,16 +213,19 @@ class ZLabel extends DataProviderComponent {
 	public function new() {
 		super();
 		_display = new ZTextField();
+		#if !disable_zlabel_cache_bitmap
 		_bitmap = new Bitmap();
 		_bitmap.smoothing = true;
+		_bitmap.scaleY = _bitmap.scaleX = 1 / labelScale;
+		#end
 		#if ios
 		_font = new TextFormat("assets/" + zygame.components.base.ZConfig.fontName);
 		#else
 		_font = new TextFormat(zygame.components.base.ZConfig.fontName);
 		#end
 		_font.size = 24;
-		_display.scaleX = 1 / _scale;
-		_display.scaleY = 1 / _scale;
+		_display.scaleX = 1 / labelScale;
+		_display.scaleY = 1 / labelScale;
 		_display.width = 0;
 		_display.height = 0;
 		_display.text = "";
@@ -250,14 +255,26 @@ class ZLabel extends DataProviderComponent {
 	private function set_mixColor(v:MixColorData):MixColorData {
 		this.mixColor = v;
 		if (__blur == 0 && this.mixColor == null)
+			#if !disable_zlabel_cache_bitmap
 			this._bitmap.shader = null;
+			#else
+			this.getDisplay().shader = null;
+			#end
 		else
+			#if !disable_zlabel_cache_bitmap
 			this._bitmap.shader = __textFieldStrokeShader;
+			#else
+			this.getDisplay().shader = __textFieldStrokeShader;
+			#end
 		return v;
 	}
 
 	private function __onRender(e:RenderEvent):Void {
+		#if !disable_zlabel_cache_bitmap
 		if (this._bitmap.shader != null) {
+		#else
+		if (this.getDisplay().shader != null) {
+		#end
 			__textFieldStrokeShader.updateParam(__blur, __color);
 			if (mixColor != null)
 				__textFieldStrokeShader.updateMixColor(mixColor.startColor, mixColor.endColor);
@@ -329,9 +346,11 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override public function initComponents():Void {
+		#if !disable_zlabel_cache_bitmap
 		this.addChild(_bitmap);
-		// _bitmap.y = 20;
-		// this.addChild(_display);
+		#else
+		this.addChild(_display);
+		#end
 		this.addChild(zquad);
 	}
 
@@ -346,11 +365,11 @@ class ZLabel extends DataProviderComponent {
 	private function updateTextXY(txt:TextField):Void {
 		var txtHeight:Float = _display.textHeight;
 		#if (openfl < '9.0.0')
-		if (this.height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end)
-			this.height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end + 32;
+		if (this.height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end)
+			this.height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end + 32;
 		#else
-		if (this.__height < txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end) {
-			this._height = txtHeight * this.scaleY / _scale #if quickgame_scale / _getCurrentScale() #end;
+		if (this.__height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end) {
+			this._height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end;
 		} else if (__height != 0 && __height != _height) {
 			this._height = __height;
 		}
@@ -365,10 +384,10 @@ class ZLabel extends DataProviderComponent {
 			case Align.TOP:
 				txt.y = 0;
 			case Align.BOTTOM:
-				txt.y = _height - txtHeight / _scale #if quickgame_scale / _getCurrentScale() #end;
+				txt.y = _height - txtHeight / labelScale #if quickgamelabelScale / _getCurrentScale() #end;
 			case Align.CENTER:
-				txt.y = _height / 2 - txtHeight / _scale / 2 #if quickgame_scale / _getCurrentScale() #end;
-				#if quickgame_scale
+				txt.y = _height / 2 - txtHeight / labelScale / 2 #if quickgamelabelScale / _getCurrentScale() #end;
+				#if quickgamelabelScale
 				txt.y -= (_height - _height / _getCurrentScale()) / 2;
 				#end
 			default:
@@ -376,14 +395,14 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override public function updateComponents():Void {
-		_display.width = _width * _scale;
+		_display.width = _width * labelScale;
 		_display.height = _height;
 
 		switch (hAlign) {
 			case LEFT:
 				_font.align = LEFT;
 			case RIGHT:
-				_font.align = RIGHT;
+				_font.align = LEFT;
 			case CENTER:
 				_font.align = CENTER;
 			default:
@@ -405,8 +424,8 @@ class ZLabel extends DataProviderComponent {
 			if (_display.text.length > 0) {
 				rect = _display.getCharBoundaries(_display.text.length - 1);
 				if (rect != null) {
-					zquad.x = (rect.x + rect.width) / _scale + _display.x;
-					zquad.y = (rect.y) / _scale + _font.size * 0.168 / _scale + _display.y;
+					zquad.x = (rect.x + rect.width) / labelScale + _display.x;
+					zquad.y = (rect.y) / labelScale + _font.size * 0.168 / labelScale + _display.y;
 				}
 			} else {
 				if (_display.x == 0) {
@@ -418,11 +437,11 @@ class ZLabel extends DataProviderComponent {
 						default:
 					}
 				}
-				zquad.y = _font.size * 0.168 / _scale + _display.y;
+				zquad.y = _font.size * 0.168 / labelScale + _display.y;
 			}
 		} else {
 			zquad.x = _display.x;
-			zquad.y = _font.size * 0.168 / _scale + _display.y;
+			zquad.y = _font.size * 0.168 / labelScale + _display.y;
 		}
 		// 默认文本实现
 		if (_defaultDisplay != null) {
@@ -448,13 +467,17 @@ class ZLabel extends DataProviderComponent {
 			this.getDisplay().width = _width / this.getDisplay().scaleY;
 		}
 
+		#if !disable_zlabel_cache_bitmap
 		if (__drawTexting) {
 			// 转换成BitmapData数据
-			var bitmapData = new BitmapData(Std.int(this.width), Std.int(this.height), true, 0x0);
+			var bitmapData = new BitmapData(Std.int(this.width * labelScale), Std.int(this.height * labelScale), true, 0x0);
 			bitmapData.disposeImage();
-			bitmapData.draw(_display, _display.transform.matrix, null, null, null, true);
+			var m = _display.transform.matrix;
+			m.scale(labelScale, labelScale);
+			bitmapData.draw(_display, m, null, null, null, true);
 			_bitmap.bitmapData = bitmapData;
 		}
+		#end
 		__drawTexting = false;
 	}
 
@@ -532,8 +555,8 @@ class ZLabel extends DataProviderComponent {
 				var newText = new ZTextField();
 				newText.width = _display.width;
 				newText.height = _display.height;
-				newText.scaleX = 1 / _scale;
-				newText.scaleY = 1 / _scale;
+				newText.scaleX = 1 / labelScale;
+				newText.scaleY = 1 / labelScale;
 				newText.x = _display.x;
 				newText.y = _display.y;
 				newText.setTextFormat(_font);
@@ -552,10 +575,10 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 选中文本效果实现
-	 * @param start 选中最开始的位置
-	 * @param len 选中结束的位置
-	 */
+ * 选中文本效果实现
+ * @param start 选中最开始的位置
+ * @param len 选中结束的位置
+ */
 	public function selectText(start:Int = 0, len:Int = -1):Void {
 		if (_display.selectable && _display.type == TextFieldType.INPUT)
 			_display.setSelection(start, len == -1 ? _display.text.length : len);
@@ -564,7 +587,7 @@ class ZLabel extends DataProviderComponent {
 	override private function set_width(value:Float):Float {
 		if (_width == value)
 			return value;
-		_width = value #if quickgame_scale * _getCurrentScale() #end;
+		_width = value #if quickgamelabelScale * _getCurrentScale() #end;
 		this.__changed = true;
 		return value;
 	}
@@ -575,13 +598,13 @@ class ZLabel extends DataProviderComponent {
 			this.drawText();
 			this.updateComponents();
 		}
-		return Math.abs(_width #if quickgame_scale / _getCurrentScale() #end * this.scaleX);
+		return Math.abs(_width #if quickgamelabelScale / _getCurrentScale() #end * this.scaleX);
 	}
 
 	override private function set_height(value:Float):Float {
 		if (_height == value)
 			return value;
-		_height = value #if quickgame_scale * _getCurrentScale() #end;
+		_height = value #if quickgamelabelScale * _getCurrentScale() #end;
 		__height = value;
 		this.__changed = true;
 		return value;
@@ -593,39 +616,39 @@ class ZLabel extends DataProviderComponent {
 			this.drawText();
 			this.updateComponents();
 		}
-		return Math.abs(_height #if quickgame_scale / _getCurrentScale() #end * this.scaleY);
+		return Math.abs(_height #if quickgamelabelScale / _getCurrentScale() #end * this.scaleY);
 	}
 
 	/**
-	 * 获取文本高度
-	 * @return Float
-	 */
+ * 获取文本高度
+ * @return Float
+ */
 	public function getTextHeight():Float {
 		if (__changed) {
 			__changed = false;
 			this.drawText();
 			this.updateComponents();
 		}
-		return _display.textHeight / _scale;
+		return _display.textHeight / labelScale;
 	}
 
 	/**
-	 * 获取文本宽度
-	 * @return Float
-	 */
+ * 获取文本宽度
+ * @return Float
+ */
 	public function getTextWidth():Float {
 		if (__changed) {
 			__changed = false;
 			this.drawText();
 			this.updateComponents();
 		}
-		return _display.textWidth / _scale;
+		return _display.textWidth / labelScale;
 	}
 
 	/**
-	 * 设置文本行距
-	 * @param lead 行距
-	 */
+ * 设置文本行距
+ * @param lead 行距
+ */
 	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
 		setTextFormat();
@@ -633,17 +656,17 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 设置文本字体大小
-	 * @param font 文本大小
-	 */
+ * 设置文本字体大小
+ * @param font 文本大小
+ */
 	public function setFontSize(font:Int):Void {
 		if (_font.size == font)
 			return;
-		#if (quickgame_scale)
+		#if (quickgamelabelScale)
 		// 快游戏兼容,OPPO新版本已修复这个问题。
 		font = Std.int(font * zygame.core.Start.currentScale);
 		#end
-		_font.size = Std.int(font * _scale);
+		_font.size = Std.int(font * labelScale);
 		setTextFormat();
 		zquad.width = 2;
 		zquad.height = font;
@@ -651,9 +674,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 设置文本的颜色
-	 * @param color 文本颜色
-	 */
+ * 设置文本的颜色
+ * @param color 文本颜色
+ */
 	public function setFontColor(color:UInt):Void {
 		if (_font.color == color)
 			return;
@@ -671,11 +694,11 @@ class ZLabel extends DataProviderComponent {
 	}> = [];
 
 	/**
-	 * 设置颜色
-	 * @param start 开始位置
-	 * @param end 结束位置
-	 * @param color 颜色值
-	 */
+ * 设置颜色
+ * @param start 开始位置
+ * @param end 结束位置
+ * @param color 颜色值
+ */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
 		__setFontSelectColor.push({
@@ -686,34 +709,34 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 设置HTML标签文本，但在部分设备上渲染可能会存在问题，建议使用简易格式的渲染。
-	 * @param bool 是否开启html渲染
-	 */
+ * 设置HTML标签文本，但在部分设备上渲染可能会存在问题，建议使用简易格式的渲染。
+ * @param bool 是否开启html渲染
+ */
 	public function setHtml(bool:Bool):Void {
 		_isHtml = bool;
 		this.dataProvider = this.dataProvider;
 	}
 
 	/**
-	 * 设置文本是否可选择
-	 * @param bool 是否可选
-	 */
+ * 设置文本是否可选择
+ * @param bool 是否可选
+ */
 	public function setSelectable(bool:Bool):Void {
 		_display.selectable = bool;
 	}
 
 	/**
-	 * 设置是否可换行
-	 * @param bool 是否可换行
-	 */
+ * 设置是否可换行
+ * @param bool 是否可换行
+ */
 	public function setWordWrap(bool:Bool):Void {
 		_display.wordWrap = bool;
 	}
 
 	/**
-	 * 设置是否可以输入
-	 * @param bool 是否可输入
-	 */
+ * 设置是否可以输入
+ * @param bool 是否可输入
+ */
 	public function setIsInput(bool:Bool):Void {
 		#if (minigame || ios || android || html5)
 		// 小游戏模式需要实现输入
@@ -747,9 +770,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 触发小游戏的输入事件
-	 * @param e
-	 */
+ * 触发小游戏的输入事件
+ * @param e
+ */
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
 		#if sxk_game_sdk
@@ -791,37 +814,48 @@ class ZLabel extends DataProviderComponent {
 	#end
 
 	private var __color:UInt = 0;
-
 	private var __blur:Float = 0;
 
 	/**
-	 * 描边字体：更改了文字大小后，可重新描边一次。
-	 * @param color 描边的颜色
-	 * @param blur 描边的厚度，默认建议使用1
-	 */
+ * 描边字体：更改了文字大小后，可重新描边一次。
+ * @param color 描边的颜色
+ * @param blur 描边的厚度，默认建议使用1
+ */
 	public function stroke(color:UInt, blur:Float = 1):Void {
 		__blur = blur;
 		__color = color;
 		if (blur == 0 && this.mixColor == null) {
+			#if !disable_zlabel_cache_bitmap
 			this._bitmap.shader = null;
+			#else
+			this.getDisplay().shader = null;
+			#end
 		} else {
+			#if !disable_zlabel_cache_bitmap
 			this._bitmap.shader = __textFieldStrokeShader;
+			#else
+			this.getDisplay().shader = __textFieldStrokeShader;
+			#end
 		}
 	}
 
 	/**
-	 * 加粗字体
-	 * @param blur 加粗大小
-	 */
+ * 加粗字体
+ * @param blur 加粗大小
+ */
 	public function bold(blur:Float = 1):Void {
 		__blur = blur;
 		__color = _font.color;
+		#if !disable_zlabel_cache_bitmap
 		this._bitmap.shader = __textFieldStrokeShader;
+		#else
+		this.getDisplay().shader = __textFieldStrokeShader;
+		#end
 	}
 
 	/**
-	 *  释放文本占用的缓存
-	 */
+ *  释放文本占用的缓存
+ */
 	override public function destroy():Void {
 		super.destroy();
 		this.removeChild(_display);
@@ -830,9 +864,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 获取文本基础渲染对象
-	 * @return ZTextField
-	 */
+ * 获取文本基础渲染对象
+ * @return ZTextField
+ */
 	public function getDisplay():ZTextField {
 		return _display;
 	}
@@ -880,10 +914,10 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 获取字符的坐标宽度
-	 * @param charIndex 位置字符
-	 * @return Rectangle
-	 */
+ * 获取字符的坐标宽度
+ * @param charIndex 位置字符
+ * @return Rectangle
+ */
 	public function getCharBounds(charIndex:Int):Rectangle {
 		var rect = _display.getCharBoundaries(charIndex);
 		rect.x += _display.x;

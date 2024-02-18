@@ -212,6 +212,7 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public function new() {
 		super();
+		this.dataProvider = "";
 		_display = new ZTextField();
 		#if !disable_zlabel_cache_bitmap
 		_bitmap = new Bitmap();
@@ -288,7 +289,7 @@ class ZLabel extends DataProviderComponent {
 		if (__changed) {
 			__changed = false;
 			if (this.dataProvider != null && this.dataProvider != this._display.text) {
-				this.drawText();
+				this.drawText(this.dataProvider);
 			}
 			__drawTexting = true;
 			this.updateComponents();
@@ -402,7 +403,7 @@ class ZLabel extends DataProviderComponent {
 			case LEFT:
 				_font.align = LEFT;
 			case RIGHT:
-				_font.align = LEFT;
+				_font.align = RIGHT;
 			case CENTER:
 				_font.align = CENTER;
 			default:
@@ -470,7 +471,7 @@ class ZLabel extends DataProviderComponent {
 		#if !disable_zlabel_cache_bitmap
 		if (__drawTexting) {
 			// 转换成BitmapData数据
-			var bitmapData = new BitmapData(Std.int(this.width * labelScale), Std.int(this.height * labelScale), true, 0x0);
+			var bitmapData = new BitmapData(Std.int(_display.width * labelScale), Std.int(_display.height * labelScale), true, 0x0);
 			bitmapData.disposeImage();
 			var m = _display.transform.matrix;
 			m.scale(labelScale, labelScale);
@@ -499,10 +500,12 @@ class ZLabel extends DataProviderComponent {
 
 		super.dataProvider = value;
 
-		// 刷新内容
-		__changed = true;
-		if (this._display.text == "") {
-			this.drawText();
+		if (_display != null) {
+			// 刷新内容
+			__changed = true;
+			if (this._display.text == "") {
+				this.drawText(this.dataProvider);
+			}
 		}
 
 		#if html5
@@ -516,9 +519,8 @@ class ZLabel extends DataProviderComponent {
 
 	private var __drawTexting:Bool = false;
 
-	private function drawText():Void {
+	private function drawText(value:String):Void {
 		__drawTexting = true;
-		var value:String = this.dataProvider;
 		if (value != null) {
 			if (value.length > _maxChars && _maxChars != 0) {
 				value = value.substr(0, _maxChars);
@@ -595,7 +597,7 @@ class ZLabel extends DataProviderComponent {
 	override private function get_width():Float {
 		if (__changed) {
 			__changed = false;
-			this.drawText();
+			this.drawText(this.dataProvider);
 			this.updateComponents();
 		}
 		return Math.abs(_width #if quickgamelabelScale / _getCurrentScale() #end * this.scaleX);
@@ -613,7 +615,7 @@ class ZLabel extends DataProviderComponent {
 	override private function get_height():Float {
 		if (__changed) {
 			__changed = false;
-			this.drawText();
+			this.drawText(this.dataProvider);
 			this.updateComponents();
 		}
 		return Math.abs(_height #if quickgamelabelScale / _getCurrentScale() #end * this.scaleY);
@@ -626,7 +628,7 @@ class ZLabel extends DataProviderComponent {
 	public function getTextHeight():Float {
 		if (__changed) {
 			__changed = false;
-			this.drawText();
+			this.drawText(this.dataProvider);
 			this.updateComponents();
 		}
 		return _display.textHeight / labelScale;
@@ -639,7 +641,7 @@ class ZLabel extends DataProviderComponent {
 	public function getTextWidth():Float {
 		if (__changed) {
 			__changed = false;
-			this.drawText();
+			this.drawText(this.dataProvider);
 			this.updateComponents();
 		}
 		return _display.textWidth / labelScale;
@@ -780,10 +782,12 @@ class ZLabel extends DataProviderComponent {
 		if (v4.utils.KeyboardInputTools.keyboard != null) {
 			v4.utils.KeyboardInputTools.keyboard.input(this);
 		} else {
+			#if html5
 			Lib.nextFrameCall(function() {
 				HTML5TextInput.openInput(this);
 				this.setSelectQuadVisible(true);
 			});
+			#end
 		}
 		#elseif minigame
 		if (zygame.core.KeyboardManager.keyboard != null) {

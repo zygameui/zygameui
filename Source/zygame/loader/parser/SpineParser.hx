@@ -1,5 +1,6 @@
 package zygame.loader.parser;
 
+import zygame.utils.ZAssets;
 import zygame.utils.load.SpineTextureAtalsLoader.SpineTextureAtals;
 import zygame.utils.StringUtils;
 import zygame.utils.AssetsUtils;
@@ -20,9 +21,15 @@ class SpineParser extends ParserBase {
 		return true;
 	}
 
-	public var map:Map<String, BitmapData> = [];
+	public var map:Map<String, BitmapData>;
 
 	public var loadindex:Int = 0;
+
+	override function load(assets:ZAssets) {
+		loadindex = 0;
+		map = [];
+		super.load(assets);
+	}
 
 	override function process() {
 		var array:Array<Dynamic> = getData().imgs;

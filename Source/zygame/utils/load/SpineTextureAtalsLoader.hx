@@ -18,6 +18,7 @@ import spine.support.graphics.TextureLoader;
  */
 class SpineTextureAtalsLoader {
 	private var _texPath:Array<String>;
+	private var _index:Int = 0;
 	private var _texs:Map<String, BitmapData>;
 	private var _texJson:String;
 	private var _errorCall:String->Void;
@@ -41,6 +42,7 @@ class SpineTextureAtalsLoader {
 	 * @param call
 	 */
 	public function load(call:SpineTextureAtals->Void, errorCall:String->Void) {
+		_index = 0;
 		_errorCall = errorCall;
 		_call = call;
 		_texs = new Map<String, BitmapData>();
@@ -49,8 +51,9 @@ class SpineTextureAtalsLoader {
 	}
 
 	public function next():Void {
-		if (_texPath.length > 0) {
-			var path:String = _texPath.shift();
+		if (_texPath.length > _index) {
+			var path:String = _texPath[_index];
+			_index++;
 			Assets.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
 				_texs.set(StringUtils.getName(path), bitmapData);
 				next();

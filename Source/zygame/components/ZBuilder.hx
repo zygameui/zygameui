@@ -836,7 +836,7 @@ class ZBuilder {
 	public static function buildXmlUiFind(xmlfileName:String, parent:Dynamic):Builder {
 		var xml = getXml(xmlfileName);
 		if (xml == null)
-			throw xmlfileName + "配置不存在";
+			throw xmlfileName + "配置资源未加载";
 		// 使用副本
 		xml = Xml.parse(xml.toString());
 		var builder:Builder = new Builder();

@@ -91,7 +91,7 @@
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf" />
 
-	<haxedef name="invalidate" if="android || hl" />
+	<!-- <haxedef name="invalidate" if="android || hl" /> -->
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->

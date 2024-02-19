@@ -9,7 +9,7 @@ import spine.SkeletonJson;
 import spine.attachments.AtlasAttachmentLoader;
 import spine.support.graphics.TextureAtlas;
 import spine.SkeletonData;
-import spine.SkeletonDataFileHandle;
+import spine.SkeletonDataFileJsonHandle;
 import zygame.utils.StringUtils;
 import spine.support.graphics.TextureLoader;
 
@@ -156,11 +156,11 @@ class SpineTextureAtals extends Atlas {
 	 * @param json
 	 * @return SkeletonData
 	 */
-	public function buildSpriteSkeletonData(id:String, data:String):SkeletonData {
+	public function buildSpriteSkeletonDataByJson(id:String, data:Dynamic):SkeletonData {
 		if (_skeletonData.exists(id)) {
 			return _skeletonData.get(id);
 		}
-		var skeletonData:SkeletonData = getSpriteSkeletonManager().readSkeletonData(new SkeletonDataFileHandle(null, data));
+		var skeletonData:SkeletonData = getSpriteSkeletonManager().readSkeletonData(new SkeletonDataFileJsonHandle(null, data));
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
 	}
@@ -171,11 +171,11 @@ class SpineTextureAtals extends Atlas {
 	 * @param data
 	 * @return SkeletonData
 	 */
-	public function buildTilemapSkeletonData(id:String, data:String):SkeletonData {
+	public function buildTilemapSkeletonDataByJson(id:String, data:Dynamic):SkeletonData {
 		if (_skeletonData.exists(id)) {
 			return _skeletonData.get(id);
 		}
-		var skeletonData:SkeletonData = getTilemapSkeletonManager().readSkeletonData(new SkeletonDataFileHandle(null, data));
+		var skeletonData:SkeletonData = getTilemapSkeletonManager().readSkeletonData(new SkeletonDataFileJsonHandle(null, data));
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
 	}
@@ -200,8 +200,8 @@ class SpineTextureAtals extends Atlas {
 	 * 生成Tilemap使用的骨骼动画
 	 * @return spine.tilemap.SkeletonAnimation
 	 */
-	public function buildTilemapSkeleton(id:String, data:String):spine.tilemap.SkeletonAnimation {
-		var skeletonData:SkeletonData = buildTilemapSkeletonData(id, data);
+	public function buildTilemapSkeleton(id:String, data:Dynamic):spine.tilemap.SkeletonAnimation {
+		var skeletonData:SkeletonData = buildSpriteSkeletonDataByJson(id, data);
 		var skeleton:spine.tilemap.SkeletonAnimation = new spine.tilemap.SkeletonAnimation(skeletonData);
 		skeleton.assetsId = this.id + ":" + id;
 		return skeleton;
@@ -211,8 +211,8 @@ class SpineTextureAtals extends Atlas {
 	 * 生成Tilemap使用的骨骼动画
 	 * @return spine.openfl.SkeletonAnimation
 	 */
-	public function buildSpriteSkeleton(id:String, data:String):spine.openfl.SkeletonAnimation {
-		var skeletonData:SkeletonData = buildSpriteSkeletonData(id, data);
+	public function buildSpriteSkeleton(id:String, data:Dynamic):spine.openfl.SkeletonAnimation {
+		var skeletonData:SkeletonData = buildSpriteSkeletonDataByJson(id, data);
 		var skeleton:spine.openfl.SkeletonAnimation = new spine.openfl.SkeletonAnimation(skeletonData);
 		skeleton.assetsId = this.id + ":" + id;
 		return skeleton;

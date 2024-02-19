@@ -811,7 +811,7 @@ class ZAssets {
 		var names:Array<String> = atlasAndJson.split(":");
 		if (getSpineTextureAlats(names[0]) == null)
 			return null;
-		return getSpineTextureAlats(names[0]).buildSpriteSkeletonData(names[1], haxe.Json.stringify(getObject(names[1])));
+		return getSpineTextureAlats(names[0]).buildSpriteSkeletonDataByJson(names[1], getObject(names[1]));
 	}
 
 	/**
@@ -823,7 +823,7 @@ class ZAssets {
 		if (atlasAndJson.indexOf(":") == -1)
 			atlasAndJson = atlasAndJson + ":" + atlasAndJson;
 		var names:Array<String> = atlasAndJson.split(":");
-		return getSpineTextureAlats(names[0]).buildTilemapSkeletonData(names[1], haxe.Json.stringify(getObject(names[1])));
+		return getSpineTextureAlats(names[0]).buildTilemapSkeletonDataByJson(names[1], getObject(names[1]));
 	}
 
 	/**
@@ -836,7 +836,7 @@ class ZAssets {
 		var jsonData = this.getObject(skeletonJsonName);
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
-		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(jsonData));
+		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
 	}
 
 	/**
@@ -849,7 +849,7 @@ class ZAssets {
 		var jsonData = this.getObject(skeletonJsonName);
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
-		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(jsonData));
+		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
 	}
 
 	/**

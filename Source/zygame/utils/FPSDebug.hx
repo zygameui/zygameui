@@ -97,7 +97,7 @@ class FPSDebug extends ZBox {
 				var msg = "CPU:" + getCpu() + "_" + zygame.core.Start.current.getCPUTime() + "\nMODE:" + Lib.getRenderMode() + "\nMEM:" + mem
 					+ "MB\nMaxMEN:" + memPeak + "MB\nUPDATES:" + zygame.core.Start.current.getUpdateLength() + "\nSUPDATES:" + SpineManager.count()
 					+ "\nS_RUNING:" + SpineManager.playingCount + "\nFPS:" + Std.int(16 / fps * 60) + "_" + Start.current.renderFps + "_"
-					+ zygame.core.Start.current.stage.frameRate + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale + "telemetry:"
+					+ zygame.core.Start.current.stage.frameRate + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale + "\ntelemetry:"
 					+ Telemetry.connected;
 				_text.dataProvider = msg;
 				if (_alltimes > 60) {

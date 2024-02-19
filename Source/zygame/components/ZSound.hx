@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.media.SoundChannelManager;
 import zygame.utils.ZLog;
 import zygame.core.Start;
 import zygame.media.base.Sound;
@@ -120,6 +121,8 @@ class ZSound implements zygame.core.Refresher {
 	 * @param loop 是否循环，默认为1次
 	 */
 	public function play(loop:Int = 1):Void {
+		if (!SoundChannelManager.current.isEffectAvailable())
+			return;
 		this.stop();
 		this._loop = loop;
 		if (_soundPlayTimes.length == 0) {

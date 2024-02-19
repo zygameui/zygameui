@@ -575,7 +575,7 @@ class ZBuilder {
 			return null;
 		if (ZBuilder.getBaseObject(skeletonJsonName) == null)
 			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
-		return atlas.buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(ZBuilder.getBaseObject(skeletonJsonName)));
+		return atlas.buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(ZBuilder.getBaseObject(skeletonJsonName)));
 	}
 
 	public static function createSpineTilemapSkeleton(atalsName:String, skeletonJsonName:String):spine.tilemap.SkeletonAnimation {
@@ -584,7 +584,7 @@ class ZBuilder {
 			return null;
 		if (ZBuilder.getBaseObject(skeletonJsonName) == null)
 			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
-		return atlas.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectData(ZBuilder.getBaseObject(skeletonJsonName)));
+		return atlas.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(ZBuilder.getBaseObject(skeletonJsonName)));
 	}
 
 	public static function getBaseTextureAtlas(value:String):Atlas {

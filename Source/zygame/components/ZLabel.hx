@@ -766,7 +766,7 @@ class ZLabel extends DataProviderComponent {
 		_isDownTime = Date.now().getTime();
 	}
 
-	#if (minigame || android || ios || html5)
+	#if (minigame || cpp || html5)
 	public function openInput():Void {
 		onMiniGameInput(null);
 	}

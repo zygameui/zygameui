@@ -32,5 +32,25 @@ class DisplayObjectRecyclerPool {
 		};
 		return item;
 	}
+
+	public static function withClassWithArgs<T:B, S, B:DisplayObject>(displayObjectType:Class<T>, ?update:(target:T, state:S) -> Void,
+			?reset:(target:T, state:S) -> Void, ?destroy:(T) -> Void, args:Array<Dynamic>):DisplayObjectRecycler<T, S, B> {
+		var item = new DisplayObjectRecycler<T, S, B>();
+		var pool:ObjectPool<T> = new ObjectPool(() -> {
+			return Type.createInstance(displayObjectType, args);
+		});
+		item.create = () -> {
+			pool.get();
+		};
+		item.update = update;
+		item.reset = reset;
+		item.destroy = (display) -> {
+			pool.release(display);
+			if (destroy != null) {
+				destroy(display);
+			}
+		};
+		return item;
+	}
 }
 #end

@@ -72,7 +72,7 @@
 	<!-- 即使在发布模式下，也将行信息包括在堆栈跟踪中。 -->
 	<define name="HXCPP_STACK_LINE" />
 	<!-- 会引起一些问题 -->
-	<define name="HXCPP_CHECK_POINTER" />
+	<!-- <define name="HXCPP_CHECK_POINTER" /> -->
 	<!-- 开启内存移动 -->
 	<!-- <define name="HXCPP_GC_MOVING"/> -->
 
@@ -91,7 +91,7 @@
 	<!-- 新增对openflswf的支持 -->
 	<define name="openfl_swf" />
 
-	<!-- <haxedef name="invalidate" if="android || hl" /> -->
+	<haxedef name="invalidate" if="android || hl" />
 
 	<!-- HTML5的模板 -->
 	<!-- <template path="index.html"/> -->

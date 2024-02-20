@@ -743,54 +743,51 @@ class Start extends ZScene {
 			this.invalidate();
 		}
 		#end
-		// TODO 我认为不再需要这个FPS限制，会导致画面渲染不流畅
 		// #if !cpp
-		// if (fps.getFps() < 61 || fps60.update()) {
-		// #end
-		// 平滑处理
-		var newTime = Timer.stamp();
-		var nowTime = newTime - _frameTime;
-		_frameDtArray.push(nowTime);
-		if (_frameDtArray.length > 30) {
-			_frameDtArray.shift();
+		if (fps.getFps() < 61 || fps60.update()) {
+			// #end
+			// 平滑处理
+			var newTime = Timer.stamp();
+			var nowTime = newTime - _frameTime;
+			_frameDtArray.push(nowTime);
+			if (_frameDtArray.length > 30) {
+				_frameDtArray.shift();
+			}
+			var all = 0.;
+			for (f in _frameDtArray) {
+				all += f;
+			}
+			_frameDt = all / _frameDtArray.length;
+			_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
+			_frameTime = newTime;
+			this.onFrame();
+			isFrameing = true;
+			for (i in 0...updates.length) {
+				updates[i].onFrame();
+			}
+			isFrameing = false;
+			for (i in 0...updateStatsList.length) {
+				if (updateStatsList[i].action == 0)
+					addToUpdate(updateStatsList[i].display);
+				else
+					removeToUpdate(updateStatsList[i].display);
+			}
+			if (updateStatsList.length > 0)
+				updateStatsList = [];
+			// GC处理
+			zygame.utils.ZGC.onFrame();
+			// 计时器处理
+			zygame.utils.Lib.onFrame();
+			// 3D渲染
+			#if zygame3d
+			if (zygame.core.Start3D.current != null)
+				zygame.core.Start3D.current.onRender();
+			#end
+			#if memory_monitor
+			this.memoryMonitor.run();
+			#end
+			// #if !cpp
 		}
-		var all = 0.;
-		for (f in _frameDtArray) {
-			all += f;
-		}
-		_frameDt = all / _frameDtArray.length;
-		_frameDtScale = Math.min(3, _frameDt / FRAME_DT_STEP);
-		_frameTime = newTime;
-		this.onFrame();
-		isFrameing = true;
-		for (i in 0...updates.length) {
-			updates[i].onFrame();
-		}
-		isFrameing = false;
-		for (i in 0...updateStatsList.length) {
-			if (updateStatsList[i].action == 0)
-				addToUpdate(updateStatsList[i].display);
-			else
-				removeToUpdate(updateStatsList[i].display);
-		}
-		if (updateStatsList.length > 0)
-			updateStatsList = [];
-		// GC处理
-		zygame.utils.ZGC.onFrame();
-		// 计时器处理
-		zygame.utils.Lib.onFrame();
-		// 3D渲染
-		#if zygame3d
-		if (zygame.core.Start3D.current != null)
-			zygame.core.Start3D.current.onRender();
-		#end
-		#if memory_monitor
-		this.memoryMonitor.run();
-		#end
-		// #if !cpp
-		// }else{
-		// trace("skip render");
-		// }
 		// #end
 	}
 

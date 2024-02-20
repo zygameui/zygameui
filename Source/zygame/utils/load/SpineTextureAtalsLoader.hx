@@ -201,7 +201,7 @@ class SpineTextureAtals extends Atlas {
 	 * @return spine.tilemap.SkeletonAnimation
 	 */
 	public function buildTilemapSkeleton(id:String, data:Dynamic):spine.tilemap.SkeletonAnimation {
-		var skeletonData:SkeletonData = buildSpriteSkeletonDataByJson(id, data);
+		var skeletonData:SkeletonData = buildTilemapSkeletonDataByJson(id, data);
 		var skeleton:spine.tilemap.SkeletonAnimation = new spine.tilemap.SkeletonAnimation(skeletonData);
 		skeleton.assetsId = this.id + ":" + id;
 		return skeleton;

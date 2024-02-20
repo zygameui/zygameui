@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.Vector;
 import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
 import openfl.display.DisplayObject;
@@ -106,7 +107,8 @@ class ZQuad extends ZBox {
 		this.graphics.clear();
 		this.graphics.beginFill(color);
 		if (ellipseWidth == null) {
-			this.graphics.drawRect(0, 0, width, height);
+			// this.graphics.drawRect(0, 0, width, height);
+			this.graphics.drawQuads(new Vector<Float>([0, 0, width, height]));
 		} else {
 			this.graphics.drawRoundRect(0, 0, width, height, ellipseWidth, ellipseHeight);
 		}

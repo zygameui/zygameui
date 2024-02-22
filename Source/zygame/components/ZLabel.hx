@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.ZLog;
 import openfl.display.BitmapData;
 import openfl.display.Bitmap;
 import zygame.components.data.MixColorData;
@@ -294,22 +295,6 @@ class ZLabel extends DataProviderComponent {
 			__drawTexting = true;
 			this.updateComponents();
 		}
-		try {
-			if (__setFontSelectColor.length > 0) {
-				var rootColor = _font.color;
-				var textLength = _display.text != null ? _display.text.length : 0;
-				for (data in __setFontSelectColor) {
-					if (data.endIndex > textLength || data.startIndex == -1) {
-						continue;
-					}
-					_font.color = data.color;
-					_display.setTextFormat(_font, data.startIndex, data.endIndex);
-				}
-				_font.color = rootColor;
-			}
-		} catch (e:Exception) {}
-		if (__setFontSelectColor.length > 0)
-			__setFontSelectColor = [];
 	}
 
 	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
@@ -326,6 +311,22 @@ class ZLabel extends DataProviderComponent {
 			_font.color = defaultColor;
 			_defaultDisplay.setTextFormat(_font);
 			_font.color = oldColor;
+		}
+		try {
+			if (__setFontSelectColor.length > 0) {
+				var rootColor = _font.color;
+				var textLength = _display.text != null ? _display.text.length : 0;
+				for (data in __setFontSelectColor) {
+					if (data.endIndex > textLength || data.startIndex == -1) {
+						continue;
+					}
+					_font.color = data.color;
+					_display.setTextFormat(_font, data.startIndex, data.endIndex);
+				}
+				_font.color = rootColor;
+			}
+		} catch (e:Exception) {
+			ZLog.exception(e);
 		}
 	}
 
@@ -653,7 +654,7 @@ class ZLabel extends DataProviderComponent {
  */
 	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
-		setTextFormat();
+		// setTextFormat();
 		__changed = true;
 	}
 
@@ -669,7 +670,7 @@ class ZLabel extends DataProviderComponent {
 		font = Std.int(font * zygame.core.Start.currentScale);
 		#end
 		_font.size = Std.int(font * labelScale);
-		setTextFormat();
+		// setTextFormat();
 		zquad.width = 2;
 		zquad.height = font;
 		__changed = true;
@@ -685,8 +686,10 @@ class ZLabel extends DataProviderComponent {
 		_font.color = color;
 		zquad.color = color;
 		_display.textColor = color;
-		setTextFormat();
+		// setTextFormat();
 		__changed = true;
+		if (__setFontSelectColor.length > 0)
+			__setFontSelectColor = [];
 	}
 
 	private var __setFontSelectColor:Array<{
@@ -703,6 +706,7 @@ class ZLabel extends DataProviderComponent {
  */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
+		__changed = true;
 		__setFontSelectColor.push({
 			startIndex: startIndex,
 			endIndex: startIndex + len,
@@ -777,7 +781,7 @@ class ZLabel extends DataProviderComponent {
  */
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
-		#if (sxk_game_sdk && !cpp)
+		#if (sxk_game_sdk && (!cpp || android))
 		// SXKSDK键盘支持
 		if (v4.utils.KeyboardInputTools.keyboard != null) {
 			v4.utils.KeyboardInputTools.keyboard.input(this);

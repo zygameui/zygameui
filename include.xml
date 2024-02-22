@@ -109,11 +109,12 @@
 
 	<!-- IOS以及Android进行64位支持 -->
 	<architecture name="arm64" exclude="armv7" if="ios" />
-	<architecture name="armv7" exclude="arm64" if="android" unless="final || one_arm64" />
-	<!-- <architecture name="armv7" exclude="arm64" if="android" unless="final"/> -->
-	<!-- <architecture name="arm64" if="android final" /> -->
-	<!-- 安卓只要v8 -->
-	<architecture name="arm64" exclude="armv7" if="android one_arm64" />
+
+	<!-- 现在安卓只要默认的64位架构，除非定义`armv7` -->
+	<section if="android">
+		<architecture name="arm64" />
+		<architecture exclude="armv7" unless="armv7" />
+	</section>
 
 	<!-- 测试 -->
 	<!-- <haxeflag name="-dce" value="full" /> -->

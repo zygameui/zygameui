@@ -30,6 +30,11 @@ class StrokeShader extends OpenFLShader {
 	@:uniform public var endcolor:Vec4;
 
 	/**
+	 * 是否启动颜色
+	 */
+	@:uniform public var availableColor:Bool;
+
+	/**
 	 * 检测当前这个点的偏移位置是否包含透明度
 	 * @param v2 
 	 * @param offestX 
@@ -62,7 +67,9 @@ class StrokeShader extends OpenFLShader {
 	override function fragment() {
 		super.fragment();
 		// 渐变色支持
-		color = mix(startcolor, endcolor, gl_openfl_TextureCoordv.y) * color.a;
+		if (availableColor) {
+			color = mix(startcolor, endcolor, gl_openfl_TextureCoordv.y) * color.a;
+		}
 		for (i in 0...6) {
 			if (float(i) > (storksize))
 				break;
@@ -82,6 +89,7 @@ class StrokeShader extends OpenFLShader {
 		// 初始化渐变色
 		u_startcolor.value = [0, 0, 0, 1];
 		u_endcolor.value = [0, 0, 0, 1];
+		u_availableColor.value = [false];
 		updateParam(size, color);
 		updateMixColor(scolor, ecolor);
 	}
@@ -90,6 +98,7 @@ class StrokeShader extends OpenFLShader {
 		u_storksize.value = [size > 0 ? size + 1 : size];
 		var scolor = ColorUtils.toShaderColor(color);
 		u_storkcolor.value = [scolor.r, scolor.g, scolor.b, 1];
+		u_availableColor.value = [false];
 	}
 
 	public function updateMixColor(start:Float, end:Float):Void {
@@ -97,5 +106,6 @@ class StrokeShader extends OpenFLShader {
 		var ecolor = ColorUtils.toShaderColor(end);
 		u_startcolor.value = [scolor.r, scolor.g, scolor.b, 1];
 		u_endcolor.value = [ecolor.r, ecolor.g, ecolor.b, 1];
+		u_availableColor.value = [start != end];
 	}
 }

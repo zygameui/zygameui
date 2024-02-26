@@ -396,6 +396,17 @@ class ZLabel extends DataProviderComponent {
 		}
 	}
 
+	/**
+ * 强制刷新
+ */
+	public function forceDraw():Void {
+		if (this.__changed) {
+			this.__drawTexting = true;
+			this.updateComponents();
+			this.__changed = false;
+		}
+	}
+
 	override public function updateComponents():Void {
 		_display.width = _width * labelScale;
 		_display.height = _height;
@@ -686,7 +697,6 @@ class ZLabel extends DataProviderComponent {
 		_font.color = color;
 		zquad.color = color;
 		_display.textColor = color;
-		// setTextFormat();
 		__changed = true;
 		if (__setFontSelectColor.length > 0)
 			__setFontSelectColor = [];

@@ -1,5 +1,9 @@
 package zygame.components;
 
+#if hscript
+import hscript.Interp;
+import hscript.Parser;
+#end
 import zygame.utils.ZLog;
 import zygame.components.data.MixColorData;
 import zygame.components.base.IBuilder;
@@ -1221,16 +1225,44 @@ class ZBuilder {
 			var parsingName:String = className + "." + name;
 			if (name.indexOf(":") == 0) {
 				// 访问当前Builder对象
+				var nameKey = name.substr(1);
+				#if hscript
+				if (builder.display.parent != null) {
+					var script = value;
+					try {
+						var hscript:Parser = new Parser();
+						var interp:Interp = new Interp();
+						var scripts = script.split(".");
+						if (!builder.ids.exists(scripts[0])) {
+							script = "this." + script;
+							interp.variables.set("this", builder.display.parent);
+						}
+						for (key => value in builder.ids) {
+							interp.variables.set(key, value);
+						}
+						var expr = hscript.parseString(script);
+						var exprValue = interp.execute(expr);
+						if (Reflect.isFunction(exprValue))
+							setProperty(ui, nameKey, createCallFunc(builder.display.parent, exprValue, []));
+						else
+							setProperty(ui, nameKey, exprValue);
+					} catch (e:Exception) {
+						ZLog.error("Invalid expr '" + script + "'");
+						ZLog.exception(e);
+					}
+				}
+				#else
 				if (builder.display.parent != null) {
 					var v = Reflect.getProperty(builder.display.parent, value);
 					if (Reflect.isFunction(v)) {
-						setProperty(ui, name.substr(1), createCallFunc(builder.display.parent, v, []));
+						setProperty(ui, nameKey, createCallFunc(builder.display.parent, v, []));
 					} else {
-						setProperty(ui, name.substr(1), v);
+						setProperty(ui, nameKey, v);
 					}
 				} else {
-					setProperty(ui, name.substr(1), builder.ids.get(value));
+					setProperty(ui, nameKey, builder.ids.get(value));
 				}
+				#end
 			} else if (name == "tween") {
 				// 过渡动画实现
 				tween = value;

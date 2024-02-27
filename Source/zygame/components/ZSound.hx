@@ -90,7 +90,6 @@ class ZSound implements zygame.core.Refresher {
 		var sound:Sound = ZBuilder.getBaseSound(src);
 		if (sound != null) {
 			// 开始播放
-			ZLog.warring("ZSound:" + src + "播放");
 			_channels.push(sound.play(0, loop));
 			_currentFrame = 0;
 			_soundIndex++;
@@ -113,6 +112,8 @@ class ZSound implements zygame.core.Refresher {
 	 * 强制播放：该方法会独立播放，不会停止已播放的音频
 	 */
 	public function playForce():Void {
+		if (!SoundChannelManager.current.isEffectAvailable())
+			return;
 		this.__playSound(1);
 	}
 

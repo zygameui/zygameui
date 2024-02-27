@@ -82,7 +82,7 @@ class Start extends ZScene {
 	}
 
 	/**
-	 * 1//60每帧的DT
+	 * 1/60每帧的DT
 	 */
 	public inline static var FRAME_DT_STEP:Float = 0.016;
 

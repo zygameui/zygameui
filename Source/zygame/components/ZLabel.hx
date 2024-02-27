@@ -407,11 +407,24 @@ class ZLabel extends DataProviderComponent {
 		}
 	}
 
+	/**
+	 * 文本布局
+	 */
+	public var textAlign(default,set):Align = LEFT;
+
+	private function set_textAlign(v:Align):Align{
+		if(this.textAlign != null){
+			this.textAlign = v;
+			__changed = true;
+		}
+		return v;
+	}
+
 	override public function updateComponents():Void {
 		_display.width = _width * labelScale;
 		_display.height = _height;
 
-		switch (hAlign) {
+		switch (textAlign) {
 			case LEFT:
 				_font.align = LEFT;
 			case RIGHT:

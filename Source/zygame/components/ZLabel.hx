@@ -366,6 +366,7 @@ class ZLabel extends DataProviderComponent {
 
 	private function updateTextXY(txt:TextField):Void {
 		var txtHeight:Float = _display.textHeight;
+		var txtWidth:Float = _display.textWidth;
 		#if (openfl < '9.0.0')
 		if (this.height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end)
 			this.height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end + 32;
@@ -382,6 +383,16 @@ class ZLabel extends DataProviderComponent {
 		}
 		if (txtHeight == 0)
 			txtHeight = (_font.size);
+
+		switch (hAlign) {
+			case Align.LEFT:
+				txt.x = 0;
+			case Align.RIGHT:
+				txt.x = _width - txtWidth / labelScale #if quickgamelabelScale / _getCurrentScale() #end;
+			case Align.CENTER:
+				txt.x = _width / 2 - txtWidth / labelScale / 2 #if quickgamelabelScale / _getCurrentScale() #end;
+			default:
+		}
 		switch (vAlign) {
 			case Align.TOP:
 				txt.y = 0;
@@ -408,12 +419,12 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
-	 * 文本布局
-	 */
-	public var textAlign(default,set):Align = LEFT;
+ * 文本布局
+ */
+	public var textAlign(default, set):Align = LEFT;
 
-	private function set_textAlign(v:Align):Align{
-		if(this.textAlign != null){
+	private function set_textAlign(v:Align):Align {
+		if (this.textAlign != null) {
 			this.textAlign = v;
 			__changed = true;
 		}

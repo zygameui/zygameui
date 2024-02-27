@@ -366,7 +366,7 @@ class ZLabel extends DataProviderComponent {
 
 	private function updateTextXY(txt:TextField):Void {
 		var txtHeight:Float = _display.textHeight;
-		var txtWidth:Float = _display.textWidth;
+		var txtWidth:Float = _display.textWidth * _display.scaleX;
 		#if (openfl < '9.0.0')
 		if (this.height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end)
 			this.height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end + 32;
@@ -451,6 +451,12 @@ class ZLabel extends DataProviderComponent {
 			_display.text = StringTools.replace(_display.text, text, "");
 		}
 
+		// 自动字体大小
+		if (autoTextSize && !this.getDisplay().wordWrap) {
+			this.getDisplay().scaleY = this.getDisplay().scaleX = Math.min(1, _width / this.getTextWidth());
+			this.getDisplay().width = _width / this.getDisplay().scaleY;
+		}
+
 		this.updateTextXY(_display);
 
 		// 更新可选区域
@@ -496,12 +502,6 @@ class ZLabel extends DataProviderComponent {
 			_display.height = textHeight;
 		if (_defaultDisplay != null) {
 			_defaultDisplay.height = _defaultDisplay.textHeight + 5;
-		}
-
-		// 自动字体大小
-		if (autoTextSize && !this.getDisplay().wordWrap) {
-			this.getDisplay().scaleY = this.getDisplay().scaleX = Math.min(1, _width / this.getTextWidth());
-			this.getDisplay().width = _width / this.getDisplay().scaleY;
 		}
 
 		#if !disable_zlabel_cache_bitmap

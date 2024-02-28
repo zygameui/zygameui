@@ -365,8 +365,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	private function updateTextXY(txt:TextField):Void {
-		var txtHeight:Float = _display.textHeight;
-		var txtWidth:Float = _display.textWidth * _display.scaleX;
+		var txtHeight:Float = txt.textHeight;
+		var txtWidth:Float = txt.textWidth * txt.scaleX;
 		#if (openfl < '9.0.0')
 		if (this.height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end)
 			this.height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end + 32;
@@ -390,7 +390,8 @@ class ZLabel extends DataProviderComponent {
 			case Align.RIGHT:
 				txt.x = _width - txtWidth / labelScale #if quickgamelabelScale / _getCurrentScale() #end;
 			case Align.CENTER:
-				txt.x = _width / 2 - txtWidth / labelScale / 2 #if quickgamelabelScale / _getCurrentScale() #end;
+				if (textAlign == LEFT)
+					txt.x = _width / 2 - txtWidth / labelScale / 2 #if quickgamelabelScale / _getCurrentScale() #end;
 			default:
 		}
 		switch (vAlign) {

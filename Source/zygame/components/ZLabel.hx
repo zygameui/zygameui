@@ -392,6 +392,9 @@ class ZLabel extends DataProviderComponent {
 			case Align.CENTER:
 				if (textAlign == LEFT)
 					txt.x = _width / 2 - txtWidth / labelScale / 2 #if quickgamelabelScale / _getCurrentScale() #end;
+				else{
+					txt.x = 0;
+				}
 			default:
 		}
 		switch (vAlign) {

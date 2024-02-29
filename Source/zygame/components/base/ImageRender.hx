@@ -84,6 +84,7 @@ class ImageRender extends Sprite {
 			}
 			this.addChild(__bitmapRender);
 			__bitmapRender.bitmapData = bitmap;
+			__bitmapRender.scrollRect = null;
 			#else
 			__beginBitmapFill(data);
 			this.graphics.drawQuads(new Vector(4, false, [0., 0., bitmap.width, bitmap.height]));

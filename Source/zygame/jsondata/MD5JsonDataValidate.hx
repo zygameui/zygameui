@@ -17,7 +17,10 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 	 */
 	private var __keys:Array<String> = [];
 
+	private var __data:Array<Dynamic> = [];
+
 	public function new(data:Array<Dynamic>) {
+		this.__data = data;
 		if (data.length > 0) {
 			var item = data[0];
 			__keys = Reflect.fields(item);
@@ -42,5 +45,18 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 			key += Reflect.getProperty(item, k);
 		}
 		return Md5.encode(key);
+	}
+
+	/**
+	 * 验证所有数据
+	 * @return Bool
+	 */
+	public function validateAll():Bool {
+		for (item in __data) {
+			if (!validateObject(item)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

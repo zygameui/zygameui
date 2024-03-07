@@ -86,6 +86,8 @@ class SoundChannelManager extends EventDispatcher {
 	 * @param sound
 	 */
 	private function playMusic(sound:Music):Void {
+		if (sound.isDispose())
+			return;
 		if (_musicChannel != null && sound == _music) {
 			ZLog.warring("[背景音乐]不能重复播放");
 			return;

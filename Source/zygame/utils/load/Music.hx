@@ -43,4 +43,8 @@ class Music {
 		_sound.close();
 		_sound = null;
 	}
+
+	public function isDispose():Bool {
+		return _sound == null;
+	}
 }

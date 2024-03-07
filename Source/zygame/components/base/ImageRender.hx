@@ -61,7 +61,7 @@ class ImageRender extends Sprite {
 			graphicsShader.bitmap.filter = __isS9Draw ? NEAREST : (this.smoothing ? LINEAR : NEAREST);
 			this.graphics.beginShaderFill(shader);
 		} else {
-			this.graphics.beginBitmapFill(data, null, true, __isS9Draw ? false : this.smoothing);
+			this.graphics.beginBitmapFill(data, null, false, this.smoothing);
 		}
 	}
 
@@ -84,6 +84,7 @@ class ImageRender extends Sprite {
 			}
 			this.addChild(__bitmapRender);
 			__bitmapRender.bitmapData = bitmap;
+			__bitmapRender.smoothing = this.smoothing;
 			__bitmapRender.scrollRect = null;
 			#else
 			__beginBitmapFill(data);

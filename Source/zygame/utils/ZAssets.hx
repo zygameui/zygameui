@@ -391,6 +391,16 @@ class ZAssets {
 		var name = StringUtils.getName(parser.getName());
 		if (getBitmapData(name) != null)
 			return;
+		if (getObject(name) != null)
+			return;
+		if (getTextureAtlas(name) != null)
+			return;
+		if (getSpineTextureAlats(name) != null)
+			return;
+		if (getXml(name) != null)
+			return;
+		if (getSound(name) != null)
+			return;
 		#if assets_debug
 		ZLog.log("[push pasrers]", parser.getName());
 		#end

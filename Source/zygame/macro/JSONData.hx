@@ -46,6 +46,11 @@ class JSONData {
 		var className = name.charAt(0).toUpperCase() + name.substr(1).toLowerCase();
 		name = "AutoJson" + className;
 		var c = macro class $name {
+			/**
+			 * 数据验证器
+			 */
+			public var validate:zygame.jsondata.IJsonDataValidate;
+
 			public function new() {}
 		}
 		var t:ComplexType = null;
@@ -129,6 +134,17 @@ class JSONData {
 												this.$mapName.set(Std.string(Reflect.getProperty(item, $v{indexName})), item);
 											}
 										}
+										// 验证器
+										if (this.validate != null) {
+											var item = this.$mapName.get(Std.string(name));
+											if(item == null)
+												return null;
+											if (this.validate.validateObject(item)) {
+												return item;
+											} else {
+												return null;
+											}
+										}
 										return this.$mapName.get(Std.string(name));
 									}
 								}),
@@ -172,6 +188,17 @@ class JSONData {
 													this.$mapName.set(Std.string(type), array);
 												}
 												array.push(item);
+											}
+										}
+										// 验证器
+										if (this.validate != null) {
+											var items = this.$mapName.get(Std.string(name));
+											if(items == null)
+												return null;
+											for(item in items){
+												if (!this.validate.validateObject(item)) {
+													return null;
+												}
 											}
 										}
 										return this.$mapName.get(Std.string(name));

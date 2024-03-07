@@ -217,7 +217,6 @@ class ZLabel extends DataProviderComponent {
 		_display = new ZTextField();
 		#if !disable_zlabel_cache_bitmap
 		_bitmap = new Bitmap();
-		_bitmap.smoothing = true;
 		_bitmap.scaleY = _bitmap.scaleX = 1 / labelScale;
 		#end
 		#if ios
@@ -517,6 +516,7 @@ class ZLabel extends DataProviderComponent {
 			m.scale(labelScale, labelScale);
 			bitmapData.draw(_display, m, null, null, null, true);
 			_bitmap.bitmapData = bitmapData;
+			_bitmap.smoothing = true;
 		}
 		#end
 		__drawTexting = false;

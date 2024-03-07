@@ -379,6 +379,13 @@ class Start extends ZScene {
 		this._lockLandscape = true;
 	}
 
+	/**
+	 * 解锁横版
+	 */
+	public function unlockLandscape():Void {
+		this._lockLandscape = false;
+	}
+
 	private function superInitEvent(e:Event):Void {
 		super.onInitEvent(e);
 		ZLog.log("[zygameui stage size]" + "width:" + this.getStageWidth() + " height:" + this.getStageHeight());

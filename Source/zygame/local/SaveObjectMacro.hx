@@ -69,7 +69,7 @@ class SaveObjectMacro {
 						case TPath(p):
 							if (p.name == "SaveDynamicData") {
 								var funcName = item.name.charAt(0).toUpperCase() + item.name.substr(1) + "Value";
-								var retType = macro:Dynamic;
+								var retType = macro :Dynamic;
 								if (p.params.length > 0) {
 									switch p.params[0] {
 										case TPType(t):
@@ -87,7 +87,7 @@ class SaveObjectMacro {
 										args: [
 											{
 												name: "key",
-												type: macro:String
+												type: macro :String
 											},
 											{
 												name: "value",
@@ -95,10 +95,10 @@ class SaveObjectMacro {
 											}
 										],
 										expr: macro {
-											var cur = this.$getName(key);
-											if(cur != value){
-												this.$attName.fieldWrite(key, value);
-											}
+											// var cur = this.$getName(key);
+											// if(cur != value){
+											this.$attName.fieldWrite(key, value);
+											// }
 										}
 									})
 								};
@@ -110,7 +110,7 @@ class SaveObjectMacro {
 										args: [
 											{
 												name: "key",
-												type: macro:String
+												type: macro :String
 											},
 											{
 												name: "defaultValue",

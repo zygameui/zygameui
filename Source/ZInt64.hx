@@ -1,3 +1,4 @@
+import haxe.Exception;
 import haxe.Int64;
 
 using StringTools;
@@ -35,7 +36,11 @@ class GIntTools {
 			if (d != -1)
 				v = v.substr(0, d);
 		}
-		return Int64.parseString(v);
+		try {
+			return Int64.parseString(v);
+		} catch (e:Exception) {
+			return 0;
+		}
 	}
 
 	/**

@@ -99,7 +99,7 @@ class FPSDebug extends ZBox {
 					+ "\nS_RUNING:" + SpineManager.playingCount + "\nFPS:" + Std.int(16 / fps * 60) + "_" + Start.current.renderFps + "_"
 					+ zygame.core.Start.current.stage.frameRate + "\nDrawCalls:" + (_curDrawCall - 2) + "\nScale:" + Start.currentScale + "\ntelemetry:"
 					+ Telemetry.connected;
-				#if android
+				#if (android && sxk_game_sdk)
 				var memoryInfo = v4.android.JNIBinding.getInstance().getApplictionMemory();
 				if (memoryInfo != null) {
 					msg += "\nTMEN:" + Math.round(memoryInfo.totalMem / 1024 / 1024 * 100) / 100 + "MB";

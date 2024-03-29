@@ -137,7 +137,7 @@ class JSONData {
 										// 验证器
 										if (this.validate != null) {
 											var item = this.$mapName.get(Std.string(name));
-											if(item == null)
+											if (item == null)
 												return null;
 											if (this.validate.validateObject(item)) {
 												return item;
@@ -191,11 +191,11 @@ class JSONData {
 											}
 										}
 										// 验证器
-										if (this.validate != null) {
+										if (this.validate != null && this.validate.allowGetDataListValidate) {
 											var items = this.$mapName.get(Std.string(name));
-											if(items == null)
+											if (items == null)
 												return null;
-											for(item in items){
+											for (item in items) {
 												if (!this.validate.validateObject(item)) {
 													return null;
 												}

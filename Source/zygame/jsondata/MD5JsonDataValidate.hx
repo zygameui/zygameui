@@ -19,6 +19,11 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 
 	private var __data:Array<Dynamic> = [];
 
+	/**
+	 * 允许在通过`getDataArrayByXX`获得数据时，进行一个数据全验证的处理，默认为`true`，如果存在性能影响时，可以设置为`false`
+	 */
+	public var allowGetDataListValidate:Bool = false;
+
 	public function new(data:Array<Dynamic>) {
 		this.__data = data;
 		if (data.length > 0) {

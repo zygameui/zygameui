@@ -50,8 +50,10 @@ class Mp3ToOgg {
 		var command = "./tools/run/ffmpeg " + " -y -i \"" + path + "\" -c:a libvorbis -q:a 2 \"" + saveTo + "\"";
 		ChildProcess.exec(command, function(e, i, o) {
 			okCounts++;
-			if (e != null)
+			if (e != null) {
+				thridCounts--;
 				throw e;
+			}
 			trace("已完成" + path + "(" + okCounts + ")");
 			thridCounts--;
 			var path = cache.shift();

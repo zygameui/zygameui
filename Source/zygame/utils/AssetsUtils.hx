@@ -83,7 +83,7 @@ class AssetsUtils {
 		return new TextLoader(ofPath(id));
 	}
 
-	public static function loadBitmapData(id:String, cache:Bool = false):BitmapDataLoader {
+	public dynamic static function loadBitmapData(id:String, cache:Bool = false):BitmapDataLoader {
 		var isASTC = StringTools.endsWith(id, ".astc");
 		if (isASTC) {
 			return new ASTCBitmapDataLoader(ofPath(id));

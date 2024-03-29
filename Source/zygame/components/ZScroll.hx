@@ -42,6 +42,13 @@ class ZScroll extends DataProviderComponent {
 	 */
 	public var viewPushWidth:Float = 0;
 
+	/**
+	 * 移动时进行遮挡，当设置为`true`时，则在移动时无法触摸内容，默认值为`false`
+	 */
+	public var moveOcclusionEnable = false;
+
+	private var __moveOcclusionEnableQuad:ZQuad;
+
 	private function get_batch():TouchImageBatchsContainer {
 		return touchBatch;
 	}
@@ -365,6 +372,8 @@ class ZScroll extends DataProviderComponent {
 	}
 
 	override public function onTouchEnd(touch:TouchEvent):Void {
+		if (this.moveOcclusionEnable)
+			this.mouseChildren = true;
 		if (touchBatch != null)
 			touchBatch.onTouchEnd(touch);
 		if (touch.touchPointID == 0) {
@@ -445,6 +454,11 @@ class ZScroll extends DataProviderComponent {
 		updateDisableSuperscreenEasing();
 
 		_onSizeChange(null);
+
+		if (this.moveOcclusionEnable) {
+			if (this.isMoveing() && _isMove)
+				this.mouseChildren = !this.getIsMoveing();
+		}
 	}
 
 	private function updateDisableSuperscreenEasing():Void {

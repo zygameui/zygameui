@@ -1691,8 +1691,8 @@ class AssetsBuilder extends Builder {
 					onloaded();
 				if (buildXmlContent != null) {
 					// 使用一个全新的xml进行处理
-					if (!isNewXmlPath)
-						viewxml = Xml.parse(viewxml.toString());
+					// if (!isNewXmlPath)
+					viewxml = Xml.parse(viewxml.toString());
 					_buildXmlContent(viewxml.firstElement());
 				}
 				// 分辨率自适配

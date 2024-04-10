@@ -10,6 +10,11 @@ interface IJsonDataValidate {
 	public var allowGetDataListValidate:Bool;
 
 	/**
+	 * 允许在通过`getDataByXXX`获得数据时，进行一个数据验证的处理，默认为`false`，开启后可能存在性能影响，但如果需要完整的数据验证，可设置为`true`
+	 */
+	public var allowGetDataValidate:Bool;
+
+	/**
 	 * 检验数据是否有被篡改
 	 * @param object 
 	 * @return Bool

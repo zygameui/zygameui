@@ -135,7 +135,7 @@ class JSONData {
 											}
 										}
 										// 验证器
-										if (this.validate != null) {
+										if (this.validate != null && this.validate.allowGetDataValidate) {
 											var item = this.$mapName.get(Std.string(name));
 											if (item == null)
 												return null;

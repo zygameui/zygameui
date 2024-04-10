@@ -117,6 +117,11 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 	public var virtualTouchDisplay:#if jsapi Dynamic #else DisplayObject #end;
 
 	/**
+	 * 是否需要检查原点半径，当符合半径外时，则不能使用原点，而是使用计算后的点
+	 */
+	public var needCheckVirtualTouchRadiusToOrginPoint:Bool = false;
+
+	/**
 	 * 当虚拟键按下触发侦听，返回值是弧度，但返回的是null时，则为松开按键
 	 */
 	public var onVirtualUpdate:Null<Float>->Void;
@@ -215,8 +220,25 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 		_beginPos.y = _mouseY;
 		_touchPos.x = _beginPos.x;
 		_touchPos.y = _beginPos.y;
-		_orignPos.x = beginOrginTouch ? _beginPos.x : 0;
-		_orignPos.y = beginOrginTouch ? _beginPos.y : 0;
+		if (beginOrginTouch) {
+			// 如果点击的位置没有超出原点半径时，则以中间点处理
+			if (needCheckVirtualTouchRadiusToOrginPoint) {
+				var len = Point.distance(_touchPos, _orignPos);
+				if (len < virtualTouchRadius) {
+					_orignPos.x = _beginPos.x;
+					_orignPos.y = _beginPos.y;
+				} else {
+					_orignPos.x = 0;
+					_orignPos.y = 0;
+				}
+			} else {
+				_orignPos.x = _beginPos.x;
+				_orignPos.y = _beginPos.y;
+			}
+		} else {
+			_orignPos.x = 0;
+			_orignPos.y = 0;
+		}
 		if (Point.distance(_mathPos, _beginPos) < virtualTouchMaxRadius) {
 			if (onCheckCanTouch(_beginPos)) {
 				_down = true;

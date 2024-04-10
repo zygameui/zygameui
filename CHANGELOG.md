@@ -8,6 +8,8 @@
 
 
 # ZYGameUI 更新日志
+### 15.0.18
+- 调整：调整【getFrameSize()】
 
 ### 15.0.7
 - 新增：新增`hxtelemetry`性能远程调试支持；

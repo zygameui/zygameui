@@ -24,6 +24,11 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 	 */
 	public var allowGetDataListValidate:Bool = false;
 
+	/**
+	 * 允许在通过`getDataByXXX`获得数据时，进行一个数据验证的处理，默认为`false`，开启后可能存在性能影响，但如果需要完整的数据验证，可设置为`true`
+	 */
+	public var allowGetDataValidate:Bool = false;
+
 	public function new(data:Array<Dynamic>) {
 		this.__data = data;
 		if (data.length > 0) {
@@ -44,7 +49,7 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 		return __md5s.exists(getMd5(object));
 	}
 
-	public function getMd5(item:String):String {
+	public function getMd5(item:Dynamic):String {
 		var key = "";
 		for (k in __keys) {
 			key += Reflect.getProperty(item, k);

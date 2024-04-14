@@ -57,7 +57,8 @@ class ZButton extends ToggleButton {
 	 */
 	public static function createButton(up:Dynamic, down:Dynamic = null, over:Dynamic = null, out:Dynamic = null):ZButton {
 		var button:ZButton = new ZButton();
-		button.skin = createSkin(up, down, over, out);
+		var skins = createSkin(up, down, over, out);
+		button.skin = skins;
 		return button;
 	}
 

@@ -160,9 +160,13 @@ class SpineTextureAtals extends Atlas {
 		if (_skeletonData.exists(id)) {
 			return _skeletonData.get(id);
 		}
+		#if (spine_hx >= "3.8.2")
 		var skeletonData:SkeletonData = getSpriteSkeletonManager().readSkeletonData(new SkeletonDataFileJsonHandle(null, data));
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
+		#else
+		return null;
+		#end
 	}
 
 	/**
@@ -175,9 +179,13 @@ class SpineTextureAtals extends Atlas {
 		if (_skeletonData.exists(id)) {
 			return _skeletonData.get(id);
 		}
+		#if (spine_hx >= "3.8.2")
 		var skeletonData:SkeletonData = getTilemapSkeletonManager().readSkeletonData(new SkeletonDataFileJsonHandle(null, data));
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
+		#else
+		return null;
+		#end
 	}
 
 	/**

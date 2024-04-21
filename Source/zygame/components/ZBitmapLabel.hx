@@ -123,8 +123,12 @@ class ZBitmapLabel extends DataProviderComponent {
 	 * 设置文本颜色，在XML配置中，你可以使用color进行设置
 	 * @param color 字体颜色
 	 */
-	public function setFontColor(color:Int):Void {
-		_node.setFontColor(color);
+	public function setFontColor(color:Null<Int>):Void {
+		if (color == null) {
+			_node.shader = null;
+		} else {
+			_node.setFontColor(color);
+		}
 	}
 
 	/**

@@ -127,7 +127,16 @@ class AutoBuilder {
 			pos: Context.currentPos()
 		}
 
+		var builerXmlPath:Field = {
+			name: "builerXmlPath",
+			doc: "当通过`AutoBuilder`构造的UI架构，都会附带builerXmlPath，可以修改builerXmlPath属性，更改加载的创建的布局的实现",
+			access: [APublic],
+			kind: FVar(macro :String, macro $v{path}),
+			pos: Context.currentPos()
+		}
+
 		fields.push(parentXml);
+		fields.push(builerXmlPath);
 
 		if (bindBuilder == "assetsBuilder") {
 			var autoNewBuilder = {
@@ -148,7 +157,7 @@ class AutoBuilder {
 						if ($v{embed}) {
 							this.$bindBuilder = zygame.components.ZBuilder.build(Xml.parse($v{builder.content}), this);
 						} else {
-							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName($v{path}), this);
+							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName(builerXmlPath), this);
 						}
 						this.onInitCreated();
 					} : macro {
@@ -156,7 +165,7 @@ class AutoBuilder {
 						if ($v{embed}) {
 							this.$bindBuilder = zygame.components.ZBuilder.build(Xml.parse($v{builder.content}), this);
 						} else {
-							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName($v{path}), this);
+							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName(builerXmlPath), this);
 						}
 					}
 				}),

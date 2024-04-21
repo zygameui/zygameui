@@ -23,7 +23,7 @@ class ZCacheBitmapLabel extends ZBitmapLabel {
 		cacheAtlas.setFontSize(size);
 	}
 
-	override function setFontColor(color:Int) {
+	override function setFontColor(color:Null<Int>) {
 		cacheAtlas.setFontColor(color);
 	}
 

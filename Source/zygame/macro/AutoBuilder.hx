@@ -1,5 +1,6 @@
 package zygame.macro;
 
+import haxe.macro.ExprTools;
 #if macro
 import haxe.Json;
 import sys.io.File;
@@ -30,7 +31,7 @@ class AutoBuilder {
 	 * @param embed 是否资源嵌入
 	 * @return Array<Field>
 	 */
-	macro public static function build(xmlPath:String, bindBuilder:String = null, embed:Bool = false):Array<Field> {
+	macro public static function build(xmlPath:String, bindBuilder:String = null, embed:Bool = false, ?builderXmlPathExpr:Expr):Array<Field> {
 		var project:ZProjectData = firstProjectData;
 		var path = project.assetsPath.get(StringUtils.getName(xmlPath) + ".xml");
 		if (path == null) {
@@ -127,16 +128,18 @@ class AutoBuilder {
 			pos: Context.currentPos()
 		}
 
-		var builerXmlPath:Field = {
-			name: "builerXmlPath",
+		var exprValue = ExprTools.toString(builderXmlPathExpr);
+
+		var builderXmlPath:Field = {
+			name: "builderXmlPath",
 			doc: "当通过`AutoBuilder`构造的UI架构，都会附带builerXmlPath，可以修改builerXmlPath属性，更改加载的创建的布局的实现",
 			access: [APublic],
-			kind: FVar(macro :String, macro $v{path}),
+			kind: exprValue != "null" ? FVar(macro :String, builderXmlPathExpr) : FVar(macro :String, macro $v{path}),
 			pos: Context.currentPos()
 		}
 
 		fields.push(parentXml);
-		fields.push(builerXmlPath);
+		fields.push(builderXmlPath);
 
 		if (bindBuilder == "assetsBuilder") {
 			var autoNewBuilder = {
@@ -148,7 +151,7 @@ class AutoBuilder {
 					args: [],
 					ret: macro :Void,
 					expr: isZBuilderScene ? macro {
-						super($v{path});
+						super(builderXmlPath);
 						this.$bindBuilder.readyTextures = $v{textures};
 						this.$bindBuilder.readFiles = $v{files};
 						this.$bindBuilder.readSpines = $v{spines};
@@ -157,7 +160,7 @@ class AutoBuilder {
 						if ($v{embed}) {
 							this.$bindBuilder = zygame.components.ZBuilder.build(Xml.parse($v{builder.content}), this);
 						} else {
-							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName(builerXmlPath), this);
+							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName(builderXmlPath), this);
 						}
 						this.onInitCreated();
 					} : macro {
@@ -165,7 +168,7 @@ class AutoBuilder {
 						if ($v{embed}) {
 							this.$bindBuilder = zygame.components.ZBuilder.build(Xml.parse($v{builder.content}), this);
 						} else {
-							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName(builerXmlPath), this);
+							this.$bindBuilder = zygame.components.ZBuilder.buildXmlUiFind(zygame.utils.StringUtils.getName(builderXmlPath), this);
 						}
 					}
 				}),

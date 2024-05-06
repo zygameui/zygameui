@@ -248,7 +248,7 @@ class ImageRender extends Sprite {
 				}
 				this.addChild(__bitmapRender);
 				__bitmapRender.bitmapData = frame.parent.getRootBitmapData();
-				__bitmapRender.scrollRect = new Rectangle(frame.x, frame.y, frame.width - 1, frame.height - 1);
+				__bitmapRender.scrollRect = new Rectangle(frame.x, frame.y, frame.width, frame.height);
 				__bitmapRender.x = frame.frameX;
 				__bitmapRender.y = frame.frameY;
 				#else

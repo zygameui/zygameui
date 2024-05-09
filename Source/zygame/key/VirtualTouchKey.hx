@@ -224,7 +224,7 @@ class VirtualTouchKey #if !jsapi extends ZBox #end {
 			// 如果点击的位置没有超出原点半径时，则以中间点处理
 			if (needCheckVirtualTouchRadiusToOrginPoint) {
 				var len = Point.distance(_touchPos, _orignPos);
-				if (len < virtualTouchRadius) {
+				if (len < virtualTouchMaxRadius - virtualTouchRadius * 3) {
 					_orignPos.x = _beginPos.x;
 					_orignPos.y = _beginPos.y;
 				} else {

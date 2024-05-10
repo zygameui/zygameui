@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.events.Event;
 import zygame.media.SoundChannelManager;
 import zygame.utils.ZLog;
 import zygame.core.Start;
@@ -90,7 +91,11 @@ class ZSound implements zygame.core.Refresher {
 		var sound:Sound = ZBuilder.getBaseSound(src);
 		if (sound != null) {
 			// 开始播放
-			_channels.push(sound.play(0, loop));
+			var channel = sound.play(0, loop);
+			_channels.push(channel);
+			channel.addEventListener(Event.SOUND_COMPLETE, (e) -> {
+				_channels.remove(channel);
+			});
 			_currentFrame = 0;
 			_soundIndex++;
 			if (_soundPlayTimes.length != 0 && _soundIndex >= _soundPlayTimes.length) {

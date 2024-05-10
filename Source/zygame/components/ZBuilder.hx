@@ -1860,6 +1860,9 @@ class Builder {
 				if (Std.isOfType(value, ZImage)) {
 					cast(value, ZImage).destroy();
 				}
+				if (Std.isOfType(value, ZSound)) {
+					cast(value, ZSound).stop();
+				}
 			}
 			// 如果这里不进行释放，是否可以解决空访问的问题
 			// ids = null;

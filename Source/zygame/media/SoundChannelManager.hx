@@ -1,5 +1,6 @@
 package zygame.media;
 
+import openfl.media.SoundTransform;
 import zygame.utils.ZLog;
 import haxe.Exception;
 import zygame.events.SoundChannelManagerEvent;
@@ -46,10 +47,14 @@ class SoundChannelManager extends EventDispatcher {
 	 */
 	private var _musicAvailable:Bool = true;
 
+	private var _musicVolume:SoundTransform = new SoundTransform();
+
 	/**
 	 * 音效音频的可用性
 	 */
 	private var _effectAvailable:Bool = true;
+
+	private var _effectVolume:SoundTransform = new SoundTransform();
 
 	public function new() {
 		super();
@@ -67,6 +72,7 @@ class SoundChannelManager extends EventDispatcher {
 					var c = sound.play(0, loop);
 					if (c == null)
 						return c;
+					c.soundTransform = _effectVolume;
 					_effectChannel.push(c);
 					cast(c, EventDispatcher).addEventListener(Event.SOUND_COMPLETE, function(e) {
 						_effectChannel.remove(c);
@@ -98,6 +104,7 @@ class SoundChannelManager extends EventDispatcher {
 			if (_musicAvailable) {
 				if (_music != null) {
 					_musicChannel = _music.play(99999);
+					_musicChannel.setVolume(_musicVolume.volume);
 				}
 			}
 		} catch (e:Exception) {
@@ -179,6 +186,26 @@ class SoundChannelManager extends EventDispatcher {
 		_effectAvailable = bool;
 		if (!bool)
 			this.stopAllEffect();
+	}
+
+	/**
+	 * 设置背景音乐音量
+	 * @param volume 
+	 */
+	public function setMusicVolume(volume:Float):Void {
+		_musicVolume.volume = volume;
+		_musicChannel?.setVolume(volume);
+	}
+
+	/**
+	 * 设置音频音乐音量
+	 * @param volume 
+	 */
+	public function setEffectVolume(volume:Float):Void {
+		_effectVolume.volume = volume;
+		for (channel in _effectChannel) {
+			channel.soundTransform = _effectVolume;
+		}
 	}
 
 	/**

@@ -141,9 +141,7 @@ class ZButton extends ToggleButton {
 		if (sound != null || defaultSound != null) {
 			var playsound = ZBuilder.getBaseSound(sound == null ? defaultSound : sound);
 			if (SoundChannelManager.current.isEffectAvailable()) {
-				if (playsound != null) {
-					playsound.play(0, 1);
-				}
+				@:privateAccess SoundChannelManager.current.playEffect(playsound, 1);
 			}
 		}
 		if (_clickEventCall != null)

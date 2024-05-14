@@ -266,9 +266,7 @@ class BToggleButton extends BTouchSprite {
 						if (sound != null || ZButton.defaultSound != null) {
 							if (SoundChannelManager.current.isEffectAvailable()) {
 								var playsound = ZBuilder.getBaseSound(sound == null ? ZButton.defaultSound : sound);
-								if (playsound != null) {
-									playsound.play(0, 1);
-								}
+								@:privateAccess SoundChannelManager.current.playEffect(playsound, 1);
 							}
 						}
 					}

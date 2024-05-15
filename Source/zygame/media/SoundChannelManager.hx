@@ -72,7 +72,7 @@ class SoundChannelManager extends EventDispatcher {
 					var c = sound.play(0, loop);
 					if (c == null)
 						return c;
-					#if !minigame
+					#if (!minigame || minigame_sound_v2)
 					c.soundTransform = _effectVolume;
 					#end
 					_effectChannel.push(c);
@@ -206,7 +206,7 @@ class SoundChannelManager extends EventDispatcher {
 	public function setEffectVolume(volume:Float):Void {
 		_effectVolume.volume = volume;
 		for (channel in _effectChannel) {
-			#if !minigame
+			#if (!minigame || minigame_sound_v2)
 			channel.soundTransform = _effectVolume;
 			#end
 		}

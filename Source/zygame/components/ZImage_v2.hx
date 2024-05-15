@@ -20,6 +20,7 @@ import zygame.utils.load.Frame;
  */
 @:access(ImageRender)
 @:noCompletion
+@:keep
 class ZImage_v2 extends DataProviderBox {
 	private var __render:ImageRender;
 

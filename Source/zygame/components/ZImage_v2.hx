@@ -146,14 +146,16 @@ class ZImage_v2 extends DataProviderBox {
 
 	override function set_width(value:Float):Float {
 		__render.width = value;
+		super.set_width(value);
 		this.updateComponents();
-		return super.set_width(value);
+		return value;
 	}
 
 	override function set_height(value:Float):Float {
 		__render.height = value;
+		super.set_height(value);
 		this.updateComponents();
-		return super.set_height(value);
+		return value;
 	}
 
 	private override function get_width():Float {

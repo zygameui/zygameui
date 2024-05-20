@@ -251,6 +251,12 @@ class AutoBuilder {
 		}
 		var propertyField:Field = {
 			name: id,
+			meta: [
+				{
+					name: ":keep",
+					pos: Context.currentPos()
+				}
+			],
 			access: [Access.APublic],
 			kind: FieldType.FProp("get", "null", myFunc.ret),
 			pos: Context.currentPos()
@@ -258,6 +264,12 @@ class AutoBuilder {
 		// create: `private inline function get_$fieldName() return $value`
 		var getterField:Field = {
 			name: "get_" + id,
+			meta: [
+				{
+					name: ":keep",
+					pos: Context.currentPos()
+				}
+			],
 			access: [Access.APrivate, Access.AInline],
 			kind: FieldType.FFun(myFunc),
 			pos: Context.currentPos()

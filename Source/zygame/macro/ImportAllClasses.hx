@@ -23,7 +23,10 @@ class ImportAllClasses {
 			if (hxfile.indexOf(".hx") == -1)
 				continue;
 			hxfile = StringTools.replace(hxfile, ".hx", "");
-			var t = Context.toComplexType(Context.getType(packageName + "." + hxfile));
+			var t = TPath({
+				pack: packageName.split("."),
+				name: hxfile
+			});
 			array.push({
 				name: "_" + hxfile,
 				access: [Access.APrivate, Access.AStatic],

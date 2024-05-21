@@ -1,7 +1,9 @@
 package zygame.macro;
 
-import haxe.macro.ExprTools;
 #if macro
+import haxe.Timer;
+import haxe.macro.ExprTools;
+import sys.FileSystem;
 import haxe.Json;
 import sys.io.File;
 import zygame.utils.StringUtils;
@@ -16,6 +18,14 @@ class AutoBuilder {
 	#if macro
 	@:persistent public static var firstProjectData(get, never):ZProjectData;
 	@:persistent private static var _firstProjectData:ZProjectData;
+
+	/**
+	 * 缓存字段处理，当发生文件时间变更时，则更新
+	 */
+	@:persistent private static var _cacheFields:Map<String, {
+		mtime:Float,
+		fields:Array<Field>
+	}> = [];
 
 	static function get_firstProjectData():ZProjectData {
 		if (_firstProjectData == null) {
@@ -38,7 +48,19 @@ class AutoBuilder {
 			throw "Xml file '" + xmlPath + "' is not exists!";
 		}
 
+		// trace("parseing ", xmlPath);
+		if (_cacheFields.exists(xmlPath)) {
+			var cache = _cacheFields.get(xmlPath);
+			var time = FileSystem.stat(path);
+			if (cache.mtime == time.mtime.getTime()) {
+				var fields = Context.getBuildFields();
+				return fields.concat(cache.fields);
+			}
+		}
+
 		var fields = Context.getBuildFields();
+
+		var cacheFields = new Array<Field>();
 
 		var builder:ZBuilderData = new ZBuilderData(path, project);
 
@@ -116,7 +138,7 @@ class AutoBuilder {
 				kind: FVar(macro :zygame.components.ZBuilder.Builder),
 				pos: Context.currentPos()
 			}
-			fields.push(assetsBuilder);
+			cacheFields.push(assetsBuilder);
 		}
 
 		// 需要额外新增一个parentXml的属性，来绑定父节点参数
@@ -138,8 +160,8 @@ class AutoBuilder {
 			pos: Context.currentPos()
 		}
 
-		fields.push(parentXml);
-		fields.push(builderXmlPath);
+		cacheFields.push(parentXml);
+		cacheFields.push(builderXmlPath);
 
 		if (bindBuilder == "assetsBuilder") {
 			var autoNewBuilder = {
@@ -174,7 +196,7 @@ class AutoBuilder {
 				}),
 				pos: Context.currentPos()
 			};
-			fields.push(autoNewBuilder);
+			cacheFields.push(autoNewBuilder);
 		}
 
 		// 追加属性创建
@@ -182,11 +204,18 @@ class AutoBuilder {
 			if (project.assetsPath.exists(value + ".xml")) {
 				// XML定义
 				var nodexml:Xml = Xml.parse(File.getContent(project.assetsPath.get(value + ".xml")));
-				createGetCall(fields, key, nodexml.firstElement().nodeName, bindBuilder);
+				createGetCall(cacheFields, key, nodexml.firstElement().nodeName, bindBuilder);
 			} else
-				createGetCall(fields, key, value, bindBuilder);
+				createGetCall(cacheFields, key, value, bindBuilder);
 		}
-		return fields;
+
+		// 缓存处理
+		var time = FileSystem.stat(path);
+		_cacheFields.set(xmlPath, {
+			mtime: time.mtime.getTime(),
+			fields: cacheFields
+		});
+		return fields.concat(cacheFields);
 	}
 
 	public static function getType(typeName:String):Dynamic {

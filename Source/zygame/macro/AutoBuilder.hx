@@ -24,6 +24,7 @@ class AutoBuilder {
 	 */
 	@:persistent private static var _cacheFields:Map<String, {
 		mtime:Float,
+		isCreateInit:Bool,
 		fields:Array<Field>
 	}> = [];
 
@@ -54,6 +55,13 @@ class AutoBuilder {
 			var time = FileSystem.stat(path);
 			if (cache.mtime == time.mtime.getTime()) {
 				var fields = Context.getBuildFields();
+				if (cache.isCreateInit) {
+					var inits = fields.filter(f -> f.name == "onInit");
+					if (inits.length > 0) {
+						inits[0].access = [APrivate];
+						inits[0].name = "onInitCreated";
+					}
+				}
 				return fields.concat(cache.fields);
 			}
 		}
@@ -213,6 +221,7 @@ class AutoBuilder {
 		var time = FileSystem.stat(path);
 		_cacheFields.set(xmlPath, {
 			mtime: time.mtime.getTime(),
+			isCreateInit: isCreateInit,
 			fields: cacheFields
 		});
 		return fields.concat(cacheFields);

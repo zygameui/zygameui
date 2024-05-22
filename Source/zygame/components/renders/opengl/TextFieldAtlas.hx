@@ -23,11 +23,10 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 	}
 
 	public function getTileFrame(id:Int):FntFrame {
-		trace("测试", id, __chars.get(id), String.fromCharCode(id));
 		return __chars.get(id);
 	}
 
-	public function pushChar(char:String, rect:Rectangle):Void {
+	public function pushChar(char:String, rect:Rectangle, xadvance:Int):Void {
 		var code = char.charCodeAt(0);
 		var id = __tileset.addRect(rect);
 		var frame = new FntFrame();
@@ -35,7 +34,7 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 		frame.y = 0;
 		frame.width = rect.width;
 		frame.height = rect.height;
-		frame.xadvance = Std.int(rect.width);
+		frame.xadvance = xadvance;
 		frame.id = id;
 		if (rect.height > maxHeight)
 			maxHeight = rect.height;

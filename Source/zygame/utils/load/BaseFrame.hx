@@ -20,6 +20,6 @@ class BaseFrame {
     public var y:Float = 0;
 
     public function toString():String{
-        return "[BaseFrame]";
+        return "BaseFrame[id=" + id + ", x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + "]";
     }
 }

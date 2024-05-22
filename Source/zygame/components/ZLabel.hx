@@ -1412,6 +1412,7 @@ class ZLabel extends DataProviderComponent {
 	private var __drawTexting:Bool = false;
 
 	private function drawText(value:String):Void {
+		return;
 		__drawTexting = true;
 		if (value != null) {
 			if (value.length > _maxChars && _maxChars != 0) {

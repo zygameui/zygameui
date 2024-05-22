@@ -1,5 +1,6 @@
 package zygame.display.batch;
 
+import zygame.components.base.IFontAtlas;
 import zygame.components.ZLabel;
 import zygame.components.ZBuilder;
 import openfl.geom.Rectangle;
@@ -201,9 +202,9 @@ class BLabel extends BSprite {
 			if (value == null || fntData == null)
 				return;
 			_texts = value.split("");
-			if (Std.isOfType(fntData, FntData)) {
+			if (Std.isOfType(fntData, IFontAtlas)) {
 				_lineHeight = 0;
-				var curFntData:FntData = cast fntData;
+				var curFntData:IFontAtlas = cast fntData;
 				_maxHeight = curFntData.maxHeight;
 				var offestX:Float = 0;
 				var offestY:Float = 0;

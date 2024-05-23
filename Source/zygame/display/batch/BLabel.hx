@@ -419,6 +419,10 @@ class BLabel extends BSprite {
 		if (rect != null) {
 			rect.x += _node.x;
 			rect.y += _node.y;
+			rect.y *= _node.scaleX;
+			rect.x *= _node.scaleX;
+			rect.width *= _node.scaleX;
+			rect.height *= _node.scaleX;
 		}
 		return rect;
 	}

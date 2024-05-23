@@ -311,7 +311,7 @@ class ZLabel extends DataProviderComponent {
 	private function __updateLabel():Void {
 		if (__changed) {
 			__changed = false;
-			if (this.dataProvider != null && this.dataProvider != this._display.text) {
+			if (this.dataProvider != null) {
 				this.drawText(this.dataProvider);
 			}
 			__drawTexting = true;
@@ -500,23 +500,45 @@ class ZLabel extends DataProviderComponent {
 
 		// 光标实现
 		if (zquad.visible) {
-			if (_display.text.length > 0) {
-				rect = _display.getCharBoundaries(_display.text.length - 1);
-				if (rect != null) {
-					zquad.x = (rect.x + rect.width) / labelScale + _display.x;
-					zquad.y = (rect.y) / labelScale + _font.size * 0.168 / labelScale + _display.y;
+			if (disableCache || _cacheBitmapLabel == null) {
+				if (_display.text.length > 0) {
+					rect = _display.getCharBoundaries(_display.text.length - 1);
+					if (rect != null) {
+						zquad.x = (rect.x + rect.width) / labelScale + _display.x;
+						zquad.y = (rect.y) / labelScale + _font.size * 0.168 / labelScale + _display.y;
+					}
+				} else {
+					if (_display.x == 0) {
+						switch (hAlign) {
+							case LEFT, RIGHT:
+								zquad.x = _display.x;
+							case CENTER:
+								zquad.x = this.width / 2;
+							default:
+						}
+					}
+					zquad.y = _font.size * 0.168 / labelScale + _display.y;
 				}
 			} else {
-				if (_display.x == 0) {
-					switch (hAlign) {
-						case LEFT, RIGHT:
-							zquad.x = _display.x;
-						case CENTER:
-							zquad.x = this.width / 2;
-						default:
+				var char:String = _cacheBitmapLabel.dataProvider;
+				if (char.length > 0) {
+					rect = _cacheBitmapLabel.getCharBounds(char.length - 1);
+					if (rect != null) {
+						zquad.x = (rect.x + rect.width) / labelScale + _cacheBitmapLabel.x;
+						zquad.y = _font.size * 0.168 / labelScale + _cacheBitmapLabel.y;
 					}
+				} else {
+					if (_cacheBitmapLabel.x == 0) {
+						switch (hAlign) {
+							case LEFT, RIGHT:
+								zquad.x = _cacheBitmapLabel.x;
+							case CENTER:
+								zquad.x = this.width / 2;
+							default:
+						}
+					}
+					zquad.y = _font.size * 0.168 / labelScale + _cacheBitmapLabel.y;
 				}
-				zquad.y = _font.size * 0.168 / labelScale + _display.y;
 			}
 		} else {
 			zquad.x = _display.x;
@@ -647,35 +669,35 @@ class ZLabel extends DataProviderComponent {
 		if (_isHtml)
 			_display.htmlText = value;
 		else {
-			if (_display.text == value)
-				return;
-			#if (meituan)
-			// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
-			if (_display != null) {
-				var newText = new ZTextField();
-				newText.width = _display.width;
-				newText.height = _display.height;
-				newText.scaleX = 1 / labelScale;
-				newText.scaleY = 1 / labelScale;
-				newText.x = _display.x;
-				newText.y = _display.y;
-				newText.setTextFormat(_font);
-				newText.wordWrap = true;
-				newText.selectable = false;
-				newText.maxChars = _display.maxChars;
-				newText.displayAsPassword = _display.displayAsPassword;
-				newText.shader = _display.shader;
-				this.removeChild(_display);
-				_display = newText;
-				this.addChild(_display);
-			}
-			#end
 			if (!disableCache && _cacheBitmapLabel != null) {
 				textFieldContextBitmapData.drawText(value);
 				_cacheBitmapLabel.width = _width * labelScale;
 				_cacheBitmapLabel.height = _height;
 				_cacheBitmapLabel.dataProvider = value;
 			} else {
+				if (_display.text == value)
+					return;
+				#if (meituan)
+				// OpenFL8.9.0文本无法实时刷新区域。（7.2.5开始默认实现）
+				if (_display != null) {
+					var newText = new ZTextField();
+					newText.width = _display.width;
+					newText.height = _display.height;
+					newText.scaleX = 1 / labelScale;
+					newText.scaleY = 1 / labelScale;
+					newText.x = _display.x;
+					newText.y = _display.y;
+					newText.setTextFormat(_font);
+					newText.wordWrap = true;
+					newText.selectable = false;
+					newText.maxChars = _display.maxChars;
+					newText.displayAsPassword = _display.displayAsPassword;
+					newText.shader = _display.shader;
+					this.removeChild(_display);
+					_display = newText;
+					this.addChild(_display);
+				}
+				#end
 				_display.text = Std.string(value);
 			}
 		}
@@ -727,7 +749,6 @@ class ZLabel extends DataProviderComponent {
 			this.drawText(this.dataProvider);
 			this.updateComponents();
 		}
-		trace("高度", this.dataProvider, Math.abs(_height #if quickgamelabelScale / _getCurrentScale() #end * this.scaleY));
 		return Math.abs(_height #if quickgamelabelScale / _getCurrentScale() #end * this.scaleY);
 	}
 

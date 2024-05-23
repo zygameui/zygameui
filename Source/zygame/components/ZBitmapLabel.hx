@@ -234,7 +234,6 @@ class ZBitmapLabel extends DataProviderComponent {
 	}
 
 	override private function get_height():Float {
-		trace(" _textmap.height=", _textmap.height);
 		return _textmap.height;
 	}
 	#end
@@ -259,8 +258,10 @@ class ZBitmapLabel extends DataProviderComponent {
 	 */
 	public function getCharBounds(charIndex:Int):Rectangle {
 		var rect = _node.getCharBounds(charIndex);
-		rect.x += _node.x;
-		rect.y += _node.y;
+		if (rect != null) {
+			rect.x += _node.x;
+			rect.y += _node.y;
+		}
 		return rect;
 	}
 }

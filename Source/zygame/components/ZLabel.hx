@@ -571,26 +571,23 @@ class ZLabel extends DataProviderComponent {
 		#if !disable_zlabel_cache_bitmap
 		if (__drawTexting) {
 			// 转换成BitmapData数据
-			// if (disableCache || _cacheBitmapLabel == null) {
-			// 	var drawText:DisplayObject = _display;
-			// 	var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale), true, 0x0);
-			// 	bitmapData.disposeImage();
-			// 	var m = drawText.transform.matrix;
-			// 	m.scale(labelScale, labelScale);
-			// 	bitmapData.draw(drawText, m, null, null, null, true);
-			// 	_bitmap.bitmapData = bitmapData;
-			// 	_bitmap.smoothing = true;
-			// } else {
-			// 	this.addChild(_cacheBitmapLabel);
-			// }
-			var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
-			var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale), true, 0x0);
-			bitmapData.disposeImage();
-			var m = drawText.transform.matrix;
-			m.scale(labelScale, labelScale);
-			bitmapData.draw(drawText, m, null, null, null, true);
-			_bitmap.bitmapData = bitmapData;
-			_bitmap.smoothing = true;
+			if (__blur > 0 || disableCache) {
+				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
+				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale), true, 0x0);
+				bitmapData.disposeImage();
+				var m = drawText.transform.matrix;
+				m.scale(labelScale, labelScale);
+				bitmapData.draw(drawText, m, null, null, null, true);
+				_bitmap.bitmapData = bitmapData;
+				_bitmap.smoothing = true;
+				if (_cacheBitmapLabel != null) {
+					_cacheBitmapLabel.parent?.removeChild(_cacheBitmapLabel);
+				}
+			} else {
+				this._cacheBitmapLabel.x = 0;
+				this._cacheBitmapLabel.y = 0;
+				this.addChild(_cacheBitmapLabel);
+			}
 		}
 		#end
 		__drawTexting = false;

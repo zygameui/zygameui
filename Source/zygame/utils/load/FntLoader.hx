@@ -48,6 +48,13 @@ class FntData extends Atlas implements IFontAtlas {
 	private var _tileset:Tileset;
 	private var _ids:Dictionary<Int, FntFrame>;
 
+	/**
+	 * 文本字体的高度
+	 */
+	public function getFontHeight():Float{
+		return maxHeight;
+	}
+
 	public function new(bitmapData:BitmapData, xml:Xml, path:String) {
 		this._ids = new Dictionary<Int, FntFrame>();
 		this._bitmapData = bitmapData;

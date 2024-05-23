@@ -39,6 +39,10 @@ class ZBitmapLabel extends DataProviderComponent {
 	private var _text:String = "";
 	private var __height:Float = 0;
 
+	#if text_debug
+	var quad = new ZQuad(1, 1, 0xff0000);
+	#end
+
 	/**
 	 * 构造一个位图文本渲染器
 	 * @param fnt 位图纹理数据
@@ -51,9 +55,14 @@ class ZBitmapLabel extends DataProviderComponent {
 		// _textmap.tileBlendModeEnabled = false;
 		// _textmap.tileColorTransformEnabled = false;
 		_node = new BLabel(fnt);
+		_textmap.smoothing = true;
 		_textmap.addTile(_node);
 		this.vAlign = Align.CENTER;
 		this.hAlign = Align.LEFT;
+		#if text_debug
+		this.addChild(quad);
+		quad.alpha = 0.5;
+		#end
 	}
 
 	override public function initComponents():Void {
@@ -155,6 +164,10 @@ class ZBitmapLabel extends DataProviderComponent {
 			_textmap.height = __height;
 			_node.height = __height;
 		}
+		#if text_debug
+		quad.width = _textmap.width;
+		quad.height = _textmap.height;
+		#end
 	}
 
 	/**
@@ -221,6 +234,7 @@ class ZBitmapLabel extends DataProviderComponent {
 	}
 
 	override private function get_height():Float {
+		trace(" _textmap.height=", _textmap.height);
 		return _textmap.height;
 	}
 	#end
@@ -232,6 +246,10 @@ class ZBitmapLabel extends DataProviderComponent {
 		_text = value;
 		updateComponents();
 		return value;
+	}
+
+	override function get_dataProvider():Dynamic {
+		return _text;
 	}
 
 	/**

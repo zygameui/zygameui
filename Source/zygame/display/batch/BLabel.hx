@@ -203,8 +203,9 @@ class BLabel extends BSprite {
 				return;
 			_texts = value.split("");
 			if (Std.isOfType(fntData, IFontAtlas)) {
-				_lineHeight = 0;
+				_maxWidth = 0;
 				var curFntData:IFontAtlas = cast fntData;
+				_lineHeight = curFntData.getFontHeight();
 				_maxHeight = curFntData.maxHeight;
 				var offestX:Float = 0;
 				var offestY:Float = 0;
@@ -214,6 +215,7 @@ class BLabel extends BSprite {
 					var id:Int = char.charCodeAt(0);
 					var frame:FntFrame = curFntData.getTileFrame(id);
 					if (frame != null) {
+						// trace("this._width", (offestX + frame.width) * scaleFloat, "scaleFloat=", scaleFloat, "_lineHeight=", _lineHeight, _size, this._width);
 						if (wordWrap && (offestX + frame.width) * scaleFloat > this._width) {
 							offestX = 0;
 							offestY += curFntData.maxHeight;
@@ -225,17 +227,22 @@ class BLabel extends BSprite {
 						tile.y = offestY + frame.yoffset;
 						offestX += Std.int(frame.xadvance);
 						lastWidth = frame.width;
-						if (_lineHeight < frame.height)
-							_lineHeight = frame.height;
+						// if (_lineHeight < frame.height)
+						// _lineHeight = frame.height;
+						if (offestX > _maxWidth) {
+							_maxWidth = offestX;
+						}
 					} else if (char == " ") {
 						offestX += (_size != 0 ? _size : lastWidth) * 0.8;
+						if (offestX > _maxWidth) {
+							_maxWidth = offestX;
+						}
 					} else if (char == "\n") {
 						offestX = 0;
 						offestY += curFntData.maxHeight;
 						_maxHeight += curFntData.maxHeight;
 					}
 				}
-				_maxWidth = offestX;
 			} else if (Std.isOfType(fntData, TextureAtlas) || Std.isOfType(fntData, SpineTextureAtals)) {
 				// 精灵表中的位图字渲染，7月2号开始支持Spine的位图渲染
 				var curSpriteDataGetBitmapDataFrame:String->Frame = null;

@@ -49,6 +49,7 @@ class TextFieldContextBitmapData {
 		__textFormat = new TextFormat(ZConfig.fontName, size, 0xffffff);
 		__textField = new TextField();
 		__atlas = new TextFieldAtlas(bitmapData);
+		__atlas.fontSize = size + offestY / 2;
 	}
 
 	/**
@@ -60,7 +61,7 @@ class TextFieldContextBitmapData {
 		var caches:Array<String> = [];
 		var chars = text.split("");
 		for (char in chars) {
-			if (char == " ")
+			if (char == " " || char == "\n" || char == "\r")
 				continue;
 			if (__atlas.getTileFrame(char.charCodeAt(0)) == null)
 				if (!caches.contains(char)) {
@@ -70,6 +71,7 @@ class TextFieldContextBitmapData {
 		if (caches.length == 0)
 			return;
 		text = caches.join(" ");
+		trace("缓存", text);
 		__textField.text = text;
 		__textField.width = 2048;
 		__textField.wordWrap = false;

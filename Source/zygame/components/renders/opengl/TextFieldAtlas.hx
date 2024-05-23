@@ -17,6 +17,8 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	public var maxHeight:Float = 0;
 
+	public var fontSize:Float = 0;
+
 	public function new(bitmapData:BitmapData) {
 		this.isTextAtlas = true;
 		__tileset = new Tileset(bitmapData);
@@ -24,6 +26,10 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	public function getTileFrame(id:Int):FntFrame {
 		return __chars.get(id);
+	}
+
+	public function getFontHeight():Float {
+		return fontSize;
 	}
 
 	public function pushChar(char:String, rect:Rectangle, xadvance:Int):Void {

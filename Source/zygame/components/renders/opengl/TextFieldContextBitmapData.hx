@@ -1,5 +1,6 @@
 package zygame.components.renders.opengl;
 
+import zygame.utils.ZLog;
 import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
 import zygame.utils.MaxRectsBinPack;
@@ -40,11 +41,11 @@ class TextFieldContextBitmapData {
 
 	private var __offestY:Int = 0;
 
-	public function new(size:Int = 36, offestX:Int = 0, offestY:Int = 0) {
+	public function new(size:Int = 36, textureWidth:Int = 2048, textureHeight:Int = 2048, offestX:Int = 0, offestY:Int = 0) {
 		this.__offestX = offestX;
 		this.__offestY = offestY;
-		bitmapData = new BitmapData(2048, 2048, true, 0x0);
-		rects = new MaxRectsBinPack(2048, 2048, false);
+		bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
+		rects = new MaxRectsBinPack(textureWidth, textureHeight, false);
 		bitmapData.disposeImage();
 		__textFormat = new TextFormat(ZConfig.fontName, size, 0xffffff);
 		__textField = new TextField();
@@ -78,6 +79,19 @@ class TextFieldContextBitmapData {
 		__textField.setTextFormat(__textFormat);
 		var pakRect = rects.insert(Std.int(__textField.textWidth + __offestX * 3), Std.int(__textField.textHeight + __offestY * 3),
 			FreeRectangleChoiceHeuristic.BestShortSideFit);
+		if (pakRect == null || pakRect.width == 0 || pakRect.height == 0) {
+			// TODO 当缓冲区满了之后，应该清空所有文字，重新渲染
+			this.clear();
+			var pakRect = rects.insert(Std.int(__textField.textWidth + __offestX * 3), Std.int(__textField.textHeight + __offestY * 3),
+				FreeRectangleChoiceHeuristic.BestShortSideFit);
+		}
+
+		// 二次确认无法渲染
+		if (pakRect == null || pakRect.width == 0 || pakRect.height == 0) {
+			ZLog.error("TextFieldContextBitmapData: 缓存区满了，无法继续渲染文字");
+			return;
+		}
+
 		var m = new Matrix();
 		m.translate(pakRect.x, pakRect.y);
 		bitmapData.draw(__textField, m);
@@ -111,7 +125,7 @@ class TextFieldContextBitmapData {
 	public function clear():Void {
 		bitmapData.fillRect(bitmapData.rect, 0x0);
 		__atlas = new TextFieldAtlas(bitmapData);
-		rects = new MaxRectsBinPack(2048, 2048, false);
+		rects = new MaxRectsBinPack(bitmapData.width, bitmapData.height, false);
 	}
 
 	/**

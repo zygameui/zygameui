@@ -90,6 +90,8 @@ class BLabel extends BSprite {
 	 */
 	public var fontEnd:String = "";
 
+	private var __sizeChange:Bool = false;
+
 	public function new(fnt:Dynamic) {
 		super();
 		if (fnt is String)
@@ -108,6 +110,7 @@ class BLabel extends BSprite {
 
 	override private function set_width(w:Float):Float {
 		_width = w;
+		__sizeChange = true;
 		updateLayout();
 		return _width;
 	}
@@ -120,6 +123,7 @@ class BLabel extends BSprite {
 
 	override private function set_height(h:Float):Float {
 		_height = h;
+		__sizeChange = true;
 		updateLayout();
 		return _height;
 	}
@@ -192,6 +196,10 @@ class BLabel extends BSprite {
 	 * @param value 
 	 */
 	public function updateText(value:Dynamic, sizeChange:Bool = false):Void {
+		if (__sizeChange) {
+			sizeChange = true;
+			__sizeChange = false;
+		}
 		if (!Std.isOfType(value, String))
 			value = Std.string(value);
 		if (ZLabel.onGlobalCharFilter != null)

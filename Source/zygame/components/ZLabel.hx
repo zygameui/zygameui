@@ -841,6 +841,7 @@ class ZLabel extends DataProviderComponent {
  */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
+		this.disableCache = true;
 		__changed = true;
 		__setFontSelectColor.push({
 			startIndex: startIndex,

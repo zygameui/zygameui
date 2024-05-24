@@ -1,5 +1,7 @@
 package zygame.components.renders.opengl;
 
+import zygame.core.Start;
+import zygame.utils.DisplayTools;
 import zygame.utils.ZLog;
 import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
@@ -26,6 +28,11 @@ class TextFieldContextBitmapData {
 	public var rects:MaxRectsBinPack;
 
 	/**
+	 * 缓存版本号
+	 */
+	public var version:Int = 0;
+
+	/**
 	 * 图集
 	 */
 	private var __atlas:TextFieldAtlas;
@@ -40,6 +47,8 @@ class TextFieldContextBitmapData {
 	private var __offestX:Int = 0;
 
 	private var __offestY:Int = 0;
+
+	private var __redrawing:Bool = false;
 
 	public function new(size:Int = 36, textureWidth:Int = 2048, textureHeight:Int = 2048, offestX:Int = 0, offestY:Int = 0) {
 		this.__offestX = offestX;
@@ -72,7 +81,6 @@ class TextFieldContextBitmapData {
 		if (caches.length == 0)
 			return;
 		text = caches.join(" ");
-		trace("缓存", text);
 		__textField.text = text;
 		__textField.width = 2048;
 		__textField.wordWrap = false;
@@ -80,15 +88,14 @@ class TextFieldContextBitmapData {
 		var pakRect = rects.insert(Std.int(__textField.textWidth + __offestX * 3), Std.int(__textField.textHeight + __offestY * 3),
 			FreeRectangleChoiceHeuristic.BestShortSideFit);
 		if (pakRect == null || pakRect.width == 0 || pakRect.height == 0) {
-			// TODO 当缓冲区满了之后，应该清空所有文字，重新渲染
-			this.clear();
-			var pakRect = rects.insert(Std.int(__textField.textWidth + __offestX * 3), Std.int(__textField.textHeight + __offestY * 3),
-				FreeRectangleChoiceHeuristic.BestShortSideFit);
-		}
-
-		// 二次确认无法渲染
-		if (pakRect == null || pakRect.width == 0 || pakRect.height == 0) {
-			ZLog.error("TextFieldContextBitmapData: 缓存区满了，无法继续渲染文字");
+			// 当缓冲区满了之后，应该清空所有文字，重新渲染
+			if (__redrawing) {
+				ZLog.error("TextFieldContextBitmapData: 缓冲区满了，停止渲染");
+				return;
+			}
+			__redrawing = true;
+			this.redraw();
+			__redrawing = false;
 			return;
 		}
 
@@ -123,9 +130,28 @@ class TextFieldContextBitmapData {
 	 * 清空文字纹理渲染
 	 */
 	public function clear():Void {
+		version++;
+		__textField = new TextField();
 		bitmapData.fillRect(bitmapData.rect, 0x0);
-		__atlas = new TextFieldAtlas(bitmapData);
+		__atlas.clear();
 		rects = new MaxRectsBinPack(bitmapData.width, bitmapData.height, false);
+	}
+
+	/**
+	 * 对当前显示对象进行重绘
+	 */
+	public function redraw():Void {
+		this.clear();
+		DisplayTools.map(Start.current.stage, (display) -> {
+			if (display is ZLabel) {
+				var label:ZLabel = cast display;
+				var oldText = label.dataProvider;
+				trace("文本，请重绘！", oldText);
+				label.dataProvider = "";
+				label.dataProvider = oldText;
+			}
+			return true;
+		});
 	}
 
 	/**

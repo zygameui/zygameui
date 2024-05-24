@@ -71,6 +71,11 @@ class ZLabel extends DataProviderComponent {
 	private var _cacheBitmapLabel:ZBitmapLabel;
 
 	/**
+	 * 缓存的版本
+	 */
+	private var _cacheVersion:Int = 0;
+
+	/**
 	 * 禁止使用缓存纹理，默认为`false`
 	 */
 	public var disableCache:Bool = false;
@@ -571,7 +576,7 @@ class ZLabel extends DataProviderComponent {
 		#if !disable_zlabel_cache_bitmap
 		if (__drawTexting) {
 			// 转换成BitmapData数据
-			if (__blur > 0 || disableCache) {
+			if (__blur > 0 || disableCache || _cacheBitmapLabel == null) {
 				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
 				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale), true, 0x0);
 				bitmapData.disposeImage();
@@ -1033,6 +1038,14 @@ class ZLabel extends DataProviderComponent {
 
 	override function onAddToStage():Void {
 		super.onAddToStage();
+		if (_cacheBitmapLabel != null
+			&& !disableCache
+			&& textFieldContextBitmapData != null
+			&& _cacheVersion != textFieldContextBitmapData.version) {
+			var old = this.dataProvider;
+			this.dataProvider = "";
+			this.dataProvider = old;
+		}
 	}
 
 	override function onRemoveToStage():Void {

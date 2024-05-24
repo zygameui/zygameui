@@ -1,5 +1,6 @@
 package zygame.components.renders.opengl;
 
+import openfl.Vector;
 import openfl.display.BitmapData;
 import openfl.display.Tileset;
 import openfl.geom.Rectangle;
@@ -19,8 +20,17 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	public var fontSize:Float = 0;
 
+	public var rootBitmapData:BitmapData;
+
+	public function clear():Void {
+		__chars = [];
+		__tileset.rectData = new Vector();
+		@:privateAccess __tileset.__data = [];
+	}
+
 	public function new(bitmapData:BitmapData) {
 		this.isTextAtlas = true;
+		this.rootBitmapData = bitmapData;
 		__tileset = new Tileset(bitmapData);
 	}
 

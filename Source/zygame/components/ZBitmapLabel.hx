@@ -60,8 +60,8 @@ class ZBitmapLabel extends DataProviderComponent {
 		this.vAlign = Align.CENTER;
 		this.hAlign = Align.LEFT;
 		#if text_debug
-		this.addChild(quad);
-		quad.alpha = 0.5;
+		// this.addChild(quad);
+		// quad.alpha = 0.5;
 		#end
 	}
 

@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.EmojTools;
 import openfl.display.Tilemap;
 import zygame.display.batch.QuadsBatchs;
 import openfl.display.DisplayObject;
@@ -540,7 +541,8 @@ class ZLabel extends DataProviderComponent {
 			} else {
 				var char:String = _cacheBitmapLabel.dataProvider;
 				if (char.length > 0) {
-					rect = _cacheBitmapLabel.getCharBounds(char.length - 1);
+					var chars = EmojTools.split(char, "");
+					rect = _cacheBitmapLabel.getCharBounds(chars.length - 1);
 					if (rect != null) {
 						zquad.x = (rect.x + rect.width) / labelScale + _cacheBitmapLabel.x;
 						zquad.y = this._cacheBitmapLabel.height / 2 - zquad.height / 2;

@@ -210,6 +210,10 @@ class BLabel extends BSprite {
 			if (value == null || fntData == null)
 				return;
 			_texts = value.split("");
+			// 处理emoj表情
+			#if !cpp
+			var req = ~/[\ud04e-\ue50e]+/;
+			#end
 			if (Std.isOfType(fntData, IFontAtlas)) {
 				_maxWidth = 0;
 				var curFntData:IFontAtlas = cast fntData;
@@ -219,9 +223,23 @@ class BLabel extends BSprite {
 				var offestY:Float = 0;
 				var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
 				var lastWidth:Float = 0;
+				var emoj:String = "";
 				for (char in _texts) {
 					var id:Int = char.charCodeAt(0);
-					var frame:FntFrame = curFntData.getTileFrame(id);
+					var frame:FntFrame = null;
+					#if !cpp
+					if (req.match(char)) {
+						emoj += char;
+						if (emoj.length == 2) {
+							frame = curFntData.getTileFrameByEmoj(emoj);
+							emoj = "";
+						}
+					} else {
+					#end
+						frame = curFntData.getTileFrame(id);
+					#if !cpp
+					}
+					#end
 					if (frame != null) {
 						// trace("this._width", (offestX + frame.width) * scaleFloat, "scaleFloat=", scaleFloat, "_lineHeight=", _lineHeight, _size, this._width);
 						if (wordWrap && (offestX + frame.width) * scaleFloat > this._width) {
@@ -263,9 +281,6 @@ class BLabel extends BSprite {
 				_maxHeight = 0;
 				_maxWidth = 0;
 				_lineHeight = 0;
-				#if !cpp
-				var req = ~/[\ud04e-\ue50e]+/;
-				#end
 				for (char in _texts) {
 					var frame:Frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
 					if (frame != null)
@@ -367,7 +382,9 @@ class BLabel extends BSprite {
 	 */
 	public function setFontColor(color:Int):Void {
 		this.shader = new TextColorShader(color);
-		if (Std.isOfType(fntData, TextTextureAtlas))
+		if (fntData is zygame.components.renders.opengl.TextFieldAtlas) {
+			this.shader = new TextColorShader(color, 0xffffff);
+		} else if (Std.isOfType(fntData, TextTextureAtlas) || fntData is IFontAtlas)
 			this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
 		else
 			this.shader = new ColorShader(color);

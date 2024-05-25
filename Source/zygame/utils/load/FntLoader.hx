@@ -51,7 +51,7 @@ class FntData extends Atlas implements IFontAtlas {
 	/**
 	 * 文本字体的高度
 	 */
-	public function getFontHeight():Float{
+	public function getFontHeight():Float {
 		return maxHeight;
 	}
 
@@ -113,6 +113,15 @@ class FntData extends Atlas implements IFontAtlas {
 		_tileset.bitmapData = null;
 		_tileset = null;
 		_ids = null;
+	}
+
+	/**
+	 * 通过emoj获得一个纹理
+	 * @param emoj 
+	 * @return FntFrame
+	 */
+	public function getTileFrameByEmoj(emoj:String):FntFrame {
+		return null;
 	}
 }
 

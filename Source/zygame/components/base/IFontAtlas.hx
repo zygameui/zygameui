@@ -19,4 +19,11 @@ interface IFontAtlas {
 	 * @return BaseFrame
 	 */
 	public function getTileFrame(id:Int):FntFrame;
+
+	/**
+	 * 通过emoj获得一个纹理
+	 * @param emoj 
+	 * @return FntFrame
+	 */
+	public function getTileFrameByEmoj(emoj:String):FntFrame;
 }

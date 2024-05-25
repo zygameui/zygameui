@@ -16,6 +16,8 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	private var __chars:Map<Int, FntFrame> = [];
 
+	private var __emojs:Map<String, FntFrame> = [];
+
 	public var maxHeight:Float = 0;
 
 	public var fontSize:Float = 0;
@@ -43,7 +45,6 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 	}
 
 	public function pushChar(char:String, rect:Rectangle, xadvance:Int):Void {
-		var code = char.charCodeAt(0);
 		var id = __tileset.addRect(rect);
 		var frame = new FntFrame();
 		frame.x = 0;
@@ -54,10 +55,25 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 		frame.id = id;
 		if (rect.height > maxHeight)
 			maxHeight = rect.height;
-		__chars.set(code, frame);
+		if (char.length == 2) {
+			// emoj表情
+			__emojs.set(char, frame);
+		} else {
+			var code = char.charCodeAt(0);
+			__chars.set(code, frame);
+		}
 	}
 
 	override function getTileset():Tileset {
 		return __tileset;
+	}
+
+	/**
+	 * 通过emoj获得一个纹理
+	 * @param emoj 
+	 * @return FntFrame
+	 */
+	public function getTileFrameByEmoj(emoj:String):FntFrame {
+		return __emojs.get(emoj);
 	}
 }

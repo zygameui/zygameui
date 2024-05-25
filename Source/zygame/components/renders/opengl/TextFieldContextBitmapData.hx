@@ -71,13 +71,32 @@ class TextFieldContextBitmapData {
 		// 过滤重复的文本
 		var caches:Array<String> = [];
 		var chars = text.split("");
+		#if !cpp
+		var emoj = "";
+		var req = ~/[\ud04e-\ue50e]+/;
+		#end
 		for (char in chars) {
 			if (char == " " || char == "\n" || char == "\r")
 				continue;
-			if (__atlas.getTileFrame(char.charCodeAt(0)) == null)
-				if (!caches.contains(char)) {
-					caches.push(char);
+			#if !cpp
+			if (req.match(char)) {
+				emoj += char;
+				if (emoj.length == 2) {
+					if (__atlas.getTileFrameByEmoj(emoj) == null)
+						if (!caches.contains(emoj)) {
+							caches.push(emoj);
+						}
+					emoj = "";
 				}
+			} else {
+			#end
+				if (__atlas.getTileFrame(char.charCodeAt(0)) == null)
+					if (!caches.contains(char)) {
+						caches.push(char);
+					}
+			#if !cpp
+			}
+			#end
 		}
 		if (caches.length == 0)
 			return;
@@ -112,10 +131,24 @@ class TextFieldContextBitmapData {
 		var m = new Matrix();
 		m.translate(pakRect.x, pakRect.y);
 		bitmapData.draw(__textField, m);
+		emoj = "";
 		for (i in 0...__textField.text.length) {
 			var char = __textField.text.charAt(i);
 			if (char == " ")
 				continue;
+
+			#if !cpp
+			if (req.match(char)) {
+				emoj += char;
+				if (emoj.length == 2) {
+					char = emoj;
+					emoj = "";
+				} else {
+					continue;
+				}
+			}
+			#end
+
 			var rect = __textField.getCharBoundaries(i);
 			rect.x += pakRect.x;
 			rect.y += pakRect.y;

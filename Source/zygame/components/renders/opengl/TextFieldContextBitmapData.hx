@@ -134,7 +134,9 @@ class TextFieldContextBitmapData {
 		var m = new Matrix();
 		m.translate(pakRect.x, pakRect.y);
 		bitmapData.draw(__textField, m);
+		#if !cpp
 		emoj = "";
+		#end
 		for (i in 0...__textField.text.length) {
 			var char = __textField.text.charAt(i);
 			if (char == " ")

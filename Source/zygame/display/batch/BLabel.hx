@@ -1,5 +1,7 @@
 package zygame.display.batch;
 
+import openfl.display.DisplayObjectShader;
+import openfl.display.Shader;
 import zygame.components.base.IFontAtlas;
 import zygame.components.ZLabel;
 import zygame.components.ZBuilder;
@@ -224,6 +226,7 @@ class BLabel extends BSprite {
 				var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
 				var lastWidth:Float = 0;
 				var emoj:String = "";
+				var isEmoj = false;
 				for (char in _texts) {
 					var id:Int = char.charCodeAt(0);
 					var frame:FntFrame = null;
@@ -231,6 +234,7 @@ class BLabel extends BSprite {
 					if (req.match(char)) {
 						emoj += char;
 						if (emoj.length == 2) {
+							isEmoj = true;
 							frame = curFntData.getTileFrameByEmoj(emoj);
 							emoj = "";
 						}
@@ -248,6 +252,15 @@ class BLabel extends BSprite {
 							_maxHeight += curFntData.maxHeight;
 						}
 						var tile:FntTile = new FntTile(frame);
+						if (isEmoj) {
+							if (__defaultEmojShader == null) {
+								__defaultEmojShader = new DisplayObjectShader();
+							}
+							tile.shader = __defaultEmojShader;
+							isEmoj = false;
+						} else {
+							tile.shader = __defaultShader;
+						}
 						_node.addChild(tile);
 						tile.x = offestX + frame.xoffset;
 						tile.y = offestY + frame.yoffset;
@@ -289,6 +302,7 @@ class BLabel extends BSprite {
 				}
 				var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
 				var emoj:String = "";
+				var isEmoj = false;
 				var lastWidth:Float = 0;
 				for (char in _texts) {
 					var frame:Frame = null;
@@ -296,6 +310,7 @@ class BLabel extends BSprite {
 					if (req.match(char)) {
 						emoj += char;
 						if (emoj.length == 2) {
+							isEmoj = true;
 							frame = curSpriteDataGetBitmapDataFrame(fontName + emoj + fontEnd);
 							emoj = "";
 						}
@@ -311,6 +326,10 @@ class BLabel extends BSprite {
 							offestY += frame.height + lineGap;
 						}
 						var tile:FntTile = new FntTile(frame);
+						if (isEmoj) {
+							tile.shader = new TextColorShader(0, 0xffffff);
+							isEmoj = false;
+						}
 						_node.addChild(tile);
 						tile.x = offestX;
 						tile.y = offestY;
@@ -376,18 +395,23 @@ class BLabel extends BSprite {
 		}
 	}
 
+	private var __defaultShader:Shader;
+
+	private var __defaultEmojShader:Shader;
+
 	/**
 	 * 设置文本颜色
 	 * @param color 
 	 */
 	public function setFontColor(color:Int):Void {
-		this.shader = new TextColorShader(color);
-		if (fntData is zygame.components.renders.opengl.TextFieldAtlas) {
-			this.shader = new TextColorShader(color, 0xffffff);
-		} else if (Std.isOfType(fntData, TextTextureAtlas) || fntData is IFontAtlas)
-			this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
-		else
-			this.shader = new ColorShader(color);
+		if (!Std.isOfType(fntData, IFontAtlas)) {
+			if (Std.isOfType(fntData, TextTextureAtlas))
+				this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
+			else
+				this.shader = new ColorShader(color);
+		} else {
+			__defaultShader = new ColorShader(color);
+		}
 	}
 
 	/**

@@ -19,7 +19,7 @@ class TextColorShader extends DisplayObjectShader {
 			#pragma body
 			
 			float a = gl_FragColor.a;
-			if(distance(gl_FragColor.rgb, msoureColor.rgb * a) < 0.05)
+			if(distance(gl_FragColor.rgb, msoureColor.rgb * a) < 0.01)
                 gl_FragColor.rgb = mcolorvalue;
 			gl_FragColor *= a * openfl_Alphav;
 		}

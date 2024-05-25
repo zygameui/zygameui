@@ -1,5 +1,7 @@
 package zygame.macro;
 
+import zygame.utils.ZLog;
+import haxe.Exception;
 #if macro
 import haxe.Timer;
 import haxe.macro.ExprTools;
@@ -218,12 +220,16 @@ class AutoBuilder {
 		}
 
 		// 缓存处理
-		var time = FileSystem.stat(path);
-		_cacheFields.set(xmlPath, {
-			mtime: time.mtime.getTime(),
-			isCreateInit: isCreateInit,
-			fields: cacheFields
-		});
+		try {
+			var time = FileSystem.stat(path);
+			_cacheFields.set(xmlPath, {
+				mtime: time.mtime.getTime(),
+				isCreateInit: isCreateInit,
+				fields: cacheFields
+			});
+		} catch (e:Exception) {
+			ZLog.exception(e);
+		}
 		return fields.concat(cacheFields);
 	}
 

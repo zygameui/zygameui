@@ -67,8 +67,6 @@ class ZLabel extends DataProviderComponent {
 
 	private var _display:ZTextField;
 
-	private var _textmap:Tilemap;
-
 	/**
 	 * 使用Tilemap渲染缓存文字
 	 */

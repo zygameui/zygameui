@@ -57,6 +57,7 @@ class TextFieldContextBitmapData {
 		rects = new MaxRectsBinPack(textureWidth, textureHeight, false);
 		bitmapData.disposeImage();
 		__textFormat = new TextFormat(ZConfig.fontName, size, 0xffffff);
+		__textFormat.leading = Std.int(size / 2);
 		__textField = new TextField();
 		__atlas = new TextFieldAtlas(bitmapData);
 		__atlas.fontSize = size + offestY / 2;
@@ -81,14 +82,23 @@ class TextFieldContextBitmapData {
 		if (caches.length == 0)
 			return;
 		text = caches.join(" ");
+		#if IOS_HIGH_PREFORMANCE_V2
+		// 微信高性能+模式下，需要重建TextField，否则会有字体重叠的问题
+		// __textField = new TextField();
+		if (untyped __textField.__graphics.__context != null)
+			untyped __textField.__graphics.__context.clearRect(0, 0, __textField.__graphics.__canvas.width, __textField.__graphics.__canvas.height);
+		#end
+		__textField.wordWrap = true;
 		__textField.text = text;
 		__textField.width = 2048;
-		__textField.wordWrap = false;
 		__textField.setTextFormat(__textFormat);
-		var pakRect = rects.insert(Std.int(__textField.textWidth + __offestX * 3), Std.int(__textField.textHeight + __offestY * 3),
-			FreeRectangleChoiceHeuristic.BestShortSideFit);
+		var pakWidth = Std.int(__textField.textWidth + __offestX * 3);
+		var pakHeight = Std.int(__textField.textHeight + __offestY * 3);
+		__textField.height = pakHeight;
+		var pakRect = rects.insert(pakWidth, pakHeight, FreeRectangleChoiceHeuristic.BestShortSideFit);
 		if (pakRect == null || pakRect.width == 0 || pakRect.height == 0) {
 			// 当缓冲区满了之后，应该清空所有文字，重新渲染
+			// trace("溢出了", pakRect, pakWidth, pakHeight, text);
 			if (__redrawing) {
 				ZLog.error("TextFieldContextBitmapData: 缓冲区满了，停止渲染");
 				return;
@@ -146,7 +156,6 @@ class TextFieldContextBitmapData {
 			if (display is ZLabel) {
 				var label:ZLabel = cast display;
 				var oldText = label.dataProvider;
-				trace("文本，请重绘！", oldText);
 				label.dataProvider = "";
 				label.dataProvider = oldText;
 			}

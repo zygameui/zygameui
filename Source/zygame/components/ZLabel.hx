@@ -1,5 +1,7 @@
 package zygame.components;
 
+import openfl.display.Tilemap;
+import zygame.display.batch.QuadsBatchs;
 import openfl.display.DisplayObject;
 import zygame.components.renders.opengl.TextFieldContextBitmapData;
 import zygame.utils.ZLog;
@@ -65,10 +67,17 @@ class ZLabel extends DataProviderComponent {
 
 	private var _display:ZTextField;
 
+	private var _textmap:Tilemap;
+
 	/**
 	 * 使用Tilemap渲染缓存文字
 	 */
 	private var _cacheBitmapLabel:ZBitmapLabel;
+
+	/**
+	 * 使用Quads渲染缓存文字
+	 */
+	private var _cacheBatch:QuadsBatchs;
 
 	/**
 	 * 缓存的版本
@@ -242,6 +251,7 @@ class ZLabel extends DataProviderComponent {
 			_cacheBitmapLabel.wordWrap = true;
 			_cacheBitmapLabel.setFontSize(24);
 			_cacheBitmapLabel.width = 100;
+			_cacheBatch = new QuadsBatchs();
 		}
 		#if !disable_zlabel_cache_bitmap
 		_bitmap = new Bitmap();
@@ -492,10 +502,15 @@ class ZLabel extends DataProviderComponent {
 		if (autoTextSize && !this.getDisplay().wordWrap) {
 			this.getDisplay().scaleY = this.getDisplay().scaleX = Math.min(1, _width / this.getTextWidth());
 			this.getDisplay().width = _width / this.getDisplay().scaleY;
+			if (_cacheBitmapLabel != null) {
+				var scaleMath = Math.min(1, _width / this._cacheBitmapLabel.getTextWidth());
+				_cacheBitmapLabel.setFontSize(Math.round(_font.size * scaleMath));
+			}
 		}
 
 		if (!disableCache && _cacheBitmapLabel != null) {
 			this.updateTextXY(_cacheBitmapLabel, _cacheBitmapLabel.getTextWidth(), _cacheBitmapLabel.getTextHeight());
+			_cacheBitmapLabel.x = _cacheBitmapLabel.y = 0;
 		} else {
 			this.updateTextXY(_display, _display.textWidth, _display.textHeight);
 		}
@@ -530,7 +545,7 @@ class ZLabel extends DataProviderComponent {
 					rect = _cacheBitmapLabel.getCharBounds(char.length - 1);
 					if (rect != null) {
 						zquad.x = (rect.x + rect.width) / labelScale + _cacheBitmapLabel.x;
-						zquad.y = _font.size * 0.168 / labelScale + _cacheBitmapLabel.y;
+						zquad.y = this._cacheBitmapLabel.height / 2 - zquad.height / 2;
 					}
 				} else {
 					if (_cacheBitmapLabel.x == 0) {
@@ -542,7 +557,7 @@ class ZLabel extends DataProviderComponent {
 							default:
 						}
 					}
-					zquad.y = _font.size * 0.168 / labelScale + _cacheBitmapLabel.y;
+					zquad.y = this._cacheBitmapLabel.height / 2 - zquad.height / 2;
 				}
 			}
 		} else {
@@ -576,7 +591,10 @@ class ZLabel extends DataProviderComponent {
 		#if !disable_zlabel_cache_bitmap
 		if (__drawTexting) {
 			// 转换成BitmapData数据
-			if (__blur > 0 || disableCache || _cacheBitmapLabel == null) {
+			if (#if force_cache_bitmap true #else __blur > 0 || disableCache || _cacheBitmapLabel == null #end) {
+				if (_bitmap.bitmapData != null) {
+					_bitmap.bitmapData.dispose();
+				}
 				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
 				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale), true, 0x0);
 				bitmapData.disposeImage();
@@ -589,9 +607,21 @@ class ZLabel extends DataProviderComponent {
 					_cacheBitmapLabel.parent?.removeChild(_cacheBitmapLabel);
 				}
 			} else {
+				#if !zlabel_cache_to_sprite
+				// Tilemap渲染，但在IOS等性能手机上，会增加消耗
 				this._cacheBitmapLabel.x = 0;
 				this._cacheBitmapLabel.y = 0;
 				this.addChild(_cacheBitmapLabel);
+				#else
+				// 使用Sprite渲染，字体位置、颜色都不对劲
+				this.addChild(_cacheBatch);
+				_cacheBatch.drawBitmapLabel(_cacheBitmapLabel);
+				_cacheBatch.scaleX = @:privateAccess _cacheBitmapLabel._node._node.scaleX;
+				_cacheBatch.scaleY = @:privateAccess _cacheBitmapLabel._node._node.scaleY;
+				_cacheBatch.x = @:privateAccess _cacheBitmapLabel._node._node.x * _cacheBatch.scaleX;
+				_cacheBatch.y = @:privateAccess _cacheBitmapLabel._node._node.y * _cacheBatch.scaleY;
+				// _cacheBatch.shader = __textFieldStrokeShader;
+				#end
 			}
 		}
 		#end
@@ -653,7 +683,7 @@ class ZLabel extends DataProviderComponent {
 			}
 		}
 
-		#if (!wechat)
+		#if (!wechat || IOS_HIGH_PREFORMANCE_V2)
 		#if (quickgame || qqquick || minigame)
 		// 快游戏引擎不会清理文本画布，请在这里进行清理
 		if (untyped _display.__graphics.__context != null)
@@ -1045,6 +1075,7 @@ class ZLabel extends DataProviderComponent {
 			var old = this.dataProvider;
 			this.dataProvider = "";
 			this.dataProvider = old;
+			this._cacheVersion = textFieldContextBitmapData.version;
 		}
 	}
 

@@ -1,5 +1,8 @@
 package zygame.display.batch;
 
+import openfl.geom.Point;
+import openfl.display.DisplayObject;
+import zygame.components.ZBitmapLabel;
 import openfl.display.GraphicsShader;
 import openfl.Vector;
 import openfl.display.BitmapData;
@@ -40,6 +43,38 @@ class QuadsBatchs extends Shape {
 			renderTileContainer(tile, 0, 0);
 		}
 		this.render();
+	}
+
+	public function drawBitmapLabel(label:ZBitmapLabel):Void {
+		_tileset = @:privateAccess label._fnt.getTileset();
+		_quads = new Vector(0, false);
+		_transform = new Vector(0, false);
+		if (this.shader != null) {
+			cast(shader, GraphicsShader).bitmap.input = _tileset.bitmapData;
+			this.graphics.beginShaderFill(shader);
+		} else {
+			this.graphics.beginBitmapFill(_tileset.bitmapData, null, true, true);
+		}
+		var batch = @:privateAccess label._textmap;
+		for (i in 0...batch.numTiles) {
+			var tile = batch.getTileAt(i);
+			renderTileContainer(tile, 0, 0);
+		}
+		this.render();
+	}
+
+	/**
+	 * 重构触摸事件，无法触发触摸的问题
+	 * @param x
+	 * @param y
+	 * @param shapeFlag
+	 * @param stack
+	 * @param interactiveOnly
+	 * @param hitObject
+	 * @return Bool
+	 */
+	override private function __hitTest(x:Float, y:Float, shapeFlag:Bool, stack:Array<DisplayObject>, interactiveOnly:Bool, hitObject:DisplayObject):Bool {
+		return super.__hitTest(x, y, false, stack, interactiveOnly, hitObject);
 	}
 
 	public function render():Void {

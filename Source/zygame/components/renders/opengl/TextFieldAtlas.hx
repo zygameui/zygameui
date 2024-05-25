@@ -26,6 +26,7 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	public function clear():Void {
 		__chars = [];
+		__emojs = [];
 		__tileset.rectData = new Vector();
 		@:privateAccess __tileset.__data = [];
 	}

@@ -101,6 +101,9 @@ class TextFieldContextBitmapData {
 		if (caches.length == 0)
 			return;
 		text = caches.join(" ");
+		#if text_debug
+		trace("TextFieldContextBitmapData cache text", text);
+		#end
 		#if IOS_HIGH_PREFORMANCE_V2
 		// 微信高性能+模式下，需要重建TextField，否则会有字体重叠的问题
 		// __textField = new TextField();

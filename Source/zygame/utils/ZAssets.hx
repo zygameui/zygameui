@@ -69,9 +69,9 @@ class ZAssets {
 	public var onlyASTCTexture:Bool = false;
 
 	/**
-	 * 最大可同时加载数量，改进默认最大载入数为10
+	 * 最大可同时加载数量，改进默认最大载入数为20
 	 */
-	public var maxLoadNumber:Int = #if MAX_LOAD_COUNT Std.parseInt(Compiler.getDefine("MAX_LOAD_COUNT")) #elseif ios 10 #else 10 #end;
+	public var maxLoadNumber:Int = #if MAX_LOAD_COUNT Std.parseInt(Compiler.getDefine("MAX_LOAD_COUNT")) #elseif ios 20 #else 20 #end;
 
 	/**
 	 * 当前正在加载的数量
@@ -402,7 +402,7 @@ class ZAssets {
 		if (getSound(name) != null)
 			return;
 		#if assets_debug
-		ZLog.log("[push pasrers]", parser.getName());
+		ZLog.log("[push pasrers] " + parser.getName());
 		#end
 		_parsers.push(parser);
 	}
@@ -500,7 +500,7 @@ class ZAssets {
 		// 加载循序排序，优先加载zip资源
 		_parsers.sort((a, b) -> Std.isOfType(a, ZIPAssetsParser) ? -1 : 0);
 		#if assets_debug
-		ZLog.log("PARSER LOAD START:", _parsers);
+		ZLog.log("PARSER LOAD START:" + _parsers.toString());
 		#end
 		if (_parsers.length == 0) {
 			// 没有任何加载资源，直接成功
@@ -587,7 +587,7 @@ class ZAssets {
 		}
 
 		#if assets_debug
-		ZLog.log("载入进度：" + currentLoadIndex, currentLoadNumber, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
+		trace("载入进度：" + currentLoadIndex, currentLoadNumber, Type.getClassName(Type.getClass(parser)), _parsers.length, parser.getName());
 		#end
 		parser.out = onAssetsOut;
 		parser.done = loadDone;
@@ -617,7 +617,7 @@ class ZAssets {
 			#end
 
 			_loadStop = true;
-			
+
 			// 全局加载失败事件
 			if (globalListener != null && globalListener.hasEventListener(GlobalAssetsLoadEvent.LOAD_ERROR)) {
 				var event = new GlobalAssetsLoadEvent(GlobalAssetsLoadEvent.LOAD_ERROR);
@@ -762,7 +762,7 @@ class ZAssets {
 		if (_callBack != null)
 			_callBack(getProgress());
 		#if assets_debug
-		ZLog.log(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
+		trace(parser.getName(), "loaded", "载入进度：" + Std.int(getProgress() * 100) + "%");
 		#end
 		// 如果已经加载停止了，则直接释放已有的资源
 		if (_loadStop) {

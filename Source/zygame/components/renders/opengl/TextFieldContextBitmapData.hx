@@ -23,6 +23,11 @@ class TextFieldContextBitmapData {
 	public var bitmapData:BitmapData;
 
 	/**
+	 * 是否清理纹理时，直接重构整个纹理
+	 */
+	public var cleanBitmapData:Bool = false;
+
+	/**
 	 * 打包器
 	 */
 	public var rects:MaxRectsBinPack;
@@ -104,12 +109,6 @@ class TextFieldContextBitmapData {
 		#if text_debug
 		trace("TextFieldContextBitmapData cache text", text);
 		#end
-		#if IOS_HIGH_PREFORMANCE_V2
-		// 微信高性能+模式下，需要重建TextField，否则会有字体重叠的问题
-		// __textField = new TextField();
-		if (untyped __textField.__graphics.__context != null)
-			untyped __textField.__graphics.__context.clearRect(0, 0, __textField.__graphics.__canvas.width, __textField.__graphics.__canvas.height);
-		#end
 		__textField.wordWrap = true;
 		__textField.text = text;
 		__textField.width = 2048;
@@ -133,6 +132,12 @@ class TextFieldContextBitmapData {
 
 		var m = new Matrix();
 		m.translate(pakRect.x, pakRect.y);
+		#if IOS_HIGH_PREFORMANCE_V2
+		// 微信高性能+模式下，需要重建TextField，否则会有字体重叠的问题
+		// __textField = new TextField();
+		if (untyped __textField.__graphics.__context != null)
+			untyped __textField.__graphics.__context.clearRect(0, 0, __textField.__graphics.__canvas.width, __textField.__graphics.__canvas.height);
+		#end
 		bitmapData.draw(__textField, m);
 		#if !cpp
 		emoj = "";
@@ -179,6 +184,12 @@ class TextFieldContextBitmapData {
 	 */
 	public function clear():Void {
 		version++;
+		if (cleanBitmapData) {
+			bitmapData = new BitmapData(bitmapData.width, bitmapData.height, true, 0x0);
+			bitmapData.disposeImage();
+			__atlas.rootBitmapData = bitmapData;
+			@:privateAccess __atlas.__tileset.bitmapData = bitmapData;
+		}
 		__textField = new TextField();
 		bitmapData.fillRect(bitmapData.rect, 0x0);
 		__atlas.clear();
@@ -189,6 +200,9 @@ class TextFieldContextBitmapData {
 	 * 对当前显示对象进行重绘
 	 */
 	public function redraw():Void {
+		#if text_debug
+		ZLog.error("TextFieldContextBitmapData redraw");
+		#end
 		this.clear();
 		DisplayTools.map(Start.current.stage, (display) -> {
 			if (display is ZLabel) {

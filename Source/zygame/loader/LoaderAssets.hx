@@ -12,6 +12,7 @@ import zygame.loader.parser.MP3Parser;
 import zygame.loader.parser.ParserBase;
 #if ldtk
 import zygame.loader.parser.LDTKParser;
+import zygame.loader.parser.AESParser;
 #end
 
 /**
@@ -34,7 +35,7 @@ class LoaderAssets {
 		XMLParser,
 		JSONParser,
 		BitmapDataParser
-		#if (ldtk), LDTKParser #end
+		#if (ldtk), LDTKParser, AESParser #end
 	];
 
 	public static function createParserBase(data:Dynamic, extPasrer:Map<String, String>):ParserBase {

@@ -11,6 +11,7 @@ using tweenxcore.Tools;
 /**
  * 过渡库实现
  */
+@:keep
 class ZTween implements Refresher {
 	private var _baseXml:Xml;
 
@@ -20,6 +21,20 @@ class ZTween implements Refresher {
 	 * 时间戳
 	 */
 	public var timeline:TimelineData = new TimelineData(0, 60);
+
+	/**
+	 * 当前帧
+	 */
+	public var currentFrame(get, set):Int;
+
+	private function set_currentFrame(v:Int):Int {
+		timeline.currentFrame = v;
+		return v;
+	}
+
+	private function get_currentFrame():Int {
+		return timeline.currentFrame;
+	}
 
 	private var _isPlay:Bool = false;
 

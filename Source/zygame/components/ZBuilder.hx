@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.components.data.CacheBuilderData;
 #if hscript
 import hscript.Interp;
 import hscript.Parser;
@@ -832,6 +833,11 @@ class ZBuilder {
 	}
 
 	/**
+	 * 缓存构建器数据
+	 */
+	public static var cacheBuilderData:Map<String, CacheBuilderData> = [];
+
+	/**
 	 * 直接查找绑定的资源，同时生成XML对象
 	 * @param xmlfileName
 	 * @param parent
@@ -843,6 +849,9 @@ class ZBuilder {
 			throw xmlfileName + "配置资源未加载";
 		// 使用副本
 		xml = Xml.parse(xml.toString());
+		// var cache = cacheBuilderData.exists(xmlfileName) ? cacheBuilderData.get(xmlfileName).copy() : new CacheBuilderData();
+		// TODO 如果这里做缓存，对界面存在一定的不兼容性
+		var cache = null;
 		var builder:Builder = new Builder();
 		if (parent is IBuilder) {
 			var map = cast(parent, IBuilder).onDefineValues();
@@ -870,12 +879,16 @@ class ZBuilder {
 		#if openfl_console
 		Cc.watch(builder, xmlfileName);
 		#end
-		buildui(xml.firstElement(), parent, builder);
+		buildui(xml.firstElement(), parent, builder, null, null, null, cache);
 		builder.bindBuilder();
 		if (Std.isOfType(builder.display, BuilderRootDisplay)) {
 			var root = cast(builder.display, BuilderRootDisplay);
 			root.builder = builder;
 			root.onInitBuilder();
+		}
+		if (cache != null) {
+			cacheBuilderData.set(xmlfileName, cache);
+			cache.record = false;
 		}
 		return builder;
 	}
@@ -1007,7 +1020,7 @@ class ZBuilder {
 	 * @return Dynamic
 	 */
 	private static function buildui(xml:Xml, parent:Dynamic, builder:Builder, superInit:ZBuilder->Void = null, defalutArgs:Array<Dynamic> = null,
-			idpush:String = null):Dynamic {
+			idpush:String = null, cacheBuild:CacheBuilderData = null):Dynamic {
 		if (defalutArgs == null)
 			defalutArgs = [];
 		// 定义判断
@@ -1285,15 +1298,22 @@ class ZBuilder {
 		}
 		try {
 			// 对齐算法
-			if (parent != null)
-				align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));
+			if (parent != null) {
+				if (cacheBuild == null || cacheBuild.record) {
+					align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));
+					if (cacheBuild != null)
+						cacheBuild.addMatrix(ui);
+				} else {
+					cacheBuild.applyMatrix(ui);
+				}
+			}
 		} catch (e:Exception) {
 			throw "Align error:" + xml.toString() + " Exception:" + e.message + "\n" + e.stack.toString();
 		}
 		var items:Iterator<Xml> = xml.elements();
 		while (items.hasNext()) {
 			var itemxml:Xml = items.next();
-			buildui(itemxml, ui, builder, idpush);
+			buildui(itemxml, ui, builder, null, null, idpush, cacheBuild);
 		}
 		if (endMaps.exists(className)) {
 			endMaps.get(className)(ui);
@@ -1306,8 +1326,15 @@ class ZBuilder {
 		}
 		#end
 		// 对齐算法
-		if (parent != null)
-			align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));
+		if (parent != null) {
+			if (cacheBuild == null || cacheBuild.record) {
+				align(ui, parent, xml.get("left"), xml.get("right"), xml.get("top"), xml.get("bottom"), xml.get("centerX"), xml.get("centerY"));
+				if (cacheBuild != null)
+					cacheBuild.addMatrix(ui);
+			} else {
+				cacheBuild.applyMatrix(ui);
+			}
+		}
 
 		// 动画最后赋值实现
 		if (tween != null) {

@@ -139,7 +139,7 @@ import zygame.utils.Lib;
 	 */
 	public function finalAssets(type:AssetsType, assetsData:Dynamic, pro:Float = 0, fileName:String = null):Void {
 		#if assets_debug
-		zygame.utils.ZLog.log("finalAssets:", type, pro);
+		trace("finalAssets:", type, pro);
 		#end
 		this.__bindName = fileName;
 		this.progress = pro;

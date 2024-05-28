@@ -246,7 +246,7 @@ class BLabel extends BSprite {
 					#end
 					if (frame != null) {
 						// trace("this._width", (offestX + frame.width) * scaleFloat, "scaleFloat=", scaleFloat, "_lineHeight=", _lineHeight, _size, this._width);
-						if (wordWrap && (offestX + frame.width) * scaleFloat > this._width) {
+						if (wordWrap && (offestX + frame.xadvance) * scaleFloat > this._width) {
 							offestX = 0;
 							offestY += curFntData.maxHeight;
 							_maxHeight += curFntData.maxHeight;
@@ -264,13 +264,13 @@ class BLabel extends BSprite {
 						_node.addChild(tile);
 						tile.x = offestX + frame.xoffset;
 						tile.y = offestY + frame.yoffset;
-						offestX += Std.int(frame.xadvance);
 						lastWidth = frame.width;
 						// if (_lineHeight < frame.height)
 						// _lineHeight = frame.height;
-						if (offestX > _maxWidth) {
-							_maxWidth = offestX;
+						if (offestX + frame.width > _maxWidth) {
+							_maxWidth = offestX + frame.width;
 						}
+						offestX += Std.int(frame.xadvance);
 					} else if (char == " ") {
 						offestX += (_size != 0 ? _size : lastWidth) * 0.8;
 						if (offestX > _maxWidth) {

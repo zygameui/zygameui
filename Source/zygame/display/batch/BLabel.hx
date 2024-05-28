@@ -1,5 +1,7 @@
 package zygame.display.batch;
 
+import zygame.utils.ColorUtils;
+import openfl.geom.ColorTransform;
 import openfl.display.DisplayObjectShader;
 import openfl.display.Shader;
 import zygame.components.base.IFontAtlas;
@@ -253,16 +255,10 @@ class BLabel extends BSprite {
 						}
 						var tile:FntTile = new FntTile(frame);
 						if (isEmoj) {
-							if (__defaultEmojShader == null) {
-								__defaultEmojShader = new DisplayObjectShader();
-							}
-							tile.shader = __defaultEmojShader;
 							isEmoj = false;
 						} else {
-							if (__defaultShader == null) {
-								this.__defaultShader = new ColorShader(0x0);
-							}
-							tile.shader = __defaultShader;
+							var c = ColorUtils.toShaderColor(__color);
+							tile.colorTransform = new ColorTransform(c.r, c.g, c.b, 1);
 						}
 						_node.addChild(tile);
 						tile.x = offestX + frame.xoffset;
@@ -398,27 +394,19 @@ class BLabel extends BSprite {
 		}
 	}
 
-	private var __defaultShader:ColorShader;
-
-	private var __defaultEmojShader:Shader;
+	private var __color:UInt = 0;
 
 	/**
 	 * 设置文本颜色
 	 * @param color 
 	 */
 	public function setFontColor(color:Int):Void {
+		__color = color;
 		if (!Std.isOfType(fntData, IFontAtlas)) {
 			if (Std.isOfType(fntData, TextTextureAtlas))
 				this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
 			else
 				this.shader = new ColorShader(color);
-		} else {
-			if (__defaultShader != null) {
-				__defaultShader.updateColor(color);
-			} else {
-				__defaultShader = new ColorShader(color);
-			}
-			this.shader = __defaultShader;
 		}
 	}
 

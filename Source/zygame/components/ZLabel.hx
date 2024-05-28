@@ -756,11 +756,12 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function get_width():Float {
-		if (__changed) {
-			__changed = false;
-			this.drawText(this.dataProvider);
-			this.updateComponents();
-		}
+		// TODO 耗性能
+		// if (__changed) {
+		// 	__changed = false;
+		// 	this.drawText(this.dataProvider);
+		// 	this.updateComponents();
+		// }
 		return Math.abs(_width #if quickgamelabelScale / _getCurrentScale() #end * this.scaleX);
 	}
 
@@ -776,10 +777,14 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function get_height():Float {
-		if (__changed) {
-			__changed = false;
-			this.drawText(this.dataProvider);
-			this.updateComponents();
+		// TODO 耗性能
+		// if (__changed) {
+		// 	__changed = false;
+		// 	this.drawText(this.dataProvider);
+		// 	this.updateComponents();
+		// }
+		if (_height < this._font.size) {
+			_height = this._font.size * 1.168;
 		}
 		return Math.abs(_height #if quickgamelabelScale / _getCurrentScale() #end * this.scaleY);
 	}

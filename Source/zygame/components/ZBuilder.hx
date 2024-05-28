@@ -473,6 +473,15 @@ class ZBuilder {
 			return [xml];
 		});
 
+		#if (html5 && !final)
+		// bindCreate(ZLabel, function(xml:Xml):Array<Dynamic> {
+		// 	if (!xml.exists("height")) {
+		// 		ZLog.warring("ZLabel应该包含height属性，避免布局计算存在误差问题:" + xml.toString());
+		// 	}
+		// 	return [];
+		// });
+		#end
+
 		// 绑定添加
 		bindAdd(zygame.display.batch.TouchImageBatchsContainer, function(obj:Dynamic, parent:Dynamic, xml:Xml):Void {
 			cast(parent, zygame.display.batch.TouchImageBatchsContainer).getBatchs().addChild(obj);

@@ -395,7 +395,7 @@ class BLabel extends BSprite {
 		}
 	}
 
-	private var __defaultShader:Shader;
+	private var __defaultShader:ColorShader = new ColorShader(0x0);
 
 	private var __defaultEmojShader:Shader;
 
@@ -410,7 +410,12 @@ class BLabel extends BSprite {
 			else
 				this.shader = new ColorShader(color);
 		} else {
-			__defaultShader = new ColorShader(color);
+			if (__defaultShader != null) {
+				__defaultShader.updateColor(color);
+			} else {
+				__defaultShader = new ColorShader(color);
+			}
+			this.shader = __defaultShader;
 		}
 	}
 

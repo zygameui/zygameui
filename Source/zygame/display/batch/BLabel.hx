@@ -100,6 +100,9 @@ class BLabel extends BSprite {
 			fntData = ZBuilder.getBaseTextureAtlas(fnt);
 		else
 			fntData = fnt;
+		if (fntData is IFontAtlas) {
+			this.__defaultShader = new ColorShader(0x0);
+		}
 		_node = new BSprite();
 		this.addChild(_node);
 	}
@@ -395,7 +398,7 @@ class BLabel extends BSprite {
 		}
 	}
 
-	private var __defaultShader:ColorShader = new ColorShader(0x0);
+	private var __defaultShader:ColorShader;
 
 	private var __defaultEmojShader:Shader;
 

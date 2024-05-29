@@ -49,6 +49,7 @@ class FPSDebug extends ZBox {
 			_text.width = 120;
 			_text.height = 200;
 			_text.vAlign = "top";
+			_text.setFontColor(0xffffff);
 			bg = new ZQuad();
 			this.addChild(bg);
 			bg.width = _text.width;

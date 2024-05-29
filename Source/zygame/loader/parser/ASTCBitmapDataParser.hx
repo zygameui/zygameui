@@ -98,12 +98,18 @@ class ASTCBitmapDataParser extends ParserBase {
 				var bitmapData:BitmapData = BitmapData.fromTexture(rectangleTexture);
 				this.finalAssets(BITMAP, bitmapData, 1);
 			}).onError(function(err) {
-				if (AssetsUtils.cleanCacheId(getData())) {
-					// 可重试
-					process();
-				} else {
-					this.sendError("无法加载：" + getData());
-				}
+				// 失败后，尝试加载png格式
+				var newpath = StringTools.replace(this.getData(), ".astc", ".png");
+				AssetsUtils.loadBitmapData(newpath).onComplete((bitmapData) -> {
+					this.finalAssets(BITMAP, bitmapData, 1);
+				}).onError(err -> {
+					if (AssetsUtils.cleanCacheId(getData())) {
+						// 可重试
+						process();
+					} else {
+						this.sendError("无法加载：" + getData());
+					}
+				});
 			});
 		} else {
 			// 不支持ASTC的情况下，则默认加载png资源

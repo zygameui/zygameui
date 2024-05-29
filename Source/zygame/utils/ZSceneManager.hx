@@ -123,7 +123,7 @@ class ZSceneManager {
 
 	private function __gc():Void {
 		__gcing = false;
-		#if (true || HXCPP_RELEASE_SCENE_GC)
+		#if (HXCPP_RELEASE_SCENE_GC)
 		openfl.system.System.gc();
 		#end
 	}

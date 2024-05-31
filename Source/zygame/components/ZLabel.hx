@@ -292,18 +292,20 @@ class ZLabel extends DataProviderComponent {
 
 	private function set_mixColor(v:MixColorData):MixColorData {
 		this.mixColor = v;
-		if (__blur == 0 && this.mixColor == null)
+		if (__blur == 0 && this.mixColor == null) {
 			#if !disable_zlabel_cache_bitmap
 			this._bitmap.shader = null;
 			#else
 			this.getDisplay().shader = null;
 			#end
-		else
+		} else {
+			this.disableCache = true;
 			#if !disable_zlabel_cache_bitmap
 			this._bitmap.shader = __textFieldStrokeShader;
 			#else
 			this.getDisplay().shader = __textFieldStrokeShader;
 			#end
+		}
 		return v;
 	}
 

@@ -91,7 +91,7 @@ class ZSound implements zygame.core.Refresher {
 		var sound:Sound = ZBuilder.getBaseSound(src);
 		if (sound != null) {
 			// 开始播放
-			var channel = sound.play(0, loop);
+			var channel = sound.play(0, loop, @:privateAccess SoundChannelManager.current._effectVolume);
 			if (channel == null)
 				return;
 			_channels.push(channel);

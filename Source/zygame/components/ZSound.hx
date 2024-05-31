@@ -92,6 +92,8 @@ class ZSound implements zygame.core.Refresher {
 		if (sound != null) {
 			// 开始播放
 			var channel = sound.play(0, loop);
+			if (channel == null)
+				return;
 			_channels.push(channel);
 			#if !minigame
 			channel.addEventListener(Event.SOUND_COMPLETE, (e) -> {

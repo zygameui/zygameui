@@ -33,7 +33,13 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 		this.__data = data;
 		if (data.length > 0) {
 			var item = data[0];
-			__keys = Reflect.fields(item);
+			var keys = Reflect.fields(item);
+			for (key in keys) {
+				var value = Reflect.getProperty(item, key);
+				if (value is String || value is Int || value is Float) {
+					__keys.push(key);
+				}
+			}
 			for (item in data) {
 				__md5s.set(getMd5(item), true);
 			}

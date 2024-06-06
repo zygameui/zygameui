@@ -217,7 +217,7 @@ class SoundChannelManager extends EventDispatcher {
 	 * @return Bool
 	 */
 	public function isEffectAvailable():Bool {
-		return _effectAvailable;
+		return _effectAvailable && _effectVolume.volume > 0;
 	}
 
 	/**
@@ -225,6 +225,6 @@ class SoundChannelManager extends EventDispatcher {
 	 * @return Bool
 	 */
 	public function isMusicAvailable():Bool {
-		return _musicAvailable;
+		return _musicAvailable && _musicVolume.volume > 0;
 	}
 }

@@ -270,8 +270,12 @@ class BToggleButton extends BTouchSprite {
 							}
 						}
 					}
+					#if auto_clicker
+					zygame.utils.AutoClicker.clickByBButton(this);
+					#else
 					if (clickEvent != null)
 						clickEvent();
+					#end
 				}
 			}
 			_currentTouchID = -1;

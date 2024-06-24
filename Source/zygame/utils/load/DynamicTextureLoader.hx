@@ -109,7 +109,7 @@ class DynamicTextureAtlas extends TextureAtlas {
 	public function new(width:Int = 2048, height:Int = 2048) {
 		var glBitmapData = new BitmapData(width, height, true, 0x0);
 		// 启动GL渲染位图
-		@:privateAccess glBitmapData.readable = false;
+		glBitmapData.disposeImage();
 		super(glBitmapData, null);
 		pack = new MaxRectsBinPack(width, height, false);
 		_tileset = new Tileset(_rootBitmapData);

@@ -144,8 +144,12 @@ class ZButton extends ToggleButton {
 				@:privateAccess SoundChannelManager.current.playEffect(playsound, 1);
 			}
 		}
+		#if auto_clicker
+		zygame.utils.AutoClicker.clickByZButton(this);
+		#else
 		if (_clickEventCall != null)
 			_clickEventCall();
+		#end
 	}
 
 	private function get_clickEvent():Void->Void {

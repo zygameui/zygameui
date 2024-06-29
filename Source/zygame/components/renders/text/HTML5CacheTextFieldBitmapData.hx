@@ -158,11 +158,19 @@ class HTML5CacheTextFieldBitmapData {
                 emoj += char;
                 if(emoj.length == 2)
                 {
+                    #if un_emoj
+                    width = context2d.measureText(" ").width;
+                    drawText += " ";
+                    rects.set(emoj,updateMaxWidthAndHeight(new Rectangle(px, (line - 1) * (height + gapHeight) + gapHeight,width,height + gapHeight)));
+                    emoj = "";
+                    px += width;
+                    #else
                     width = context2d.measureText(emoj).width;
                     drawText += emoj;
                     rects.set(emoj,updateMaxWidthAndHeight(new Rectangle(px, (line - 1) * (height + gapHeight) + gapHeight,width,height + gapHeight)));
                     emoj = "";
                     px += width;
+                    #end
                 }
             }
             else

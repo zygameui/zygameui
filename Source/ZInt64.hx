@@ -71,7 +71,11 @@ class GIntTools {
 	 * @return Int
 	 */
 	public static function toInt(v:Int64):Int {
-		return Int64.toInt(v);
+		try {
+			return Int64.toInt(v);
+		} catch (e:Exception) {
+			return 0;
+		}
 	}
 
 	/**

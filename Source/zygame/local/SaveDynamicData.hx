@@ -152,13 +152,13 @@ class SaveDynamicDataContent<T> extends SaveDynamicDataBaseContent {
 			var newdata = {};
 			for (key => value in changedValues) {
 				// 需要进行签名验证
-				if (!this.vaildate(key)) {
+				if (this.vaildate(key)) {
 					if (value is CEData) {
 						Reflect.setProperty(newdata, key, cast(value, CEData).value);
 					} else
 						Reflect.setProperty(newdata, key, value);
 				} else {
-					throw "SaveDynamicData vaildate error:" + key + ":" + Json.stringify(value);
+					throw "SaveDynamicData数据验证错误:" + key + ":" + Json.stringify(value);
 				}
 			}
 			Reflect.setProperty(changeData, key, newdata);

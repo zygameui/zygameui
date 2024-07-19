@@ -1,5 +1,6 @@
 package zygame.local;
 
+import haxe.Json;
 import zygame.utils.CEFloat.CEData;
 
 /**
@@ -62,6 +63,23 @@ import zygame.utils.CEFloat.CEData;
 		return this.changed;
 	}
 
+	/**
+	 * 启动验算逻辑，它会产生一个签名数值
+	 * @param cb 
+	 */
+	public function vaildateFunc(cb:T->String):Void {
+		this.vaildateFunc = cb;
+	}
+
+	/**
+	 * 验算数据是否存在异常
+	 * @param id 
+	 * @return Bool
+	 */
+	public function vaildate(id:String):Bool {
+		return this.vaildate(id);
+	}
+
 	@:from public static function fromDynamic<T>(data:Dynamic<T>):SaveDynamicData<T> {
 		var data = new SaveDynamicData(data);
 		return data;
@@ -83,10 +101,47 @@ class SaveDynamicDataContent<T> extends SaveDynamicDataBaseContent {
 		return Reflect.getProperty(this.data, key);
 	}
 
+	/**
+	 * 签名验算方法定义
+	 */
+	public var vaildateFunc:T->String;
+
+	/**
+	 * 签名验算使用的签名
+	 */
+	private var __vaildateSign:Map<String, String> = [];
+
+	/**
+	 * 验算数据
+	 * @param key 
+	 * @return T
+	 */
+	public function vaildate(key:String):Bool {
+		if (vaildateFunc == null) {
+			return true;
+		}
+		if (__vaildateSign.exists(key)) {
+			var v = this.getValue(key);
+			if (v == null) {
+				return true;
+			}
+			return __vaildateSign.get(key) == vaildateFunc(v);
+		}
+		return true;
+	}
+
 	public function setValue(key:String, value:T):T {
 		this.changed = true;
 		this.changedValues.set(key, value);
 		Reflect.setProperty(this.data, key, value);
+		// 更新签名
+		if (vaildateFunc != null) {
+			if (value == null) {
+				__vaildateSign.remove(key);
+			} else {
+				__vaildateSign.set(key, vaildateFunc(value));
+			}
+		}
 		return value;
 	}
 
@@ -96,10 +151,15 @@ class SaveDynamicDataContent<T> extends SaveDynamicDataBaseContent {
 			changed = false;
 			var newdata = {};
 			for (key => value in changedValues) {
-				if (value is CEData) {
-					Reflect.setProperty(newdata, key, cast(value, CEData).value);
-				} else
-					Reflect.setProperty(newdata, key, value);
+				// 需要进行签名验证
+				if (!this.vaildate(key)) {
+					if (value is CEData) {
+						Reflect.setProperty(newdata, key, cast(value, CEData).value);
+					} else
+						Reflect.setProperty(newdata, key, value);
+				} else {
+					throw "SaveDynamicData vaildate error:" + key + ":" + Json.stringify(value);
+				}
 			}
 			Reflect.setProperty(changeData, key, newdata);
 			changedValues = [];

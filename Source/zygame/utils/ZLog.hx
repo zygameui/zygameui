@@ -42,10 +42,11 @@ class ZLog {
 	 * 将`Exception`输出
 	 * @param e 
 	 */
-	public static function exception(e:Exception, ?infos:PosInfos):Void {
+	public static function exception(e:Exception, ?infos:PosInfos):String {
 		var message = e.message + "\n" + e.stack.toString();
 		var str = haxe.Log.formatOutput(message, infos);
 		error(str, infos);
+		return str;
 	}
 
 	/**

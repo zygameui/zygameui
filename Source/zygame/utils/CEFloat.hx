@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.crypto.Md5;
 import haxe.io.Bytes;
 
 /**
@@ -68,6 +69,9 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Float
 	 */
 	@:commutative @:op(A + B) public function add(value:Float):Float {
+		#if secure_cefloat
+		this.vaildateAddMath(this.value, value);
+		#end
 		return this.value + value;
 	}
 
@@ -77,10 +81,16 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Float
 	 */
 	@:op(A - B) public function jian(value:Float):Float {
+		#if secure_cefloat
+		this.vaildateAddMath(this.value, -value);
+		#end
 		return this.value - value;
 	}
 
 	@:commutative @:op(B - A) public function jian2(value:Float):Float {
+		#if secure_cefloat
+		this.vaildateAddMath(value, -this.value);
+		#end
 		return value - this.value;
 	}
 
@@ -90,6 +100,9 @@ abstract CEFloat(CEData) to CEData from CEData {
 	 * @return Float
 	 */
 	@:commutative @:op(A * B) public function mul(value:Float):Float {
+		#if secure_cefloat
+		this.vaildateMulMath(this.value, value);
+		#end
 		return this.value * value;
 	}
 
@@ -166,17 +179,17 @@ class CEData {
 	public var value(get, set):Float;
 
 	public function toString():String {
-		return Std.string(value);
+		var newBytes = Bytes.alloc(bytes.length);
+		for (i in 0...bytes.length) {
+			newBytes.set(i, bytes.get(i) ^ random);
+		}
+		return newBytes.toString();
 	}
 
 	function get_value():Float {
 		if (bytes == null)
 			return 0;
-		var newBytes = Bytes.alloc(bytes.length);
-		for (i in 0...bytes.length) {
-			newBytes.set(i, bytes.get(i) ^ random);
-		}
-		return Std.parseFloat(newBytes.toString());
+		return Std.parseFloat(toString());
 	}
 
 	function set_value(value:Float):Float {
@@ -186,5 +199,23 @@ class CEData {
 			bytes.set(i, bytes.get(i) ^ random);
 		}
 		return value;
+	}
+
+	public function vaildateAddMath(currentValue:Float, addValue:Float):Void {
+		var thisValue = Math.floor(currentValue);
+		var localValue = Math.floor(addValue);
+		var v = thisValue + localValue;
+		if (v - localValue != thisValue) {
+			throw "CEFloat.add数据验证错误：" + v + "-" + localValue + "!=" + thisValue;
+		}
+	}
+
+	public function vaildateMulMath(currentValue:Float, mulValue:Float):Void {
+		var thisValue = Math.floor(currentValue);
+		var localValue = Math.floor(mulValue);
+		var v = thisValue * localValue;
+		if (localValue != 0 && v / localValue != thisValue) {
+			throw "CEFloat.mul数据验证错误：" + v + "/" + localValue + "!=" + thisValue;
+		}
 	}
 }

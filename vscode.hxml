@@ -27,3 +27,4 @@
 --js bin/main.js
 --no-output
 -D zimage_v2
+-D secure_cefloat

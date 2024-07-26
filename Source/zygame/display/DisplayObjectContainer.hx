@@ -282,6 +282,11 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 
 	#if (zygameui13 || zygameui >= '14.0.0')
 	/**
+	 * 是否允许发送`Event.REMOVED`事件
+	 */
+	public var dispatchWithCaptureRemovedEventEnable:Bool = true;
+
+	/**
 	 * 重写该方法触发addChild之后的onInit事件
 	 * @param event 
 	 * @return Bool
@@ -292,7 +297,21 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 				onInitEvent(event);
 			}
 		}
+		if (!dispatchWithCaptureRemovedEventEnable && event.type == Event.REMOVED)
+			return true;
 		return super.__dispatchWithCapture(event);
+	}
+
+	@:noCompletion override private function __dispatch(event:Event):Bool {
+		if (!dispatchWithCaptureRemovedEventEnable && event.type == Event.REMOVED)
+			return true;
+		return super.__dispatch(event);
+	}
+
+	@:noCompletion private override function __dispatchEvent(event:Event):Bool {
+		if (!dispatchWithCaptureRemovedEventEnable && event.type == Event.REMOVED)
+			return true;
+		return super.__dispatchEvent(event);
 	}
 	#end
 

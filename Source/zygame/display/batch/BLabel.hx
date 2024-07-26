@@ -27,6 +27,8 @@ import zygame.shader.ColorShader;
  * 需要使用vAlign/hAlign时，需要相应地设置height,width值。
  */
 class BLabel extends BSprite {
+	private static var __defaultColorShader:ColorShader;
+
 	private var _texts:Array<String> = [];
 
 	private var _maxWidth:Float = 0;
@@ -387,14 +389,21 @@ class BLabel extends BSprite {
 			endIndex = _node.numTiles;
 		for (i in startIndex...endIndex) {
 			var tile:Tile = cast _node.getTileAt(i);
-			if (Std.isOfType(fntData, TextTextureAtlas))
+			if (Std.isOfType(fntData, TextTextureAtlas)) {
+				__isTextureAtlas = true;
 				tile.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
-			else
-				tile.shader = getColorShader(color);
+			} else {
+				__isTextureAtlas = false;
+				tile.shader = new ColorShader(color);
+			}
 		}
 	}
 
+	private var __isTextureAtlas:Bool = false;
+
 	private var __color:UInt = 0;
+
+	private var __setColor = false;
 
 	/**
 	 * 设置文本颜色
@@ -402,15 +411,17 @@ class BLabel extends BSprite {
 	 */
 	public function setFontColor(color:Int):Void {
 		__color = color;
+		__setColor = true;
 		if (!Std.isOfType(fntData, IFontAtlas)) {
-			if (Std.isOfType(fntData, TextTextureAtlas))
+			if (Std.isOfType(fntData, TextTextureAtlas)) {
+				__isTextureAtlas = true;
 				this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
-			else
+			} else {
+				__isTextureAtlas = false;
 				this.shader = getColorShader(color);
+			}
 		}
 	}
-
-	private var __colorShader = new ColorShader(0xffffff);
 
 	/**
 	 * 重用ColorShader着色器
@@ -418,8 +429,12 @@ class BLabel extends BSprite {
 	 * @return ColorShader
 	 */
 	private function getColorShader(color:UInt):ColorShader {
-		__colorShader.updateColor(color);
-		return __colorShader;
+		if (__defaultColorShader == null) {
+			__defaultColorShader = new ColorShader(color);
+		} else {
+			__defaultColorShader.updateColor(color);
+		}
+		return __defaultColorShader;
 	}
 
 	/**
@@ -461,6 +476,10 @@ class BLabel extends BSprite {
 			return 0;
 		#end
 		return _maxHeight * _node.scaleY;
+	}
+
+	override function get_shader():Shader {
+		return __setColor ? getColorShader(__color) : super.shader;
 	}
 
 	/**

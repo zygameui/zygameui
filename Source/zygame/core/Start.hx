@@ -506,7 +506,8 @@ class Start extends ZScene {
 		SpineManager.init(stage);
 
 		fps = new FPSDebug();
-		topView.addChild(fps);
+		// 不应该默认就添加的
+		// topView.addChild(fps);
 		fps.visible = this.isDebug;
 
 		// 默认最高质量
@@ -728,8 +729,11 @@ class Start extends ZScene {
 	 * @param e 事件
 	 */
 	private function onFrameEvent(e:Event):Void {
-		if (fps.visible)
-			topView.addChild(fps);
+		if (fps.visible) {
+			if (fps.parent == null)
+				topView.addChild(fps);
+		} else if (fps.parent != null)
+			topView.removeChild(fps);
 		#if (hxonline && cpp)
 		hxonline.Client.getInstance().process();
 		#end

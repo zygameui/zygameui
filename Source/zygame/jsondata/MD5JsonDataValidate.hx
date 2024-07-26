@@ -8,6 +8,11 @@ import haxe.zip.Reader;
  */
 class MD5JsonDataValidate implements IJsonDataValidate {
 	/**
+	 * 是否启用全局验证，当关闭时，则在验证时，会忽略掉所有验证规则
+	 */
+	public static var validateGlobalEnable:Bool = true;
+
+	/**
 	 * 验证条例
 	 */
 	private var __md5s:Map<String, Bool> = [];
@@ -55,6 +60,9 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 		#if test
 		game.utils.DebugStatus.checkValidate++;
 		#end
+		if (!validateGlobalEnable) {
+			return true;
+		}
 		return __md5s.exists(getMd5(object));
 	}
 

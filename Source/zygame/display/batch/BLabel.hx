@@ -390,7 +390,7 @@ class BLabel extends BSprite {
 			if (Std.isOfType(fntData, TextTextureAtlas))
 				tile.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
 			else
-				tile.shader = new ColorShader(color);
+				tile.shader = getColorShader(color);
 		}
 	}
 
@@ -406,8 +406,20 @@ class BLabel extends BSprite {
 			if (Std.isOfType(fntData, TextTextureAtlas))
 				this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
 			else
-				this.shader = new ColorShader(color);
+				this.shader = getColorShader(color);
 		}
+	}
+
+	private var __colorShader = new ColorShader(0xffffff);
+
+	/**
+	 * 重用ColorShader着色器
+	 * @param color 
+	 * @return ColorShader
+	 */
+	private function getColorShader(color:UInt):ColorShader {
+		__colorShader.updateColor(color);
+		return __colorShader;
 	}
 
 	/**

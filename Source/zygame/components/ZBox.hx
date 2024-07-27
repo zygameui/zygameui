@@ -88,7 +88,7 @@ class ZBox extends Component {
 
 	override public function addChildAt(display:DisplayObject, index:Int):DisplayObject {
 		var child:DisplayObject = super.addChildAt(display, index);
-		if (updateComponentsCall == -1 && layout != null) {
+		if (updateComponentsCall == -1) {
 			updateComponentsCall = Lib.nextFrameCall(updateComponents);
 		}
 		return child;
@@ -113,7 +113,7 @@ class ZBox extends Component {
 	}
 
 	override public function removeChild(display:DisplayObject):DisplayObject {
-		if (updateComponentsCall == -1 && layout != null) {
+		if (updateComponentsCall == -1) {
 			updateComponentsCall = Lib.nextFrameCall(updateComponents);
 		}
 		return super.removeChild(display);

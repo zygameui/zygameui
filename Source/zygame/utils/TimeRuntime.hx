@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.Exception;
 import zygame.core.Start;
 import openfl.utils.Function;
 
@@ -243,7 +244,9 @@ class Call {
 		frame--;
 		#end
 		if (frame <= 0) {
-			Reflect.callMethod(closure, closure, args == null ? [] : args);
+			try {
+				Reflect.callMethod(closure, closure, args == null ? [] : args);
+			} catch (e:Exception) {}
 			if (!isInterval)
 				stop();
 			else

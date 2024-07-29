@@ -96,7 +96,7 @@ class ZStack extends ZBox {
 		for (i in 0...this.stacks.length) {
 			var child = this.stacks[i];
 			child.visible = child.name == currentId;
-			if (child.visible) {
+			if (child.visible && child.parent == null) {
 				this.addChild(child);
 			}
 		}

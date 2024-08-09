@@ -398,7 +398,7 @@ class Lib {
 	 * @return Bool
 	 */
 	public static function isPc():Bool {
-		#if (android || ios)
+		#if (android || ios || minigame)
 		return false;
 		#elseif html5
 		var userAgent = Browser.navigator.userAgent;

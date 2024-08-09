@@ -56,7 +56,6 @@ class System {
 		if (count >= TASK_VM_INFO_REV1_COUNT) {
 			return info.phys_footprint;
 		}");
-
 		#elseif cpp
 		return cpp.vm.Gc.memUsage();
 		#end
@@ -68,5 +67,30 @@ class System {
 	 */
 	public static function gc():Void {
 		openfl.system.System.gc();
+	}
+
+	/**
+	 * 为游戏画面设置分辨率设置
+	 * @param pixelRatio 
+	 */
+	public static function setPixelRatio(pixelRatio:Float) {
+		#if html5
+		var current = openfl.Lib.current;
+		@:privateAccess current.stage.window.scale = pixelRatio;
+		@:privateAccess current.stage.window.__scale = pixelRatio;
+		@:privateAccess current.stage.window.__backend.scale = pixelRatio;
+		@:privateAccess current.stage.window.__attributes.allowHighDPI = false;
+		@:privateAccess current.stage.window.__backend.scale = pixelRatio;
+		var canvas = @:privateAccess current.stage.window.__backend.canvas;
+		if (canvas != null) {
+			canvas.width = Math.round(@:privateAccess current.stage.window.__width * pixelRatio);
+			canvas.height = Math.round(@:privateAccess current.stage.window.__height * pixelRatio);
+			canvas.style.width = @:privateAccess current.stage.window.__width + "px";
+			canvas.style.height = @:privateAccess current.stage.window.__height + "px";
+		}
+		@:privateAccess current.stage.__renderer.__pixelRatio = pixelRatio;
+		@:privateAccess current.stage.__renderer.__resize(@:privateAccess current.stage.window.width, @:privateAccess current.stage.window.height);
+		@:privateAccess current.stage.window.onResize.dispatch(@:privateAccess current.stage.window.width, @:privateAccess current.stage.window.height);
+		#end
 	}
 }

@@ -1,6 +1,7 @@
 package zygame.macro;
 
 #if macro
+import haxe.macro.Expr.FieldType;
 import haxe.macro.Expr.Access;
 import haxe.macro.Expr.Field;
 import haxe.macro.Context;

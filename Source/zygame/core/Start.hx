@@ -1,5 +1,6 @@
 package zygame.core;
 
+import openfl.geom.Rectangle;
 import zygame.display.TouchDisplayObjectContainer;
 import openfl.events.TouchEvent;
 #if openfl_console
@@ -628,6 +629,14 @@ class Start extends ZScene {
 		}
 
 		currentScale = ScaleUtils.mathScale(stage.stageWidth, stage.stageHeight, this.HDWidth, this.HDHeight, _lockLandscape, scalePower);
+		Start.stageWidth = Std.int(stage.stageWidth / currentScale) + 1;
+		Start.stageHeight = Std.int(stage.stageHeight / currentScale) + 1;
+
+		// this.stage.scaleMode = SHOW_ALL;
+		// @:privateAccess this.stage.__setLogicalSize(Start.stageWidth, Start.stageHeight);
+		// this.stage.fullScreenSourceRect = new Rectangle(0, 0, Start.stageWidth, Start.stageHeight);
+		// trace("this.stage.fullScreenSourceRect =", this.stage.fullScreenSourceRect);
+		// @:privateAccess this.stage.__resize();
 
 		this.scaleX = currentScale;
 		this.scaleY = currentScale;
@@ -640,8 +649,6 @@ class Start extends ZScene {
 		js.Syntax.code("window.currentScale=zygame_core_Start.currentScale");
 		#end
 
-		Start.stageWidth = Std.int(stage.stageWidth / this.scaleX) + 1;
-		Start.stageHeight = Std.int(stage.stageHeight / this.scaleY) + 1;
 		this.rotation = 0;
 		topView.rotation = 0;
 		this.x = 0;

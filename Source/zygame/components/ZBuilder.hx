@@ -1004,15 +1004,16 @@ class ZBuilder {
 				return false;
 		}
 		if (xml.exists("unless")) {
+			// 这里永远是或判断
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("unless").split(" ");
 			for (ifstr in array) {
-				if (!defineMaps.exists(ifstr)) {
+				if (defineMaps.exists(ifstr)) {
 					isExists = true;
 					break;
 				}
 			}
-			if (!isExists)
+			if (isExists)
 				return false;
 		}
 		return true;
@@ -1053,12 +1054,12 @@ class ZBuilder {
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("unless").split(" ");
 			for (ifstr in array) {
-				if (!defineMaps.exists(ifstr) || @:privateAccess builder.defines.exists(ifstr)) {
+				if (defineMaps.exists(ifstr) || @:privateAccess builder.defines.exists(ifstr)) {
 					isExists = true;
 					break;
 				}
 			}
-			if (!isExists)
+			if (isExists)
 				return null;
 		}
 		// 模板功能

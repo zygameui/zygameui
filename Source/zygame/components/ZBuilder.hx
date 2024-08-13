@@ -990,12 +990,12 @@ class ZBuilder {
 	 * @param xml 
 	 * @return Bool
 	 */
-	public static function checkIfUnless(xml:Xml):Bool {
+	public static function checkIfUnless(xml:Xml, otherDefines:Map<String, String> = null):Bool {
 		if (xml.exists("if")) {
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("if").split(" ");
 			for (ifstr in array) {
-				if (defineMaps.exists(ifstr)) {
+				if (defineMaps.exists(ifstr) || (otherDefines != null && otherDefines.exists(ifstr))) {
 					isExists = true;
 					break;
 				}
@@ -1008,7 +1008,7 @@ class ZBuilder {
 			var isExists:Bool = false;
 			var array:Array<String> = xml.get("unless").split(" ");
 			for (ifstr in array) {
-				if (defineMaps.exists(ifstr)) {
+				if (defineMaps.exists(ifstr) || (otherDefines != null && otherDefines.exists(ifstr))) {
 					isExists = true;
 					break;
 				}
@@ -1530,7 +1530,7 @@ class AssetsBuilder extends Builder {
 					id = src;
 				}
 			}
-			if (ZBuilder.checkIfUnless(item)) {
+			if (ZBuilder.checkIfUnless(item, this.defines)) {
 				needAssetsList.set(item.nodeName, true);
 				needAssetsList.set(id, true);
 			} else {

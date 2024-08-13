@@ -453,8 +453,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 强制刷新
- */
+	 * 强制刷新
+	 */
 	public function forceDraw():Void {
 		if (this.__changed) {
 			this.__drawTexting = true;
@@ -464,8 +464,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 文本布局
- */
+	 * 文本布局
+	 */
 	public var textAlign(default, set):Align = LEFT;
 
 	private function set_textAlign(v:Align):Align {
@@ -745,10 +745,10 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 选中文本效果实现
- * @param start 选中最开始的位置
- * @param len 选中结束的位置
- */
+	 * 选中文本效果实现
+	 * @param start 选中最开始的位置
+	 * @param len 选中结束的位置
+	 */
 	public function selectText(start:Int = 0, len:Int = -1):Void {
 		if (_display.selectable && _display.type == TextFieldType.INPUT)
 			_display.setSelection(start, len == -1 ? _display.text.length : len);
@@ -799,9 +799,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 获取文本高度
- * @return Float
- */
+	 * 获取文本高度
+	 * @return Float
+	 */
 	public function getTextHeight():Float {
 		if (__changed) {
 			__changed = false;
@@ -814,9 +814,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 获取文本宽度
- * @return Float
- */
+	 * 获取文本宽度
+	 * @return Float
+	 */
 	public function getTextWidth():Float {
 		if (__changed) {
 			__changed = false;
@@ -829,9 +829,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 设置文本行距
- * @param lead 行距
- */
+	 * 设置文本行距
+	 * @param lead 行距
+	 */
 	public function setFontLeading(lead:Int):Void {
 		_font.leading = lead;
 		// setTextFormat();
@@ -839,9 +839,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 设置文本字体大小
- * @param font 文本大小
- */
+	 * 设置文本字体大小
+	 * @param font 文本大小
+	 */
 	public function setFontSize(font:Int):Void {
 		if (_font.size == font)
 			return;
@@ -858,9 +858,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 设置文本的颜色
- * @param color 文本颜色
- */
+	 * 设置文本的颜色
+	 * @param color 文本颜色
+	 */
 	public function setFontColor(color:UInt):Void {
 		if (_font.color == color)
 			return;
@@ -880,11 +880,11 @@ class ZLabel extends DataProviderComponent {
 	}> = [];
 
 	/**
- * 设置颜色
- * @param start 开始位置
- * @param end 结束位置
- * @param color 颜色值
- */
+	 * 设置颜色
+	 * @param start 开始位置
+	 * @param end 结束位置
+	 * @param color 颜色值
+	 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:UInt):Void {
 		// 当长度小于0，或者索引少于-1时则无效
 		this.disableCache = true;
@@ -897,26 +897,41 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 设置HTML标签文本，但在部分设备上渲染可能会存在问题，建议使用简易格式的渲染。
- * @param bool 是否开启html渲染
- */
+	 * 设置高亮的文本
+	 * @param texts 
+	 * @param color 
+	 */
+	public function setHighLightTexts(texts:Array<String>, color:UInt):Void {
+		var text:String = _dataProvider;
+		for (s in texts) {
+			var at = text.indexOf(s);
+			if (at != -1) {
+				this.setFontSelectColor(at, s.length, color);
+			}
+		}
+	}
+
+	/**
+	 * 设置HTML标签文本，但在部分设备上渲染可能会存在问题，建议使用简易格式的渲染。
+	 * @param bool 是否开启html渲染
+	 */
 	public function setHtml(bool:Bool):Void {
 		_isHtml = bool;
 		this.dataProvider = this.dataProvider;
 	}
 
 	/**
- * 设置文本是否可选择
- * @param bool 是否可选
- */
+	 * 设置文本是否可选择
+	 * @param bool 是否可选
+	 */
 	public function setSelectable(bool:Bool):Void {
 		_display.selectable = bool;
 	}
 
 	/**
- * 设置是否可换行
- * @param bool 是否可换行
- */
+	 * 设置是否可换行
+	 * @param bool 是否可换行
+	 */
 	public function setWordWrap(bool:Bool):Void {
 		_display.wordWrap = bool;
 		if (_cacheBitmapLabel != null)
@@ -924,9 +939,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 设置是否可以输入
- * @param bool 是否可输入
- */
+	 * 设置是否可以输入
+	 * @param bool 是否可输入
+	 */
 	public function setIsInput(bool:Bool):Void {
 		#if (minigame || ios || android || html5)
 		// 小游戏模式需要实现输入
@@ -960,9 +975,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 触发小游戏的输入事件
- * @param e
- */
+	 * 触发小游戏的输入事件
+	 * @param e
+	 */
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
 		#if (sxk_game_sdk && (!cpp || android))
@@ -1009,10 +1024,10 @@ class ZLabel extends DataProviderComponent {
 	private var __blur:Float = 0;
 
 	/**
- * 描边字体：更改了文字大小后，可重新描边一次。
- * @param color 描边的颜色
- * @param blur 描边的厚度，默认建议使用1
- */
+	 * 描边字体：更改了文字大小后，可重新描边一次。
+	 * @param color 描边的颜色
+	 * @param blur 描边的厚度，默认建议使用1
+	 */
 	public function stroke(color:UInt, blur:Float = 1):Void {
 		__blur = blur;
 		__color = color;
@@ -1032,9 +1047,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 加粗字体
- * @param blur 加粗大小
- */
+	 * 加粗字体
+	 * @param blur 加粗大小
+	 */
 	public function bold(blur:Float = 1):Void {
 		__blur = blur;
 		__color = _font.color;
@@ -1046,8 +1061,8 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- *  释放文本占用的缓存
- */
+	 *  释放文本占用的缓存
+	 */
 	override public function destroy():Void {
 		super.destroy();
 		this.removeChild(_display);
@@ -1056,9 +1071,9 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 获取文本基础渲染对象
- * @return ZTextField
- */
+	 * 获取文本基础渲染对象
+	 * @return ZTextField
+	 */
 	public function getDisplay():ZTextField {
 		return _display;
 	}
@@ -1115,10 +1130,10 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	/**
- * 获取字符的坐标宽度
- * @param charIndex 位置字符
- * @return Rectangle
- */
+	 * 获取字符的坐标宽度
+	 * @param charIndex 位置字符
+	 * @return Rectangle
+	 */
 	public function getCharBounds(charIndex:Int):Rectangle {
 		var rect = _display.getCharBoundaries(charIndex);
 		rect.x += _display.x;

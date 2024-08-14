@@ -333,4 +333,20 @@ class ZButton extends ToggleButton {
 		this.initText();
 		return _text;
 	}
+
+	/**
+	 * 获得按钮的原始宽度，即非缩放后的宽度
+	 */
+	public function getOriginWidth():Float {
+		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);
+		return img != null ? img.width / img.scaleX : 0;
+	}
+
+	/**
+	 * 获得按钮的原始高度，即非缩放后的高度
+	 */
+	public function getOriginHeight():Float {
+		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);
+		return img != null ? img.height / img.scaleY : 0;
+	}
 }

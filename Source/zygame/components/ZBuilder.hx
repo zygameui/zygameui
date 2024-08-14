@@ -877,7 +877,8 @@ class ZBuilder {
 			var fxml = xml.firstElement();
 			for (key in parentXml.attributes()) {
 				switch (key) {
-					case "id", "centerX", "centerY", "left", "right", "bottom", "top", "y", "x", "scaleX", "scaleY", "width", "height", "alpha", "visible":
+					case "id", "centerX", "centerY", "left", "right", "bottom", "top", "y", "x", "scaleX", "scaleY", "width", "height", "alpha", "visible",
+						"if", "unless":
 						continue;
 				}
 				fxml.set(key, parentXml.get(key));

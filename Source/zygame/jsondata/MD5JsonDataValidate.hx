@@ -86,4 +86,12 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 		}
 		return true;
 	}
+
+	/**
+	 * 获得原始数据
+	 * @return Array<Dynamic>
+	 */
+	public function getData():Array<Dynamic> {
+		return __data;
+	}
 }

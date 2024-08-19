@@ -32,6 +32,7 @@ class ZInputLabel extends ZLabel {
 		super.onInit();
 		this.setWordWrap(false);
 		this.setIsInput(true);
+		this.disableCache = true;
 		zquadbg = new ZQuad();
 		this.addChildAt(zquadbg, 0);
 		zquadbg.width = this.width;

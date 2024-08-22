@@ -44,7 +44,7 @@ class ImageBatchs extends Tilemap {
 		super(pwidth, pheight, batchSprites == null ? null : batchSprites.getTileset(), smoothing);
 		_batchSprites = batchSprites;
 		_batch = new BSprite();
-		#if openfl_experimental_multitexture
+		#if (openfl_experimental_multitexture && openfl >= '9.5.0')
 		this.multiTextureEnabled = true;
 		#end
 		// this.cacheAsBitmap = true;

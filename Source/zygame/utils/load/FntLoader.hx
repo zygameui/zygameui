@@ -73,7 +73,7 @@ class FntData extends Atlas implements IFontAtlas {
 			var pheight:Float = Std.parseFloat(char.get("height"));
 			var xadvance:Int = Std.parseInt(char.get("xadvance"));
 			if (pwidth != 0 && pheight != 0) {
-				var frame:FntFrame = new FntFrame();
+				var frame:FntFrame = new FntFrame(this);
 				frame.id = _tileset.addRect(new Rectangle(posx, posy, pwidth, pheight));
 				frame.width = pwidth;
 				frame.height = pheight;
@@ -95,7 +95,7 @@ class FntData extends Atlas implements IFontAtlas {
 		}
 	}
 
-	public function getRootBitmapData():BitmapData {
+	override public function getRootBitmapData():BitmapData {
 		return _bitmapData;
 	}
 
@@ -152,6 +152,4 @@ class FntFrame extends BaseFrame {
 	private function get_yoffset():Float {
 		return y;
 	}
-
-	public function new() {}
 }

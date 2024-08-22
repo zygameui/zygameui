@@ -159,7 +159,7 @@ class TextureAtlas extends Atlas {
 			if (_tileRects.exists(txml.get("name"))) {
 				frame = _tileRects.get(txml.get("name"));
 			} else {
-				frame = new Frame();
+				frame = new Frame(this);
 				frame.name = txml.get("name");
 				_tileRects.set(txml.get("name"), frame);
 			}
@@ -178,7 +178,6 @@ class TextureAtlas extends Atlas {
 				frame.frameWidth = Std.parseInt(txml.get("frameWidth"));
 			if (txml.exists("frameHeight"))
 				frame.frameHeight = Std.parseInt(txml.get("frameHeight"));
-			frame.parent = this;
 			_names.push(txml.get("name"));
 			if (txml.exists("slice9")) {
 				this.bindScale9(txml.get("name"), txml.get("slice9"));
@@ -194,7 +193,7 @@ class TextureAtlas extends Atlas {
 		return rects;
 	}
 
-	public function getRootBitmapData():BitmapData {
+	override public function getRootBitmapData():BitmapData {
 		return _rootBitmapData;
 	}
 

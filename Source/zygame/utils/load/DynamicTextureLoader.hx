@@ -167,12 +167,11 @@ class DynamicTextureAtlas extends TextureAtlas {
 		// 追加名字
 		_names.push(name);
 		// 生成可用的Frame
-		var frame = new Frame();
+		var frame = new Frame(this);
 		frame.x = rect.x;
 		frame.y = rect.y;
 		frame.width = rect.width;
 		frame.height = rect.height;
-		frame.parent = this;
 		frame.id = _names.length - 1;
 		_tileRects.set(name, frame);
 		_tileset.addRect(rect);

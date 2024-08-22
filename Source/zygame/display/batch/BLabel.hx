@@ -526,8 +526,10 @@ class FntTile extends Tile {
 		curFrame = frame;
 		if (frame == null) {
 			this.id = -1;
+			this.tileset = null;
 		} else {
 			this.id = frame.id;
+			this.tileset = frame.parent.getTileset();
 		}
 	}
 

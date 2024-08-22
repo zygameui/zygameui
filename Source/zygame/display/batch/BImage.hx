@@ -95,7 +95,7 @@ class BImage extends BDisplayObject {
 			return;
 		}
 		super.set_id(frame.id);
-		curParent = frame.parent;
+		curParent = cast frame.parent;
 		curFrame = frame;
 		this.tileset = frame.parent.getTileset();
 		this.originX = -frame.frameX;

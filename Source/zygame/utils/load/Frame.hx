@@ -32,7 +32,7 @@ class Frame extends Slice9Frame {
 	private var _texture3d:#if zygame3d away3d.textures.BitmapTexture #else Dynamic #end;
 
 	public function copy():Frame {
-		var frame = new Frame();
+		var frame = new Frame(this.parent);
 		frame.name = name;
 		frame.frameX = frameX;
 		frame.frameY = frameY;
@@ -57,10 +57,6 @@ class Frame extends Slice9Frame {
 	// 	_rect = rect;
 	// 	return _rect;
 	// }
-
-	public function new() {
-		super();
-	}
 
 	/**
 	 * 获取九宫格配置

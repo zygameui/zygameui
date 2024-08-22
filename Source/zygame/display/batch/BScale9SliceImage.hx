@@ -36,7 +36,7 @@ class BScale9SliceImage extends BDisplayObjectContainer {
 		if (frame == null || frame.scale9frames == null || frame == curFrame)
 			return;
 		super.set_id(frame.id);
-		curParent = frame.parent;
+		curParent = cast frame.parent;
 		curFrame = frame;
 		// 清空所有tiles
 		removeTiles();
@@ -93,7 +93,7 @@ class BScale9SliceImage extends BDisplayObjectContainer {
 
 			switch (i) {
 				case 0:
-				// 左上
+					// 左上
 				case 1:
 					// 中上
 					tile.x = left;

@@ -47,7 +47,7 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	public function pushChar(char:String, rect:Rectangle, xadvance:Int):Void {
 		var id = __tileset.addRect(rect);
-		var frame = new FntFrame();
+		var frame = new FntFrame(this);
 		frame.x = 0;
 		frame.y = 0;
 		frame.width = rect.width;

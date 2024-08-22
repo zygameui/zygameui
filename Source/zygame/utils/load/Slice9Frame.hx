@@ -18,8 +18,6 @@ class Slice9Frame extends BaseFrame {
 
 	private var _rect:Rectangle = null;
 
-	public var parent:TextureAtlas;
-
 	private function get_scale9rect():Rectangle {
 		return _rect;
 	}
@@ -32,8 +30,6 @@ class Slice9Frame extends BaseFrame {
 		return _rect;
 	}
 
-	public function new() {}
-
 	private function get_scale9frames():Array<Frame> {
 		if (scale9rect == null) {
 			return null;
@@ -45,15 +41,14 @@ class Slice9Frame extends BaseFrame {
 		var rects:Array<Rectangle> = zygame.utils.Scale9Utils.createScale9Rects(this.x, this.y, this.width, this.height, scale9rect);
 		_scale9frames = [];
 		for (rect in rects) {
-			@:privateAccess parent._tileset.addRect(rect);
+			parent.getTileset().addRect(rect);
 			// 创建批处理帧
-			var frame:Frame = new Frame();
-			frame.id = @:privateAccess parent._tileset.numRects - 1;
+			var frame:Frame = new Frame(parent);
+			frame.id = parent.getTileset().numRects - 1;
 			frame.x = rect.x;
 			frame.y = rect.y;
 			frame.width = rect.width;
 			frame.height = rect.height;
-			frame.parent = parent;
 			_scale9frames.push(frame);
 		}
 		return _scale9frames;

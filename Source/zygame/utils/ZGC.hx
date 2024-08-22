@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import zygame.components.TilesetManager;
 import lime.graphics.Image;
 import openfl.display.ITileContainer;
 import zygame.display.batch.ImageBatchs;
@@ -117,6 +118,7 @@ class ZGC {
 		if (@:privateAccess bitmapData.image != null && @:privateAccess bitmapData.image.src != null) {
 			@:privateAccess bitmapData.image.src = null;
 		}
+		TilesetManager.diposeBitmapData(bitmapData);
 		bitmapData.dispose();
 		bitmapData.disposeImage();
 		bitmapData = null;

@@ -1,5 +1,7 @@
 package zygame.display.batch;
 
+import zygame.components.TilesetManager;
+import openfl.display.BitmapData;
 import zygame.components.ZBuilder;
 import openfl.display.Tile;
 import zygame.utils.load.Frame;
@@ -79,6 +81,10 @@ class BImage extends BDisplayObject {
 	public function setFrame(data:Dynamic):Void {
 		if (data is String) {
 			setFrame(ZBuilder.getBaseBitmapData(data));
+			return;
+		} else if (data is BitmapData) {
+			var atlas = TilesetManager.getTextureAtlasByBitmapData(data);
+			this.setFrame(atlas.getBitmapDataFrameAt(0));
 			return;
 		}
 		var frame:Frame = data;

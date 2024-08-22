@@ -84,12 +84,14 @@ class BImage extends BDisplayObject {
 		var frame:Frame = data;
 		if (frame == null) {
 			super.set_id(-1);
-			curFrame = null;
+			this.curFrame = null;
+			this.tileset = null;
 			return;
 		}
 		super.set_id(frame.id);
 		curParent = frame.parent;
 		curFrame = frame;
+		this.tileset = frame.parent.getTileset();
 		this.originX = -frame.frameX;
 		this.originY = -frame.frameY;
 	}

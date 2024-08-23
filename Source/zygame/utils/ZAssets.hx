@@ -380,27 +380,56 @@ class ZAssets {
 	 * @param parser 
 	 */
 	private function pushPasrers(parser:ParserBase):Void {
+		#if assets_debug
+		ZLog.log("[push pasrers] ready " + parser.getName());
+		#end
 		for (base in _parsers) {
 			if (base.equal(parser)) {
 				// 队列已存在
-				// ZLog.warring(["队列已经存在相同的加载资源：", parser.getName()]);
+				#if assets_debug
+				ZLog.warring(["队列已经存在相同的加载资源：", parser.getName()]);
+				#end
 				return;
 			}
 		}
 		// 这里需要检测资源是否已经存在，如果存在，则不再载入
 		var name = StringUtils.getName(parser.getName());
-		if (getBitmapData(name) != null)
+		if (getBitmapData(name) != null) {
+			#if assets_debug
+			ZLog.log("[exsit pasrers] return " + parser.getName());
+			#end
 			return;
-		if (getObject(name) != null)
+		}
+		if (getObject(name) != null) {
+			#if assets_debug
+			ZLog.log("[exsit pasrers] return " + parser.getName());
+			#end
 			return;
-		if (getTextureAtlas(name) != null)
+		}
+		if (getTextureAtlas(name) != null) {
+			#if assets_debug
+			ZLog.log("[exsit pasrers] return " + parser.getName());
+			#end
 			return;
-		if (getSpineTextureAlats(name) != null)
+		}
+		if (getSpineTextureAlats(name) != null) {
+			#if assets_debug
+			ZLog.log("[exsit pasrers] return " + parser.getName());
+			#end
 			return;
-		if (getXml(name) != null)
+		}
+		if (getXml(name) != null) {
+			#if assets_debug
+			ZLog.log("[exsit pasrers] return " + parser.getName());
+			#end
 			return;
-		if (getSound(name) != null)
+		}
+		if (getSound(name) != null) {
+			#if assets_debug
+			ZLog.log("[exsit pasrers] return " + parser.getName());
+			#end
 			return;
+		}
 		#if assets_debug
 		ZLog.log("[push pasrers] " + parser.getName());
 		#end
@@ -1445,6 +1474,9 @@ class ZAssets {
 				removeCDBData(key);
 		}
 		#end
+		for (key => value in _jsons) {
+			_jsons.remove(key);
+		}
 	}
 
 	/**

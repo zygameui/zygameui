@@ -585,8 +585,10 @@ class ZBuilder {
 	 */
 	public static function createSpineSpriteSkeleton(atalsName:String, skeletonJsonName:String):spine.openfl.SkeletonAnimation {
 		var atlas:SpineTextureAtals = cast ZBuilder.getBaseTextureAtlas(atalsName);
-		if (atlas == null)
+		if (atlas == null) {
+			trace("atlas " + atalsName + " is null.");
 			return null;
+		}
 		if (ZBuilder.getBaseObject(skeletonJsonName) == null)
 			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
 		return atlas.buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(ZBuilder.getBaseObject(skeletonJsonName)));

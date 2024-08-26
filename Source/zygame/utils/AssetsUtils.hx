@@ -143,7 +143,7 @@ class AssetsUtils {
 		}
 		#end
 		#if ios
-		if (path.indexOf("http") != 0)
+		if (path.indexOf("http") != 0 && path.indexOf("assets/assets/") != 0)
 			path = "assets/" + path;
 		#end
 		#if (oppo || vivo || xiaomi)

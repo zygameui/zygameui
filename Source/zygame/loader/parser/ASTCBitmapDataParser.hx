@@ -98,6 +98,7 @@ class ASTCBitmapDataParser extends ParserBase {
 				var bitmapData:BitmapData = BitmapData.fromTexture(rectangleTexture);
 				this.finalAssets(BITMAP, bitmapData, 1);
 			}).onError(function(err) {
+				trace("bytes load error:", err);
 				// 失败后，尝试加载png格式
 				var newpath = StringTools.replace(this.getData(), ".astc", ".png");
 				AssetsUtils.loadBitmapData(newpath).onComplete((bitmapData) -> {

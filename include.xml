@@ -58,7 +58,8 @@
 	<include path="platforms.xml" />
 
 	<!-- IOS的一些修复 -->
-	<haxedef name="ios_render_fix" if="ios || ks" />
+	<!-- <haxedef name="ios_render_fix" if="ios || ks" /> -->
+	<haxedef name="ios_render_fix" if="ks" />
 
 	<!-- C++测试模块 -->
 	<haxedef name="debuginput" if="debug cpp !ios" />

@@ -1677,7 +1677,7 @@ class ZLabel extends DataProviderComponent {
  */
 	private function onMiniGameInput(e:MouseEvent):Void {
 		var timecha = Date.now().getTime() - _isDownTime;
-		#if (sxk_game_sdk && (!cpp || android))
+		#if (sxk_game_sdk && (ios || android || minigame))
 		// SXKSDK键盘支持
 		if (v4.utils.KeyboardInputTools.keyboard != null) {
 			v4.utils.KeyboardInputTools.keyboard.input(this);

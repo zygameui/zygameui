@@ -979,7 +979,7 @@ class ZLabel extends DataProviderComponent {
 	 * @param e
 	 */
 	private function onMiniGameInput(e:MouseEvent):Void {
-		#if (sxk_game_sdk && (android || ios))
+		#if (sxk_game_sdk && (ios || android || minigame))
 		// SXKSDK键盘支持
 		if (v4.utils.KeyboardInputTools.keyboard != null) {
 			v4.utils.KeyboardInputTools.keyboard.input(this);

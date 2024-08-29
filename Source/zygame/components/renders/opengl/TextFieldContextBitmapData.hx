@@ -61,7 +61,7 @@ class TextFieldContextBitmapData {
 		bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
 		rects = new MaxRectsBinPack(textureWidth, textureHeight, false);
 		bitmapData.disposeImage();
-		__textFormat = new TextFormat(ZConfig.fontName, size, 0xffffff);
+		__textFormat = new TextFormat(#if ios "assets/" + ZConfig.fontName #else ZConfig.fontName #end, size, 0xffffff);
 		__textFormat.leading = Std.int(size / 2);
 		__textField = new TextField();
 		__atlas = new TextFieldAtlas(bitmapData);
@@ -180,8 +180,8 @@ class TextFieldContextBitmapData {
 	}
 
 	/**
-	 * 清空文字纹理渲染
-	 */
+		 * 清空文字纹理渲染
+		 */
 	public function clear():Void {
 		version++;
 		if (cleanBitmapData) {
@@ -197,8 +197,8 @@ class TextFieldContextBitmapData {
 	}
 
 	/**
-	 * 对当前显示对象进行重绘
-	 */
+		 * 对当前显示对象进行重绘
+		 */
 	public function redraw():Void {
 		#if text_debug
 		ZLog.error("TextFieldContextBitmapData redraw");
@@ -216,9 +216,9 @@ class TextFieldContextBitmapData {
 	}
 
 	/**
-	 * 获得纹理
-	 * @return Atlas
-	 */
+		 * 获得纹理
+		 * @return Atlas
+		 */
 	public function getAtlas():Atlas {
 		return __atlas;
 	}

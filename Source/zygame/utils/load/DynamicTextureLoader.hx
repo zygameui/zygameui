@@ -112,7 +112,6 @@ class DynamicTextureAtlas extends TextureAtlas {
 		glBitmapData.disposeImage();
 		super(glBitmapData, null);
 		pack = new MaxRectsBinPack(width, height, false);
-		_tileset = new Tileset(_rootBitmapData);
 	}
 
 	/**
@@ -130,7 +129,7 @@ class DynamicTextureAtlas extends TextureAtlas {
 		rect = rect.clone();
 		ma.tx = rect.x - bounds.x * scale;
 		ma.ty = rect.y - bounds.y * scale;
-		_rootBitmapData.draw(spr, ma);
+		rootBitmapData.draw(spr, ma);
 		// 生成可用的Frame
 		var frame = pushFrame(name, rect);
 		frame.frameWidth = bounds.width * scale;
@@ -152,7 +151,7 @@ class DynamicTextureAtlas extends TextureAtlas {
 		rect = rect.clone();
 		ma.tx = rect.x;
 		ma.ty = rect.y;
-		_rootBitmapData.draw(bitmapData, ma);
+		rootBitmapData.draw(bitmapData, ma);
 		ZGC.disposeBitmapData(bitmapData);
 		pushFrame(name, rect);
 	}
@@ -174,7 +173,7 @@ class DynamicTextureAtlas extends TextureAtlas {
 		frame.height = rect.height;
 		frame.id = _names.length - 1;
 		_tileRects.set(name, frame);
-		_tileset.addRect(rect);
+		getTileset().addRect(rect);
 		return frame;
 	}
 }

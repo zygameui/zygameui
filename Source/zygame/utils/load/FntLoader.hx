@@ -39,13 +39,11 @@ class FntLoader {
  * 字体数据
  */
 class FntData extends Atlas implements IFontAtlas {
-	private var _bitmapData:BitmapData;
 	private var _xml:Xml;
 
 	public var path:String;
 	public var maxHeight:Float = 0;
 
-	private var _tileset:Tileset;
 	private var _ids:Dictionary<Int, FntFrame>;
 
 	/**
@@ -57,11 +55,11 @@ class FntData extends Atlas implements IFontAtlas {
 
 	public function new(bitmapData:BitmapData, xml:Xml, path:String) {
 		this._ids = new Dictionary<Int, FntFrame>();
-		this._bitmapData = bitmapData;
 		this._xml = xml;
 		this.path = path;
 		// 解析瓦片
-		_tileset = new Tileset(bitmapData);
+		var _tileset = new Tileset(bitmapData);
+		super(_tileset);
 		var chars:Iterator<Xml> = xml.elementsNamed("font").next().elementsNamed("chars").next().elements();
 		var minYOffect:Float = 99999;
 		while (chars.hasNext()) {
@@ -95,23 +93,12 @@ class FntData extends Atlas implements IFontAtlas {
 		}
 	}
 
-	override public function getRootBitmapData():BitmapData {
-		return _bitmapData;
-	}
-
 	public function getTileFrame(id:Int):FntFrame {
 		return _ids.get(id);
 	}
 
-	override public function getTileset():Tileset {
-		return _tileset;
-	}
-
 	public function dispose():Void {
-		zygame.utils.ZGC.disposeBitmapData(_bitmapData);
-		_bitmapData = null;
-		_tileset.bitmapData = null;
-		_tileset = null;
+		zygame.utils.ZGC.disposeBitmapData(getRootBitmapData());
 		_ids = null;
 	}
 

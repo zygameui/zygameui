@@ -12,8 +12,6 @@ import zygame.utils.load.Atlas;
  * 文本纹理
  */
 class TextFieldAtlas extends Atlas implements IFontAtlas {
-	private var __tileset:Tileset;
-
 	private var __chars:Map<Int, FntFrame> = [];
 
 	private var __emojs:Map<String, FntFrame> = [];
@@ -21,8 +19,6 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 	public var maxHeight:Float = 0;
 
 	public var fontSize:Float = 0;
-
-	public var rootBitmapData:BitmapData;
 
 	public function clear():Void {
 		__chars = [];
@@ -33,8 +29,7 @@ class TextFieldAtlas extends Atlas implements IFontAtlas {
 
 	public function new(bitmapData:BitmapData) {
 		this.isTextAtlas = true;
-		this.rootBitmapData = bitmapData;
-		__tileset = new Tileset(bitmapData);
+		super(new Tileset(bitmapData));
 	}
 
 	public function getTileFrame(id:Int):FntFrame {

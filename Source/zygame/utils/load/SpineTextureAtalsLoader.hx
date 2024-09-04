@@ -123,6 +123,7 @@ class SpineTextureAtals extends Atlas {
 		_bitmapDatas = maps;
 		_data = data;
 		_skeletonData = new Map<String, SkeletonData>();
+		super(null);
 	}
 
 	/**

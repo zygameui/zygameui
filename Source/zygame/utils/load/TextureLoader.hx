@@ -104,20 +104,15 @@ class TextureAtlas extends Atlas {
 
 	private var _names:Array<String>;
 
-	private var _rootBitmapData:BitmapData;
-
 	private var _rootXml:Xml;
-
-	private var _tileset:Tileset;
 
 	private var _tileRects:Dictionary<String, Frame>;
 
 	public function new(img:BitmapData, xml:Xml) {
-		_rootBitmapData = img;
 		_names = [];
 		_tileRects = new Dictionary<String, Frame>();
 		// 创建可在Tiles里使用的索引位图
-		_tileset = new Tileset(img);
+		super(new Tileset(img));
 		if (img != null && xml != null)
 			this.updateAtlas(img, xml);
 	}
@@ -184,6 +179,7 @@ class TextureAtlas extends Atlas {
 			}
 		}
 		// 更新渲染
+		var _tileset = getTileset();
 		_tileset.bitmapData = bitmapData;
 		_tileset.rectData = new Vector<Float>(0, false);
 		@:privateAccess _tileset.__data = new Array();
@@ -191,14 +187,6 @@ class TextureAtlas extends Atlas {
 			_tileset.addRect(rects[i]);
 		}
 		return rects;
-	}
-
-	override public function getRootBitmapData():BitmapData {
-		return _rootBitmapData;
-	}
-
-	override public function getTileset():Tileset {
-		return _tileset;
 	}
 
 	/**
@@ -245,8 +233,8 @@ class TextureAtlas extends Atlas {
 	}
 
 	public function dispose():Void {
-		zygame.utils.ZGC.disposeBitmapData(_rootBitmapData);
-		_rootBitmapData = null;
+		var _tileset = getTileset();
+		zygame.utils.ZGC.disposeBitmapData(getRootBitmapData());
 		if (_tileset != null) {
 			_tileset.bitmapData = null;
 			_tileset.rectData = null;

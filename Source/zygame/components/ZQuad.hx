@@ -1,5 +1,8 @@
 package zygame.components;
 
+import openfl.geom.ColorTransform;
+import zygame.utils.ColorUtils;
+import openfl.display.Shader;
 import openfl.Vector;
 import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
@@ -22,7 +25,7 @@ class ZQuad extends ZBox {
 	/**
 	 * 颜色着色器
 	 */
-	private static var __colorShader:ColorShader = new ColorShader(0x0);
+	// public static var __colorShader:ColorShader = new ColorShader(0x0);
 
 	/**
 	 * 图块的渲染纹理对象
@@ -33,7 +36,7 @@ class ZQuad extends ZBox {
 
 	private static function get_quadBitmapData():BitmapData {
 		if (__quadBitmapData == null) {
-			__quadBitmapData = new BitmapData(1, 1, true, 0xffffffff);
+			__quadBitmapData = new BitmapData(1, 1, false, 0x0);
 		}
 		return __quadBitmapData;
 	}
@@ -41,7 +44,7 @@ class ZQuad extends ZBox {
 	/**
 	 * 非圆角的显示对象仍然支持Bitmap
 	 */
-	private var display:Bitmap;
+	private var display:ZQuadBitmap;
 	#end
 
 	/**
@@ -81,13 +84,19 @@ class ZQuad extends ZBox {
 	public function new(width:Int = 0, height:Int = 0, color:UInt = 0x0) {
 		super();
 		#if zquad_use_bitmap
-		display = new Bitmap(quadBitmapData);
-		display.shader = __colorShader;
+		display = new ZQuadBitmap(quadBitmapData);
+		// display.shader = __colorShader;
 		#end
 		this.width = width;
 		this.height = height;
 		this.color = color;
-		this.addEventListener(RenderEvent.RENDER_OPENGL, onRenderOpenGL);
+	}
+
+	override private function __enterFrame(deltaTime:Int):Void {
+		if (__changed) {
+			__changed = false;
+			this.__draw();
+		}
 	}
 
 	private function __draw():Void {
@@ -116,17 +125,6 @@ class ZQuad extends ZBox {
 		#end
 	}
 
-	private function onRenderOpenGL(e:RenderEvent):Void {
-		#if zquad_use_bitmap
-		if (display.parent != null)
-			__colorShader.updateColor(color);
-		#end
-		if (__changed) {
-			__changed = false;
-			this.updateComponents();
-		}
-	}
-
 	override public function initComponents():Void {
 		super.initComponents();
 		#if zquad_use_bitmap
@@ -146,6 +144,9 @@ class ZQuad extends ZBox {
 
 	private function set_color(value:UInt):UInt {
 		if (this.color != value) {
+			#if zquad_use_bitmap
+			display.color = value;
+			#end
 			this.color = value;
 			this.updateComponents();
 		}
@@ -250,5 +251,19 @@ class ZQuad extends ZBox {
 		bounds.setTo(0, 0, this._componentWidth, this._componentHeight);
 		@:privateAccess bounds.__transform(bounds, matrix);
 		@:privateAccess rect.__expand(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+}
+
+class ZQuadBitmap extends Bitmap {
+	/**
+	 * 纹理的颜色
+	 */
+	public var color(default, set):Int = 0x0;
+
+	private function set_color(c:Int):Int {
+		this.color = c;
+		var params = ColorUtils.toShaderColor(c);
+		this.transform.colorTransform = new ColorTransform(0, 0, 0, 1, 255 * params.r, 255 * params.g, 255 * params.b);
+		return c;
 	}
 }

@@ -93,13 +93,14 @@ class ZQuad extends ZBox {
 	}
 
 	override private function __enterFrame(deltaTime:Int):Void {
+		super.__enterFrame(deltaTime);
 		if (__changed) {
-			__changed = false;
 			this.__draw();
 		}
 	}
 
 	private function __draw():Void {
+		__changed = false;
 		#if zquad_use_bitmap
 		if (ellipseWidth == null) {
 			this.addChildAt(display, 0);

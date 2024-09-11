@@ -244,9 +244,13 @@ class Call {
 		frame--;
 		#end
 		if (frame <= 0) {
+			#if final
 			try {
+			#end
 				Reflect.callMethod(closure, closure, args == null ? [] : args);
+			#if final
 			} catch (e:Exception) {}
+			#end
 			if (!isInterval)
 				stop();
 			else

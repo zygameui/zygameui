@@ -57,6 +57,9 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 	 * @return Bool
 	 */
 	public function validateObject(object:Dynamic):Bool {
+		if (object == null) {
+			return true;
+		}
 		#if test
 		game.utils.DebugStatus.checkValidate++;
 		#end

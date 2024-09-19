@@ -57,7 +57,7 @@ class XlsBuild {
 						};
 						for (i2 in 1...values.length) {
 							var key:String = Std.string(keys[i2]);
-							if (key != "" && key != null && key != "null") {
+							if (key != "" && key != null && key != "null" && key.indexOf("#") == -1) {
 								Reflect.setProperty(obj, key, Std.string(values[i2]));
 							}
 						}

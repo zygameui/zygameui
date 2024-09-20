@@ -1,5 +1,7 @@
 package zygame.components;
 
+import zygame.core.Start;
+import zygame.utils.FrameEngine;
 import zygame.components.data.MixColorData;
 import haxe.Timer;
 import openfl.events.TouchEvent;
@@ -159,6 +161,16 @@ class ZButton extends ToggleButton {
 	private function set_clickEvent(call:Void->Void):Void->Void {
 		_clickEventCall = call;
 		return call;
+	}
+
+	/**
+	 * 长按回调鼠标事件，一般长按0.5秒则为快速响应
+	 */
+	public var longClickEvent(default, set):Void->Void;
+
+	private function set_longClickEvent(cb:Void->Void):Void->Void {
+		this.longClickEvent = cb;
+		return longClickEvent;
 	}
 
 	private override function set_width(value:Float):Float {
@@ -348,5 +360,23 @@ class ZButton extends ToggleButton {
 	public function getOriginHeight():Float {
 		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);
 		return img != null ? img.height / img.scaleY : 0;
+	}
+
+	override function onMouseDown(e:MouseEvent) {
+		super.onMouseDown(e);
+		if (longClickEvent != null) {
+			// 开始进行计数器
+			var time = 0.;
+			FrameEngine.create((f) -> {
+				if (this.stage == null || toggleState == ToggleButton.UP) {
+					f.stop();
+					return;
+				}
+				time += Start.current.frameDt;
+				if (time > 0.5) {
+					longClickEvent();
+				}
+			});
+		}
 	}
 }

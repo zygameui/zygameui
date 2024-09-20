@@ -64,6 +64,11 @@ class ZLabel extends DataProviderComponent {
 	 */
 	public static var renderType = NATIVE;
 
+	/**
+	 * 是否使用全局文本过滤实现
+	 */
+	public var globalCharFilterEnable = true;
+
 	private var _defaultDisplay:ZTextField;
 
 	private var _display:ZTextField;
@@ -703,7 +708,7 @@ class ZLabel extends DataProviderComponent {
 		#if (!neko && !hl)
 		if (value != null && Std.isOfType(value, String) && value.indexOf("@") == 0)
 			value = zygame.utils.LanguageUtils.getText(value);
-		if (onGlobalCharFilter != null) {
+		if (globalCharFilterEnable && onGlobalCharFilter != null) {
 			value = onGlobalCharFilter(value);
 		}
 		#end

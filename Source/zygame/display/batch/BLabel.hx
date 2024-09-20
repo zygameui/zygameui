@@ -57,6 +57,11 @@ class BLabel extends BSprite {
 	private var _height:Float = 0;
 
 	/**
+	 * 是否使用全局文本过滤实现
+	 */
+	public var globalCharFilterEnable = true;
+
+	/**
 	 * 是否自动换行
 	 */
 	public var wordWrap:Bool = false;
@@ -208,7 +213,7 @@ class BLabel extends BSprite {
 		}
 		if (!Std.isOfType(value, String))
 			value = Std.string(value);
-		if (ZLabel.onGlobalCharFilter != null)
+		if (globalCharFilterEnable && ZLabel.onGlobalCharFilter != null)
 			value = ZLabel.onGlobalCharFilter(value);
 		if (_text != value || sizeChange) {
 			_text = value;
@@ -368,8 +373,8 @@ class BLabel extends BSprite {
 	}
 
 	/**
-	 * 清理区域选择的颜色
-	 */
+			 * 清理区域选择的颜色
+			 */
 	public function clearFontSelectColor():Void {
 		for (i in 0..._node.numTiles) {
 			var tile:Tile = cast _node.getTileAt(i);
@@ -378,11 +383,11 @@ class BLabel extends BSprite {
 	}
 
 	/**
-	 * 设置区域颜色，请注意设置了之后将一直生效。当文本未变更的情况下，需要clearFontSelectColor清理后才会清空
-	 * @param startIndex 开始更改的位置
-	 * @param len 更改长度 
-	 * @param color 更改颜色
-	 */
+			 * 设置区域颜色，请注意设置了之后将一直生效。当文本未变更的情况下，需要clearFontSelectColor清理后才会清空
+			 * @param startIndex 开始更改的位置
+			 * @param len 更改长度 
+			 * @param color 更改颜色
+			 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:Int):Void {
 		var endIndex:Int = startIndex + len;
 		if (endIndex >= _node.numTiles)
@@ -406,9 +411,9 @@ class BLabel extends BSprite {
 	private var __setColor = false;
 
 	/**
-	 * 设置文本颜色
-	 * @param color 
-	 */
+			 * 设置文本颜色
+			 * @param color 
+			 */
 	public function setFontColor(color:Int):Void {
 		__color = color;
 		__setColor = true;
@@ -424,10 +429,10 @@ class BLabel extends BSprite {
 	}
 
 	/**
-	 * 重用ColorShader着色器
-	 * @param color 
-	 * @return ColorShader
-	 */
+			 * 重用ColorShader着色器
+			 * @param color 
+			 * @return ColorShader
+			 */
 	private function getColorShader(color:UInt):ColorShader {
 		if (__defaultColorShader == null) {
 			__defaultColorShader = new ColorShader(color);
@@ -438,26 +443,26 @@ class BLabel extends BSprite {
 	}
 
 	/**
-	 * 设置文本大小
-	 * @param size 
-	 */
+			 * 设置文本大小
+			 * @param size 
+			 */
 	public function setFontSize(size:Int):Void {
 		this._size = size;
 		updateText(getText(), true);
 	}
 
 	/**
-	 * 获取文本
-	 * @return String
-	 */
+			 * 获取文本
+			 * @return String
+			 */
 	public function getText():String {
 		return _text;
 	}
 
 	/**
-	 * 获取文本宽度
-	 * @return Float
-	 */
+			 * 获取文本宽度
+			 * @return Float
+			 */
 	public function getTextWidth():Float {
 		#if neko
 		if (_maxWidth == null)
@@ -467,9 +472,9 @@ class BLabel extends BSprite {
 	}
 
 	/**
-	 * 获取文本高度
-	 * @return Float
-	 */
+			 * 获取文本高度
+			 * @return Float
+			 */
 	public function getTextHeight():Float {
 		#if neko
 		if (_maxHeight == null)
@@ -483,10 +488,10 @@ class BLabel extends BSprite {
 	}
 
 	/**
-	 * 获取字符的坐标宽度
-	 * @param charIndex 
-	 * @return Rectangle
-	 */
+			 * 获取字符的坐标宽度
+			 * @param charIndex 
+			 * @return Rectangle
+			 */
 	public function getCharBounds(charIndex:Int):Rectangle {
 		var char = _node.getTileAt(charIndex);
 		if (char == null)

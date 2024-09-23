@@ -244,12 +244,13 @@ class Call {
 		frame--;
 		#end
 		if (frame <= 0) {
-			#if final
+			#if (cpp || final)
 			try {
 			#end
 				Reflect.callMethod(closure, closure, args == null ? [] : args);
-			#if final
-			} catch (e:Exception) {}
+			#if (cpp || final)
+			} catch (e:Exception)
+			{}
 			#end
 			if (!isInterval)
 				stop();
@@ -261,16 +262,16 @@ class Call {
 	}
 
 	/**
-	 * 停止计时回调，isInterval=true时方法无效
-	 */
+		 * 停止计时回调，isInterval=true时方法无效
+		 */
 	public function stop():Void {
 		closure = null;
 		args = null;
 	}
 
 	/**
-	 * 重置为原始值
-	 */
+		 * 重置为原始值
+		 */
 	public function reset():Void {
 		frame = maxframe;
 	}

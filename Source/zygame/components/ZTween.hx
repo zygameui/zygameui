@@ -1,5 +1,6 @@
 package zygame.components;
 
+import openfl.events.Event;
 import zygame.components.data.TimelineData;
 import zygame.display.DisplayObjectContainer;
 import zygame.core.Start;
@@ -165,6 +166,20 @@ class ZTween implements Refresher {
 				timeline.maxFrame = tw.end;
 			_baseFrames.push(tw);
 		}
+		// 内部暂停逻辑
+		if (builder.display is openfl.display.DisplayObject) {
+			var displayObject:openfl.display.DisplayObject = cast builder.display;
+			displayObject.addEventListener(Event.REMOVED_FROM_STAGE, __onRemoveFromStage);
+			displayObject.addEventListener(Event.ADDED_TO_STAGE, __onAddFromStage);
+		}
+	}
+
+	private function __onRemoveFromStage(e:Event):Void {
+		this.__pause();
+	}
+
+	private function __onAddFromStage(e:Event):Void {
+		this.__resume();
 	}
 
 	/**
@@ -230,6 +245,33 @@ class ZTween implements Refresher {
 	public function stop():Void {
 		Start.current.removeToUpdate(this);
 		_isPlay = false;
+	}
+
+	/**
+	 * 是否内部暂停
+	 */
+	private var __isInternalPause:Bool = false;
+
+	/**
+	 * 内部暂停逻辑
+	 */
+	private function __pause():Void {
+		if (_isPlay) {
+			__isInternalPause = true;
+			Start.current.removeToUpdate(this);
+		}
+	}
+
+	/**
+	 * 内部恢复逻辑
+	 */
+	private function __resume():Void {
+		if (__isInternalPause) {
+			__isInternalPause = false;
+			if (_isPlay) {
+				Start.current.addToUpdate(this);
+			}
+		}
 	}
 }
 

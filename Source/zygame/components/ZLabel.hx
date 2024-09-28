@@ -413,6 +413,7 @@ class ZLabel extends DataProviderComponent {
 
 	private function updateTextXY(txt:DisplayObject, txtWidth:Float, txtHeight:Float):Void {
 		txtWidth *= txt.scaleX;
+		txtHeight *= txt.scaleY;
 		#if (openfl < '9.0.0')
 		if (this.height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end)
 			this.height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end + 32;

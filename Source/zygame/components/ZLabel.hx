@@ -412,8 +412,6 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	private function updateTextXY(txt:DisplayObject, txtWidth:Float, txtHeight:Float):Void {
-		txtWidth *= txt.scaleX;
-		txtHeight *= txt.scaleY;
 		#if (openfl < '9.0.0')
 		if (this.height < txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end)
 			this.height = txtHeight * this.scaleY / labelScale #if quickgamelabelScale / _getCurrentScale() #end + 32;
@@ -425,6 +423,9 @@ class ZLabel extends DataProviderComponent {
 		}
 		txt.height = _height;
 		#end
+		// 基础宽高应该使用实际宽高处理
+		txtWidth *= txt.scaleX;
+		txtHeight *= txt.scaleY;
 		if (_defaultDisplay != null && txtHeight < _defaultDisplay.textHeight) {
 			txtHeight = _defaultDisplay.textHeight;
 		}
@@ -604,7 +605,7 @@ class ZLabel extends DataProviderComponent {
 					_bitmap.bitmapData.dispose();
 				}
 				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
-				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale / drawText.scaleX), Std.int(drawText.height * labelScale / drawText.scaleY),
+				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale / drawText.scaleY),
 					true, 0x0);
 				bitmapData.disposeImage();
 				var m = drawText.transform.matrix;

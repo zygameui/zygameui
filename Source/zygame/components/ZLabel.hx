@@ -604,7 +604,8 @@ class ZLabel extends DataProviderComponent {
 					_bitmap.bitmapData.dispose();
 				}
 				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
-				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale), true, 0x0);
+				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale / drawText.scaleX), Std.int(drawText.height * labelScale / drawText.scaleY),
+					true, 0x0);
 				bitmapData.disposeImage();
 				var m = drawText.transform.matrix;
 				m.scale(labelScale, labelScale);

@@ -605,8 +605,7 @@ class ZLabel extends DataProviderComponent {
 					_bitmap.bitmapData.dispose();
 				}
 				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
-				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale), Std.int(drawText.height * labelScale / drawText.scaleY),
-					true, 0x0);
+				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale + 3), Std.int(drawText.height * labelScale / drawText.scaleY), true, 0x0);
 				bitmapData.disposeImage();
 				var m = drawText.transform.matrix;
 				m.scale(labelScale, labelScale);
@@ -818,7 +817,7 @@ class ZLabel extends DataProviderComponent {
 		}
 		if (!disableCache && _cacheBitmapLabel != null)
 			return _cacheBitmapLabel.getTextHeight();
-		return _display.textHeight / labelScale;
+		return _display.textHeight / labelScale * _display.scaleY;
 	}
 
 	/**
@@ -833,7 +832,7 @@ class ZLabel extends DataProviderComponent {
 		}
 		if (!disableCache && _cacheBitmapLabel != null)
 			return _cacheBitmapLabel.getTextWidth();
-		return _display.textWidth / labelScale;
+		return _display.textWidth / labelScale  * _display.scaleX;
 	}
 
 	/**

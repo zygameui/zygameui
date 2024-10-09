@@ -410,4 +410,49 @@ class DisplayObjectContainer extends Sprite implements Refresher implements zyga
 	function get_delayScale():Float {
 		return Start.current.frameDtScale;
 	}
+
+	/**
+	 *  对齐功能
+	 * @param obj - 对齐对象
+	 * @param leftPx - 左对齐
+	 * @param rightPx - 右对齐
+	 * @param topPx - 顶部对齐
+	 * @param bottomPx - 底部对齐
+	 * @param centerX - 居中对齐
+	 * @param centerY - 垂直对齐
+	 */
+	public function alignSelf(leftPx:Dynamic = null, rightPx:Dynamic = null, topPx:Dynamic = null, bottomPx:Dynamic = null, centerX:Dynamic = 0,
+			centerY:Dynamic = 0):Void {
+		var obj:DisplayObject = this;
+		if (Std.isOfType(leftPx, String))
+			leftPx = Std.parseInt(leftPx);
+		if (Std.isOfType(rightPx, String))
+			rightPx = Std.parseInt(rightPx);
+		if (Std.isOfType(topPx, String))
+			topPx = Std.parseInt(topPx);
+		if (Std.isOfType(bottomPx, String))
+			bottomPx = Std.parseInt(bottomPx);
+		if (Std.isOfType(centerX, String))
+			centerX = Std.parseInt(centerX);
+		if (Std.isOfType(centerY, String))
+			centerY = Std.parseInt(centerY);
+		var rect:Rectangle = obj.getBounds(obj.parent);
+		var pos:Point = new Point(rect.x, rect.y);
+		pos.x -= obj.x;
+		pos.y -= obj.y;
+		pos.x *= -1;
+		pos.y *= -1;
+		if (leftPx != null)
+			obj.x = cast(leftPx, Int) + pos.x;
+		else if (rightPx != null)
+			obj.x = this.width - cast(rightPx, Int) + pos.x - rect.width;
+		else if (centerX != null)
+			obj.x = this.width / 2 + cast(centerX, Int) + pos.x - rect.width / 2;
+		if (topPx != null)
+			obj.y = cast(topPx, Int) + pos.y;
+		else if (bottomPx != null)
+			obj.y = this.height - cast(bottomPx, Int) + pos.y - rect.height;
+		else if (centerY != null)
+			obj.y = this.height / 2 + cast(centerY, Int) + pos.y - rect.height / 2;
+	}
 }

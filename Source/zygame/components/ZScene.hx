@@ -72,7 +72,28 @@ class ZScene extends ZBox {
 		ZSceneManager.current.releaseScene(this);
 	}
 
+	/**
+	 * 释放场景事件列表
+	 */
+	private var __onSceneReleaseEvents:Array<Void->Void> = [];
+
 	dynamic public function onSceneReleaseEvent():Void {}
+
+	/**
+	 * 添加场景释放事件
+	 * @param callback 
+	 */
+	public function addOnSceneReleaseEvent(callback:Void->Void):Void {
+		__onSceneReleaseEvents.push(callback);
+	}
+
+	/**
+	 * 删除场景释放事件
+	 * @param callback 
+	 */
+	public function removeOnSceneReleaseEvent(callback:Void->Void):Void {
+		__onSceneReleaseEvents.remove(callback);
+	}
 
 	/**
 	 * 返回上一个场景，仅记录5个场景记录

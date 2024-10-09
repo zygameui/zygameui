@@ -591,6 +591,10 @@ class Start extends ZScene {
 			// 隐藏光标
 			@:privateAccess oldlabel.setSelectQuadVisible(false);
 		}
+		// 焦点如果已经移除了，则应该删除
+		if (focus != null && focus.stage == null) {
+			focus = null;
+		}
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.Timer;
 #if openfl_console
 import com.junkbyte.console.Cc;
 #end
@@ -102,6 +103,9 @@ class ZSceneManager {
 			return;
 		if (onSceneRelease) {
 			zScene.onSceneRelease();
+			@:privateAccess for (cb in zScene.__onSceneReleaseEvents) {
+				cb();
+			}
 			zScene.onSceneReleaseEvent();
 		}
 		// 如果释放了，则进行历史清理

@@ -249,6 +249,8 @@ class ZButton extends ToggleButton {
 			_text.height = this.height;
 			_text.hAlign = "center";
 			_text.mouseEnabled = false;
+			_text.autoTextSize = true;
+			_text.setWordWrap(false);
 			box.addChild(_text);
 		}
 	}

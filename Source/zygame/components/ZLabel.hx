@@ -508,7 +508,8 @@ class ZLabel extends DataProviderComponent {
 
 		// 自动字体大小
 		if (autoTextSize && !this.getDisplay().wordWrap) {
-			this.getDisplay().scaleY = this.getDisplay().scaleX = Math.min(1, _width / this.getTextWidth());
+			var mathScale = Math.min(1, _width / this._display.textWidth);
+			this.getDisplay().scaleY = this.getDisplay().scaleX = mathScale;
 			this.getDisplay().width = _width / this.getDisplay().scaleY;
 			if (_cacheBitmapLabel != null) {
 				var scaleMath = Math.min(1, _width / this._cacheBitmapLabel.getTextWidth());

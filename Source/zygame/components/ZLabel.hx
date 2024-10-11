@@ -333,7 +333,7 @@ class ZLabel extends DataProviderComponent {
 		if (__changed) {
 			__changed = false;
 			if (this.dataProvider != null) {
-				this.drawText(this.dataProvider);
+				this.drawText(this.__drawTextValue);
 			}
 			__drawTexting = true;
 			this.updateComponents();
@@ -637,6 +637,8 @@ class ZLabel extends DataProviderComponent {
 		__drawTexting = false;
 	}
 
+	private var __drawTextValue:String = "";
+
 	override private function set_dataProvider(value:Dynamic):Dynamic {
 		if (__setFontSelectColor.length > 0)
 			__setFontSelectColor = [];
@@ -662,17 +664,27 @@ class ZLabel extends DataProviderComponent {
 
 		super.dataProvider = value;
 
+		// 多国语言化
+		#if (!neko && !hl)
+		if (value != null && Std.isOfType(value, String) && value.indexOf("@") == 0)
+			value = zygame.utils.LanguageUtils.getText(value);
+		if (globalCharFilterEnable && onGlobalCharFilter != null) {
+			value = onGlobalCharFilter(value);
+		}
+		#end
+		__drawTextValue = value;
+
 		if (_cacheBitmapLabel != null && !disableCache) {
 			// 刷新内容
 			__changed = true;
 			if (this._cacheBitmapLabel.dataProvider == "") {
-				this.drawText(this.dataProvider);
+				this.drawText(this.__drawTextValue);
 			}
 		} else if (_display != null) {
 			// 刷新内容
 			__changed = true;
 			if (this._display.text == "") {
-				this.drawText(this.dataProvider);
+				this.drawText(this.__drawTextValue);
 			}
 		}
 
@@ -705,14 +717,6 @@ class ZLabel extends DataProviderComponent {
 		if (untyped _display.__graphics.__context != null)
 			untyped _display.__graphics.__context.clearRect(0, 0, _display.__graphics.__canvas.width, _display.__graphics.__canvas.height);
 		#end
-		#end
-		// 多国语言化
-		#if (!neko && !hl)
-		if (value != null && Std.isOfType(value, String) && value.indexOf("@") == 0)
-			value = zygame.utils.LanguageUtils.getText(value);
-		if (globalCharFilterEnable && onGlobalCharFilter != null) {
-			value = onGlobalCharFilter(value);
-		}
 		#end
 		if (_isHtml)
 			_display.htmlText = value;
@@ -775,7 +779,7 @@ class ZLabel extends DataProviderComponent {
 		// TODO 耗性能
 		// if (__changed) {
 		// 	__changed = false;
-		// 	this.drawText(this.dataProvider);
+		// 	this.drawText(this.__drawTextValue);
 		// 	this.updateComponents();
 		// }
 		return Math.abs(_width #if quickgamelabelScale / _getCurrentScale() #end * this.scaleX);
@@ -796,7 +800,7 @@ class ZLabel extends DataProviderComponent {
 		// TODO 耗性能
 		// if (__changed) {
 		// 	__changed = false;
-		// 	this.drawText(this.dataProvider);
+		// 	this.drawText(this.__drawTextValue);
 		// 	this.updateComponents();
 		// }
 		if (_height < this._font.size) {
@@ -812,7 +816,7 @@ class ZLabel extends DataProviderComponent {
 	public function getTextHeight():Float {
 		if (__changed) {
 			__changed = false;
-			this.drawText(this.dataProvider);
+			this.drawText(this.__drawTextValue);
 			this.updateComponents();
 		}
 		if (!disableCache && _cacheBitmapLabel != null)
@@ -827,12 +831,12 @@ class ZLabel extends DataProviderComponent {
 	public function getTextWidth():Float {
 		if (__changed) {
 			__changed = false;
-			this.drawText(this.dataProvider);
+			this.drawText(this.__drawTextValue);
 			this.updateComponents();
 		}
 		if (!disableCache && _cacheBitmapLabel != null)
 			return _cacheBitmapLabel.getTextWidth();
-		return _display.textWidth / labelScale  * _display.scaleX;
+		return _display.textWidth / labelScale * _display.scaleX;
 	}
 
 	/**

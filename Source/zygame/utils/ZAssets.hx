@@ -878,7 +878,7 @@ class ZAssets {
 			throw "Spine缺少json对象：" + skeletonJsonName;
 		#if spine_haxe
 		// TODO 这里可以改进性能
-		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, Json.stringify(jsonData));
+		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, jsonData);
 		#else
 		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
 		#end
@@ -895,7 +895,7 @@ class ZAssets {
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
 		#if spine_haxe
-		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, Json.stringify(jsonData));
+		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, jsonData);
 		#else
 		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
 		#end

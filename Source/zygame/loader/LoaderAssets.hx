@@ -10,6 +10,7 @@ import zygame.loader.parser.CDBParser;
 import zygame.loader.parser.TextParser;
 import zygame.loader.parser.MP3Parser;
 import zygame.loader.parser.ParserBase;
+import zygame.loader.parser.BytesParser;
 #if ldtk
 import zygame.loader.parser.LDTKParser;
 import zygame.loader.parser.AESParser;
@@ -24,6 +25,7 @@ class LoaderAssets {
 	 */
 	public static var fileparser:Array<Class<ParserBase>> = [
 		SparticleParser,
+		BytesParser,
 		#if true
 		zygame.loader.parser.ASTCBitmapDataParser,
 		#end

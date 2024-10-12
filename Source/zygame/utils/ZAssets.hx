@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import openfl.utils.ByteArray;
 import haxe.Json;
 import zygame.loader.parser.JSONTextureAtlas;
 #if away3d
@@ -123,18 +124,60 @@ class ZAssets {
 	private var _callBack:Float->Void;
 	private var _errorCallBack:String->Void;
 
+	/**
+	 * 二进制数据
+	 */
+	private var _bytes:Dictionary<String, ByteArray>;
+
+	/**
+	 * 位图数据
+	 */
 	private var _bitmaps:Dictionary<String, BitmapData>;
+
+	/**
+	 * JSON数据
+	 */
 	private var _jsons:Dictionary<String, Dynamic>;
+
+	/**
+	 * XML数据
+	 */
 	private var _xmls:Dictionary<String, Xml>;
+
+	/**
+	 * 精灵图数据
+	 */
 	private var _textures:Dictionary<String, TextureAtlas>;
+
+	/**
+	 * 声音数据
+	 */
 	private var _sounds:Dictionary<String, Sound>;
+
+	/**
+	 * 音乐数据
+	 */
 	private var _musics:Dictionary<String, Music>;
+
+	/**
+	 * 字体数据
+	 */
 	private var _fnts:Dictionary<String, FntData>;
+
+	/**
+	 * Spine纹理数据
+	 */
 	private var _spines:Dictionary<String, SpineTextureAtals>;
+
 	#if (openfl_swf && swf)
 	private var _swflites:Dictionary<String, AnimateLibrary>;
 	#end
+
+	/**
+	 * 压缩包资源
+	 */
 	private var _zips:Dictionary<String, Zip>;
+
 	#if castle
 	private var _cdbs:Dictionary<String, CDBData>;
 	#end
@@ -164,6 +207,7 @@ class ZAssets {
 		_jsons = new Dictionary<String, Dynamic>();
 		_xmls = new Dictionary<String, Xml>();
 		_textures = new Dictionary<String, TextureAtlas>();
+		_bytes = new Dictionary<String, ByteArray>();
 		_musics = new Dictionary<String, Music>();
 		_fnts = new Dictionary<String, FntData>();
 		_spines = new Dictionary<String, SpineTextureAtals>();
@@ -731,6 +775,8 @@ class ZAssets {
 		// 资源分析
 		var t:Int = type;
 		switch (t) {
+			case BYTES:
+				_bytes.set(parser.getName(), data);
 			case LDTK:
 				// LDTK编辑器生成的地图数据
 				#if ldtk
@@ -874,8 +920,11 @@ class ZAssets {
 	 */
 	public function createSpineSpriteSkeleton(atalsName:String, skeletonJsonName:String):spine.openfl.SkeletonAnimation {
 		var jsonData = this.getObject(skeletonJsonName);
-		if (jsonData == null)
-			throw "Spine缺少json对象：" + skeletonJsonName;
+		if (jsonData == null) {
+			jsonData = this.getBytes(skeletonJsonName);
+			if (jsonData == null)
+				throw "Spine缺少json对象：" + skeletonJsonName;
+		}
 		#if spine_haxe
 		// TODO 这里可以改进性能
 		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, jsonData);
@@ -1352,6 +1401,15 @@ class ZAssets {
 	}
 
 	/**
+	 * 根据ID获得二进制
+	 * @param id 
+	 * @return ByteArray
+	 */
+	public function getBytes(id:String):ByteArray {
+		return _bytes.get(id);
+	}
+
+	/**
 	 * 设置JSON对象
 	 * @param id
 	 * @param data
@@ -1449,6 +1507,9 @@ class ZAssets {
 		for (s in _xmls) {
 			if (name == null || name == s)
 				_xmls.remove(s);
+		}
+		for (b in _bytes) {
+			_bytes.remove(b);
 		}
 		for (key in _bitmaps) {
 			if (name == null || name == key)

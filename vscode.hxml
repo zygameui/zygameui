@@ -4,6 +4,7 @@
 --library openfl
 --library lime
 --library spine-hx
+-D spine3.8
 # --library castle
 --library hscript
 --library tweenxcore

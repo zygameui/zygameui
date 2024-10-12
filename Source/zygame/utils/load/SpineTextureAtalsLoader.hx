@@ -172,7 +172,7 @@ class SpineTextureAtals extends Atlas {
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
 		#elseif (spine_hx >= "3.8.2")
-		var skeletonData:SkeletonData = getSpriteSkeletonManager().readSkeletonData(new SkeletonDataFileJsonHandle(null, data));
+		var skeletonData:SkeletonData = getSpriteSkeletonManager().readSkeletonData(new spine.SkeletonDataFileJsonHandle(null, data));
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
 		#else
@@ -195,7 +195,7 @@ class SpineTextureAtals extends Atlas {
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
 		#elseif (spine_hx >= "3.8.2")
-		var skeletonData:SkeletonData = getTilemapSkeletonManager().readSkeletonData(new SkeletonDataFileJsonHandle(null, data));
+		var skeletonData:SkeletonData = getTilemapSkeletonManager().readSkeletonData(new spine.SkeletonDataFileJsonHandle(null, data));
 		_skeletonData.set(id, skeletonData);
 		return skeletonData;
 		#else

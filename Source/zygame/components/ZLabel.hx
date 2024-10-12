@@ -255,6 +255,7 @@ class ZLabel extends DataProviderComponent {
 			_cacheBitmapLabel.wordWrap = true;
 			_cacheBitmapLabel.setFontSize(24);
 			_cacheBitmapLabel.width = 100;
+			_cacheBitmapLabel.globalCharFilterEnable = false;
 			_cacheBatch = new QuadsBatchs();
 		}
 		#if !disable_zlabel_cache_bitmap

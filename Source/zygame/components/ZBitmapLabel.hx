@@ -65,6 +65,17 @@ class ZBitmapLabel extends DataProviderComponent {
 		#end
 	}
 
+	public var globalCharFilterEnable(get, set):Bool;
+
+	private function set_globalCharFilterEnable(v:Bool):Bool {
+		this._node.globalCharFilterEnable = v;
+		return v;
+	}
+
+	private function get_globalCharFilterEnable():Bool {
+		return this._node.globalCharFilterEnable;
+	}
+
 	override public function initComponents():Void {
 		this.addChild(_textmap);
 	}
@@ -151,7 +162,7 @@ class ZBitmapLabel extends DataProviderComponent {
 
 	override public function updateComponents():Void {
 		// 批量渲染字
-		_node.updateText(_text);
+		@:privateAccess _node.dataProvider = _text;
 		var txtHeight:Float = getTextHeight();
 		// 新版本是否不再需要移动位移？
 		// #if (quickgame)

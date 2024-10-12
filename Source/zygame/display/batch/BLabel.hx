@@ -81,7 +81,7 @@ class BLabel extends BSprite {
 
 	private function set_fontName(value:String):String {
 		_font = value;
-		this.updateText(this.getText(), true);
+		this.drawText(__drawText);
 		return _font;
 	}
 
@@ -213,163 +213,174 @@ class BLabel extends BSprite {
 		}
 		if (!Std.isOfType(value, String))
 			value = Std.string(value);
-		if (globalCharFilterEnable && ZLabel.onGlobalCharFilter != null)
-			value = ZLabel.onGlobalCharFilter(value);
 		if (_text != value || sizeChange) {
 			_text = value;
-			this._node.removeTiles();
-			if (value == null || fntData == null)
-				return;
-			_texts = value.split("");
-			// 处理emoj表情
-			#if !cpp
-			var req = ~/[\ud04e-\ue50e]+/;
-			#end
-			if (Std.isOfType(fntData, IFontAtlas)) {
-				_maxWidth = 0;
-				var curFntData:IFontAtlas = cast fntData;
-				_lineHeight = curFntData.getFontHeight();
-				_maxHeight = curFntData.maxHeight;
-				var offestX:Float = 0;
-				var offestY:Float = 0;
-				var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
-				var lastWidth:Float = 0;
-				var emoj:String = "";
-				var isEmoj = false;
-				for (char in _texts) {
-					var id:Int = char.charCodeAt(0);
-					var frame:FntFrame = null;
-					#if !cpp
-					if (req.match(char)) {
-						emoj += char;
-						if (emoj.length == 2) {
-							isEmoj = true;
-							frame = curFntData.getTileFrameByEmoj(emoj);
-							emoj = "";
-						}
-					} else {
-					#end
-						frame = curFntData.getTileFrame(id);
-					#if !cpp
+			if (globalCharFilterEnable && ZLabel.onGlobalCharFilter != null)
+				value = ZLabel.onGlobalCharFilter(value);
+			__drawText = value;
+			drawText(__drawText);
+		}
+	}
+
+	private var __drawText:String = "";
+
+	/**
+	 * 内部文本渲染调用
+	 * @param text 
+	 */
+	private function drawText(text:String):Void {
+		this._node.removeTiles();
+		if (text == null || fntData == null)
+			return;
+		_texts = text.split("");
+		// 处理emoj表情
+		#if !cpp
+		var req = ~/[\ud04e-\ue50e]+/;
+		#end
+		if (Std.isOfType(fntData, IFontAtlas)) {
+			_maxWidth = 0;
+			var curFntData:IFontAtlas = cast fntData;
+			_lineHeight = curFntData.getFontHeight();
+			_maxHeight = curFntData.maxHeight;
+			var offestX:Float = 0;
+			var offestY:Float = 0;
+			var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
+			var lastWidth:Float = 0;
+			var emoj:String = "";
+			var isEmoj = false;
+			for (char in _texts) {
+				var id:Int = char.charCodeAt(0);
+				var frame:FntFrame = null;
+				#if !cpp
+				if (req.match(char)) {
+					emoj += char;
+					if (emoj.length == 2) {
+						isEmoj = true;
+						frame = curFntData.getTileFrameByEmoj(emoj);
+						emoj = "";
 					}
-					#end
-					if (frame != null) {
-						// trace("this._width", (offestX + frame.width) * scaleFloat, "scaleFloat=", scaleFloat, "_lineHeight=", _lineHeight, _size, this._width);
-						if (wordWrap && (offestX + frame.xadvance) * scaleFloat > this._width) {
-							offestX = 0;
-							offestY += curFntData.maxHeight;
-							_maxHeight += curFntData.maxHeight;
-						}
-						var tile:FntTile = new FntTile(frame);
-						if (isEmoj) {
-							isEmoj = false;
-						} else {
-							var c = ColorUtils.toShaderColor(__color);
-							tile.colorTransform = new ColorTransform(c.r, c.g, c.b, 1);
-						}
-						_node.addChild(tile);
-						tile.x = offestX + frame.xoffset;
-						tile.y = offestY + frame.yoffset;
-						lastWidth = frame.width;
-						// if (_lineHeight < frame.height)
-						// _lineHeight = frame.height;
-						if (offestX + frame.width > _maxWidth) {
-							_maxWidth = offestX + frame.width;
-						}
-						offestX += Std.int(frame.xadvance);
-					} else if (char == " ") {
-						offestX += (_size != 0 ? _size : lastWidth) * 0.8;
-						if (offestX > _maxWidth) {
-							_maxWidth = offestX;
-						}
-					} else if (char == "\n") {
+				} else {
+				#end
+					frame = curFntData.getTileFrame(id);
+				#if !cpp
+				}
+				#end
+				if (frame != null) {
+					// trace("this._width", (offestX + frame.width) * scaleFloat, "scaleFloat=", scaleFloat, "_lineHeight=", _lineHeight, _size, this._width);
+					if (wordWrap && (offestX + frame.xadvance) * scaleFloat > this._width) {
 						offestX = 0;
 						offestY += curFntData.maxHeight;
 						_maxHeight += curFntData.maxHeight;
 					}
-				}
-			} else if (Std.isOfType(fntData, TextureAtlas) || Std.isOfType(fntData, SpineTextureAtals)) {
-				// 精灵表中的位图字渲染，7月2号开始支持Spine的位图渲染
-				var curSpriteDataGetBitmapDataFrame:String->Frame = null;
-				if (Std.isOfType(fntData, TextureAtlas))
-					curSpriteDataGetBitmapDataFrame = cast(fntData, TextureAtlas).getBitmapDataFrame;
-				else
-					curSpriteDataGetBitmapDataFrame = cast(fntData, SpineTextureAtals).getBitmapDataFrame;
-				var offestX:Float = 0;
-				var offestY:Float = 0;
-				_maxHeight = 0;
-				_maxWidth = 0;
-				_lineHeight = 0;
-				for (char in _texts) {
-					var frame:Frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
-					if (frame != null)
-						if (_lineHeight < frame.height)
-							_lineHeight = frame.height;
-				}
-				var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
-				var emoj:String = "";
-				var isEmoj = false;
-				var lastWidth:Float = 0;
-				for (char in _texts) {
-					var frame:Frame = null;
-					#if !cpp
-					if (req.match(char)) {
-						emoj += char;
-						if (emoj.length == 2) {
-							isEmoj = true;
-							frame = curSpriteDataGetBitmapDataFrame(fontName + emoj + fontEnd);
-							emoj = "";
-						}
+					var tile:FntTile = new FntTile(frame);
+					if (isEmoj) {
+						isEmoj = false;
 					} else {
-					#end
-						frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
-					#if !cpp
+						var c = ColorUtils.toShaderColor(__color);
+						tile.colorTransform = new ColorTransform(c.r, c.g, c.b, 1);
 					}
-					#end
-					if (frame != null) {
-						if (wordWrap && (offestX + frame.width) * scaleFloat > this._width) {
-							offestX = 0;
-							offestY += frame.height + lineGap;
-						}
-						var tile:FntTile = new FntTile(frame);
-						if (isEmoj) {
-							tile.shader = new TextColorShader(0, 0xffffff);
-							isEmoj = false;
-						}
-						_node.addChild(tile);
-						tile.x = offestX;
-						tile.y = offestY;
-						tile.rotation = frame.rotate ? 90 : 0;
-						if (frame.rotate) {
-							tile.x += tile.width;
-						}
-						if (frame.frameY > 0) {
-							tile.y += frame.frameY;
-						}
-						offestX += Std.int(frame.width + gap);
-						lastWidth = frame.width;
-						if (_maxHeight < offestY + frame.height)
-							_maxHeight = offestY + frame.height;
-						if (_maxWidth < offestX)
-							_maxWidth = offestX;
-					} else if (char == " ") {
-						offestX += (_size != 0 ? _size : lastWidth) * 0.8;
-					} else if (char == "\n") {
-						offestX = 0;
-						offestY += _lineHeight;
-						_maxHeight += _lineHeight;
+					_node.addChild(tile);
+					tile.x = offestX + frame.xoffset;
+					tile.y = offestY + frame.yoffset;
+					lastWidth = frame.width;
+					// if (_lineHeight < frame.height)
+					// _lineHeight = frame.height;
+					if (offestX + frame.width > _maxWidth) {
+						_maxWidth = offestX + frame.width;
 					}
+					offestX += Std.int(frame.xadvance);
+				} else if (char == " ") {
+					offestX += (_size != 0 ? _size : lastWidth) * 0.8;
+					if (offestX > _maxWidth) {
+						_maxWidth = offestX;
+					}
+				} else if (char == "\n") {
+					offestX = 0;
+					offestY += curFntData.maxHeight;
+					_maxHeight += curFntData.maxHeight;
 				}
 			}
-
-			// 字体大小调整
-			if (this._size > 0 && _lineHeight != 0) {
-				_node.scaleX = this._size / _lineHeight;
-				_node.scaleY = _node.scaleX;
+		} else if (Std.isOfType(fntData, TextureAtlas) || Std.isOfType(fntData, SpineTextureAtals)) {
+			// 精灵表中的位图字渲染，7月2号开始支持Spine的位图渲染
+			var curSpriteDataGetBitmapDataFrame:String->Frame = null;
+			if (Std.isOfType(fntData, TextureAtlas))
+				curSpriteDataGetBitmapDataFrame = cast(fntData, TextureAtlas).getBitmapDataFrame;
+			else
+				curSpriteDataGetBitmapDataFrame = cast(fntData, SpineTextureAtals).getBitmapDataFrame;
+			var offestX:Float = 0;
+			var offestY:Float = 0;
+			_maxHeight = 0;
+			_maxWidth = 0;
+			_lineHeight = 0;
+			for (char in _texts) {
+				var frame:Frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
+				if (frame != null)
+					if (_lineHeight < frame.height)
+						_lineHeight = frame.height;
 			}
-
-			updateLayout();
+			var scaleFloat:Float = this._size > 0 ? (this._size / _lineHeight) : 1;
+			var emoj:String = "";
+			var isEmoj = false;
+			var lastWidth:Float = 0;
+			for (char in _texts) {
+				var frame:Frame = null;
+				#if !cpp
+				if (req.match(char)) {
+					emoj += char;
+					if (emoj.length == 2) {
+						isEmoj = true;
+						frame = curSpriteDataGetBitmapDataFrame(fontName + emoj + fontEnd);
+						emoj = "";
+					}
+				} else {
+				#end
+					frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
+				#if !cpp
+				}
+				#end
+				if (frame != null) {
+					if (wordWrap && (offestX + frame.width) * scaleFloat > this._width) {
+						offestX = 0;
+						offestY += frame.height + lineGap;
+					}
+					var tile:FntTile = new FntTile(frame);
+					if (isEmoj) {
+						tile.shader = new TextColorShader(0, 0xffffff);
+						isEmoj = false;
+					}
+					_node.addChild(tile);
+					tile.x = offestX;
+					tile.y = offestY;
+					tile.rotation = frame.rotate ? 90 : 0;
+					if (frame.rotate) {
+						tile.x += tile.width;
+					}
+					if (frame.frameY > 0) {
+						tile.y += frame.frameY;
+					}
+					offestX += Std.int(frame.width + gap);
+					lastWidth = frame.width;
+					if (_maxHeight < offestY + frame.height)
+						_maxHeight = offestY + frame.height;
+					if (_maxWidth < offestX)
+						_maxWidth = offestX;
+				} else if (char == " ") {
+					offestX += (_size != 0 ? _size : lastWidth) * 0.8;
+				} else if (char == "\n") {
+					offestX = 0;
+					offestY += _lineHeight;
+					_maxHeight += _lineHeight;
+				}
+			}
 		}
+
+		// 字体大小调整
+		if (this._size > 0 && _lineHeight != 0) {
+			_node.scaleX = this._size / _lineHeight;
+			_node.scaleY = _node.scaleX;
+		}
+
+		updateLayout();
 	}
 
 	/**
@@ -448,7 +459,7 @@ class BLabel extends BSprite {
 			 */
 	public function setFontSize(size:Int):Void {
 		this._size = size;
-		updateText(getText(), true);
+		drawText(__drawText);
 	}
 
 	/**

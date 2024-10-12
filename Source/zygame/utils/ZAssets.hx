@@ -1,5 +1,6 @@
 package zygame.utils;
 
+import haxe.Json;
 import zygame.loader.parser.JSONTextureAtlas;
 #if away3d
 import away3d.textures.BitmapTexture;
@@ -876,7 +877,8 @@ class ZAssets {
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
 		#if spine_haxe
-		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, jsonData);
+		// TODO 这里可以改进性能
+		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, Json.stringify(jsonData));
 		#else
 		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
 		#end
@@ -893,7 +895,7 @@ class ZAssets {
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
 		#if spine_haxe
-		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, jsonData);
+		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, Json.stringify(jsonData));
 		#else
 		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
 		#end

@@ -1,5 +1,7 @@
 package zygame.loader.parser;
 
+import zygame.utils.StringUtils;
+import zygame.components.ZBuilder;
 import zygame.utils.ZLog;
 import openfl.utils.ByteArray;
 import haxe.io.Bytes;
@@ -54,6 +56,15 @@ class ASTCBitmapDataParser extends ParserBase {
 
 	override function process() {
 		if (isSupportASTCConfig()) {
+			var imgname = StringUtils.getName(getData());
+			var zipAssets = ZBuilder.getZipAssetsByExsit(imgname, 'png');
+			if (zipAssets != null) {
+				// 直接通过Zip资源包加载
+				@:privateAccess zipAssets.loadZipBitmapData(imgname, (bitmapData) -> {
+					this.finalAssets(BITMAP, bitmapData, 1);
+				});
+				return;
+			}
 			AssetsUtils.loadBytes(getData()).onComplete(function(bytes) {
 				// 检测是否为zlib压缩
 				if (isZlibFile(bytes)) {

@@ -1,5 +1,6 @@
 package zygame.utils.load;
 
+import zygame.components.ZBuilder;
 import zygame.loader.parser.ASTCBitmapDataParser;
 import openfl.display.BitmapData;
 import zygame.utils.AssetsUtils.BitmapDataLoader;

@@ -1,7 +1,6 @@
 package zygame.utils.load;
 
 import openfl.geom.Rectangle;
-import spine.openfl.SkeletonSprite;
 import openfl.display.Sprite;
 import zygame.utils.load.TextureLoader.TextureAtlas;
 import openfl.display.Tileset;

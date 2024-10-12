@@ -4,7 +4,11 @@ import zygame.utils.ZLog;
 import haxe.Exception;
 import openfl.display.Shader;
 import zygame.utils.SpineManager;
+#if spine_haxe
+import spine.animation.AnimationState;
+#elseif spine_hx
 import spine.AnimationState;
+#end
 import zygame.display.batch.ImageBatchs;
 import zygame.display.batch.BSpine;
 import spine.openfl.SkeletonAnimation;
@@ -46,25 +50,21 @@ class ZSpine extends ZBox {
 	/**
 	 * 是否缓存模式，对三角形数据进行缓存处理，仅在spine的情况下才能够缓存
 	 */
+	@:deprecated('isCache is deprecated')
 	public var isCache(get, set):Bool;
 
-	private var _isCache = false;
+	function get_isCache():Bool {
+		return false;
+	}
+
+	function set_isCache(value:Bool):Bool {
+		return false;
+	}
 
 	/**
 	 * 是否使用tilemap渲染，默认为false
 	 */
 	public var tilemap:Bool = false;
-
-	function get_isCache():Bool {
-		return _isCache;
-	}
-
-	function set_isCache(value:Bool):Bool {
-		_isCache = value;
-		if (getNativeSpine() != null)
-			getNativeSpine().isCache = value;
-		return _isCache;
-	}
 
 	/**
 	 * 获取`Sprite`渲染的Spine对象
@@ -97,7 +97,11 @@ class ZSpine extends ZBox {
 				bspine.spineSkin = name;
 			else {
 				if (spine != null) {
+					#if spine_haxe
+					spine.skeleton.skinName = name;
+					#else
 					spine.skeleton.setSkinByName(name);
+					#end
 					spine.skeleton.setBonesToSetupPose();
 					spine.skeleton.setSlotsToSetupPose();
 				}
@@ -111,12 +115,21 @@ class ZSpine extends ZBox {
 	private function get_spineSkin():String {
 		if (spine == null && bspine == null)
 			return null;
+		#if spine_haxe
+		if (bspine == null) {
+			return spine.skeleton.skin != null ? spine.skeleton.skin.name : null;
+		}
+		if (bspine.spine.skeleton.skin == null)
+			return null;
+		return bspine.spine.skeleton.skin.name;
+		#else
 		if (bspine == null) {
 			return spine.skeleton.getSkin() != null ? spine.skeleton.getSkin().name : null;
 		}
 		if (bspine.spine.skeleton.getSkin() == null)
 			return null;
 		return bspine.spine.skeleton.getSkin().name;
+		#end
 	}
 
 	/**
@@ -287,6 +300,17 @@ class ZSpine extends ZBox {
 	public function setMixByName(fromName:String, toName:String, duration:Float):Void {
 		if (fromName == null || toName == null)
 			return;
+		#if spine_haxe
+		if (this.getNativeSpine() != null) {
+			if (this.getNativeSpine().state.data.skeletonData.findAnimation(fromName) != null
+				&& this.getNativeSpine().state.data.skeletonData.findAnimation(toName) != null)
+				getNativeSpine().state.data.setMixByName(fromName, toName, duration);
+		} else if (this.getTilemapSpine() != null) {
+			if (this.getTilemapSpine().state.data.skeletonData.findAnimation(fromName) != null
+				&& this.getTilemapSpine().state.data.skeletonData.findAnimation(toName) != null)
+				getTilemapSpine().state.data.setMixByName(fromName, toName, duration);
+		}
+		#elseif spine_hx
 		if (this.getNativeSpine() != null) {
 			if (this.getNativeSpine().state.getData().skeletonData.findAnimation(fromName) != null
 				&& this.getNativeSpine().state.getData().skeletonData.findAnimation(toName) != null)
@@ -296,5 +320,6 @@ class ZSpine extends ZBox {
 				&& this.getTilemapSpine().state.getData().skeletonData.findAnimation(toName) != null)
 				getTilemapSpine().state.getData().setMixByName(fromName, toName, duration);
 		}
+		#end
 	}
 }

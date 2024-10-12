@@ -591,7 +591,11 @@ class ZBuilder {
 		}
 		if (ZBuilder.getBaseObject(skeletonJsonName) == null)
 			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
+		#if spine_haxe
+		return atlas.buildSpriteSkeleton(skeletonJsonName, ZBuilder.getBaseObject(skeletonJsonName));
+		#else
 		return atlas.buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(ZBuilder.getBaseObject(skeletonJsonName)));
+		#end
 	}
 
 	public static function createSpineTilemapSkeleton(atalsName:String, skeletonJsonName:String):spine.tilemap.SkeletonAnimation {
@@ -600,7 +604,11 @@ class ZBuilder {
 			return null;
 		if (ZBuilder.getBaseObject(skeletonJsonName) == null)
 			throw "SkeletonJsonName " + skeletonJsonName + " is null.";
+		#if spine_haxe
+		return atlas.buildTilemapSkeleton(skeletonJsonName, ZBuilder.getBaseObject(skeletonJsonName));
+		#else
 		return atlas.buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(ZBuilder.getBaseObject(skeletonJsonName)));
+		#end
 	}
 
 	public static function getBaseTextureAtlas(value:String):Atlas {

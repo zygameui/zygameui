@@ -2,7 +2,6 @@ package zygame.utils;
 
 import haxe.Timer;
 import zygame.core.Start;
-import spine.openfl.SkeletonSprite;
 import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.display.Stage;

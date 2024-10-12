@@ -875,7 +875,11 @@ class ZAssets {
 		var jsonData = this.getObject(skeletonJsonName);
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
+		#if spine_haxe
+		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, jsonData);
+		#else
 		return _spines.get(atalsName).buildSpriteSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
+		#end
 	}
 
 	/**
@@ -888,7 +892,11 @@ class ZAssets {
 		var jsonData = this.getObject(skeletonJsonName);
 		if (jsonData == null)
 			throw "Spine缺少json对象：" + skeletonJsonName;
+		#if spine_haxe
+		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, jsonData);
+		#else
 		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, spine.utils.JSONVersionUtils.getSpineObjectJsonData(jsonData));
+		#end
 	}
 
 	/**

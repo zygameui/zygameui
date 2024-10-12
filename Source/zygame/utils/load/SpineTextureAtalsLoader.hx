@@ -7,11 +7,17 @@ import openfl.display.BitmapData;
 import zygame.utils.AssetsUtils in Assets;
 import spine.SkeletonJson;
 import spine.attachments.AtlasAttachmentLoader;
-import spine.support.graphics.TextureAtlas;
 import spine.SkeletonData;
-import spine.SkeletonDataFileJsonHandle;
-import zygame.utils.StringUtils;
+#if spine_hx
+import spine.support.graphics.TextureAtlas;
+import spine.SkeletonDataFileHandle;
 import spine.support.graphics.TextureLoader;
+#elseif spine_haxe
+import spine.atlas.TextureAtlas;
+import spine.SkeletonData;
+import spine.atlas.TextureLoader;
+#end
+import zygame.utils.StringUtils;
 
 /**
  * SpineTextureAtalsLoader加载器

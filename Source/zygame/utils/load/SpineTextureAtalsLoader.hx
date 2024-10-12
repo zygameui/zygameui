@@ -114,9 +114,11 @@ class Base64SpineTextureAtalsLoader extends SpineTextureAtalsLoader {
  */
 class SpineTextureAtals extends Atlas {
 	private var _tilemapSkeletonManager:SkeletonJson;
-	private var _tilemapSkeletonBytesManager:SkeletonBinary;
 	private var _spriteSkeletonManager:SkeletonJson;
+	#if spine_haxe
+	private var _tilemapSkeletonBytesManager:SkeletonBinary;
 	private var _spriteSkeletonBytesManager:SkeletonBinary;
+	#end
 
 	private var _bitmapDatas:Map<String, BitmapData>;
 

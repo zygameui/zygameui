@@ -276,8 +276,10 @@ class BLabel extends BSprite {
 					if (isEmoj) {
 						isEmoj = false;
 					} else {
-						var c = ColorUtils.toShaderColor(__color);
-						tile.colorTransform = new ColorTransform(c.r, c.g, c.b, 1);
+						if (__setColor) {
+							var c = ColorUtils.toShaderColor(__color);
+							tile.colorTransform = new ColorTransform(c.r, c.g, c.b, 1);
+						}
 					}
 					_node.addChild(tile);
 					tile.x = offestX + frame.xoffset;

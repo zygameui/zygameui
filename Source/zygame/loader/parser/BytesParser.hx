@@ -5,6 +5,7 @@ import zygame.utils.AssetsUtils;
 /**
  * 二进制数据加载
  */
+@:keep
 class BytesParser extends ParserBase {
 	/**
 	 * 支持格式

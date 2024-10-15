@@ -249,8 +249,9 @@ class Call {
 			#end
 				Reflect.callMethod(closure, closure, args == null ? [] : args);
 			#if (cpp || final)
-			} catch (e:Exception)
-			{}
+			} catch (e:Exception) {
+				ZLog.exception(e);
+			}
 			#end
 			if (!isInterval)
 				stop();

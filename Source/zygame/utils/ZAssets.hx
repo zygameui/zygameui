@@ -919,11 +919,12 @@ class ZAssets {
 	 * @return spine.openfl.SkeletonAnimation
 	 */
 	public function createSpineSpriteSkeleton(atalsName:String, skeletonJsonName:String):spine.openfl.SkeletonAnimation {
-		var jsonData = this.getObject(skeletonJsonName);
+		var jsonData:Dynamic = this.getObject(skeletonJsonName);
 		if (jsonData == null) {
 			jsonData = this.getBytes(skeletonJsonName);
-			if (jsonData == null)
-				throw "Spine缺少json对象：" + skeletonJsonName;
+			if (jsonData == null) {
+				throw "Spine缺少json对象：\'" + skeletonJsonName + "\'";
+			}
 		}
 		#if spine_haxe
 		// TODO 这里可以改进性能
@@ -940,9 +941,9 @@ class ZAssets {
 	 * @return spine.tilemap.SkeletonAnimation
 	 */
 	public function createSpineTilemapSkeleton(atalsName:String, skeletonJsonName:String):spine.tilemap.SkeletonAnimation {
-		var jsonData = this.getObject(skeletonJsonName);
+		var jsonData:Dynamic = this.getObject(skeletonJsonName);
 		if (jsonData == null)
-			throw "Spine缺少json对象：" + skeletonJsonName;
+			throw "Spine缺少json对象：\'" + skeletonJsonName + "\'";
 		#if spine_haxe
 		return _spines.get(atalsName).buildTilemapSkeleton(skeletonJsonName, jsonData);
 		#else

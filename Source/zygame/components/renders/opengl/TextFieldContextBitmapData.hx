@@ -132,7 +132,7 @@ class TextFieldContextBitmapData {
 
 		var m = new Matrix();
 		m.translate(pakRect.x, pakRect.y);
-		#if IOS_HIGH_PREFORMANCE_V2
+		#if (ks || IOS_HIGH_PREFORMANCE_V2)
 		// 微信高性能+模式下，需要重建TextField，否则会有字体重叠的问题
 		// __textField = new TextField();
 		if (untyped __textField.__graphics.__context != null)

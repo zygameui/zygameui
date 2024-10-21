@@ -714,7 +714,7 @@ class ZLabel extends DataProviderComponent {
 		}
 
 		#if (!wechat || IOS_HIGH_PREFORMANCE_V2)
-		#if (quickgame || qqquick || minigame)
+		#if (ks || quickgame || qqquick || minigame)
 		// 快游戏引擎不会清理文本画布，请在这里进行清理
 		if (untyped _display.__graphics.__context != null)
 			untyped _display.__graphics.__context.clearRect(0, 0, _display.__graphics.__canvas.width, _display.__graphics.__canvas.height);

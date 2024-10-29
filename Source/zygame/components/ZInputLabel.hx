@@ -30,6 +30,7 @@ class ZInputLabel extends ZLabel {
 
 	override public function onInit():Void {
 		super.onInit();
+		this.globalCharFilterEnable = false;
 		this.setWordWrap(false);
 		this.setIsInput(true);
 		this.disableCache = true;

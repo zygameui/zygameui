@@ -583,26 +583,40 @@ class SoundLoader extends BaseLoader {
 		return this;
 	}
 
+	private var __currentSound:Sound;
+
 	public function onComplete(call:Sound->Void):BaseLoader {
 		_onCompleteCall = call;
 		var url:URLRequest = new URLRequest(path);
-		var sound:Sound = new Sound();
-		sound.addEventListener(Event.COMPLETE, function(_):Void {
-			if (_onCompleteCall != null)
-				_onCompleteCall(sound);
-			_onCompleteCall = null;
-		});
-		sound.addEventListener(IOErrorEvent.IO_ERROR, function(e:IOErrorEvent):Void {
-			if (loadTimes < AssetsUtils.failTryLoadTimes) {
-				// 重试
-				ZLog.warring("重载：" + path + "," + loadTimes);
-				loadTimes++;
-				Lib.setTimeout(onComplete, 3000, [_onCompleteCall]);
-			} else
-				callError("无法加载" + path);
-		});
-		sound.load(url);
+		__currentSound = new Sound();
+		__currentSound.addEventListener(Event.COMPLETE, __onSoundComplete);
+		__currentSound.addEventListener(IOErrorEvent.IO_ERROR, __onSoundIOError);
+		__currentSound.load(url);
 		return this;
+	}
+
+	private function __onSoundComplete(e:Event):Void {
+		if (_onCompleteCall != null)
+			_onCompleteCall(__currentSound);
+		_onCompleteCall = null;
+		removeListeners();
+	}
+
+	private function __onSoundIOError(e:IOErrorEvent):Void {
+		if (loadTimes < AssetsUtils.failTryLoadTimes) {
+			// 重试
+			ZLog.warring("重载：" + path + "," + loadTimes);
+			loadTimes++;
+			Lib.setTimeout(onComplete, 3000, [_onCompleteCall]);
+		} else
+			callError("无法加载" + path);
+		removeListeners();
+	}
+
+	private function removeListeners():Void {
+		__currentSound.removeEventListener(Event.COMPLETE, __onSoundComplete);
+		__currentSound.removeEventListener(IOErrorEvent.IO_ERROR, __onSoundIOError);
+		__currentSound = null;
 	}
 }
 

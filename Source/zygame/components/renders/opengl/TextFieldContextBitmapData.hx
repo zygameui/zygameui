@@ -55,7 +55,13 @@ class TextFieldContextBitmapData {
 
 	private var __redrawing:Bool = false;
 
+	private var __textureWidth:Int = 0;
+
+	private var __textureHeight:Int = 0;
+
 	public function new(size:Int = 36, textureWidth:Int = 2048, textureHeight:Int = 2048, offestX:Int = 0, offestY:Int = 0) {
+		this.__textureWidth = textureWidth;
+		this.__textureHeight = textureHeight;
 		this.__offestX = offestX;
 		this.__offestY = offestY;
 		bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
@@ -73,6 +79,17 @@ class TextFieldContextBitmapData {
 	 * @param text 
 	 */
 	public function drawText(text:String):Void {
+		#if (text_debug && stack_printf)
+		var list = haxe.CallStack.callStack();
+		if (list != null && list.length > 0) {
+			// 开始上报调用栈
+			var stackMessage = haxe.CallStack.toString(list);
+			#if test
+			trace("darwText " + text + " stack:\n", stackMessage);
+			#end
+		}
+		#end
+
 		// 过滤重复的文本
 		var caches:Array<String> = [];
 		var chars = text.split("");
@@ -194,7 +211,7 @@ class TextFieldContextBitmapData {
 		__textField = new TextField();
 		bitmapData.fillRect(bitmapData.rect, 0x0);
 		__atlas.clear();
-		rects = new MaxRectsBinPack(bitmapData.width, bitmapData.height, false);
+		rects = new MaxRectsBinPack(__textureWidth, __textureHeight, false);
 	}
 
 	/**

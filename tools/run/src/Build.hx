@@ -16,10 +16,34 @@ class Build {
 	public static var currentBuild:BuildSuper;
 
 	private static var platforms:Array<String> = [
-		"android", "ios", "oppo", "vivo", "qqquick", "html5", "4399", // H5
+		"android",
+		"ios",
+		"oppo",
+		"vivo",
+		"qqquick",
+		"html5",
+		"4399", // H5
 		"g4399", // 快游戏
-		"xiaomi-zz", "xiaomi-h5", "xiaomi", "wechat", "tt", "baidu", "mgc",
-		"wifi", "meizu", "mmh5", "facebook", "huawei", "qihoo", "bili", "hl", "electron", "ks", "lianxin", "mac", "meituan"
+		"xiaomi-zz",
+		"xiaomi-h5",
+		"xiaomi",
+		"wechat",
+		"tt",
+		"baidu",
+		"mgc",
+		"wifi",
+		"meizu",
+		"mmh5",
+		"facebook",
+		"huawei",
+		"qihoo",
+		"bili",
+		"hl",
+		"electron",
+		"ks",
+		"lianxin",
+		"mac",
+		"meituan"
 	];
 
 	/**
@@ -233,6 +257,10 @@ class Build {
 		trace("开始编译HTML5");
 		var args:Array<String> = Sys.args();
 		var code:Int = 0;
+		// 避免使用npm构造，需要删除package.json
+		if (FileSystem.exists("Export/html5/bin/package.json")) {
+			FileSystem.deleteFile("Export/html5/bin/package.json");
+		}
 		if (args.indexOf("-final") != -1)
 			code = Sys.command("lime build html5 -final");
 		else
@@ -293,8 +321,7 @@ class Build {
 							if (FileSystem.isDirectory(path))
 								FileUtils.copyDic(path, currentBuild.root != null ? (dir + "/" + currentBuild.root) : dir);
 							else
-								FileUtils.copyFile(path,
-									currentBuild.root != null ? (dir + "/" + currentBuild.root + "/" + filepath) : (dir + "/" + filepath));
+								FileUtils.copyFile(path, currentBuild.root != null ? (dir + "/" + currentBuild.root + "/" + filepath) : (dir + "/" + filepath));
 						}
 					}
 				case "include":

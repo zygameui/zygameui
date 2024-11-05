@@ -17,7 +17,8 @@ class XMLParser extends ParserBase {
 		}
 		AssetsUtils.loadText(getData()).onComplete(function(text) {
 			try {
-				this.finalAssets(XML, Xml.parse(text), 1);
+				var xml = Xml.parse(text);
+				this.finalAssets(XML, xml, 1);
 			} catch (e:Exception) {
 				// 无效XML配置
 				ZLog.exception(e);

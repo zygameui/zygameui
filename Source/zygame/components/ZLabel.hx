@@ -342,7 +342,7 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
-		__updateLabel();
+		// __updateLabel();
 		super.__updateTransforms(overrideTransform);
 	}
 

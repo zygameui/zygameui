@@ -515,6 +515,7 @@ class Start extends ZScene {
 		stage.quality = openfl.display.StageQuality.HIGH;
 
 		this.addEventListener(Event.ENTER_FRAME, onFrameEvent);
+		this.addEventListener(Event.EXIT_FRAME, onExitFrameEvent);
 		stage.addEventListener(Event.RESIZE, onResize);
 		// #if wechat
 		// untyped window.onSizeChange = function() {
@@ -735,14 +736,20 @@ class Start extends ZScene {
 		return _cpuDt;
 	}
 
+	private function onExitFrameEvent(e:Event):Void {
+		@:privateAccess for (label in ZLabel.__labels) {
+			label.__updateLabel();
+		}
+	}
+
 	/**
 	 * 按照每1秒60次调用频次的事件
 	 * @param e 事件
 	 */
 	private function onFrameEvent(e:Event):Void {
 		if (fps.visible) {
-			if (fps.parent == null)
-				topView.addChild(fps);
+			// if (fps.parent == null)
+			topView.addChild(fps);
 		} else if (fps.parent != null)
 			topView.removeChild(fps);
 		#if (hxonline && cpp)

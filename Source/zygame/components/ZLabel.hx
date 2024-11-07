@@ -42,6 +42,8 @@ enum ZLabelRenderType {
  */
 @:keep
 class ZLabel extends DataProviderComponent {
+	private static var __labels:Array<ZLabel> = [];
+
 	/**
 	 * 全局文本过滤实现
 	 */
@@ -327,7 +329,8 @@ class ZLabel extends DataProviderComponent {
 			else
 				__textFieldStrokeShader.updateMixColor(_font.color, _font.color);
 		}
-		this.__updateLabel();
+
+		// this.__updateLabel();
 	}
 
 	private function __updateLabel():Void {
@@ -1111,6 +1114,7 @@ class ZLabel extends DataProviderComponent {
 
 	override function onAddToStage():Void {
 		super.onAddToStage();
+		__labels.push(this);
 		if (_cacheBitmapLabel != null
 			&& !disableCache
 			&& textFieldContextBitmapData != null
@@ -1124,6 +1128,7 @@ class ZLabel extends DataProviderComponent {
 
 	override function onRemoveToStage():Void {
 		super.onRemoveToStage();
+		__labels.remove(this);
 		setSelectQuadVisible(false);
 	}
 

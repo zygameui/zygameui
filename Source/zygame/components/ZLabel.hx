@@ -469,6 +469,7 @@ class ZLabel extends DataProviderComponent {
 	public function forceDraw():Void {
 		if (this.__changed) {
 			this.__drawTexting = true;
+			this.__updateLabel();
 			this.updateComponents();
 			this.__changed = false;
 		}
@@ -684,15 +685,15 @@ class ZLabel extends DataProviderComponent {
 		if (_cacheBitmapLabel != null && !disableCache) {
 			// 刷新内容
 			__changed = true;
-			if (this._cacheBitmapLabel.dataProvider == "") {
-				this.drawText(this.__drawTextValue);
-			}
+			// if (this._cacheBitmapLabel.dataProvider == "") {
+			// this.drawText(this.__drawTextValue);
+			// }
 		} else if (_display != null) {
 			// 刷新内容
 			__changed = true;
-			if (this._display.text == "") {
-				this.drawText(this.__drawTextValue);
-			}
+			// if (this._display.text == "") {
+			// this.drawText(this.__drawTextValue);
+			// }
 		}
 
 		#if html5

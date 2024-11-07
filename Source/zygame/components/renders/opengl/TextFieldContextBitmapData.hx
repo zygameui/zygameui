@@ -84,9 +84,8 @@ class TextFieldContextBitmapData {
 		if (list != null && list.length > 0) {
 			// 开始上报调用栈
 			var stackMessage = haxe.CallStack.toString(list);
-			#if test
-			trace("darwText " + text + " stack:\n", stackMessage);
-			#end
+			if (stackMessage.indexOf("onExitFrameEvent") == -1)
+				ZLog.warring("darwText " + text + " stack:\n" + stackMessage);
 		}
 		#end
 

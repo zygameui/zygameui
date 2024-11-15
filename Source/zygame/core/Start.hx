@@ -740,6 +740,7 @@ class Start extends ZScene {
 		@:privateAccess for (label in ZLabel.__labels) {
 			label.__updateLabel();
 		}
+		Lib.onExitFrame();
 	}
 
 	/**

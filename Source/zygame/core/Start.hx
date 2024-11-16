@@ -737,9 +737,6 @@ class Start extends ZScene {
 	}
 
 	private function onExitFrameEvent(e:Event):Void {
-		@:privateAccess for (label in ZLabel.__labels) {
-			label.__updateLabel();
-		}
 		Lib.onExitFrame();
 	}
 

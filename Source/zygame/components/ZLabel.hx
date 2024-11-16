@@ -42,8 +42,6 @@ enum ZLabelRenderType {
  */
 @:keep
 class ZLabel extends DataProviderComponent {
-	private static var __labels:Array<ZLabel> = [];
-
 	/**
 	 * 全局文本过滤实现
 	 */
@@ -329,8 +327,7 @@ class ZLabel extends DataProviderComponent {
 			else
 				__textFieldStrokeShader.updateMixColor(_font.color, _font.color);
 		}
-
-		// this.__updateLabel();
+		this.__updateLabel();
 	}
 
 	private function __updateLabel():Void {
@@ -686,13 +683,13 @@ class ZLabel extends DataProviderComponent {
 			// 刷新内容
 			__changed = true;
 			// if (this._cacheBitmapLabel.dataProvider == "") {
-			// this.drawText(this.__drawTextValue);
+			this.drawText(this.__drawTextValue);
 			// }
 		} else if (_display != null) {
 			// 刷新内容
 			__changed = true;
 			// if (this._display.text == "") {
-			// this.drawText(this.__drawTextValue);
+			this.drawText(this.__drawTextValue);
 			// }
 		}
 
@@ -1083,6 +1080,9 @@ class ZLabel extends DataProviderComponent {
 	 */
 	override public function destroy():Void {
 		super.destroy();
+		if (_bitmap != null && _bitmap.bitmapData != null) {
+			_bitmap.bitmapData.dispose();
+		}
 		this.removeChild(_display);
 		// _display = null;
 		setFrameEvent(false);
@@ -1115,7 +1115,6 @@ class ZLabel extends DataProviderComponent {
 
 	override function onAddToStage():Void {
 		super.onAddToStage();
-		__labels.push(this);
 		if (_cacheBitmapLabel != null
 			&& !disableCache
 			&& textFieldContextBitmapData != null
@@ -1129,7 +1128,6 @@ class ZLabel extends DataProviderComponent {
 
 	override function onRemoveToStage():Void {
 		super.onRemoveToStage();
-		__labels.remove(this);
 		setSelectQuadVisible(false);
 	}
 

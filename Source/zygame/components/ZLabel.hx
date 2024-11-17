@@ -610,13 +610,11 @@ class ZLabel extends DataProviderComponent {
 				var textureWidth = Std.int(drawText.width * labelScale + 3);
 				var textureHeight = Std.int(drawText.height * labelScale / drawText.scaleY);
 				if (_bitmap.bitmapData != null) {
-					@:privateAccess _bitmap.bitmapData.__resize(textureWidth, textureHeight);
-					_bitmap.bitmapData.fillRect(_bitmap.bitmapData.rect, 0);
-				} else {
-					var bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
-					bitmapData.disposeImage();
-					_bitmap.bitmapData = bitmapData;
+					_bitmap.bitmapData.dispose();
 				}
+				var bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
+				bitmapData.disposeImage();
+				_bitmap.bitmapData = bitmapData;
 				var m = drawText.transform.matrix;
 				m.scale(labelScale, labelScale);
 				_bitmap.bitmapData.draw(drawText, m, null, null, null, true);

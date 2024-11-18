@@ -6,6 +6,7 @@ import openfl.display.BitmapData;
 /**
  * 缓存Assets
  */
+@:deprecated("CacheAssets is deprecated, use ImageBitmapCacheAssets. Current version is not effect.")
 class CacheAssets extends ZAssets {
 	private var _loading:Map<String, Array<BitmapData->Void>> = [];
 

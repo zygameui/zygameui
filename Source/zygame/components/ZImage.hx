@@ -67,11 +67,6 @@ class ZImage extends DataProviderComponent {
 	}
 
 	/**
-	 * 缓存资源，如果定义缓存资源，ZImage的异步资源会从这里读取资源
-	 */
-	public var cacheAssets:CacheAssets;
-
-	/**
 	 * 构造一个图像显示对象，允许使用图片、精灵图对象进行设置
 	 */
 	public function new() {

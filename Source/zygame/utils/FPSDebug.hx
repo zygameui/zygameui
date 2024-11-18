@@ -44,6 +44,7 @@ class FPSDebug extends ZBox {
 		BitmapData.loadFromBase64(FPSAssets.assets, "image/png").onComplete(function(bitmapData:BitmapData):Void {
 			fnt = new FntData(bitmapData, Xml.parse(FPSAssets.fnt), null);
 			_text = new ZBitmapLabel(fnt);
+			_text.globalCharFilterEnable = false;
 			_text.x = inX;
 			this.y = inY;
 			_text.width = 120;

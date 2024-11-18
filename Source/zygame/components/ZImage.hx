@@ -1,5 +1,8 @@
 package zygame.components;
 
+#if zimage_v2
+class ZImage extends zygame.components.ZImage_v2 {}
+#else
 import zygame.utils.Align;
 import zygame.utils.CacheAssets;
 import zygame.utils.ZGC;
@@ -10,10 +13,6 @@ import openfl.display.BitmapData;
 import zygame.utils.AssetsUtils in Assets;
 import zygame.utils.load.Frame;
 import openfl.geom.Rectangle;
-
-#if zimage_v2
-class ZImage extends zygame.components.ZImage_v2 {}
-#else
 
 /**
  * 支持使用图片路径、以及位图设置内容，默认允许XML中使用。

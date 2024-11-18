@@ -150,6 +150,15 @@ class Lib {
 	}
 
 	/**
+	 * onExitFrame时触发
+	 */
+	public static function onExitFrame():Void {
+		for (runtime in _timeRuntimes) {
+			runtime.onExitFrame();
+		}
+	}
+
+	/**
 	 * 当活动恢复时触发
 	 */
 	public static function onResume():Void {
@@ -303,6 +312,10 @@ class Lib {
 	 */
 	public static function renderCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
 		return getTimeRuntime(runtimeTag).renderCall(closure, args);
+	}
+
+	public static function exitCall(closure:Function, args:Array<Dynamic> = null, runtimeTag:String = "defalut"):Int {
+		return getTimeRuntime(runtimeTag).exitCall(closure, args);
 	}
 
 	/**

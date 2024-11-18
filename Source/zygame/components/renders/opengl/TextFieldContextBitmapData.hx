@@ -22,6 +22,8 @@ class TextFieldContextBitmapData {
 	 */
 	public var bitmapData:BitmapData;
 
+	private var __renderTestBitmapData:BitmapData;
+
 	/**
 	 * 是否清理纹理时，直接重构整个纹理
 	 */
@@ -64,6 +66,8 @@ class TextFieldContextBitmapData {
 		this.__textureHeight = textureHeight;
 		this.__offestX = offestX;
 		this.__offestY = offestY;
+		__renderTestBitmapData = new BitmapData(1, 1, true, 0x0);
+		__renderTestBitmapData.disposeImage();
 		bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
 		rects = new MaxRectsBinPack(textureWidth, textureHeight, false);
 		bitmapData.disposeImage();
@@ -125,6 +129,7 @@ class TextFieldContextBitmapData {
 		#if text_debug
 		trace("TextFieldContextBitmapData cache text", text);
 		#end
+		// __textField = new TextField();
 		__textField.wordWrap = true;
 		__textField.text = text;
 		__textField.width = 2048;
@@ -155,6 +160,10 @@ class TextFieldContextBitmapData {
 		if (untyped __textField.__graphics.__context != null)
 			untyped __textField.__graphics.__context.clearRect(0, 0, __textField.__graphics.__canvas.width, __textField.__graphics.__canvas.height);
 		#end
+		__renderTestBitmapData.draw(__textField);
+		// Start.current.stage.context3D.setTextureAt(0, null);
+		// Start.current.stage.context3D.setRenderToBackBuffer();
+		// Start.current.stage.context3D.present();
 		bitmapData.draw(__textField, m);
 		#if !cpp
 		emoj = "";

@@ -42,8 +42,6 @@ enum ZLabelRenderType {
  */
 @:keep
 class ZLabel extends DataProviderComponent {
-	private static var __labels:Array<ZLabel> = [];
-
 	/**
 	 * 全局文本过滤实现
 	 */
@@ -329,8 +327,7 @@ class ZLabel extends DataProviderComponent {
 			else
 				__textFieldStrokeShader.updateMixColor(_font.color, _font.color);
 		}
-
-		// this.__updateLabel();
+		this.__updateLabel();
 	}
 
 	private function __updateLabel():Void {
@@ -345,7 +342,7 @@ class ZLabel extends DataProviderComponent {
 	}
 
 	override private function __updateTransforms(overrideTransform:Matrix = null):Void {
-		// __updateLabel();
+		__updateLabel();
 		super.__updateTransforms(overrideTransform);
 	}
 
@@ -609,16 +606,18 @@ class ZLabel extends DataProviderComponent {
 		if (__drawTexting) {
 			// 转换成BitmapData数据
 			if (#if force_cache_bitmap true #else __blur > 0 || disableCache || _cacheBitmapLabel == null #end) {
+				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
+				var textureWidth = Std.int(drawText.width * labelScale + 3);
+				var textureHeight = Std.int(drawText.height * labelScale / drawText.scaleY);
 				if (_bitmap.bitmapData != null) {
 					_bitmap.bitmapData.dispose();
 				}
-				var drawText:DisplayObject = (disableCache || _cacheBitmapLabel == null) ? _display : @:privateAccess _cacheBitmapLabel._textmap;
-				var bitmapData = new BitmapData(Std.int(drawText.width * labelScale + 3), Std.int(drawText.height * labelScale / drawText.scaleY), true, 0x0);
+				var bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
 				bitmapData.disposeImage();
+				_bitmap.bitmapData = bitmapData;
 				var m = drawText.transform.matrix;
 				m.scale(labelScale, labelScale);
-				bitmapData.draw(drawText, m, null, null, null, true);
-				_bitmap.bitmapData = bitmapData;
+				_bitmap.bitmapData.draw(drawText, m, null, null, null, true);
 				_bitmap.smoothing = true;
 				if (_cacheBitmapLabel != null) {
 					_cacheBitmapLabel.parent?.removeChild(_cacheBitmapLabel);
@@ -686,13 +685,13 @@ class ZLabel extends DataProviderComponent {
 			// 刷新内容
 			__changed = true;
 			// if (this._cacheBitmapLabel.dataProvider == "") {
-			// this.drawText(this.__drawTextValue);
+			this.drawText(this.__drawTextValue);
 			// }
 		} else if (_display != null) {
 			// 刷新内容
 			__changed = true;
 			// if (this._display.text == "") {
-			// this.drawText(this.__drawTextValue);
+			this.drawText(this.__drawTextValue);
 			// }
 		}
 
@@ -1083,6 +1082,9 @@ class ZLabel extends DataProviderComponent {
 	 */
 	override public function destroy():Void {
 		super.destroy();
+		if (_bitmap != null && _bitmap.bitmapData != null) {
+			_bitmap.bitmapData.dispose();
+		}
 		this.removeChild(_display);
 		// _display = null;
 		setFrameEvent(false);
@@ -1115,7 +1117,6 @@ class ZLabel extends DataProviderComponent {
 
 	override function onAddToStage():Void {
 		super.onAddToStage();
-		__labels.push(this);
 		if (_cacheBitmapLabel != null
 			&& !disableCache
 			&& textFieldContextBitmapData != null
@@ -1129,7 +1130,6 @@ class ZLabel extends DataProviderComponent {
 
 	override function onRemoveToStage():Void {
 		super.onRemoveToStage();
-		__labels.remove(this);
 		setSelectQuadVisible(false);
 	}
 

@@ -17,6 +17,8 @@ class TimeRuntime {
 
 	private var _timecall:Map<Int, Call> = new Map<Int, Call>();
 
+	public var _exitcall:Map<Int, Call> = new Map<Int, Call>();
+
 	/**
 	 * 渲染事件引用数
 	 */
@@ -84,6 +86,20 @@ class TimeRuntime {
 			if (call != null && call.call()) {
 				_rendercall.remove(id);
 				renderCounts--;
+			}
+		}
+	}
+
+	/**
+	 * onExitRender
+	 */
+	public function onExitFrame():Void {
+		var keys:Iterator<Int> = _exitcall.keys();
+		while (keys.hasNext()) {
+			var id:Int = keys.next();
+			var call:Call = _exitcall.get(id);
+			if (call != null && call.call()) {
+				_exitcall.remove(id);
 			}
 		}
 	}
@@ -192,6 +208,19 @@ class TimeRuntime {
 		_id++;
 		_rendercall.set(_id, new Call(_id, 0, closure, args));
 		renderCounts++;
+		return _id;
+	}
+
+	/**
+	 * 当游戏正确渲染时进行调用
+	 * @param closure
+	 * @param args
+	 * @return Int
+	 */
+	public function exitCall(closure:Function, args:Array<Dynamic> = null):Int {
+		// 当活动是处于活动的情况下，则直接走setTimeout
+		_id++;
+		_exitcall.set(_id, new Call(_id, 0, closure, args));
 		return _id;
 	}
 }

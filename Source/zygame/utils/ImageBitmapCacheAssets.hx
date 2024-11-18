@@ -31,7 +31,6 @@ class ImageBitmapCacheAssets {
 	 * 注册位图
 	 */
 	public function register(key:String, bitmap:BitmapData):Void {
-		trace('register key:$key');
 		__weakMap[key] = new WeakRef(bitmap);
 	}
 
@@ -39,7 +38,6 @@ class ImageBitmapCacheAssets {
 	 * 获取位图
 	 */
 	public function get(key:String):BitmapData {
-		trace('get key:$key');
 		var ref = __weakMap[key];
 		if (ref != null) {
 			var bitmap = #if js __weakMap[key].deref() #else __weakMap[key].get() #end;

@@ -113,12 +113,18 @@ class ZImage_v2 extends DataProviderBox {
 						}
 					});
 				} else {
-					// 启动异步载入
-					AssetsUtils.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
-						if (dataProvider != path)
-							return;
+					var bitmapData = zygame.utils.ImageBitmapCacheAssets.getInstance().get(path);
+					if (bitmapData != null) {
 						__drawRender(bitmapData);
-					}).onError(__loadError);
+					} else {
+						// 启动异步载入
+						AssetsUtils.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
+							if (dataProvider != path)
+								return;
+							__drawRender(bitmapData);
+							zygame.utils.ImageBitmapCacheAssets.getInstance().register(path, bitmapData);
+						}).onError(__loadError);
+					}
 				}
 			}
 		}

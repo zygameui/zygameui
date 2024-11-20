@@ -161,9 +161,6 @@ class TextFieldContextBitmapData {
 			untyped __textField.__graphics.__context.clearRect(0, 0, __textField.__graphics.__canvas.width, __textField.__graphics.__canvas.height);
 		#end
 		__renderTestBitmapData.draw(__textField);
-		// Start.current.stage.context3D.setTextureAt(0, null);
-		// Start.current.stage.context3D.setRenderToBackBuffer();
-		// Start.current.stage.context3D.present();
 		bitmapData.draw(__textField, m);
 		#if !cpp
 		emoj = "";

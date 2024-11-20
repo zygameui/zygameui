@@ -327,7 +327,6 @@ class ZLabel extends DataProviderComponent {
 			else
 				__textFieldStrokeShader.updateMixColor(_font.color, _font.color);
 		}
-		this.__updateLabel();
 	}
 
 	private function __updateLabel():Void {
@@ -686,12 +685,14 @@ class ZLabel extends DataProviderComponent {
 			__changed = true;
 			// if (this._cacheBitmapLabel.dataProvider == "") {
 			this.drawText(this.__drawTextValue);
+			this.updateComponents();
 			// }
 		} else if (_display != null) {
 			// 刷新内容
 			__changed = true;
 			// if (this._display.text == "") {
 			this.drawText(this.__drawTextValue);
+			this.updateComponents();
 			// }
 		}
 

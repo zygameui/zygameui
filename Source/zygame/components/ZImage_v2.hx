@@ -25,11 +25,6 @@ class ZImage_v2 extends DataProviderBox {
 	private var __render:ImageRender;
 
 	/**
-	 * 全局缓存资源，如果定义缓存资源，ZImage的异步资源会从这里读取资源
-	 */
-	public static var cacheAssets:CacheAssets;
-
-	/**
 	 * 默认显示数据，当发生加载失败的时候，该参数就会作为默认值进行渲染
 	 */
 	public var defaultDataProvider:Dynamic = null;
@@ -78,9 +73,6 @@ class ZImage_v2 extends DataProviderBox {
 		super();
 		__render = new ImageRender();
 		this.addChild(__render);
-		// var quad = new ZQuad(5, 5, 0xff0000);
-		// this.addChild(quad);
-		// quad.x = quad.y = -2;
 	}
 
 	override public function initComponents():Void {
@@ -104,20 +96,16 @@ class ZImage_v2 extends DataProviderBox {
 				}
 				if (path == "")
 					return data;
-				if (cacheAssets != null) {
-					cacheAssets.loadBitmapData(path, function(bitmapData:BitmapData):Void {
-						if (dataProvider != path)
-							return;
-						if (Std.isOfType(dataProvider, String)) {
-							__drawRender(bitmapData);
-						}
-					});
+				var bitmapData = zygame.utils.ImageBitmapCacheAssets.getInstance().get(path);
+				if (bitmapData != null) {
+					__drawRender(bitmapData);
 				} else {
 					// 启动异步载入
 					AssetsUtils.loadBitmapData(path, false).onComplete(function(bitmapData:BitmapData):Void {
 						if (dataProvider != path)
 							return;
 						__drawRender(bitmapData);
+						zygame.utils.ImageBitmapCacheAssets.getInstance().register(path, bitmapData);
 					}).onError(__loadError);
 				}
 			}

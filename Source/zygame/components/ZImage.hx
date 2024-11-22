@@ -1,5 +1,8 @@
 package zygame.components;
 
+#if zimage_v2
+class ZImage extends zygame.components.ZImage_v2 {}
+#else
 import zygame.utils.Align;
 import zygame.utils.CacheAssets;
 import zygame.utils.ZGC;
@@ -10,10 +13,6 @@ import openfl.display.BitmapData;
 import zygame.utils.AssetsUtils in Assets;
 import zygame.utils.load.Frame;
 import openfl.geom.Rectangle;
-
-#if zimage_v2
-class ZImage extends zygame.components.ZImage_v2 {}
-#else
 
 /**
  * 支持使用图片路径、以及位图设置内容，默认允许XML中使用。
@@ -65,11 +64,6 @@ class ZImage extends DataProviderComponent {
 	private function get_fill():Bool {
 		return _fill;
 	}
-
-	/**
-	 * 缓存资源，如果定义缓存资源，ZImage的异步资源会从这里读取资源
-	 */
-	public var cacheAssets:CacheAssets;
 
 	/**
 	 * 构造一个图像显示对象，允许使用图片、精灵图对象进行设置

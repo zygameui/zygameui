@@ -1,5 +1,12 @@
 package zygame.components.renders.opengl;
 
+import lime.text.harfbuzz.HBFTFont;
+import lime.text.harfbuzz.HBFont;
+#if cpp
+import v4.NativeApi;
+import zygame.utils.AssetsUtils;
+#end
+import lime.text.Font;
 import zygame.core.Start;
 import zygame.utils.DisplayTools;
 import zygame.utils.ZLog;
@@ -61,6 +68,11 @@ class TextFieldContextBitmapData {
 
 	private var __textureHeight:Int = 0;
 
+	#if !cpp
+	private var emoj = "";
+	private var req = ~/[\ud04e-\ue50e]+/;
+	#end
+
 	public function new(size:Int = 36, textureWidth:Int = 2048, textureHeight:Int = 2048, offestX:Int = 0, offestY:Int = 0) {
 		this.__textureWidth = textureWidth;
 		this.__textureHeight = textureHeight;
@@ -71,7 +83,8 @@ class TextFieldContextBitmapData {
 		bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
 		rects = new MaxRectsBinPack(textureWidth, textureHeight, false);
 		bitmapData.disposeImage();
-		__textFormat = new TextFormat(#if ios "assets/" + ZConfig.fontName #else ZConfig.fontName #end, size, 0xffffff);
+		var fontPath = #if ios "assets/" + ZConfig.fontName #else ZConfig.fontName #end;
+		__textFormat = new TextFormat(fontPath, size, 0xffffff);
 		__textFormat.leading = Std.int(size / 2);
 		__textField = new TextField();
 		__atlas = new TextFieldAtlas(bitmapData);
@@ -96,10 +109,7 @@ class TextFieldContextBitmapData {
 		// 过滤重复的文本
 		var caches:Array<String> = [];
 		var chars = text.split("");
-		#if !cpp
-		var emoj = "";
-		var req = ~/[\ud04e-\ue50e]+/;
-		#end
+		emoj = "";
 		for (char in chars) {
 			if (char == " " || char == "\n" || char == "\r")
 				continue;
@@ -125,10 +135,22 @@ class TextFieldContextBitmapData {
 		}
 		if (caches.length == 0)
 			return;
+
+		#if cpp
+		for (s in caches) {
+			__cacheText(s);
+		}
+		#else
 		text = caches.join(" ");
-		#if text_debug
-		trace("TextFieldContextBitmapData cache text", text);
+		__cacheText(text);
 		#end
+	}
+
+	/**
+		 * 缓存文本
+		 * @param text 
+		 */
+	private function __cacheText(text:String):Void {
 		// __textField = new TextField();
 		__textField.wordWrap = true;
 		__textField.text = text;
@@ -161,9 +183,6 @@ class TextFieldContextBitmapData {
 			untyped __textField.__graphics.__context.clearRect(0, 0, __textField.__graphics.__canvas.width, __textField.__graphics.__canvas.height);
 		#end
 		__renderTestBitmapData.draw(__textField);
-		// Start.current.stage.context3D.setTextureAt(0, null);
-		// Start.current.stage.context3D.setRenderToBackBuffer();
-		// Start.current.stage.context3D.present();
 		bitmapData.draw(__textField, m);
 		#if !cpp
 		emoj = "";

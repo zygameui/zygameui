@@ -8,6 +8,11 @@
 
 
 # ZYGameUI 更新日志
+### 15.0.20
+- 新增：新增`TextFieldContextBitmapData`缓存文本对象支持，它可以缓存文本对象，减少渲染消耗、内存使用；
+- 新增：新增`ImageBitmapCacheAssets`位图缓存对象，它可以缓存`ZImage`通过地址加载的位图，减少渲染消耗、内存使用；
+- 弃用：弃用`cacheAssets`，不再支持位图缓存，现在有更加方便的`ImageBitmapCacheAssets`；
+
 ### 15.0.19
 - 修复：修复【摇杆】原点逻辑不符合的问题；
 - 调整：调整【数据验证】开关，默认不启动；

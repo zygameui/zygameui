@@ -68,6 +68,11 @@ class TextFieldContextBitmapData {
 
 	private var __textureHeight:Int = 0;
 
+	#if !cpp
+	private var emoj = "";
+	private var req = ~/[\ud04e-\ue50e]+/;
+	#end
+
 	public function new(size:Int = 36, textureWidth:Int = 2048, textureHeight:Int = 2048, offestX:Int = 0, offestY:Int = 0) {
 		this.__textureWidth = textureWidth;
 		this.__textureHeight = textureHeight;
@@ -104,10 +109,7 @@ class TextFieldContextBitmapData {
 		// 过滤重复的文本
 		var caches:Array<String> = [];
 		var chars = text.split("");
-		#if !cpp
-		var emoj = "";
-		var req = ~/[\ud04e-\ue50e]+/;
-		#end
+		emoj = "";
 		for (char in chars) {
 			if (char == " " || char == "\n" || char == "\r")
 				continue;

@@ -68,8 +68,8 @@ class TextFieldContextBitmapData {
 
 	private var __textureHeight:Int = 0;
 
-	#if !cpp
 	private var emoj = "";
+	#if !cpp
 	private var req = ~/[\ud04e-\ue50e]+/;
 	#end
 

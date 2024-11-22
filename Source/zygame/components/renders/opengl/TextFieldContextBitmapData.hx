@@ -1,5 +1,12 @@
 package zygame.components.renders.opengl;
 
+import lime.text.harfbuzz.HBFTFont;
+import lime.text.harfbuzz.HBFont;
+#if cpp
+import v4.NativeApi;
+import zygame.utils.AssetsUtils;
+#end
+import lime.text.Font;
 import zygame.core.Start;
 import zygame.utils.DisplayTools;
 import zygame.utils.ZLog;
@@ -71,7 +78,8 @@ class TextFieldContextBitmapData {
 		bitmapData = new BitmapData(textureWidth, textureHeight, true, 0x0);
 		rects = new MaxRectsBinPack(textureWidth, textureHeight, false);
 		bitmapData.disposeImage();
-		__textFormat = new TextFormat(#if ios "assets/" + ZConfig.fontName #else ZConfig.fontName #end, size, 0xffffff);
+		var fontPath = #if ios "assets/" + ZConfig.fontName #else ZConfig.fontName #end;
+		__textFormat = new TextFormat(fontPath, size, 0xffffff);
 		__textFormat.leading = Std.int(size / 2);
 		__textField = new TextField();
 		__atlas = new TextFieldAtlas(bitmapData);
@@ -125,10 +133,22 @@ class TextFieldContextBitmapData {
 		}
 		if (caches.length == 0)
 			return;
+
+		#if cpp
+		for (s in caches) {
+			__cacheText(s);
+		}
+		#else
 		text = caches.join(" ");
-		#if text_debug
-		trace("TextFieldContextBitmapData cache text", text);
+		__cacheText(text);
 		#end
+	}
+
+	/**
+		 * 缓存文本
+		 * @param text 
+		 */
+	private function __cacheText(text:String):Void {
 		// __textField = new TextField();
 		__textField.wordWrap = true;
 		__textField.text = text;

@@ -13,6 +13,28 @@ import cpp.vm.WeakRef;
 class ImageBitmapCacheAssets {
 	private static var __instance:ImageBitmapCacheAssets;
 
+	private static var __isSupport:Null<Bool> = null;
+
+	/**
+	 * 判断是否支持当前API
+	 * @return Bool
+	 */
+	public static function isSupport():Bool {
+		if (__isSupport != null)
+			return __isSupport;
+		#if js
+		if (untyped window.WeakRef != null) {
+			__isSupport = true;
+		} else {
+			trace("[WeakRef] Not support.");
+			__isSupport = false;
+		}
+		#else
+		__isSupport = true;
+		#end
+		return __isSupport;
+	}
+
 	/**
 	 * 单例
 	 */
@@ -31,18 +53,22 @@ class ImageBitmapCacheAssets {
 	 * 注册位图
 	 */
 	public function register(key:String, bitmap:BitmapData):Void {
-		__weakMap[key] = new WeakRef(bitmap);
+		if (isSupport()) {
+			__weakMap[key] = new WeakRef(bitmap);
+		}
 	}
 
 	/**
 	 * 获取位图
 	 */
 	public function get(key:String):BitmapData {
-		var ref = __weakMap[key];
-		if (ref != null) {
-			var bitmap = #if js __weakMap[key].deref() #else __weakMap[key].get() #end;
-			if (bitmap != null && @:privateAccess bitmap.__texture != null)
-				return bitmap;
+		if (isSupport()) {
+			var ref = __weakMap[key];
+			if (ref != null) {
+				var bitmap = #if js __weakMap[key].deref() #else __weakMap[key].get() #end;
+				if (bitmap != null && @:privateAccess bitmap.__texture != null)
+					return bitmap;
+			}
 		}
 		return null;
 	}

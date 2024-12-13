@@ -2,8 +2,6 @@ package zygame.display;
 
 import zygame.utils.Align;
 import zygame.shader.engine.ZShader;
-import openfl.filters.ShaderFilter;
-import zygame.shader.ColorShader;
 import openfl.display.Shader;
 import zygame.display.DisplayObjectContainer;
 import openfl.display.BitmapData;
@@ -15,7 +13,6 @@ import zygame.utils.load.Frame;
 import zygame.display.batch.BImage;
 import openfl.display.DisplayObject;
 import openfl.display.Tile;
-import zygame.display.ZBitmapData;
 import zygame.utils.load.TextureLoader;
 import zygame.display.batch.BScale9Image;
 

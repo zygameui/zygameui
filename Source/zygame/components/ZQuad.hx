@@ -8,9 +8,6 @@ import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
 import openfl.display.DisplayObject;
 import openfl.display.Bitmap;
-import zygame.shader.ColorShader;
-import openfl.display.BitmapData;
-import openfl.events.RenderEvent;
 import zygame.components.ZBox;
 
 /**
@@ -22,11 +19,6 @@ import zygame.components.ZBox;
 @:privateAccess(game.geom.Rectangle)
 class ZQuad extends ZBox {
 	#if zquad_use_bitmap
-	/**
-	 * 颜色着色器
-	 */
-	// public static var __colorShader:ColorShader = new ColorShader(0x0);
-
 	/**
 	 * 图块的渲染纹理对象
 	 */
@@ -85,7 +77,6 @@ class ZQuad extends ZBox {
 		super();
 		#if zquad_use_bitmap
 		display = new ZQuadBitmap(quadBitmapData);
-		// display.shader = __colorShader;
 		#end
 		this.width = width;
 		this.height = height;

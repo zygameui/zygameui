@@ -2,8 +2,6 @@ package zygame.display.batch;
 
 import zygame.utils.ColorUtils;
 import openfl.geom.ColorTransform;
-import openfl.display.DisplayObjectShader;
-import openfl.display.Shader;
 import zygame.components.base.IFontAtlas;
 import zygame.components.ZLabel;
 import zygame.components.ZBuilder;

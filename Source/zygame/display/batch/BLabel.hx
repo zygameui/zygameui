@@ -18,7 +18,6 @@ import zygame.utils.load.BaseFrame;
 import zygame.utils.load.Frame;
 import zygame.utils.Align;
 import zygame.shader.TextColorShader;
-import zygame.shader.ColorShader;
 
 /**
  * 批量渲染字位图，能够支持精灵表/位图Fnt/Spine位图渲染
@@ -27,8 +26,6 @@ import zygame.shader.ColorShader;
  * 需要使用vAlign/hAlign时，需要相应地设置height,width值。
  */
 class BLabel extends BSprite {
-	private static var __defaultColorShader:ColorShader;
-
 	private var _texts:Array<String> = [];
 
 	private var _maxWidth:Float = 0;
@@ -260,10 +257,10 @@ class BLabel extends BSprite {
 						emoj = "";
 					}
 				} else {
-				#end
 					frame = curFntData.getTileFrame(id);
-				#if !cpp
 				}
+				#else
+				frame = curFntData.getTileFrame(id);
 				#end
 				if (frame != null) {
 					// trace("this._width", (offestX + frame.width) * scaleFloat, "scaleFloat=", scaleFloat, "_lineHeight=", _lineHeight, _size, this._width);
@@ -335,10 +332,10 @@ class BLabel extends BSprite {
 						emoj = "";
 					}
 				} else {
-				#end
 					frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
-				#if !cpp
 				}
+				#else
+				frame = curSpriteDataGetBitmapDataFrame(fontName + char + fontEnd);
 				#end
 				if (frame != null) {
 					if (wordWrap && (offestX + frame.width) * scaleFloat > this._width) {
@@ -386,8 +383,8 @@ class BLabel extends BSprite {
 	}
 
 	/**
-			 * 清理区域选择的颜色
-			 */
+	 * 清理区域选择的颜色
+	 */
 	public function clearFontSelectColor():Void {
 		for (i in 0..._node.numTiles) {
 			var tile:Tile = cast _node.getTileAt(i);
@@ -396,11 +393,11 @@ class BLabel extends BSprite {
 	}
 
 	/**
-			 * 设置区域颜色，请注意设置了之后将一直生效。当文本未变更的情况下，需要clearFontSelectColor清理后才会清空
-			 * @param startIndex 开始更改的位置
-			 * @param len 更改长度 
-			 * @param color 更改颜色
-			 */
+	 * 设置区域颜色，请注意设置了之后将一直生效。当文本未变更的情况下，需要clearFontSelectColor清理后才会清空
+	 * @param startIndex 开始更改的位置
+	 * @param len 更改长度 
+	 * @param color 更改颜色
+	 */
 	public function setFontSelectColor(startIndex:Int, len:Int, color:Int):Void {
 		var endIndex:Int = startIndex + len;
 		if (endIndex >= _node.numTiles)
@@ -412,7 +409,8 @@ class BLabel extends BSprite {
 				tile.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
 			} else {
 				__isTextureAtlas = false;
-				tile.shader = new ColorShader(color);
+				var colorsShader = ColorUtils.toShaderColor(color);
+				tile.colorTransform = new ColorTransform(0, 0, 0, 1, colorsShader.r * 255, colorsShader.g * 255, colorsShader.b * 255);
 			}
 		}
 	}
@@ -424,9 +422,9 @@ class BLabel extends BSprite {
 	private var __setColor = false;
 
 	/**
-			 * 设置文本颜色
-			 * @param color 
-			 */
+	 * 设置文本颜色
+	 * @param color 
+	 */
 	public function setFontColor(color:Int):Void {
 		__color = color;
 		__setColor = true;
@@ -436,46 +434,33 @@ class BLabel extends BSprite {
 				this.shader = new TextColorShader(color, cast(fntData, TextTextureAtlas).textColor);
 			} else {
 				__isTextureAtlas = false;
-				this.shader = getColorShader(color);
+				var shaderColor = ColorUtils.toShaderColor(color);
+				this.colorTransform = new ColorTransform(0, 0, 0, 1, shaderColor.r * 255, shaderColor.g * 255, shaderColor.b * 255);
 			}
 		}
 	}
 
 	/**
-			 * 重用ColorShader着色器
-			 * @param color 
-			 * @return ColorShader
-			 */
-	private function getColorShader(color:UInt):ColorShader {
-		if (__defaultColorShader == null) {
-			__defaultColorShader = new ColorShader(color);
-		} else {
-			__defaultColorShader.updateColor(color);
-		}
-		return __defaultColorShader;
-	}
-
-	/**
-			 * 设置文本大小
-			 * @param size 
-			 */
+	 * 设置文本大小
+	 * @param size 
+	 */
 	public function setFontSize(size:Int):Void {
 		this._size = size;
 		drawText(__drawText);
 	}
 
 	/**
-			 * 获取文本
-			 * @return String
-			 */
+	 * 获取文本
+	 * @return String
+	 */
 	public function getText():String {
 		return _text;
 	}
 
 	/**
-			 * 获取文本宽度
-			 * @return Float
-			 */
+	 * 获取文本宽度
+	 * @return Float
+	 */
 	public function getTextWidth():Float {
 		#if neko
 		if (_maxWidth == null)
@@ -485,9 +470,9 @@ class BLabel extends BSprite {
 	}
 
 	/**
-			 * 获取文本高度
-			 * @return Float
-			 */
+	 * 获取文本高度
+	 * @return Float
+	 */
 	public function getTextHeight():Float {
 		#if neko
 		if (_maxHeight == null)
@@ -496,15 +481,11 @@ class BLabel extends BSprite {
 		return _maxHeight * _node.scaleY;
 	}
 
-	override function get_shader():Shader {
-		return __setColor ? getColorShader(__color) : super.shader;
-	}
-
 	/**
-			 * 获取字符的坐标宽度
-			 * @param charIndex 
-			 * @return Rectangle
-			 */
+	 * 获取字符的坐标宽度
+	 * @param charIndex 
+	 * @return Rectangle
+	 */
 	public function getCharBounds(charIndex:Int):Rectangle {
 		var char = _node.getTileAt(charIndex);
 		if (char == null)

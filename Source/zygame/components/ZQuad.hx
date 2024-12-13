@@ -9,6 +9,9 @@ import openfl.geom.Rectangle;
 import openfl.display.DisplayObject;
 import openfl.display.Bitmap;
 import zygame.components.ZBox;
+#if zquad_use_bitmap
+import openfl.display.BitmapData;
+#end
 
 /**
  * 生成一个矩形可更改颜色的色块，默认允许XML中使用。

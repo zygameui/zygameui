@@ -881,8 +881,8 @@ class ZLabel extends DataProviderComponent {
 	 * @param color 文本颜色
 	 */
 	public function setFontColor(color:UInt):Void {
-		if (_font.color == color)
-			return;
+		// if (_font.color == color)
+		// return;
 		_font.color = color;
 		zquad.color = color;
 		_display.textColor = color;

@@ -246,7 +246,7 @@ class BLabel extends BSprite {
 			for (char in _texts) {
 				var id:Int = char.charCodeAt(0);
 				var frame:FntFrame = null;
-				#if !cpp
+				#if (!unemoj && !cpp)
 				if (req.match(char)) {
 					emoj += char;
 					if (emoj.length == 2) {
@@ -287,7 +287,7 @@ class BLabel extends BSprite {
 					}
 					offestX += Std.int(frame.xadvance);
 				} else if (char == " ") {
-					offestX += (_size != 0 ? _size : lastWidth) * 0.8;
+					offestX += (_size != 0 ? _size : lastWidth) * #if ttf_space_scale 0.5 #else 0.8 #end;
 					if (offestX > _maxWidth) {
 						_maxWidth = offestX;
 					}
@@ -321,7 +321,7 @@ class BLabel extends BSprite {
 			var lastWidth:Float = 0;
 			for (char in _texts) {
 				var frame:Frame = null;
-				#if !cpp
+				#if (!unemoj && !cpp)
 				if (req.match(char)) {
 					emoj += char;
 					if (emoj.length == 2) {
@@ -362,7 +362,7 @@ class BLabel extends BSprite {
 					if (_maxWidth < offestX)
 						_maxWidth = offestX;
 				} else if (char == " ") {
-					offestX += (_size != 0 ? _size : lastWidth) * 0.8;
+					offestX += (_size != 0 ? _size : lastWidth) * #if ttf_space_scale 0.5 #else 0.8 #end;
 				} else if (char == "\n") {
 					offestX = 0;
 					offestY += _lineHeight;

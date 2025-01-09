@@ -113,7 +113,7 @@ class TextFieldContextBitmapData {
 		for (char in chars) {
 			if (char == " " || char == "\n" || char == "\r")
 				continue;
-			#if !cpp
+			#if (!unemoj && !cpp)
 			if (req.match(char)) {
 				emoj += char;
 				if (emoj.length == 2) {
@@ -129,7 +129,7 @@ class TextFieldContextBitmapData {
 					if (!caches.contains(char)) {
 						caches.push(char);
 					}
-			#if !cpp
+			#if (!unemoj && !cpp)
 			}
 			#end
 		}
@@ -192,7 +192,7 @@ class TextFieldContextBitmapData {
 			if (char == " ")
 				continue;
 
-			#if !cpp
+			#if (!unemoj && !cpp)
 			if (req.match(char)) {
 				emoj += char;
 				if (emoj.length == 2) {

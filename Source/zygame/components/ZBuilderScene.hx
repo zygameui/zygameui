@@ -96,9 +96,9 @@ class ZBuilderScene extends ZScene {
 				ZBuilder.bindAssets(assetsBuilder.assets);
 				_loaded = true;
 				this.onBuildedEvent();
-				onBuilded();
+				this.onBuilded();
 				this.onBuildedAfterEvent();
-				postCompleteEvent();
+				this.postCompleteEvent();
 			} else {
 				if (onBuildError()) {
 					// 当如果是加载失败的情况下，应该直接释放资源，而不是走onSceneRelease。

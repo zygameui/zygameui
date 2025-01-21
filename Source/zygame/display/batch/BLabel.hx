@@ -279,7 +279,7 @@ class BLabel extends BSprite {
 					_node.addChild(tile);
 					tile.x = offestX + frame.xoffset;
 					tile.y = offestY + frame.yoffset;
-					lastWidth = frame.width;
+					lastWidth = frame.xadvance;
 					// if (_lineHeight < frame.height)
 					// _lineHeight = frame.height;
 					if (offestX + frame.width > _maxWidth) {
@@ -287,7 +287,7 @@ class BLabel extends BSprite {
 					}
 					offestX += Std.int(frame.xadvance);
 				} else if (char == " ") {
-					offestX += (_size != 0 ? _size : lastWidth) * #if ttf_space_scale 0.5 #else 0.8 #end;
+					offestX += (lastWidth != 0 ? lastWidth : _size) * #if ttf_space_scale 0.5 #else 0.8 #end;
 					if (offestX > _maxWidth) {
 						_maxWidth = offestX;
 					}

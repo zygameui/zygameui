@@ -258,7 +258,11 @@ class BytesLoader extends BaseLoader {
 			});
 		}
 		if (threadPool == null) {
+			#if (lime >= '8.2.0')
+			threadPool = new ThreadPool(0, 10, MULTI_THREADED);
+			#else
 			threadPool = new ThreadPool(0, 10);
+			#end
 			threadPool.doWork.add(threadPool_doWork);
 			threadPool.onProgress.add(threadPool_onProgress);
 			threadPool.onComplete.add(threadPool_onComplete);

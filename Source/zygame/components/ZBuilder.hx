@@ -1804,6 +1804,8 @@ class Builder {
 	 */
 	private var defines:Map<String, String> = [];
 
+	public var miniAssets:MiniEngineAssets;
+
 	/**
 	 * 定义参数
 	 * @param key 
@@ -1885,6 +1887,7 @@ class Builder {
 	 * @param miniAssets 内置mini引擎对象
 	 */
 	public function variablesAllHaxeBindMiniAssets(miniAssets:MiniEngineAssets):Void {
+		this.miniAssets = miniAssets;
 		if (ids == null)
 			return;
 		for (key => value in ids) {

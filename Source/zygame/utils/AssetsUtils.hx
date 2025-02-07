@@ -220,7 +220,7 @@ class BytesLoader extends BaseLoader {
 
 	public function onComplete(call:Bytes->Void):BytesLoader {
 		_onCompleteCall = call;
-		#if (cpp && !ios && !use_openfl_bytes_loader)
+		#if (cpp && !ios && !use_openfl_bytes_loader && lime < '8.2.0')
 		var uri:String = #if ios path #else path #end;
 		this.promise = new Promise<Bytes>();
 		var md5path:String = haxe.crypto.Md5.encode(uri);

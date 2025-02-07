@@ -584,10 +584,10 @@ class Start extends ZScene {
 	 */
 	public function onStageMouseClick(e:MouseEvent):Void {
 		var oldfocus = focus;
-		focus = cast e.target;
+		focus = e.target is ZLabel ? cast e.target : null;
 		if (oldfocus == focus)
 			return;
-		if (Std.isOfType(oldfocus, ZLabel)) {
+		if (oldfocus is ZLabel) {
 			var oldlabel = cast(oldfocus, ZLabel);
 			// 隐藏光标
 			@:privateAccess oldlabel.setSelectQuadVisible(false);

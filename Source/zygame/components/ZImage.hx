@@ -1,6 +1,6 @@
 package zygame.components;
 
-#if zimage_v2
+#if true
 class ZImage extends zygame.components.ZImage_v2 {}
 #else
 import zygame.utils.Align;

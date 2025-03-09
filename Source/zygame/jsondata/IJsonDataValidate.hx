@@ -22,6 +22,13 @@ interface IJsonDataValidate {
 	public function validateObject(object:Dynamic):Bool;
 
 	/**
+	 * 验证指定数组的内容
+	 * @param array 
+	 * @return Bool
+	 */
+	public function vaildateArray(array:Array<Dynamic>):Bool;
+
+	/**
 	 * 验证所有数据
 	 * @return Bool
 	 */

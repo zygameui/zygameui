@@ -77,6 +77,15 @@ class MD5JsonDataValidate implements IJsonDataValidate {
 		return Md5.encode(key);
 	}
 
+	public function vaildateArray(array:Array<Dynamic>):Bool {
+		for (item in array) {
+			if (!validateObject(item)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * 验证所有数据
 	 * @return Bool

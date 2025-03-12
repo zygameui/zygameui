@@ -56,6 +56,9 @@ class Lib {
 	 * @param data
 	 */
 	public static function setData(key:String, data:Dynamic):Void {
+		if (key == null) {
+			return;
+		}
 		if (sharedObject == null)
 			sharedObject = SharedObject.getLocal(saveName);
 		// 防CE逻辑实现
@@ -125,6 +128,9 @@ class Lib {
 	 * @return Dynamic
 	 */
 	public static function getData(key:String, defulatData:Dynamic = null):Dynamic {
+		if (key == null) {
+			return defulatData;
+		}
 		if (sharedObject == null)
 			sharedObject = SharedObject.getLocal(saveName);
 		var value:Dynamic = Reflect.field(sharedObject.data, key);

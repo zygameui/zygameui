@@ -165,7 +165,11 @@ class AssetsUtils {
 			}
 		}
 		#end
+		// 如果使用了外部包支持，需要先读取外部包资源，如果无法读取，则使用本地资源
+
+
 		#if openfl_so_load
+		// 安卓热更资源包路径
 		path = soutils.FileManager.ofPath(path);
 		#end
 		return path;

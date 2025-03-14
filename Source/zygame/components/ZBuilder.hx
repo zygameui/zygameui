@@ -1307,8 +1307,9 @@ class ZBuilder {
 					var bfb:Float = Std.parseFloat(value.substr(0, value.lastIndexOf("%")));
 					bfb = bfb / 100 * getProperty(parent, name);
 					setProperty(ui, name, bfb);
-				} else
+				} else {
 					setProperty(ui, name, Std.parseFloat(value));
+				}
 			} else if (Std.isOfType(att, Int)) {
 				setProperty(ui, name, Std.parseInt(value));
 			} else if (Std.isOfType(att, Bool)) {
@@ -1377,7 +1378,9 @@ class ZBuilder {
 	 * Align参数的百分比支持
 	 * @return Int
 	 */
-	private static function alignPercentage(#if (cpp || hl) parent:Dynamic #else parent:DisplayObject #end, key:String, value:String):Int {
+	private static function alignPercentage(#if (cpp || hl) parent:Dynamic #else parent:DisplayObject #end, key:String, value:String):Null<Int> {
+		if (value == "null")
+			return null;
 		if (value.indexOf("%") != -1) {
 			// 百分比计算
 			var parentValue:Float = cast getProperty(parent, key);

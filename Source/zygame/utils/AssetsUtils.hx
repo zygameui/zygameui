@@ -142,6 +142,7 @@ class AssetsUtils {
 			}
 		}
 		#end
+		var rootPath = path;
 		#if ios
 		if (path.indexOf("http") != 0 && path.indexOf("assets/assets/") != 0)
 			path = "assets/" + path;
@@ -166,12 +167,22 @@ class AssetsUtils {
 		}
 		#end
 		// 如果使用了外部包支持，需要先读取外部包资源，如果无法读取，则使用本地资源
-
+		var bundlePath = AssetsBundle.getInstance().ofPath(rootPath);
 
 		#if openfl_so_load
 		// 安卓热更资源包路径
-		path = soutils.FileManager.ofPath(path);
+		var hotPath = soutils.FileManager.ofPath(path);
+		if (hotPath != null) {
+			path = hotPath;
+		} else if (bundlePath != null) {
+			path = bundlePath;
+		}
+		#else
+		if (bundlePath != null) {
+			path = bundlePath;
+		}
 		#end
+
 		return path;
 	}
 }

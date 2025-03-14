@@ -93,6 +93,12 @@ class AssetsBundle {
 						code: OK,
 						progress: 1
 					});
+				} else {
+					// 解压失败
+					cb({
+						code: FAIL,
+						progress: 0
+					});
 				}
 			});
 			#end

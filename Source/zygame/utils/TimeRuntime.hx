@@ -280,6 +280,9 @@ class Call {
 			#if (cpp || final)
 			} catch (e:Exception) {
 				ZLog.exception(e);
+				#if openfl
+
+				#end
 			}
 			#end
 			if (!isInterval)

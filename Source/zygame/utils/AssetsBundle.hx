@@ -60,6 +60,7 @@ class AssetsBundle {
 	 */
 	public function install(url:String, cb:AssetsBundleData->Void):Void {
 		// 需要检查一下安装的资源是否已经准备好，避免重复安装
+		#if sys
 		var installedUrl = Lib.getData("assets_bundle_installed");
 		if (installedUrl == url) {
 			cb({
@@ -120,6 +121,12 @@ class AssetsBundle {
 			});
 		});
 		loader.load(new URLRequest(url));
+		#else
+		cb({
+			code: FAIL,
+			progress: 0
+		});
+		#end
 	}
 
 	/**

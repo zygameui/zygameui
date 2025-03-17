@@ -119,7 +119,7 @@
 	</section>
 
 	<!-- 测试 -->
-	<haxeflag name="-dce" value="no" if="scriptable" />
+	<haxeflag name="-dce" value="no" if="scriptable ios" />
 	<!-- <haxeflag name="-dce" value="full" /> -->
 	<haxeflag name='--macro keep("openfl.display.DisplayObject")' />
 	<haxeflag name='--macro keep("openfl.display.DisplayObjectContainer")' />

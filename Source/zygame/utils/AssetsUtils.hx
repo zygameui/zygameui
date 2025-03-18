@@ -166,8 +166,14 @@ class AssetsUtils {
 			}
 		}
 		#end
+		
+		#if !un_assets_bundle
 		// 如果使用了外部包支持，需要先读取外部包资源，如果无法读取，则使用本地资源
 		var bundlePath = AssetsBundle.getInstance().ofPath(rootPath);
+		#else
+		var bundlePath = null;
+		#end
+
 
 		#if openfl_so_load
 		// 安卓热更资源包路径
@@ -177,7 +183,7 @@ class AssetsUtils {
 		} else if (bundlePath != null) {
 			path = bundlePath;
 		}
-		#else
+		#elseif !un_assets_bundle
 		if (bundlePath != null) {
 			path = bundlePath;
 		}

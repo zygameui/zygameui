@@ -599,4 +599,11 @@ class SaveObjectData {
 	}
 
 	public function updateUserData(userData:Dynamic):Void {}
+
+	/**
+	 * 标记为无效状态
+	 */
+	public function invaild():Void {
+
+	}
 }

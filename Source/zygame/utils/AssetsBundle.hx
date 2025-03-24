@@ -53,6 +53,18 @@ class AssetsBundle {
 	}
 	#end
 
+	public function isInstalled(url:String):Bool {
+		#if sys
+		var installedUrl = Lib.getData("assets_bundle_installed");
+		if (installedUrl == url) {
+			return true;
+		}
+		return false;
+		#else
+		return false;
+		#end
+	}
+
 	/**
 	 * 安装资源包
 	 * @param url 
@@ -61,8 +73,7 @@ class AssetsBundle {
 	public function install(url:String, cb:AssetsBundleData->Void):Void {
 		// 需要检查一下安装的资源是否已经准备好，避免重复安装
 		#if sys
-		var installedUrl = Lib.getData("assets_bundle_installed");
-		if (installedUrl == url) {
+		if (isInstalled(url)) {
 			cb({
 				code: OK,
 				progress: 1

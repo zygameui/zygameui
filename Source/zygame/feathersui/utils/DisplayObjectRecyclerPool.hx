@@ -1,5 +1,6 @@
 package zygame.feathersui.utils;
 
+import haxe.Exception;
 import lime.utils.ObjectPool;
 #if feathersui
 import feathers.utils.DisplayObjectRecycler;
@@ -24,8 +25,10 @@ class DisplayObjectRecyclerPool {
 		};
 		item.update = update;
 		item.reset = reset;
-		item.destroy = (display) -> {
-			pool.release(display);
+		item.destroy = function(display) {
+			try {
+				pool.release(display);
+			} catch (e:Exception) {}
 			if (destroy != null) {
 				destroy(display);
 			}
@@ -44,8 +47,10 @@ class DisplayObjectRecyclerPool {
 		};
 		item.update = update;
 		item.reset = reset;
-		item.destroy = (display) -> {
-			pool.release(display);
+		item.destroy = function(display) {
+			try {
+				pool.release(display);
+			} catch (e:Exception) {}
 			if (destroy != null) {
 				destroy(display);
 			}

@@ -1,5 +1,6 @@
 package zygame.components;
 
+import zygame.utils.Lib;
 import zygame.components.base.DataProviderComponent;
 import zygame.components.ZBox;
 import openfl.display.DisplayObject;
@@ -372,8 +373,11 @@ class ZScroll extends DataProviderComponent {
 	}
 
 	override public function onTouchEnd(touch:TouchEvent):Void {
-		if (this.moveOcclusionEnable)
-			this.mouseChildren = true;
+		if (this.moveOcclusionEnable) {
+			Lib.nextFrameCall(() -> {
+				this.mouseChildren = true;
+			});
+		}
 		if (touchBatch != null)
 			touchBatch.onTouchEnd(touch);
 		if (touch.touchPointID == 0) {

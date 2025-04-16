@@ -1683,6 +1683,11 @@ class AssetsBuilder extends Builder {
 	public function build(cb:Bool->Void, onloaded:Void->Void = null) {
 		var isNewXmlPath = false;
 		var existXml:Xml = null;
+		if (assets == null) {
+			// 说明已经释放了，为了防止发生问题，这里需要直接阻止
+			ZLog.warring("AssetsBuilder.build() assets is null, file is " + viewXmlPath);
+			return this;
+		}
 		if (!ZBuilder.existFile(viewXmlPath)) {
 			isNewXmlPath = true;
 			assets.loadFile(viewXmlPath);

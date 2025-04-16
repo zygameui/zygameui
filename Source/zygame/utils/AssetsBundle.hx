@@ -117,7 +117,6 @@ class AssetsBundle {
 		});
 		loader.addEventListener(ProgressEvent.PROGRESS, (e) -> {
 			// 加载中
-			trace("load progress", Math.round(e.bytesLoaded / e.bytesTotal * 100) + "%");
 			cb({
 				code: PROGRESS,
 				progress: e.bytesLoaded / e.bytesTotal

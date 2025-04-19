@@ -1083,9 +1083,11 @@ class ZLabel extends DataProviderComponent {
 	 */
 	override public function destroy():Void {
 		super.destroy();
+		#if !disable_zlabel_cache_bitmap
 		if (_bitmap != null && _bitmap.bitmapData != null) {
 			_bitmap.bitmapData.dispose();
 		}
+		#end
 		this.removeChild(_display);
 		// _display = null;
 		setFrameEvent(false);

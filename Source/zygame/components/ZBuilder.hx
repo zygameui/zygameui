@@ -1,5 +1,7 @@
 package zygame.components;
 
+import hx.display.ButtonSkin;
+import hx.display.Button;
 import hx.display.Image;
 import hx.display.Quad;
 import hx.ui.UIManager;
@@ -175,8 +177,13 @@ class ZBuilder {
 		bindCreate(Image, function(xml:Xml):Array<Dynamic> {
 			return [UIManager.getBitmapData(xml.get("src"))];
 		}, "hx:");
-		bindParsing(Image, "width", function(ui:Dynamic, name:String, value:String):Void {
-			cast(ui, Image).width = Std.parseFloat(value);
+		bind(Button, "hx:");
+		bindCreate(Button, function(xml:Xml):Array<Dynamic> {
+			var bitmapData = UIManager.getBitmapData(xml.get("src"));
+			var skin:ButtonSkin = {
+				up: bitmapData,
+			};
+			return [xml.exists("text") ? xml.get("text") : null, skin];
 		}, "hx:");
 
 		// 解析方法解析

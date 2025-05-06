@@ -172,8 +172,11 @@ class ZBuilder {
 			cast(ui, Quad).data = Std.parseInt(value);
 		}, "hx:");
 		bind(Image, "hx:");
-		bindParsing(Image, "src", function(ui:Dynamic, name:String, value:String):Void {
-			cast(ui, Image).data = UIManager.getBitmapData(value);
+		bindCreate(Image, function(xml:Xml):Array<Dynamic> {
+			return [UIManager.getBitmapData(xml.get("src"))];
+		}, "hx:");
+		bindParsing(Image, "width", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, Image).width = Std.parseFloat(value);
 		}, "hx:");
 
 		// 解析方法解析
@@ -820,10 +823,10 @@ class ZBuilder {
 	 * @param obj
 	 * @param fun
 	 */
-	public static function bindCreate(obj:Class<Dynamic>, fun:Xml->Array<Dynamic>):Void {
+	public static function bindCreate(obj:Class<Dynamic>, fun:Xml->Array<Dynamic>, nameFirst:String = ""):Void {
 		var className:String = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		createMaps.set(className, fun);
+		createMaps.set(nameFirst + className, fun);
 	}
 
 	/**

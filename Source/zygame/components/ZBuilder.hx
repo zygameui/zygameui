@@ -1,5 +1,6 @@
 package zygame.components;
 
+import hx.display.Spine;
 import hx.display.ButtonSkin;
 import hx.display.Button;
 import hx.display.Image;
@@ -184,6 +185,10 @@ class ZBuilder {
 				up: bitmapData,
 			};
 			return [xml.exists("text") ? xml.get("text") : null, skin];
+		}, "hx:");
+		bind(Spine, "hx:");
+		bindCreate(Spine, function(xml:Xml):Array<Dynamic> {
+			return [UIManager.getSkeletonData(xml.get("src"))];
 		}, "hx:");
 
 		// 解析方法解析

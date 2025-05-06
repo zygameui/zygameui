@@ -1549,6 +1549,10 @@ class ZAssets {
 		for (key => value in _jsons) {
 			_jsons.remove(key);
 		}
+		if (_hxmakerAssets != null) {
+			_hxmakerAssets.clean();
+			_hxmakerAssets = null;
+		}
 	}
 
 	/**
@@ -1593,5 +1597,18 @@ class ZAssets {
 
 	public function getParsers():Array<ParserBase> {
 		return _parsers;
+	}
+
+	private var _hxmakerAssets:ZMakerAssets;
+
+	/**
+	 * 获得`hxmaker`的资源对象
+	 * @return ZMakerAssets
+	 */
+	public function getZMakerAssets():ZMakerAssets {
+		if (_hxmakerAssets == null) {
+			_hxmakerAssets = new ZMakerAssets(this);
+		}
+		return _hxmakerAssets;
 	}
 }

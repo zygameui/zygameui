@@ -12,6 +12,8 @@
 # --library KengSDK
 --library feathersui
 # --library swf
+--library hxmaker
+--library hxmaker-openfl
 --library differ
 --library vector-math
 --library openfl-glsl

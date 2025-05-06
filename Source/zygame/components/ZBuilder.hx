@@ -1,5 +1,7 @@
 package zygame.components;
 
+import hx.ui.UIManager;
+import zygame.core.Start;
 import zygame.components.data.CacheBuilderData;
 #if hscript
 import hscript.Interp;
@@ -49,6 +51,7 @@ import zygame.script.ZHaxe;
 import openfl.display.DisplayObject;
 import zygame.components.ZAnimation;
 import zygame.utils.load.Atlas;
+import hx.display.MakerDisplay;
 
 /**
  * UI创建器
@@ -160,6 +163,7 @@ class ZBuilder {
 		bind(BStack);
 		bind(ZParticles);
 		bind(ZCacheBitmapLabel);
+		bind(MakerDisplay);
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {
@@ -472,6 +476,9 @@ class ZBuilder {
 		bindCreate(ZTween, function(xml:Xml):Array<Dynamic> {
 			return [xml];
 		});
+		bindCreate(MakerDisplay, function(xml:Xml):Array<Dynamic> {
+			return [Start.current.getStageWidth(), Start.current.getStageHeight()];
+		});
 
 		#if (html5 && !final)
 		// bindCreate(ZLabel, function(xml:Xml):Array<Dynamic> {
@@ -732,6 +739,9 @@ class ZBuilder {
 			return;
 		if (baseAssetsList.indexOf(assets) == -1)
 			baseAssetsList.push(assets);
+		#if auto_bind_hxmaker
+		UIManager.bindAssets(assets.getZMakerAssets());
+		#end
 	}
 
 	/**
@@ -765,6 +775,9 @@ class ZBuilder {
 	 */
 	public static function unbindAssets(assets:ZAssets):Void {
 		baseAssetsList.remove(assets);
+		#if auto_bind_hxmaker
+		UIManager.unbindAssets(assets.getZMakerAssets());
+		#end
 	}
 
 	/**

@@ -15,17 +15,27 @@ class ZMakerAssets extends Assets {
 	public function new(assets:ZAssets) {
 		super();
 		this.assets = assets;
+		this.updateAssets();
+	}
+
+	public function updateAssets():Void {
 		// 绑定位图
 		for (key => value in @:privateAccess this.assets._bitmaps) {
-			this.bitmapDatas.set(key, OpenFlBitmapData.fromBitmapData(value));
+			if (!this.bitmapDatas.exists(key)) {
+				this.bitmapDatas.set(key, OpenFlBitmapData.fromBitmapData(value));
+			}
 		}
 		// 绑定json
 		for (key => value in @:privateAccess this.assets._jsons) {
-			this.objects.set(key, value);
+			if (!this.objects.exists(key)) {
+				this.objects.set(key, value);
+			}
 		}
 		// 绑定精灵图
 		for (key => value in @:privateAccess this.assets._textures) {
-			this.atlases.set(key, new XmlAtlas(OpenFlBitmapData.fromBitmapData(value.rootBitmapData), @:privateAccess value._rootXml));
+			if (!this.atlases.exists(key)) {
+				this.atlases.set(key, new XmlAtlas(OpenFlBitmapData.fromBitmapData(value.rootBitmapData), @:privateAccess value._rootXml));
+			}
 		}
 	}
 }

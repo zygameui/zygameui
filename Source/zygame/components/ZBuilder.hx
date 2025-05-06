@@ -776,7 +776,8 @@ class ZBuilder {
 	public static function unbindAssets(assets:ZAssets):Void {
 		baseAssetsList.remove(assets);
 		#if auto_bind_hxmaker
-		UIManager.unbindAssets(assets.getZMakerAssets());
+		if (assets != null)
+			UIManager.unbindAssets(@:privateAccess assets._hxmakerAssets);
 		#end
 	}
 

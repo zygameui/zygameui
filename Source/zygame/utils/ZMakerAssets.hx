@@ -18,22 +18,22 @@ class ZMakerAssets extends Assets {
 		this.updateAssets();
 	}
 
-	public function updateAssets():Void {
+	public function updateAssets(force:Bool = false):Void {
 		// 绑定位图
 		for (key => value in @:privateAccess this.assets._bitmaps) {
-			if (!this.bitmapDatas.exists(key)) {
+			if (force || !this.bitmapDatas.exists(key)) {
 				this.bitmapDatas.set(key, OpenFlBitmapData.fromBitmapData(value));
 			}
 		}
 		// 绑定json
 		for (key => value in @:privateAccess this.assets._jsons) {
-			if (!this.objects.exists(key)) {
+			if (force || !this.objects.exists(key)) {
 				this.objects.set(key, value);
 			}
 		}
 		// 绑定精灵图
 		for (key => value in @:privateAccess this.assets._textures) {
-			if (!this.atlases.exists(key)) {
+			if (force || !this.atlases.exists(key)) {
 				this.atlases.set(key, new XmlAtlas(OpenFlBitmapData.fromBitmapData(value.rootBitmapData), @:privateAccess value._rootXml));
 			}
 		}

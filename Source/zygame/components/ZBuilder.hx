@@ -1,5 +1,7 @@
 package zygame.components;
 
+import hx.display.Image;
+import hx.display.Quad;
 import hx.ui.UIManager;
 import zygame.core.Start;
 import zygame.components.data.CacheBuilderData;
@@ -164,6 +166,15 @@ class ZBuilder {
 		bind(ZParticles);
 		bind(ZCacheBitmapLabel);
 		bind(MakerDisplay);
+
+		bind(Quad, "hx:");
+		bindParsing(Quad, "color", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, Quad).data = Std.parseInt(value);
+		}, "hx:");
+		bind(Image, "hx:");
+		bindParsing(Image, "src", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, Image).data = UIManager.getBitmapData(value);
+		}, "hx:");
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {
@@ -794,14 +805,14 @@ class ZBuilder {
 	 * 绑定解析组件
 	 * @param class
 	 */
-	public static function bind(obj:Dynamic):Void {
+	public static function bind(obj:Dynamic, nameFirst:String = ""):Void {
 		var className:String = null;
 		if (Std.isOfType(obj, String))
 			className = obj;
 		else
 			className = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		classMaps.set(className, Std.isOfType(obj, String) ? Type.resolveClass(obj) : obj);
+		classMaps.set(nameFirst + className, Std.isOfType(obj, String) ? Type.resolveClass(obj) : obj);
 	}
 
 	/**
@@ -843,14 +854,14 @@ class ZBuilder {
 	 * @param key
 	 * @param fun
 	 */
-	public static function bindParsing(obj:Dynamic, key:String, fun:Dynamic->String->String->Void):Void {
+	public static function bindParsing(obj:Dynamic, key:String, fun:Dynamic->String->String->Void, nameFrist:String = ""):Void {
 		var className:String = null;
 		if (Std.isOfType(obj, String))
 			className = obj;
 		else
 			className = Type.getClassName(obj);
 		className = className.substr(className.lastIndexOf(".") + 1);
-		parsingMaps.set(className + "." + key, fun);
+		parsingMaps.set(nameFrist + className + "." + key, fun);
 	}
 
 	/**
@@ -1159,7 +1170,7 @@ class ZBuilder {
 				Reflect.setProperty(ui, "parentXml", xml);
 			} catch (e:Exception) {}
 		}
-		if (!Std.isOfType(ui, DisplayObject) && !Std.isOfType(ui, Tile)) {
+		if (!Std.isOfType(ui, DisplayObject) && !Std.isOfType(ui, Tile) && !Std.isOfType(ui, hx.display.DisplayObject)) {
 			// 着色器
 			if (Std.isOfType(ui, ZShader)) {
 				try {
@@ -1238,7 +1249,11 @@ class ZBuilder {
 			parentClassName = parentClassName.substr(parentClassName.lastIndexOf(".") + 1);
 		if (parentClassName != null && addMaps.exists(parentClassName))
 			addMaps.get(parentClassName)(ui, parent, xml);
-		else if (Std.isOfType(parent, ImageBatchs))
+		else if (Std.isOfType(parent, MakerDisplay)) {
+			cast(parent, MakerDisplay).container.addChild(ui);
+		} else if (Std.isOfType(parent, hx.display.DisplayObjectContainer)) {
+			cast(parent, hx.display.DisplayObjectContainer).addChild(ui);
+		} else if (Std.isOfType(parent, ImageBatchs))
 			cast(parent, ImageBatchs).addChild(ui);
 		else if (Std.isOfType(parent, DisplayObjectContainer))
 			cast(parent, DisplayObjectContainer).addChild(ui);

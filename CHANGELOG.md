@@ -8,6 +8,9 @@
 
 
 # ZYGameUI 更新日志
+### 16.0.0
+- 新增：新增`hxmaker`库支持；
+
 ### 15.1.20
 - 新增：新增`TextFieldContextBitmapData`缓存文本对象支持，它可以缓存文本对象，减少渲染消耗、内存使用；
 - 新增：新增`ImageBitmapCacheAssets`位图缓存对象，它可以缓存`ZImage`通过地址加载的位图，减少渲染消耗、内存使用；

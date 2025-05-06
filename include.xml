@@ -34,6 +34,9 @@
 	<haxelib name="tweenxcore" />
 	<haxelib name="actuate" />
 
+	<define name="use_spine_hx" unless="spine4.2" />
+	<haxelib name="hxmaker-openfl"/>
+
 	<define name="message.reporting" value="pretty" unless="ios" />
 	<define name="message.log-format" value="pretty" unless="ios" />
 
@@ -76,7 +79,7 @@
 	<!-- 此定义显式检查指针是否为空访问并引发信息异常，而不仅仅是崩溃。每个成员访问都有开销,运行时性能打击：小 -->
 	<define name="HXCPP_CHECK_POINTER" />
 	<!-- HXCPP_PROFILER 性能检测器 -->
-	<define name="HXCPP_PROFILER" if="telemetry"/>
+	<define name="HXCPP_PROFILER" if="telemetry" />
 	<!-- 开启内存移动 -->
 	<!-- <define name="HXCPP_GC_MOVING"/> -->
 

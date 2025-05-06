@@ -190,6 +190,12 @@ class ZBuilder {
 		bindCreate(Spine, function(xml:Xml):Array<Dynamic> {
 			return [UIManager.getSkeletonData(xml.get("src"))];
 		}, "hx:");
+		bindParsing(Spine, "action", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, Spine).play(value, 0);
+		}, "hx:");
+		bindParsing(Spine, "skin", function(ui:Dynamic, name:String, value:String):Void {
+			cast(ui, Spine).setSkinByName(value);
+		}, "hx:");
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {

@@ -3,7 +3,6 @@ package zygame.components.renders.opengl;
 import lime.text.harfbuzz.HBFTFont;
 import lime.text.harfbuzz.HBFont;
 #if cpp
-import v4.NativeApi;
 import zygame.utils.AssetsUtils;
 #end
 import lime.text.Font;

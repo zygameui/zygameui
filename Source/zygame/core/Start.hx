@@ -497,7 +497,7 @@ class Start extends ZScene {
 
 	override public function onInit():Void {
 		// 初始化Hxmaker
-		var engine = Hxmaker.init(Engine, 1920, 1080);
+		var engine = Hxmaker.init(Engine, this.HDWidth, this.HDHeight);
 		engine.initOpenFLRoot(this);
 
 		#if lime
@@ -631,6 +631,10 @@ class Start extends ZScene {
 	 * 当舞台的尺寸发生变化时触发
 	 */
 	public function onStageSizeChange():Void {
+		if (Hxmaker.engine != null) {
+			Hxmaker.engine.init(HDWidth, HDHeight);
+		}
+
 		if (HDWidth == 0 && HDHeight == 0) {
 			Start.stageWidth = Std.int(stage.stageWidth / this.scaleX) + 1;
 			Start.stageHeight = Std.int(stage.stageHeight / this.scaleY) + 1;

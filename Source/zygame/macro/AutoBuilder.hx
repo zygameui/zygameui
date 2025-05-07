@@ -247,6 +247,11 @@ class AutoBuilder {
 				case "HBox":
 					return macro :zygame.components.ZBox.HBox;
 			}
+		} else if (typeName == "MakerDisplay" || typeName.indexOf("hx:") == 0) {
+			return TPath({
+				pack: ["hx", "display"],
+				name: typeName
+			});
 		} else if (typeName.indexOf("F") == 0) {
 			return TPath({
 				pack: ["zygame", "feathersui"],

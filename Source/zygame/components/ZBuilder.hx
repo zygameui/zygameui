@@ -188,7 +188,8 @@ class ZBuilder {
 			var skin:ButtonSkin = {
 				up: bitmapData,
 			};
-			return [xml.exists("text") ? xml.get("text") : null, skin];
+			var textFormat = new TextFormat(ZConfig.fontName, Std.parseInt(xml.get("size")), Std.parseInt(xml.get("color")));
+			return [xml.exists("text") ? xml.get("text") : null, skin, textFormat];
 		}, "hx:");
 		bind(Spine, "hx:");
 		bindCreate(Spine, function(xml:Xml):Array<Dynamic> {

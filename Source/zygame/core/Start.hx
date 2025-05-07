@@ -1,5 +1,7 @@
 package zygame.core;
 
+import hx.core.Hxmaker;
+import hx.core.Engine;
 import openfl.geom.Rectangle;
 import zygame.display.TouchDisplayObjectContainer;
 import openfl.events.TouchEvent;
@@ -494,6 +496,10 @@ class Start extends ZScene {
 	#end
 
 	override public function onInit():Void {
+		// 初始化Hxmaker
+		var engine = Hxmaker.init(Engine, 1920, 1080);
+		engine.initOpenFLRoot(this);
+
 		#if lime
 		stage.window.onRender.remove(@:privateAccess stage.__onLimeRender);
 		stage.window.onRender.add(onGameRender);

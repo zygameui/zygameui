@@ -1,5 +1,9 @@
 package zygame.components;
 
+import zygame.utils.Align;
+import zygame.components.base.ZConfig;
+import hx.display.TextFormat;
+import hx.display.Label;
 import hx.display.Spine;
 import hx.display.ButtonSkin;
 import hx.display.Button;
@@ -195,6 +199,37 @@ class ZBuilder {
 		}, "hx:");
 		bindParsing(Spine, "skin", function(ui:Dynamic, name:String, value:String):Void {
 			cast(ui, Spine).setSkinByName(value);
+		}, "hx:");
+		bind(Label, "hx:");
+		bindCreate(Label, function(xml:Xml):Array<Dynamic> {
+			var textFormat = new TextFormat(ZConfig.fontName, Std.parseInt(xml.get("size")), Std.parseInt(xml.get("color")));
+			return [xml.get("text"), textFormat];
+		}, "hx:");
+		bindParsing(Label, "hAlign", function(ui:Dynamic, name:String, value:String):Void {
+			var label:Label = cast ui;
+			var align:Align = value;
+			switch align {
+				case LEFT:
+					label.horizontalAlign = LEFT;
+				case RIGHT:
+					label.horizontalAlign = RIGHT;
+				case CENTER:
+					label.horizontalAlign = CENTER;
+				default:
+			}
+		}, "hx:");
+		bindParsing(Label, "vAlign", function(ui:Dynamic, name:String, value:String):Void {
+			var label:Label = cast ui;
+			var align:Align = value;
+			switch align {
+				case TOP:
+					label.verticalAlign = TOP;
+				case BOTTOM:
+					label.verticalAlign = BOTTOM;
+				case CENTER:
+					label.verticalAlign = CENTER;
+				default:
+			}
 		}, "hx:");
 
 		// 解析方法解析

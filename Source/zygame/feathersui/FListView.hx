@@ -1,14 +1,10 @@
 package zygame.feathersui;
 
 import openfl.events.Event;
-import feathers.data.IFlatCollection;
 import openfl.geom.Point;
 import openfl.events.MouseEvent;
 #if feathersui
-import feathers.events.ScrollEvent;
 import feathers.controls.ListView;
-import feathers.utils.Scroller;
-import openfl.display.DisplayObjectContainer;
 
 class FListView extends ListView {
 	/**

@@ -1,5 +1,6 @@
 package zygame.components;
 
+import hx.display.ListView;
 import hx.display.Box;
 import zygame.utils.Align;
 import zygame.components.base.ZConfig;
@@ -236,6 +237,7 @@ class ZBuilder {
 		bind(hx.display.HBox, "hx:");
 		bind(hx.display.VBox, "hx:");
 		bind(Box, "hx:");
+		bind(ListView, "hx:");
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {

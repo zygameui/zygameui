@@ -649,6 +649,9 @@ class ZAssets {
 				}
 				if (timer != null)
 					timer.stop();
+				if (this._hxmakerAssets != null) {
+					this._hxmakerAssets.updateAssets();
+				}
 			}
 			return;
 		}

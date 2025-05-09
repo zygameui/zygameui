@@ -232,6 +232,8 @@ class ZBuilder {
 				default:
 			}
 		}, "hx:");
+		bind(hx.display.HBox, "hx:");
+		bind(hx.display.VBox, "hx:");
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {

@@ -83,15 +83,15 @@ class FPSDebug extends ZBox {
 		var mem:Float = Math.round(System.totalMemory / 1024 / 1024 * 100) / 100;
 		if (mem > memPeak)
 			memPeak = mem;
+		#if (gl_stats)
+		if (Context3DStats.totalDrawCalls() != 0)
+			_curDrawCall = Context3DStats.totalDrawCalls();
+		#end
 		if (visible) {
 			if (debugMsg != null)
 				_text.dataProvider = debugMsg;
 			else {
 				var gpumem:Float = Math.round(Start.current.stage.context3D.totalGPUMemory / 1024 / 1024 * 100) / 100;
-				#if (gl_stats)
-				if (Context3DStats.totalDrawCalls() != 0)
-					_curDrawCall = Context3DStats.totalDrawCalls();
-				#end
 				_alldt += zygame.core.Start.current.getIntervalTime();
 				_allcpu += zygame.core.Start.current.getCPUTime();
 				_alltimes++;

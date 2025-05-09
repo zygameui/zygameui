@@ -1,5 +1,6 @@
 package zygame.components;
 
+import hx.display.Box;
 import zygame.utils.Align;
 import zygame.components.base.ZConfig;
 import hx.display.TextFormat;
@@ -234,6 +235,7 @@ class ZBuilder {
 		}, "hx:");
 		bind(hx.display.HBox, "hx:");
 		bind(hx.display.VBox, "hx:");
+		bind(Box, "hx:");
 
 		// 解析方法解析
 		bindParsing(ZParticles, "src", function(ui:Dynamic, name:String, value:String):Void {

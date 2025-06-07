@@ -381,4 +381,13 @@ class ZButton extends ToggleButton {
 			});
 		}
 	}
+
+	public var smoothing(default, set):Bool;
+
+	private function set_smoothing(value:Bool):Bool {
+		var img:ZImage = cast this.findComponent(ToggleButton.COMPONENT_IMAGE);
+		if (img != null)
+			img.smoothing = value;
+		return value;
+	}
 }

@@ -132,6 +132,14 @@ class ZImage_v2 extends DataProviderBox {
 		onBitmapDataUpdate();
 	}
 
+	public function getBitmapDataWidth():Float {
+		return __render.getFrameSize().width;
+	}
+
+	public function getBitmapDataHeight():Float {
+		return __render.getFrameSize().height;
+	}
+
 	override function set_width(value:Float):Float {
 		__render.width = value;
 		super.set_width(value);

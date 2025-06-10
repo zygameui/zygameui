@@ -124,12 +124,17 @@ class ZImage_v2 extends DataProviderBox {
 	private var __currentDraw:Dynamic;
 
 	private function __drawRender(bitmapData:Dynamic):Void {
+		var isUpdated = false;
+		if (__currentDraw != bitmapData) {
+			isUpdated = true;
+		}
 		__currentDraw = bitmapData;
 		__render.scaleX = __render.scaleY = 1;
 		__render.x = __render.y = 0;
 		@:privateAccess __render.draw(bitmapData, this._setWidth ? this._componentWidth : null, this._setHeight ? this._componentHeight : null);
 		this.updateComponents();
-		onBitmapDataUpdate();
+		if (isUpdated)
+			onBitmapDataUpdate();
 	}
 
 	public function getBitmapDataWidth():Float {

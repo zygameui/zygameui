@@ -1,5 +1,6 @@
 package zygame.components;
 
+import hx.display.BitmapLabel;
 import hx.display.ListView;
 import hx.display.Box;
 import zygame.utils.Align;
@@ -192,6 +193,40 @@ class ZBuilder {
 			};
 			var textFormat = new TextFormat(ZConfig.fontName, Std.parseInt(xml.get("size")), Std.parseInt(xml.get("color")));
 			return [xml.exists("text") ? xml.get("text") : null, skin, textFormat];
+		}, "hx:");
+		bind(BitmapLabel, "hx:");
+		bindCreate(BitmapLabel, function(xml:Xml):Array<Dynamic> {
+			return [UIManager.getAtlas(xml.get("src"))];
+		}, "hx:");
+		bindParsing(BitmapLabel, "hAlign", function(ui:Dynamic, name:String, value:String):Void {
+			var label:BitmapLabel = cast ui;
+			var align:Align = value;
+			switch align {
+				case LEFT:
+					label.horizontalAlign = LEFT;
+				case RIGHT:
+					label.horizontalAlign = RIGHT;
+				case CENTER:
+					label.horizontalAlign = CENTER;
+				default:
+			}
+		}, "hx:");
+		bindParsing(BitmapLabel, "vAlign", function(ui:Dynamic, name:String, value:String):Void {
+			var label:BitmapLabel = cast ui;
+			var align:Align = value;
+			switch align {
+				case TOP:
+					label.verticalAlign = TOP;
+				case BOTTOM:
+					label.verticalAlign = BOTTOM;
+				case CENTER:
+					label.verticalAlign = CENTER;
+				default:
+			}
+		}, "hx:");
+		bindParsing(BitmapLabel, "text", function(ui:Dynamic, name:String, value:String):Void {
+			var label:BitmapLabel = cast ui;
+			label.data = value;
 		}, "hx:");
 		bind(Spine, "hx:");
 		bindCreate(Spine, function(xml:Xml):Array<Dynamic> {
@@ -1210,6 +1245,7 @@ class ZBuilder {
 					base = classMaps.get(className);
 				#if igonre_extends_error
 				if (base == null) {
+					trace("className:" + className, "no extends class found");
 					ui = new ZBox();
 				} else {
 					ui = Type.createInstance(base, createMaps.exists(className) ? createMaps.get(className)(xml) : defalutArgs);

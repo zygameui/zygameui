@@ -81,4 +81,8 @@ class Reflect {
 		}
 		return R.deleteField(o, field);
 	}
+
+	public static function copy(o:Dynamic):Dynamic {
+		return R.copy(o);
+	}
 }

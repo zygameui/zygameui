@@ -174,4 +174,8 @@
 
 	<haxeflag name="--debug" if="test" />
 
+	<!-- 鸿蒙HAP目标（HTML5包装版本） -->
+	<target name="hap-html5" handler="harmony-os-html5-hap" />
+	<haxelib name="harmony-os-html5-hap" if="hap-html5"/>
+
 </project>

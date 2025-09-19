@@ -75,8 +75,11 @@ class Build {
 		trace("BUILDING " + args, Sys.getCwd());
 		if (args.length < 3)
 			throw "参数不足，请参考`haxelib run zygameui -build 平台`命令\n 已支持平台：" + platforms.join(" ");
-		if (platforms.indexOf(buildAgs[0]) == -1)
-			throw "平台`" + args[1] + "`无效，不存在于`" + platforms.join(" ") + "`当中";
+		var isCustomTarget = false;
+		if (platforms.indexOf(buildAgs[0]) == -1) {
+			// throw "平台`" + args[1] + "`无效，不存在于`" + platforms.join(" ") + "`当中";
+			isCustomTarget = true;
+		}
 		if (!FileSystem.exists(Sys.getCwd() + "zproject.xml"))
 			throw "项目不存在有效的zproject.xml配置";
 		// 开始编译
@@ -116,9 +119,14 @@ class Build {
 				buildPlatform = "mac";
 				buildMac();
 			default:
-				// 默认编译HTML5
-				buildPlatform = "html5";
-				buildHtml5();
+				if (isCustomTarget) {
+					buildPlatform = buildAgs[0];
+					buildCustom(buildPlatform);
+				} else {
+					// 默认编译HTML5
+					buildPlatform = "html5";
+					buildHtml5();
+				}
 		}
 		buildPlatformAssets(args, dir);
 		isBuilded = true;
@@ -248,6 +256,22 @@ class Build {
 			Sys.command("lime build electron -final");
 		else
 			Sys.command("lime build electron");
+	}
+
+	/**
+	 * 编译成HTML5
+	 */
+	public function buildCustom(target:String):Void {
+		trace("开始编译自定义目标", target);
+		var args:Array<String> = Sys.args();
+		var code:Int = 0;
+		if (args.indexOf("-final") != -1)
+			code = Sys.command("lime build " + target + " -final");
+		else
+			code = Sys.command("lime build " + target);
+		trace("BUILDED " + code);
+		if (code != 0)
+			throw "编译发生了错误！";
 	}
 
 	/**

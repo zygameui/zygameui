@@ -38,7 +38,21 @@ class SharedObject extends openfl.net.SharedObject {
 	 */
 	public static function getLocal(name:String, localPath:String = null, secure:Bool = false /* note: unsupported**/):openfl.net.SharedObject {
 		__zygameui_save_name = name;
-		#if weixin
+		#if harmony_os_html5
+		// 鸿蒙HTML5兼容模式
+		var id = localPath + "/" + name;
+		if (!@:privateAccess openfl.net.SharedObject.__sharedObjects.exists(id)) {
+			var sharedObject = new SharedObject();
+			sharedObject.data = untyped hosLocalStorage.getItem(id);
+			if (sharedObject.data == null) {
+				sharedObject.data = {};
+			}
+			sharedObject.__localPath = localPath;
+			sharedObject.__name = name;
+			@:privateAccess openfl.net.SharedObject.__sharedObjects.set(id, sharedObject);
+		}
+		return @:privateAccess openfl.net.SharedObject.__sharedObjects.get(id);
+		#elseif weixin
 		#if weixin_worker
 		if (Worker.isSupport() && worker == null) {
 			worker = new Worker("workers/worker.js");
@@ -156,7 +170,12 @@ class SharedObject extends openfl.net.SharedObject {
 	}
 
 	override function flush(minDiskSpace:Int = 0):SharedObjectFlushStatus {
-		#if weixin
+		#if harmony_os_html5
+		// 鸿蒙HTML5兼容模式
+		var id = this.__localPath + "/" + this.__name;
+		untyped hosLocalStorage.setItem(id, this.data);
+		return SharedObjectFlushStatus.FLUSHED;
+		#elseif weixin
 		if (Reflect.fields(data).length == 0) {
 			return SharedObjectFlushStatus.FLUSHED;
 		}

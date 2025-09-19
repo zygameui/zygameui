@@ -1,5 +1,6 @@
 package platforms;
 
+import haxe.io.Path;
 import sys.io.File;
 import sys.FileSystem;
 import python.FileUtils;
@@ -54,20 +55,17 @@ class Baidu extends Wechat {}
  * 梦工厂
  */
 class Mgc extends Wechat {
-
 	/**
 	 * 尝试编译为MGC
 	 */
 	override function buildAfter() {
 		super.buildAfter();
 		var code = Sys.command("haxelib run lebox-build-tools");
-		if(code == 0){
+		if (code == 0) {
 			trace("梦工厂包编译成功");
-		}
-		else 
+		} else
 			trace("Warring:梦工厂包编译时，需要安装lebox-build-tools库");
 	}
-
 }
 
 /**

@@ -41,7 +41,10 @@ class SharedObject extends openfl.net.SharedObject {
 		#if harmony_os_html5
 		// 鸿蒙HTML5兼容模式
 		var id = localPath + "/" + name;
-		if (!@:privateAccess openfl.net.SharedObject.__sharedObjects.exists(id)) {
+		if (@:privateAccess openfl.net.SharedObject.__sharedObjects == null) {
+			@:privateAccess openfl.net.SharedObject.__sharedObjects = new Map();
+		}
+		if (! @:privateAccess openfl.net.SharedObject.__sharedObjects.exists(id)) {
 			var sharedObject = new SharedObject();
 			sharedObject.data = untyped hosLocalStorage.getItem(id);
 			if (sharedObject.data == null) {

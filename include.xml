@@ -35,7 +35,8 @@
 	<haxelib name="actuate" />
 
 	<define name="use_spine_hx" unless="spine4.2" />
-	<haxelib name="hxmaker-openfl"/>
+	<haxelib name="hxmaker-openfl-v1" if="hxmakerv1"/>
+	<haxelib name="hxmaker-openfl" unless="hxmakerv1"/>
 
 	<define name="message.reporting" value="pretty" unless="ios" />
 	<define name="message.log-format" value="pretty" unless="ios" />
